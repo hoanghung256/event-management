@@ -16,20 +16,20 @@ import java.util.logging.Logger;
  */
 public class TestRepository extends SQLDatabase {
 
-    private Logger logger = Logger.getLogger(TestRepository.class.getName());
+    // private Logger logger = Logger.getLogger(TestRepository.class.getName());
 
-    public ArrayList<String> get() {
-        ResultSet rs = executeQueryPreparedStatement("SELECT * FROM Product");
-        ArrayList<String> res = new ArrayList<>();
+    // public ArrayList<String> get() {
+    // ResultSet rs = executeQueryPreparedStatement("SELECT * FROM Product");
+    // ArrayList<String> res = new ArrayList<>();
 
-        try {
-            while (rs.next()) {
-                res.add(rs.getString("productName"));
-                System.out.println(rs.getNString("productName"));
-            }
-        } catch (SQLException ex) {
-            logger.log(Level.SEVERE, null, ex);
-        }
-        return res;
-    }
+    // try {
+    // while (rs.next()) {
+    // res.add(rs.getString("productName"));
+    // System.out.println(rs.getNString("productName"));
+    // }
+    // } catch (SQLException ex) {
+    // logger.log(Level.SEVERE, null, ex);
+    // }
+    // return res;
+    // }
 }

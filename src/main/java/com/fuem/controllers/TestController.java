@@ -19,16 +19,16 @@ import java.util.ArrayList;
  */
 @WebServlet(name = "TestController", urlPatterns = "/test")
 public class TestController extends HttpServlet {
-    
+
     private TestRepository testRepository = new TestRepository();
-    
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        ArrayList<String> result = testRepository.get();
-        
-        System.out.println(result.size());
-        
-        req.setAttribute("names", result);
-        req.getRequestDispatcher("test.jsp").forward(req, resp);
+        // ArrayList<String> result = testRepository.get();
+
+        // System.out.println(result.size());
+
+        // req.setAttribute("names", result);
+        // req.getRequestDispatcher("test.jsp").forward(req, resp);
     }
 }
