@@ -171,6 +171,18 @@ GO
 <<<<<<<<<< BEGIN: EXAMPLE DATA <<<<<<<<<<
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 */
+
+/* create user data*/
+insert into [User] (fullname, studentId, email, [password], isClubPresident, isAdmin)
+values ('NGUYEN MINH THANG', 'DE180145', 'thangnmde180145@fpt.edu.vn', '110404', 0, 0)
+
+SELECT email FROM [User] WHERE email = 'thangnmde180145@fpt.edu.vn'
+SELECT * FROM [User]
+
+Update [User] 
+set password = '160504'
+where email = 'thangnmde180145@fpt.edu.vn'
+
 /*
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 >>>>>>>>>> END: EXAMPLE DATA >>>>>>>>>>
