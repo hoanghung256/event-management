@@ -21,39 +21,16 @@ import java.io.PrintWriter;
 @WebServlet(name = "ResetPasswordController", urlPatterns = {"/reset"})
 public class ResetPasswordController extends HttpServlet {
     private final UserDAO dao = new UserDAO();
-    
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ResetPasswordController</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ResetPasswordController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
-        String inpuOtp = request.getParameter("otp");
+        String inputOtp = request.getParameter("otp");
         String email = String.valueOf(session.getAttribute("email"));
         String newPassword = request.getParameter("new-password");
         
-        //valid if OTP is similar
-        if (inpuOtp.equalsIgnoreCase(String.valueOf(session.getAttribute("otp")))) {
+        if (inputOtp.equalsIgnoreCase(String.valueOf(session.getAttribute("otp")))) {
             dao.updatePassword(email, newPassword);
             request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
         } else {
@@ -61,10 +38,4 @@ public class ResetPasswordController extends HttpServlet {
             request.getRequestDispatcher("authentication/forget-password.jsp").forward(request, response);
         }
     }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }
-
 }
