@@ -8366,7 +8366,7 @@ input[type=file] {
 }
 
 [bd-theme=bd-theme-dark] .sign__logo .logo-black {
-  display: none;
+  display: none ;
 }
 
 /*----------------------------------------*/
