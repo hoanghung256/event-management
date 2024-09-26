@@ -14,7 +14,6 @@
       <meta name="description" content="">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="theme-style-mode" content="1">
-      <!-- Place favicon.ico in the root directory -->
       <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
       <!-- CSS here -->
         <link rel="stylesheet" href="assets/app/css/bootstrap.min.css" type="text/css">
@@ -151,8 +150,6 @@
     </script>
    </body>
    
-
-<!-- Mirrored from codeskdhaka.com/html/expovent-prev/expovent/signin.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 22 Sep 2024 08:45:00 GMT -->
 </html>
 
 

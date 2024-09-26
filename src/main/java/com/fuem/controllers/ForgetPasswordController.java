@@ -10,7 +10,6 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.PasswordAuthentication;
 import jakarta.mail.Session;
 import jakarta.mail.Transport;
-import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.ServletException;
@@ -28,7 +27,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author ASUS
+ * @author MinhThang
  */
 @WebServlet(name = "ForgetPasswordController", urlPatterns = {"/forget"})
 public class ForgetPasswordController extends HttpServlet {
@@ -39,7 +38,6 @@ public class ForgetPasswordController extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -52,15 +50,6 @@ public class ForgetPasswordController extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -84,8 +73,8 @@ public class ForgetPasswordController extends HttpServlet {
                 request.getRequestDispatcher("authentication/reset-password.jsp").forward(request, response);
             }
             else {
-                response.sendRedirect("test.jsp");
-                System.out.println("Email not exist");
+                request.setAttribute("message", "Email does not exist");
+                request.getRequestDispatcher("authentication/forget-password.jsp").forward(request, response);
             } 
         } catch (MessagingException e) {
            logger.log(Level.SEVERE, email, e);
@@ -112,10 +101,10 @@ public class ForgetPasswordController extends HttpServlet {
         
         //setting server SMTP
         Properties props = new Properties();
-        props.put("mail.smtp.host", "smtp.gmail.com"); // SMTP của Gmail
+        props.put("mail.smtp.host", "smtp.gmail.com"); // SMTP of Gmail
         props.put("mail.smtp.port", "587");            // Port TLS
         props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true"); // Kích hoạt TLS
+        props.put("mail.smtp.starttls.enable", "true"); // Activate TLS
         
         //Create a session for sending emails with user authentication
         Session session = Session.getInstance(props, new jakarta.mail.Authenticator() {
@@ -133,10 +122,8 @@ public class ForgetPasswordController extends HttpServlet {
 
             // Send Email
             Transport.send(message);
-            System.out.println("Email sent successfully");
         } catch (MessagingException e) {
-            e.printStackTrace(); // Log the exception
-            System.out.println("Failed to send email: " + e.getMessage());
+            logger.log(Level.SEVERE, toEmail, e);
         }
     }
     
