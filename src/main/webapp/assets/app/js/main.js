@@ -249,102 +249,102 @@ MagnificPopup image view
 		$(".bd-theme-settings-area").toggleClass("settings-opened");
 	});
 
-	// rtl settings
-	function bd_rtl_settings() {
+	// // rtl settings
+	// function bd_rtl_settings() {
 
-		$('#bd-dir-toggler').on("change", function () {
-			toggle_rtl();
-			window.location.reload(true);
+	// 	$('#bd-dir-toggler').on("change", function () {
+	// 		toggle_rtl();
+	// 		window.location.reload(true);
 
-		});
-
-
-		// set toggle theme scheme
-		function bd_set_scheme(bd_dir) {
-			localStorage.setItem('bd_dir', bd_dir);
-			document.documentElement.setAttribute("dir", bd_dir);
-
-			if (bd_dir === 'rtl') {
-				var list = $("[href='assets/app/css/bootstrap.min.css']");
-				$(list).attr("href", "assets/app/css/bootstrap.rtl.min.css");
-			} else {
-				var list = $("[href='assets/app/css/bootstrap.min.css']");
-				$(list).attr("href", "assets/app/css/bootstrap.min.css");
-			}
-		}
-
-		// toogle theme scheme
-		function toggle_rtl() {
-			if (localStorage.getItem('bd_dir') === 'rtl') {
-				bd_set_scheme('ltr');
-				var list = $("[href='assets/app/css/bootstrap.rtl.min.css']");
-				$(list).attr("href", "assets/app/css/bootstrap.min.css");
-			} else {
-				bd_set_scheme('rtl');
-				var list = $("[href='assets/app/css/bootstrap.min.css']");
-				$(list).attr("href", "assets/app/css/bootstrap.rtl.min.css");
-			}
-		}
-
-		// set the first theme scheme
-		function bd_init_dir() {
-			if (localStorage.getItem('bd_dir') === 'rtl') {
-				bd_set_scheme('rtl');
-				var list = $("[href='assets/app/css/bootstrap.min.css']");
-				$(list).attr("href", "assets/app/css/bootstrap.rtl.min.css");
-				document.getElementById('bd-dir-toggler').checked = true;
-			} else {
-				bd_set_scheme('ltr');
-				document.getElementById('bd-dir-toggler').checked = false;
-				var list = $("[href='assets/app/css/bootstrap.min.css']");
-				$(list).attr("href", "assets/app/css/bootstrap.min.css");
-			}
-		}
-		bd_init_dir();
-	}
-	if ($("#bd-dir-toggler").length > 0) {
-		bd_rtl_settings();
-	}
-
-	// dark light mode toggler
-	function bd_theme_toggler() {
-
-		$('#bd-theme-toggler').on("change", function () {
-			toggleTheme();
-
-		});
+	// 	});
 
 
-		// set toggle theme scheme
-		function bd_set_scheme(bd_theme) {
-			localStorage.setItem('bd_theme_scheme', bd_theme);
-			document.documentElement.setAttribute("bd-theme", bd_theme);
-		}
+	// 	// set toggle theme scheme
+	// 	function bd_set_scheme(bd_dir) {
+	// 		localStorage.setItem('bd_dir', bd_dir);
+	// 		document.documentElement.setAttribute("dir", bd_dir);
 
-		// toogle theme scheme
-		function toggleTheme() {
-			if (localStorage.getItem('bd_theme_scheme') === 'bd-theme-light') {
-				bd_set_scheme('bd-theme-dark');
-			} else {
-				bd_set_scheme('bd-theme-light');
-			}
-		}
+	// 		if (bd_dir === 'rtl') {
+	// 			var list = $("[href='assets/app/css/bootstrap.min.css']");
+	// 			$(list).attr("href", "assets/app/css/bootstrap.rtl.min.css");
+	// 		} else {
+	// 			var list = $("[href='assets/app/css/bootstrap.min.css']");
+	// 			$(list).attr("href", "assets/app/css/bootstrap.min.css");
+	// 		}
+	// 	}
 
-		// set the first theme scheme
-		function bd_init_theme() {
-			if (localStorage.getItem('bd_theme_scheme') === 'bd-theme-light') {
-				bd_set_scheme('bd-theme-light');
-				document.getElementById('bd-theme-toggler').checked = false;
-			} else {
-				bd_set_scheme('bd-theme-dark');
-				document.getElementById('bd-theme-toggler').checked = true;
-			}
-		}
-		bd_init_theme();
-	}
-	if ($("#bd-theme-toggler").length > 0) {
-		bd_theme_toggler();
-	}
+	// 	// toogle theme scheme
+	// 	function toggle_rtl() {
+	// 		if (localStorage.getItem('bd_dir') === 'rtl') {
+	// 			bd_set_scheme('ltr');
+	// 			var list = $("[href='assets/app/css/bootstrap.rtl.min.css']");
+	// 			$(list).attr("href", "assets/app/css/bootstrap.min.css");
+	// 		} else {
+	// 			bd_set_scheme('rtl');
+	// 			var list = $("[href='assets/app/css/bootstrap.min.css']");
+	// 			$(list).attr("href", "assets/app/css/bootstrap.rtl.min.css");
+	// 		}
+	// 	}
+
+	// 	// set the first theme scheme
+	// 	function bd_init_dir() {
+	// 		if (localStorage.getItem('bd_dir') === 'rtl') {
+	// 			bd_set_scheme('rtl');
+	// 			var list = $("[href='assets/app/css/bootstrap.min.css']");
+	// 			$(list).attr("href", "assets/app/css/bootstrap.rtl.min.css");
+	// 			document.getElementById('bd-dir-toggler').checked = true;
+	// 		} else {
+	// 			bd_set_scheme('ltr');
+	// 			document.getElementById('bd-dir-toggler').checked = false;
+	// 			var list = $("[href='assets/app/css/bootstrap.min.css']");
+	// 			$(list).attr("href", "assets/app/css/bootstrap.min.css");
+	// 		}
+	// 	}
+	// 	bd_init_dir();
+	// }
+	// if ($("#bd-dir-toggler").length > 0) {
+	// 	bd_rtl_settings();
+	// }
+
+	// // dark light mode toggler
+	// function bd_theme_toggler() {
+
+	// 	$('#bd-theme-toggler').on("change", function () {
+	// 		toggleTheme();
+
+	// 	});
+
+
+	// 	// set toggle theme scheme
+	// 	function bd_set_scheme(bd_theme) {
+	// 		localStorage.setItem('bd_theme_scheme', bd_theme);
+	// 		document.documentElement.setAttribute("bd-theme", bd_theme);
+	// 	}
+
+	// 	// toogle theme scheme
+	// 	function toggleTheme() {
+	// 		if (localStorage.getItem('bd_theme_scheme') === 'bd-theme-light') {
+	// 			bd_set_scheme('bd-theme-dark');
+	// 		} else {
+	// 			bd_set_scheme('bd-theme-light');
+	// 		}
+	// 	}
+
+	// 	// set the first theme scheme
+	// 	function bd_init_theme() {
+	// 		if (localStorage.getItem('bd_theme_scheme') === 'bd-theme-light') {
+	// 			bd_set_scheme('bd-theme-light');
+	// 			document.getElementById('bd-theme-toggler').checked = false;
+	// 		} else {
+	// 			bd_set_scheme('bd-theme-dark');
+	// 			document.getElementById('bd-theme-toggler').checked = true;
+	// 		}
+	// 	}
+	// 	bd_init_theme();
+	// }
+	// if ($("#bd-theme-toggler").length > 0) {
+	// 	bd_theme_toggler();
+	// }
 
 
 	// color settings
