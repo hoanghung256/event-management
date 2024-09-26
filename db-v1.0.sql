@@ -176,3 +176,41 @@ GO
 >>>>>>>>>> END: EXAMPLE DATA >>>>>>>>>>
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 */
+
+INSERT INTO [User] (fullname, studentId, email, [password], avatarPath, isClubPresident, isAdmin)
+VALUES 
+('Nguyen Van A', 'SV123456', 'nguyenvana@example.com', 'hashed_password_1', '/avatars/user1.png', 1, 0);
+
+INSERT INTO [EventType] (typeName, description)
+VALUES 
+('Workshop', 'A session focused on hands-on practice and learning.');
+
+INSERT INTO [EventLocation] (locationDescription)
+VALUES 
+('Main Hall - Building A');
+
+INSERT INTO [Event] (hostId, fullname, description, typeId, locationId, startDate, endDate, guestRegisterLimit, registerDeadline)
+VALUES 
+(1, 'Introduction to AI', 'This workshop will cover the basics of Artificial Intelligence.', 1, 1, '2024-10-01 09:00:00', '2024-10-01 12:00:00', 100, '2024-09-25 23:59:59');
+
+INSERT INTO [EventImage] (eventId, path)
+VALUES 
+(8, '/event-management/src/main/webapp/assets/img/user/1/avataTest.png');
+
+INSERT INTO [File] (submitterId, fileType, path)
+VALUES 
+(1, 'REPORT', '/files/reports/ai_workshop_report.pdf');
+
+INSERT INTO [Notification] (senderId, content)
+VALUES 
+(1, 'The AI Workshop is starting soon. Please prepare.');
+
+INSERT INTO [NotificationReceiver] (notificationId, receiverId)
+VALUES 
+(1, 1);
+
+SELECT e.id, e.fullname, e.description, et.typeName, el.locationDescription, e.startDate, e.endDate, e.registerDeadline 
+FROM Event e
+JOIN EventType et ON e.typeId = et.id
+JOIN EventLocation el ON e.locationId = el.id
+WHERE e.id = 8;
