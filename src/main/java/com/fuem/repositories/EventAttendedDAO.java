@@ -47,6 +47,8 @@ public class EventAttendedDAO extends SQLDatabase{
                 String organizerAcronym = rs.getNString("organizerName");
                 String avatarPath = rs.getNString("avatarPath");
                 Date dateOfEvent  = rs.getDate("eventDate");
+                
+                Event event = new Event(eventName, organizerAcronym, avatarPath, dateOfEvent);
                 eventsAttendedList.add(event);
             }
         }catch(SQLException e){
