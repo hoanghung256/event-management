@@ -33,7 +33,6 @@ public class AttendedEventController extends HttpServlet {
         ArrayList<Event> attendedEvents = dao.getAttendedEventsList(4);
 
         request.setAttribute("event", attendedEvents);
-        
         request.getRequestDispatcher("student/attended-events.jsp").forward(request, response);
     }
 
