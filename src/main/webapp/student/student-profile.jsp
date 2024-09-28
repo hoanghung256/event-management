@@ -13,11 +13,11 @@
         justify-content: center;
     }
 
-    
+
     .profile__user-item {
         display: flex;
-        align-items: center; 
-        margin-bottom: 30px; 
+        align-items: center;
+        margin-bottom: 30px;
     }
 
     .profile__user-tiitle {
@@ -29,27 +29,27 @@
         width: auto;
         text-align: left;
     }
-
-    
     .change-password-section {
-        margin-top: 10px; 
-        margin-left: 0px; 
-        text-align: right;
+        text-align: right; 
+        max-width: 200px; 
+        margin-left: auto; 
     }
 
-    .change-password-btn {
-        background-color: #007bff;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 12px; 
+    .ticket__price-inner {
+        font-size: 13px; 
     }
 
-    .change-password-btn:hover {
-        background-color: #0056b3;
+    .unfield__input-btn {
+        padding: 5px 10px; 
+        width: 100%; 
+        height: 60%;
+        box-sizing: border-box; 
     }
+
+
+
+
+
 
 
     .userInfor{
@@ -142,10 +142,15 @@
                                 </ul>
                                 <!--changepass--> 
                                 <div class="change-password-section">
-                                    <a href="authentication/forget-password.jsp" class="change-password-btn">
-                                        <i class="flaticon-lock"></i> Change Password
-                                    </a>
+                                    <div class="ticket__price-inner">
+                                        <div class="ticket__price-item">
+                                            <button class="unfield__input-btn" type="button" onclick="window.location.href = 'authentication/forget-password.jsp'">
+                                                <i class="flaticon-lock"></i> Change Password
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
+
 
 
                             </div>
@@ -155,6 +160,7 @@
                 </div>
             </div>
         </div>
+
 
     </div>
 </section>
