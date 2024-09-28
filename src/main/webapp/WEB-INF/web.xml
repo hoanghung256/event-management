@@ -3,14 +3,7 @@
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
-    <servlet>
-        <servlet-name>EventDetailsController</servlet-name>
-        <servlet-class>com.fuem.controllers.EventDetailsController</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>EventDetailsController</servlet-name>
-        <url-pattern>/EventDetailsController</url-pattern>
-    </servlet-mapping>
+    
     <session-config>
         <session-timeout>
             30

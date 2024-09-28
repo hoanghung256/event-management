@@ -8,7 +8,8 @@ import java.util.List;
 
 public class Event {
     private int id;  
-    private String hostClub;
+    private User hostClub;
+    private String eventName;
     private String eventType;
     private String location;
     private LocalDateTime startDate;
@@ -26,13 +27,23 @@ public class Event {
         this.id = id;
     }
 
-    public String getHostClub() {
+    public User getHostClub() {
         return hostClub;
     }
 
-    public void setHostClub(String hostClub) {
+    public void setHostClub(User hostClub) {
         this.hostClub = hostClub;
     }
+
+    public String getEventName() {
+        return eventName;
+    }
+
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
+
+    
 
     public String getEventType() {
         return eventType;
