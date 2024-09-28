@@ -3,22 +3,57 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.fuem.models;
+
+import com.fuem.models.EventLocation;
+import com.fuem.models.Organizer;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+
+
+/**
+ *
+ * @author hoang hung
+ */
+import java.util.Date;
 import java.util.List;
 
 public class Event {
-    private int id;  
-    private User hostClub;
-    private String eventName;
-    private String eventType;
-    private String location;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
+    
+    private int id;
+    private Organizer organizer;
+    private String fullname;
+    private String description;
+    private EventType type;
+    private EventLocation location;
+    private Date dateOfEvent;
+    private LocalTime startTime;
+    private LocalTime endTime;
+    private int guestRegisterLimit;
     private LocalDateTime registerDeadline;
-    private String description; 
-    private List<String> images; 
+    private int guestAttendedCount;
+    private List<String> images;
 
-    // Getters and Setters
+    public Event() {
+    }
+
+    public Event(int id, Organizer organizer, String fullname, String description, EventType type, EventLocation location, Date dateOfEvent, LocalTime startTime, LocalTime endTime, int guestRegisterLimit, LocalDateTime registerDeadline, int guestAttendedCount, List<String> images) {
+        this.id = id;
+        this.organizer = organizer;
+        this.fullname = fullname;
+        this.description = description;
+        this.type = type;
+        this.location = location;
+        this.dateOfEvent = dateOfEvent;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.guestRegisterLimit = guestRegisterLimit;
+        this.registerDeadline = registerDeadline;
+        this.guestAttendedCount = guestAttendedCount;
+        this.images = images;
+    }
+
     public int getId() {
         return id;
     }
@@ -27,62 +62,20 @@ public class Event {
         this.id = id;
     }
 
-    public User getHostClub() {
-        return hostClub;
+    public Organizer getOrganizer() {
+        return organizer;
     }
 
-    public void setHostClub(User hostClub) {
-        this.hostClub = hostClub;
+    public void setOrganizer(Organizer organizer) {
+        this.organizer = organizer;
     }
 
-    public String getEventName() {
-        return eventName;
+    public String getFullname() {
+        return fullname;
     }
 
-    public void setEventName(String eventName) {
-        this.eventName = eventName;
-    }
-
-    
-
-    public String getEventType() {
-        return eventType;
-    }
-
-    public void setEventType(String eventType) {
-        this.eventType = eventType;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public LocalDateTime getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(LocalDateTime startDate) {
-        this.startDate = startDate;
-    }
-
-    public LocalDateTime getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(LocalDateTime endDate) {
-        this.endDate = endDate;
-    }
-
-    public LocalDateTime getRegisterDeadline() {
-        return registerDeadline;
-    }
-
-    public void setRegisterDeadline(LocalDateTime registerDeadline) {
-        this.registerDeadline = registerDeadline;
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public String getDescription() {
@@ -93,6 +86,70 @@ public class Event {
         this.description = description;
     }
 
+    public EventType getType() {
+        return type;
+    }
+
+    public void setType(EventType type) {
+        this.type = type;
+    }
+
+    public EventLocation getLocation() {
+        return location;
+    }
+
+    public void setLocation(EventLocation location) {
+        this.location = location;
+    }
+
+    public Date getDateOfEvent() {
+        return dateOfEvent;
+    }
+
+    public void setDateOfEvent(Date dateOfEvent) {
+        this.dateOfEvent = dateOfEvent;
+    }
+
+    public LocalTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalTime getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
+    }
+
+    public int getGuestRegisterLimit() {
+        return guestRegisterLimit;
+    }
+
+    public void setGuestRegisterLimit(int guestRegisterLimit) {
+        this.guestRegisterLimit = guestRegisterLimit;
+    }
+
+    public LocalDateTime getRegisterDeadline() {
+        return registerDeadline;
+    }
+
+    public void setRegisterDeadline(LocalDateTime registerDeadline) {
+        this.registerDeadline = registerDeadline;
+    }
+
+    public int getGuestAttendedCount() {
+        return guestAttendedCount;
+    }
+
+    public void setGuestAttendedCount(int guestAttendedCount) {
+        this.guestAttendedCount = guestAttendedCount;
+    }
+
     public List<String> getImages() {
         return images;
     }
@@ -100,4 +157,11 @@ public class Event {
     public void setImages(List<String> images) {
         this.images = images;
     }
+
+    @Override
+    public String toString() {
+        return "Event{" + "id=" + id + ", organizer=" + organizer + ", fullname=" + fullname + ", description=" + description + ", type=" + type + ", location=" + location + ", dateOfEvent=" + dateOfEvent + ", startTime=" + startTime + ", endTime=" + endTime + ", guestRegisterLimit=" + guestRegisterLimit + ", registerDeadline=" + registerDeadline + ", guestAttendedCount=" + guestAttendedCount + ", images=" + images + '}';
+    }
+
+    
 }

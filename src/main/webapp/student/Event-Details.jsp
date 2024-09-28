@@ -37,11 +37,10 @@
         </div>
         <!--Bat dau content cua page o day-->
         <div class="pb-20">
-            <div class="">
-                <div class="" id="myTabContent">
-                    <div class="" id="day-tab-1-pane" role="tabpanel" aria-labelledby="day-tab-1" tabindex="0">
-
-                        <!--BODY GO HERE-->
+            <div>
+                <div id="myTabContent">
+                    <div id="day-tab-1-pane" role="tabpanel" aria-labelledby="day-tab-1" tabindex="0">
+                        <!-- BODY GO HERE -->
                         <div class="event__details-area">
                             <div class="row">
                                 <div class="col-xxl-7 col-xl-6">
@@ -49,24 +48,23 @@
                                         <div class="body__card-wrapper mb-20">
                                             <div class="card__header-top">
                                                 <div class="card__title-inner">
-                                                    <h4 class="event__information-title">${event.eventName}</h4>
+                                                    <h4 class="event__information-title">${event.fullname}</h4>
                                                 </div>
                                             </div>
                                             <div class="review__main-wrapper pt-25">
-                                                <div class="review__meta mb-25">
-                                                </div>
+                                                <div class="review__meta mb-25"></div>
                                                 <div class="review__author-meta mb-15">
                                                     <div class="review__author-thumb">
-                                                        <img src="assets/img/meta/01.png" alt="image not found">
+                                                        <img src="${event.organizer.avatarPath}" alt="Organizer Avatar" onerror="this.onerror=null; this.src='assets/img/default-avatar.png';">
                                                     </div>
                                                     <div class="review__author-name">
-                                                        <h4>${event.hostClub.fullName}</h4> 
+                                                        <h4>${event.organizer.fullname}</h4> 
                                                     </div>
                                                 </div>
                                                 <div class="review__tab">
                                                     <nav>
                                                         <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                                                            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">about</button>
+                                                            <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">About</button>
                                                         </div>
                                                     </nav>
                                                     <div class="tab-content" id="nav-tabContent">
@@ -75,7 +73,7 @@
                                                                 <c:choose>
                                                                     <c:when test="${not empty event.images}">
                                                                         <c:forEach var="image" items="${event.images}">
-                                                                            <img src="${pageContext.request.contextPath}/${image}" alt="Event Image" />
+                                                                            <img src="${pageContext.request.contextPath}/${imagesS}" alt="Event Image" />
                                                                         </c:forEach>
                                                                     </c:when>
                                                                     <c:otherwise>
@@ -95,7 +93,6 @@
                                                                     <div class="ticket__price-item">
                                                                         <button class="unfield__input-btn" type="submit">Register as Collaborator</button>
                                                                     </div>
-
                                                                     <div class="ticket__price-item">
                                                                         <button class="unfield__input-btn" type="submit">Register as Attendant</button>
                                                                     </div>
@@ -103,7 +100,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
@@ -116,19 +112,21 @@
                                                 <ul>
                                                     <li>
                                                         <span>Date: </span>
-                                                        ${fn:substringBefore(event.startDate, 'T')} - ${fn:substringBefore(event.endDate, 'T')}
+                                                        ${event.dateOfEvent}
                                                     </li>
                                                     <li>
                                                         <span>Time: </span>
-                                                        ${fn:substringAfter(event.startDate, 'T')} - ${fn:substringAfter(event.endDate, 'T')}
+                                                        
+                                                        ${event.startTime} / ${event.endTime}
                                                     </li>
                                                     <li>
                                                         <span>Reg. Deadline: </span>
-                                                        ${event.registerDeadline} 
+                                                        
+                                                        ${fn:substringBefore(event.registerDeadline, 'T')} / ${fn:substringAfter(event.registerDeadline, 'T')} 
                                                     </li>
                                                     <li>
                                                         <span>Venue: </span>
-                                                        ${event.location}
+                                                        ${event.location.description}
                                                     </li>                                           
                                                 </ul>
                                             </div>
@@ -140,7 +138,7 @@
                     </div>
                 </div>
             </div>
-        </div>                             
+        </div>
         <!--End content cua page-->
     </div>
 </section>
