@@ -13,5 +13,8 @@
     </head>
     <body>
         <h1>Hello World!</h1>
+        <form method="GET">
+            <button type="submit">Move to attended events</button>
+        </form>
     </body>
 </html>

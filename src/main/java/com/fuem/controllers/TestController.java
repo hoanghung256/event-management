@@ -29,6 +29,6 @@ public class TestController extends HttpServlet {
         // System.out.println(result.size());
 
         // req.setAttribute("names", result);
-        // req.getRequestDispatcher("test.jsp").forward(req, resp);
+         req.getRequestDispatcher("student/attended-events.jsp").forward(req, resp);
     }
 }
