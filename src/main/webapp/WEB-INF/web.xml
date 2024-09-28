@@ -6,7 +6,7 @@
 
     <!-- Trang chào mừng -->
     <welcome-file-list>
-        <welcome-file>authentication/forget-password.jsp</welcome-file>
+        <welcome-file>sign-in</welcome-file>
     </welcome-file-list>
 
     <!-- Cấu hình session timeout (đơn vị là phút) -->

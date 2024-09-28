@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.fuem.dao;
 
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
@@ -18,10 +14,11 @@ import java.util.logging.Logger;
  */
 public class DatabaseConnection {
     private static Connection connection;
-    private static final String URL = "jdbc:sqlserver://localhost:1433;database=event_management;encrypt=true;trustServerCertificate=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+    private static final String URL = "jdbc:sqlserver://localhost:8080;database=EventManagement;encrypt=true;trustServerCertificate=true;loginTimeout=30;";
+
   
-    private static final String USERNAME = "sa";
-    private static final String PASSWORD = "30042004";
+    private static final String USERNAME = "sa"; // Kiểm tra người dùng này
+    private static final String PASSWORD = "30042004"; // Kiểm tra mật khẩu này
     
     public DatabaseConnection() {
     }

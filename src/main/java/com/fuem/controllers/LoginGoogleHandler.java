@@ -1,6 +1,6 @@
 package com.fuem.controllers;
 
-import com.fuem.dao.UserDAO;
+import com.fuem.repositories.UserDAO;
 import com.fuem.models.User;
 import com.fuem.utils.Cookies;
 
@@ -31,42 +31,49 @@ public class LoginGoogleHandler extends HttpServlet {
     private static final String CLIENT_SECRET = "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";
     private static final String REDIRECT_URI = "http://localhost:8080/event-management/LoginGoogleHandler";
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String code = request.getParameter("code");
-        if (code != null) {
-            String accessToken = getAccessToken(code);
-            if (accessToken != null) {
-                JsonObject userInfo = getUserInfo(accessToken);
-                if (userInfo != null) {
-                    String email = userInfo.getString("email");
-                    UserDAO userDAO = new UserDAO();
-                    User user = userDAO.getUserByEmail(email);
-                    System.out.println(email);
-                    System.out.println(user);
+protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    String code = request.getParameter("code");
+    if (code != null) {
+        String accessToken = getAccessToken(code);
+        if (accessToken != null) {
+            JsonObject userInfo = getUserInfo(accessToken);
+            if (userInfo != null) {
+                String email = userInfo.getString("email");
+                UserDAO userDAO = new UserDAO();
+                
+                User user = new User();
 
-                    if (user != null) {
-                        HttpSession session = request.getSession();
-                        session.setAttribute("user", user);
-                        Cookies.add("userInfo", user, 120, response);
-                        response.sendRedirect("home");
-                    } else {
-                        request.getRequestDispatcher("authentication/sign-in.jsp?error=email_not_registered").forward(request, response);
-                    }
+                if (userDAO.isEmailInDatabase(email)) {
+                    // Người dùng đã tồn tại
+                    user = userDAO.getUserByEmail(email);
+                    
+                    HttpSession session = request.getSession();
+                    session.setAttribute("userInfo", user);
+                    request.getRequestDispatcher("index.html").forward(request, response);
                 } else {
-                    request.setAttribute("errorMessage", "Unable to fetch user information");
-                    request.getRequestDispatcher("authentication/sign-in.jsp?error=email_not_registered").forward(request, response);
-
+                    String[] emailSplit = email.split("@");
+                    if (!emailSplit[1].equalsIgnoreCase("fpt.edu.vn")) {
+                        request.setAttribute("error", "Email not allow, must be contain @fpt.edu.vn");
+                        request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
+                    } else {
+                        request.setAttribute("email", email);
+                        user.setEmail(email);
+                        request.getRequestDispatcher("authentication/sign-up.jsp").forward(request, response);
+                    }
+                    
                 }
             } else {
+                request.setAttribute("error", "Unable to fetch user information");
                 request.getRequestDispatcher("authentication/sign-in.jsp?error=email_not_registered").forward(request, response);
-
             }
         } else {
             request.getRequestDispatcher("authentication/sign-in.jsp?error=email_not_registered").forward(request, response);
-
         }
+    } else {
+        request.getRequestDispatcher("authentication/sign-in.jsp?error=email_not_registered").forward(request, response);
     }
+}
 
     private String getAccessToken(String code) throws IOException {
         String url = "https://oauth2.googleapis.com/token";

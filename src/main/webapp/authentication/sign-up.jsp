@@ -1,4 +1,10 @@
-<!doctype html>
+<%-- 
+    Document   : sign-in
+    Created on : Sep 28, 2024, 11:21:09 AM
+    Author     : ADMIN
+--%>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <html class="no-js" lang="zxx">
    
 <!-- Mirrored from codeskdhaka.com/html/expovent-prev/expovent/signup.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 22 Sep 2024 08:45:00 GMT -->
@@ -42,156 +48,6 @@
       </div>
       <!-- Preloder start -->
 
-      <!-- Offcanvas area start -->
-      <div class="fix">
-         <div class="offcanvas__info">
-            <div class="offcanvas__wrapper">
-               <div class="offcanvas__content">
-                  <div class="offcanvas__top mb-40 d-flex justify-content-between align-items-center">
-                     <div class="offcanvas__logo">
-                        <a href="dashboard.html">
-                           <img src="assets/img/logo/logo-black.svg" alt="logo not found">
-                        </a>
-                     </div>
-                     <div class="offcanvas__close">
-                        <button>
-                           <i class="fal fa-times"></i>
-                        </button>
-                     </div>
-                  </div>
-                  <div class="offcanvas__search mb-25">
-                     <form action="#">
-                        <input type="text" placeholder="What are you searching for?">
-                        <button type="submit"><i class="far fa-search"></i></button>
-                     </form>
-                  </div>
-                  <div class="mobile-menu fix mb-40"></div>
-                  <div class="offcanvas__contact mt-30 mb-20">
-                     <h4>Contact Info</h4>
-                     <ul>
-                        <li class="d-flex align-items-center">
-                           <div class="offcanvas__contact-icon mr-15">
-                              <i class="fal fa-map-marker-alt"></i>
-                           </div>
-<!--                           <div class="offcanvas__contact-text">
-                              <a target="_blank"
-                                 href="https://www.google.com/maps/place/Dhaka/@23.7806207,90.3492859,12z/data=!3m1!4b1!4m5!3m4!1s0x3755b8b087026b81:0x8fa563bbdd5904c2!8m2!3d23.8104753!4d90.4119873">12/A,
-                                 Mirnada City Tower, NYC</a>
-                           </div>-->
-                        </li>
-                        <li class="d-flex align-items-center">
-                           <div class="offcanvas__contact-icon mr-15">
-                              <i class="far fa-phone"></i>
-                           </div>
-                           <div class="offcanvas__contact-text">
-                              <a href="tel:+088889797697">+088889797697</a>
-                           </div>
-                        </li>
-                        <li class="d-flex align-items-center">
-                           <div class="offcanvas__contact-icon mr-15">
-                              <i class="fal fa-envelope"></i>
-                           </div>
-                           <div class="offcanvas__contact-text">
-                              <a href="tel:+012-345-6789"><span class="mailto:support@mail.com">support@mail.com</span></a>
-                           </div>
-                        </li>
-                     </ul>
-                  </div>
-                  <div class="offcanvas__social">
-                     <ul>
-                        <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-                        <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                        <li><a href="#"><i class="fab fa-youtube"></i></a></li>
-                        <li><a href="#"><i class="fab fa-linkedin"></i></a></li>
-                     </ul>
-                  </div>
-               </div>
-            </div>
-         </div>
-      </div>
-      <div class="offcanvas__overlay"></div>
-      <div class="offcanvas__overlay-white"></div>
-      <!-- Offcanvas area start -->
-
-      <!--Speaker popup area start -->
-      <section class="speaker__popup-area">
-         <div class="popup__wrapper">
-            <div class="popup__title-wrapper">
-               <h3 class="popup__title">Add Event Speaker</h3>
-            </div>
-            <div class="popup__input-wrapper">
-               <form action="#">
-                  <div class="singel__input-field mb-15">
-                     <label class="input__field-text">Speaker Name</label>
-                     <input type="text">
-                  </div>
-                  <div class="singel__input-field mb-15">
-                     <label class="input__field-text">Email</label>
-                     <input type="text">
-                  </div>
-                  <div class="singel__input-field mb-15">
-                     <label class="input__field-text">Phone Number</label>
-                     <input type="text">
-                  </div>
-                  <div class="singel__input-field mb-15">
-                     <label class="input__field-text">Organization Name</label>
-                     <input type="text">
-                  </div>
-                  <div class="singel__input-field mb-15">
-                     <label class="input__field-text">Designation</label>
-                     <input type="text">
-                  </div>
-                  <div class="popup__update mb-15">
-                     <label class="input__field-text">Upload Image ( 200x200px )</label>
-                     <input type="file">
-                  </div>
-                  <button class="input__btn w-100" type="submit"><i class="fa-regular fa-plus"></i>Add Speaker</button>
-               </form>
-            </div>
-         </div>
-      </section>
-      <!--Speaker popup area end -->
-
-      <!-- Event popup area start -->
-      <section class="event__popup-area">
-         <div class="popup__wrapper">
-            <div class="popup__title-wrapper">
-               <h3 class="popup__title">Add Event Attendant</h3>
-            </div>
-            <div class="popup__input-wrapper">
-               <form action="#">
-                  <div class="singel__input-field mb-15">
-                     <label class="input__field-text">Name</label>
-                     <input type="text">
-                  </div>
-                  <div class="singel__input-field mb-15">
-                     <label class="input__field-text">Email</label>
-                     <input type="email">
-                  </div>
-                  <div class="singel__input-field mb-15">
-                     <label class="input__field-text">Phone Number</label>
-                     <input type="text">
-                  </div>
-                  <div class="singel__input-field mb-15">
-                     <label class="input__field-text">Organization Name</label>
-                     <input type="text">
-                  </div>
-                  <div class="singel__input-field mb-15">
-                     <label class="input__field-text">Ticket ID No</label>
-                     <input type="text">
-                  </div>
-                  <div class="popup__update">
-                     <label class="input__field-text">Upload Image ( 200x200px )</label>
-                     <input type="file" name="img" accept="image/*">
-                  </div>
-                  <button class="input__btn w-100" type="submit"><i class="fa-regular fa-plus"></i>Add
-                     Attendant</button>
-               </form>
-            </div>
-         </div>
-      </section>
-      <!-- Event popup area end -->
-
        <!-- signup area start -->
        <section class="signin__area">
          <div class="sign__main-wrapper">
@@ -204,35 +60,43 @@
                      </a>
                   </div>
                   <div class="sign__link">
-                     <a class="sign__link-text" href="signin.html">Sign in</a>
+                 <a class="sign__link-text" href="SignInController">Sign in</a>
+
                      <a class="sign__link-active" href="#">Sign Up</a>
                   </div>
                </div>
                <div class="sign__center-wrapper text-center mt-80">
                   <div class="sign__title-wrapper mb-40">
                      <h3 class="sign__title">Create An Account</h3>
-                     <p>The faster you fill up. the faster you get a ticket</p>
+                     <p>The faster you fill up. the faster you go to event</p>
                   </div>
                   <div class="sign__input-form text-center">
-                     <form action="#">
+                     <form action="sign-up"method="POST"> 
                         <div class="sign__input">
-                           <input type="text" placeholder="User Name">
+                            <input type="text" placeholder="Full Name" name="fullname">
+                           <span><i class="flaticon-user-2"></i></span>
+                        </div>
+                          <div class="sign__input">
+                           <input type="text" placeholder="Student ID" name="studentId">
                            <span><i class="flaticon-user-2"></i></span>
                         </div>
                         <div class="sign__input">
-                           <input type="email" placeholder="Email Address">
+                           <input type="email" placeholder="Email Address" name="email" value="${email}">
                            <span><i class="flaticon-user-2"></i></span>
                         </div>
                         <div class="sign__input">
-                           <input type="password" placeholder="Enter Password">
+                           <input type="password" placeholder="Enter Password" name="password">
                            <span><i class="flaticon-password"></i></span>
                         </div>
                         <div class="sign__input">
-                           <input type="password" placeholder="Confirm Password">
+                           <input type="password" placeholder="Confirm Password" name="confirmPassword">
                            <span><i class="flaticon-password"></i></span>
                         </div>
                         <div class="sing__button mb-20">
-                           <button class="input__btn w-100 mb-20" type="submit">Sign Up</button>
+                            <c:if test="${not empty error}">
+                        <p style="color: red;">${error}</p>
+                    </c:if>
+                           <button class="input__btn w-100 mb-20" type="submit">Sign-up</button>
                            <button class="gamil__sign-btn w-100" type="submit"><span><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                               <g clip-path="url(#clip0_322_540)">
                               <path d="M4.43242 12.0863L3.73625 14.6852L1.19176 14.739C0.431328 13.3286 0 11.7149 0 10C0 8.34179 0.403281 6.77804 1.11812 5.40112H1.11867L3.38398 5.81644L4.37633 8.06815C4.16863 8.67366 4.05543 9.32366 4.05543 10C4.05551 10.7341 4.18848 11.4374 4.43242 12.0863Z" fill="#FBBB00"/>
@@ -246,11 +110,11 @@
                               </clipPath>
                               </defs>
                               </svg>
-                              </span>Sign Up With Google</button>
+<!--                              </span>Sign Up With Google</button>-->
                         </div>
                      </form>
                      <div class="if__account mt-90">
-                        <p>Already have an account? <a href="signin.html">Sign in</a></p>
+                         <p>Already have an account? <a href="authentication/sign-in.jsp" <Sign in></a></p>
                      </div>
                   </div>
                </div>

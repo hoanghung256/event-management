@@ -8,32 +8,29 @@ package com.fuem.models;
  *
  * @author AnhNQ
  */
-public class User {
+
+public class Organizer {
     private int id;
-    private String fullname; // Chỉnh sửa từ fullName thành fullname
-    private String studentId;
+    private String acronym;
+    private String fullname;
+    private String description;
     private String email;
     private String password;
     private String avatarPath;
+    private boolean isAdmin;
 
-    public User() {
+    public Organizer() {
     }
 
-    public User(String fullname, String studentId, String email, String password) {
-        this.fullname = fullname;
-        this.studentId = studentId;
-        this.email = email;
-        this.password = password;
-    }
-
-  
-    public User(int id, String fullname, String studentId, String email, String password, String avatarPath) {
+    public Organizer(int id, String acronym, String fullname, String description, String email, String password, String avatarPath, boolean isAdmin) {
         this.id = id;
+        this.acronym = acronym;
         this.fullname = fullname;
-        this.studentId = studentId;
+        this.description = description;
         this.email = email;
         this.password = password;
         this.avatarPath = avatarPath;
+        this.isAdmin = isAdmin;
     }
 
     public int getId() {
@@ -44,6 +41,14 @@ public class User {
         this.id = id;
     }
 
+    public String getAcronym() {
+        return acronym;
+    }
+
+    public void setAcronym(String acronym) {
+        this.acronym = acronym;
+    }
+
     public String getFullname() {
         return fullname;
     }
@@ -52,12 +57,12 @@ public class User {
         this.fullname = fullname;
     }
 
-    public String getStudentId() {
-        return studentId;
+    public String getDescription() {
+        return description;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getEmail() {
@@ -84,8 +89,18 @@ public class User {
         this.avatarPath = avatarPath;
     }
 
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
+    }
+
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", fullname=" + fullname + ", studentId=" + studentId + ", email=" + email + ", password=" + password + ", avatarPath=" + avatarPath + '}';
+        return "Organizer{" + "id=" + id + ", acronym=" + acronym + ", fullname=" + fullname + ", description=" + description + ", email=" + email + ", password=" + password + ", avatarPath=" + avatarPath + ", isAdmin=" + isAdmin + '}';
     }
+    
 }
+
