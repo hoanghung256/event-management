@@ -118,7 +118,7 @@ CREATE TABLE [Event] (
 	[endTime] TIME,
 	[guestRegisterLimit] INT,
 	[registerDeadline] DATETIME,
-	[guestAttendedCount] INT
+	[collaboratorRegisterLimit] INT,
 		
 	CONSTRAINT PK_Event PRIMARY KEY ([id]),
 	FOREIGN KEY ([organizerId]) REFERENCES [Organizer]([id]),
@@ -185,6 +185,8 @@ CREATE TABLE [EventCollaborator] (
 CREATE TABLE [EventGuest] (
 	[studentId] INT,
 	[eventId] INT,
+	[isRegistered] BIT DEFAULT(0),
+	[isAttended] BIT DEFAULT(0),
 
 	CONSTRAINT PK_EventGuest PRIMARY KEY ([studentId], [eventId]),
 	FOREIGN KEY ([studentId]) REFERENCES [User]([id]),
@@ -274,7 +276,7 @@ BEGIN
     SET @randomOrganizerId = 1 + FLOOR(RAND() * (5 - 1 + 1));
 
     INSERT INTO [Event] 
-    ([organizerId], [fullname], [description], [typeId], [locationId], [dateOfEvent], [startTime], [endTime], [guestRegisterLimit], [registerDeadline], [guestAttendedCount])
+    ([organizerId], [fullname], [description], [typeId], [locationId], [dateOfEvent], [startTime], [endTime], [guestRegisterLimit], [registerDeadline])
     VALUES 
     (
         @randomOrganizerId,
@@ -286,12 +288,18 @@ BEGIN
 		CAST(DATEADD(DAY, 8, GETDATE()) AS TIME),
 		CAST(DATEADD(DAY, 12, GETDATE()) AS TIME),
         100,
-        DATEADD(DAY, @i, GETDATE()),
-		50
+        DATEADD(DAY, @i, GETDATE())
     );
 
     SET @i = @i + 1;
 END;
+
+DECLARE @j INT = 1;
+WHILE @j <= 6
+BEGIN
+	INSERT INTO [EventGuest](eventId, studentId, isRegistered) VALUES (2, @j, 1);
+	SET @j = @j + 1;
+END
 /*
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 >>>>>>>>>> END: EXAMPLE DATA >>>>>>>>>>
