@@ -112,17 +112,16 @@
                                                 <ul>
                                                     <li>
                                                         <span>Date: </span>
-                                                        ${event.dateOfEvent}
+                                                        <i id="date">${event.dateOfEvent}</i>
                                                     </li>
                                                     <li>
                                                         <span>Time: </span>
                                                         
-                                                        ${event.startTime} / ${event.endTime}
+                                                        <i id="time">${event.startTime}</i> - <i id="time">${event.endTime}</i> 
                                                     </li>
                                                     <li>
-                                                        <span>Reg. Deadline: </span>
-                                                        
-                                                        ${fn:substringBefore(event.registerDeadline, 'T')} / ${fn:substringAfter(event.registerDeadline, 'T')} 
+                                                        <span>Register Deadline: </span>
+                                                        <i id="datetime">${event.registerDeadline}</i>
                                                     </li>
                                                     <li>
                                                         <span>Venue: </span>
