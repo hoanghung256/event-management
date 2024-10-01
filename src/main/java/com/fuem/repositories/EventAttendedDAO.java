@@ -5,6 +5,8 @@
 package com.fuem.repositories;
 
 import com.fuem.models.Event;
+import com.fuem.repositories.helpers.Page;
+import com.fuem.repositories.helpers.PagingCriteria;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,7 +24,8 @@ public class EventAttendedDAO extends SQLDatabase{
                                                             "    E.fullname AS eventName,\n" +
                                                             "    O.acronym AS organizerName,\n" +
                                                             "	 O.avatarPath AS avatarPath,\n" +
-                                                            "    E.dateOfEvent AS eventDate\n" +
+                                                            "    E.dateOfEvent AS eventDate,\n" +
+                                                            "    COUNT (*) OVER() AS 'TotalRow'\n" +
                                                             "FROM \n" +
                                                             "    [EventGuest] EG\n" +
                                                             "JOIN \n" +
@@ -35,14 +38,22 @@ public class EventAttendedDAO extends SQLDatabase{
                                                             "    EG.studentId = ? \n" +
                                                             "    AND E.dateOfEvent < '2025-10-31'\n" +
                                                             "ORDER BY \n" +
-                                                            "    E.dateOfEvent DESC;";
+                                                            "    E.dateOfEvent DESC\n"+ 
+                                                            "OFFSET ? ROWS\n" +
+                                                            "FETCH NEXT ? ROWS ONLY";
     
-    public ArrayList<Event> getAttendedEventsList(int userId){
-        ResultSet rs = executeQueryPreparedStatement(SELECT_ATTENDED_EVENTS, userId);
+    public Page<Event> getAttendedEventsList(PagingCriteria pagingCriteria, int userId){
+        ResultSet rs = executeQueryPreparedStatement(SELECT_ATTENDED_EVENTS, userId, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());
+        Page<Event> page = new Page<>();
         ArrayList<Event> eventsAttendedList = new ArrayList<>();
         
         try{
             while(rs.next()){
+                if (page.getTotalPage() == null && page.getCurrentPage() == null) {
+                    page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
+                    page.setCurrentPage(pagingCriteria.getOffset() / pagingCriteria.getFetchNext());
+                }
+                
                 String eventName = rs.getString("eventName");
                 String organizerAcronym = rs.getNString("organizerName");
                 String avatarPath = rs.getNString("avatarPath");
@@ -50,13 +61,14 @@ public class EventAttendedDAO extends SQLDatabase{
                 System.out.println("date: "+dateOfEvent);
                 
                 Event event = new Event(eventName, organizerAcronym, avatarPath, dateOfEvent);
-                event.print();
                 eventsAttendedList.add(event);
             }
         }catch(SQLException e){
                 logger.log(Level.SEVERE, null, e);
-            }
-        return eventsAttendedList;
+        }
+        page.setDatas(eventsAttendedList);
+        
+        return page;
     }
 }
 

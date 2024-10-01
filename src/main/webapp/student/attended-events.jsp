@@ -46,7 +46,7 @@
                                     </tr>
                                  </thead>
                                  <tbody>
-                                        <c:forEach var="event" items="${event}">
+                                        <c:forEach var="event" items="${page.datas}">
                                             <tr>
                                                 <td>
                                                     <div class="attendant__user-item">
@@ -60,7 +60,7 @@
                                                 </td>
                                                 <td>
                                                     <div class="attendant__seminar">
-                                                        <span>${event.fullname}</a></span>
+                                                        <span>${event.fullname}</span>
                                                     </div>
                                                 </td>
                                                 <td>
@@ -78,28 +78,54 @@
                                  </tbody>
                               </table>
                            </div>
+                             <!<!-- pagination controls -->
                            <div class="basic__pagination d-flex align-items-center justify-content-end">
-                              <nav> 
-                                 <ul>
-                                    <li>
-                                       <a href="#">1</a>
-                                    </li>
-                                    <li>
-                                       <span class="current">2</span>
-                                    </li>
-                                    <li>
-                                       <a href="#">3</a>
-                                    </li>
-                                    <li>
-                                       <a href="#">4</a>
-                                    </li>
-                                    <li>
-                                       <a href="#">
-                                          <i class="fa-regular fa-arrow-right-long"></i>
-                                       </a>
-                                    </li>
-                                 </ul>
-                              </nav>
+                             <nav>
+                                <ul>
+                                    <c:forEach var="i" begin="0" end="${page.totalPage}">
+                                        <c:choose>
+                                            <c:when test="${i == 0 && page.currentPage > 0}">
+                                                <li>
+                                                    <a href="attended?page=${page.currentPage - 1}">
+                                                        <i class="fa-regular fa-arrow-left-long"></i>
+                                                    </a>
+                                                </li>
+                                            </c:when>
+                                            <c:when test="${i >= page.currentPage && i <= page.currentPage + 4}">
+                                                <c:choose>
+                                                    <c:when test="${i == page.currentPage}">
+                                                        <li>
+                                                            <span class="current">${i + 1}</span>
+                                                        </li>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <li>
+                                                            <a href="attended?page=${i}">${i + 1}</a>
+                                                        </li>
+                                                    </c:otherwise>
+                                                </c:choose>
+                                            </c:when>
+                                            <c:when test="${i == page.currentPage + 5 && page.currentPage + 5 < page.totalPage - 1}">
+                                                <li> ... </li>
+                                            </c:when>
+                                            <c:when test="${i == page.totalPage - 1 && page.currentPage + 5 < page.totalPage - 1}">
+                                                <li>
+                                                    <a href="attended?page=${page.totalPage - 1}">
+                                                       ${page.totalPage}
+                                                    </a>
+                                                </li>
+                                            </c:when>
+                                            <c:when test="${i == page.totalPage - 1 && page.currentPage < page.totalPage - 1}">
+                                                <li>
+                                                    <a href="attended?page=${page.currentPage + 1}">
+                                                        <i class="fa-regular fa-arrow-right-long"></i>
+                                                    </a>
+                                                </li>
+                                            </c:when>
+                                        </c:choose>
+                                    </c:forEach>
+                                </ul>
+                             </nav>
                            </div>
                         </div>
                   </div>

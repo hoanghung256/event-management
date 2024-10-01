@@ -6,13 +6,14 @@ package com.fuem.controllers;
 
 import com.fuem.models.Event;
 import com.fuem.repositories.EventAttendedDAO;
+import com.fuem.repositories.helpers.Page;
+import com.fuem.repositories.helpers.PagingCriteria;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
 
 /**
  *
@@ -30,10 +31,25 @@ public class AttendedEventController extends HttpServlet {
         HttpSession session = request.getSession();
         session.getAttribute("userId", userId);    
         */
-        ArrayList<Event> attendedEvents = dao.getAttendedEventsList(4);
-
-        request.setAttribute("event", attendedEvents);
+        PagingCriteria pagingCriteria = new PagingCriteria();
+        String pageNumberStr = request.getParameter("page");
         
+        Integer pageNumber = null;
+        
+        if (pageNumberStr == null) {
+            pageNumber = 0;
+        } else {
+            pageNumber = Integer.valueOf(pageNumberStr);
+        }
+        
+        pagingCriteria = new PagingCriteria(
+                pageNumber, 
+                10
+        );
+        
+        Page<Event> attendedEvents = dao.getAttendedEventsList(pagingCriteria, 4);
+        
+        request.setAttribute("page", attendedEvents);
         request.getRequestDispatcher("student/attended-events.jsp").forward(request, response);
     }
 
