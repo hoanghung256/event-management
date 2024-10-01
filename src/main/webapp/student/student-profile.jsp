@@ -93,7 +93,7 @@
 
                                 </a>
                                 <div class="profile__thumb mb-45">
-                                    <img src="${sessionScope.userInfor.avatarPath}" alt="image not found">
+                                    <img src="https://th.bing.com/th/id/OIP.e1KNYwnuhNwNj7_-98yTRwHaF7?rs=1&pid=ImgDetMain" alt="image not found">
                                 </div>
                                 <div class="profile__user">                                            
                                 </div>
@@ -115,7 +115,7 @@
                                                 <span>First Name:</span>
                                             </div>
                                             <div class="profile__user-info">
-                                                <span>${sessionScope.userInfor.fullName}</span>
+                                                <span>${sessionScope.userInfor.fullname}</span>
                                             </div>
                                         </div>
                                     </li>
