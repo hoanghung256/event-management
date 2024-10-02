@@ -106,6 +106,9 @@ public class Organizer {
     public void setAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
+<<<<<<< HEAD
+}
+=======
 
     @Override
     public String toString() {
@@ -114,3 +117,4 @@ public class Organizer {
     
 }
 
+>>>>>>> master
