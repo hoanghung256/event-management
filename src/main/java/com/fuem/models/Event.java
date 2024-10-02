@@ -6,28 +6,39 @@ package com.fuem.models;
 
 import com.fuem.models.EventLocation;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.LocalDate;
+import java.util.List;
+
 /**
  *
  * @author hoang hung
  */
-import java.sql.Date;
-
 public class Event {
-    
+
     private int id;
     private Organizer organizer;
     private String fullname;
     private String description;
     private EventType type;
     private EventLocation location;
-    private Date dateOfEvent;
-    private Timestamp startTime;
-    private Timestamp endTime;
+    private LocalDate dateOfEvent;
+    private LocalTime startTime;
+    private LocalTime endTime;
     private int guestRegisterLimit;
-    private Date registerDeadline;
-    private int guestAttendedCount;
+    private LocalDateTime registerDeadline;
+    private int collaboratorRegisterLimit;
+    private List<String> images;
 
-    public Event(int id, Organizer organizer, String fullname, String description, EventType type, EventLocation location, Date dateOfEvent, Timestamp startTime, Timestamp endTime, int guestRegisterLimit, Date registerDeadline, int guestAttendedCount) {
+    public Event() {
+    }
+
+    public Event(int id, Organizer organizer, String fullname, String description, EventType type,
+            EventLocation location, LocalDate dateOfEvent, LocalTime startTime, LocalTime endTime,
+            int guestRegisterLimit,
+            LocalDateTime registerDeadline, int guestAttendedCount, int collaboratorRegisterLimit,
+            List<String> images) {
         this.id = id;
         this.organizer = organizer;
         this.fullname = fullname;
@@ -39,18 +50,14 @@ public class Event {
         this.endTime = endTime;
         this.guestRegisterLimit = guestRegisterLimit;
         this.registerDeadline = registerDeadline;
-        this.guestAttendedCount = guestAttendedCount;
     }
-    
-    public Event(String fullname, String organizerAcronym, String avatarPath, Date dateOfEvent){
+
+    public Event(String fullname, String organizerAcronym, String avatarPath, Date dateOfEvent) {
         this.fullname = fullname;
         this.organizer = new Organizer();
         this.organizer.setAcronym(organizerAcronym);
         this.organizer.setAvatarPath(avatarPath);
         this.dateOfEvent = dateOfEvent;
-    }
-    
-    public Event(){
     }
 
     public int getId() {
@@ -101,27 +108,27 @@ public class Event {
         this.location = location;
     }
 
-    public Date getDateOfEvent() {
+    public LocalDate getDateOfEvent() {
         return dateOfEvent;
     }
 
-    public void setDateOfEvent(Date dateOfEvent) {
+    public void setDateOfEvent(LocalDate dateOfEvent) {
         this.dateOfEvent = dateOfEvent;
     }
 
-    public Timestamp getStartTime() {
+    public LocalTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Timestamp startTime) {
+    public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public Timestamp getEndTime() {
+    public LocalTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Timestamp endTime) {
+    public void setEndTime(LocalTime endTime) {
         this.endTime = endTime;
     }
 
@@ -133,38 +140,37 @@ public class Event {
         this.guestRegisterLimit = guestRegisterLimit;
     }
 
-    public Date getRegisterDeadline() {
+    public LocalDateTime getRegisterDeadline() {
         return registerDeadline;
     }
 
-    public void setRegisterDeadline(Date registerDeadline) {
+    public void setRegisterDeadline(LocalDateTime registerDeadline) {
         this.registerDeadline = registerDeadline;
     }
 
-    public int getGuestAttendedCount() {
-        return guestAttendedCount;
+    public int getCollaboratorRegisterLimit() {
+        return collaboratorRegisterLimit;
     }
 
-    public void setGuestAttendedCount(int guestAttendedCount) {
-        this.guestAttendedCount = guestAttendedCount;
-    }
-    
-    public String getAvatarPath() {
-        return organizer != null ? organizer.getAvatarPath() : null;
-    }
-    
-    public String getOrganizerName() {
-        return organizer != null ? organizer.getAcronym() : null;
+    public void setCollaboratorRegisterLimit(int collaboratorRegisterLimit) {
+        this.collaboratorRegisterLimit = collaboratorRegisterLimit;
     }
 
+    public List<String> getImages() {
+        return images;
+    }
 
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
 
     @Override
     public String toString() {
-        return "Event{" + "id=" + id + ", organizer=" + organizer + ", fullname=" + fullname + ", description=" + description + ", type=" + type + ", location=" + location + ", dateOfEvent=" + dateOfEvent + ", startTime=" + startTime + ", endTime=" + endTime + ", guestRegisterLimit=" + guestRegisterLimit + ", registerDeadline=" + registerDeadline + ", guestAttendedCount=" + guestAttendedCount + '}';
-    }
-    
-    public void print(){
-        System.out.println("Event Name: " + fullname + ", Organizer Name: " + organizer.getAcronym() + ", Avatar Path: " + organizer.getAvatarPath() + ", Event Date: " + dateOfEvent); 
+        return "Event{" + "id=" + id + ", organizer=" + organizer + ", fullname=" + fullname + ", description="
+                + description + ", type=" + type + ", location=" + location + ", dateOfEvent=" + dateOfEvent
+                + ", startTime=" + startTime + ", endTime=" + endTime + ", guestRegisterLimit=" + guestRegisterLimit
+                + ", registerDeadline=" + registerDeadline + ", collaboratorRegisterLimit=" + collaboratorRegisterLimit
+                + ", images="
+                + images + '}';
     }
 }

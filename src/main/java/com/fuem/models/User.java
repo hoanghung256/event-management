@@ -10,28 +10,40 @@ package com.fuem.models;
  */
 public class User {
     private int id;
-    private String fullName;
+    private String fullname; // Chỉnh sửa từ fullName thành fullname
     private String studentId;
     private String email;
     private String password;
     private String avatarPath;
-    private boolean isClubPresident;
-    private boolean isAdmin;
 
     public User() {
     }
 
-    public User(int id, String fullName, String studentId, String email, String password, String avatarPath, boolean isClubPresident, boolean isAdmin) {
+    public User(String fullname, String studentId, String email, String password) {
+        this.fullname = fullname;
+        this.studentId = studentId;
+        this.email = email;
+        this.password = password;
+    }
+
+  
+    public User(int id, String fullname, String studentId, String email, String password, String avatarPath) {
         this.id = id;
-        this.fullName = fullName;
+        this.fullname = fullname;
         this.studentId = studentId;
         this.email = email;
         this.password = password;
         this.avatarPath = avatarPath;
-        this.isClubPresident = isClubPresident;
-        this.isAdmin = isAdmin;
     }
-    
+
+    public User(int id, String fullname, String studentId, String email,  String avatarPath) {
+       this.id = id;
+        this.fullname = fullname;
+        this.studentId = studentId;
+        this.email = email;
+        this.avatarPath = avatarPath;
+    }
+
     public int getId() {
         return id;
     }
@@ -40,12 +52,12 @@ public class User {
         this.id = id;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getFullname() {
+        return fullname;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
     public String getStudentId() {
@@ -80,33 +92,8 @@ public class User {
         this.avatarPath = avatarPath;
     }
 
-    public boolean isIsClubPresident() {
-        return isClubPresident;
-    }
-
-    public void setIsClubPresident(boolean isClubPresident) {
-        this.isClubPresident = isClubPresident;
-    }
-
-    public boolean isIsAdmin() {
-        return isAdmin;
-    }
-
-    public void setIsAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
-    }
-    
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", fullName='" + fullName + '\'' +
-                ", studentId='" + studentId + '\'' +
-                ", email='" + email + '\'' +
-                ", avatarPath='" + avatarPath + '\'' +
-                ", isClubPresident=" + isClubPresident +
-                ", isAdmin=" + isAdmin +
-                '}';
+        return "User{" + "id=" + id + ", fullname=" + fullname + ", studentId=" + studentId + ", email=" + email + ", password=" + password + ", avatarPath=" + avatarPath + '}';
     }
-
 }
