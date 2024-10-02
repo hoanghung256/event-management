@@ -19,7 +19,7 @@ import java.io.IOException;
  *
  * @author ThangNM
  */
-@WebServlet(name = "AttendedEventController", urlPatterns = {"/attended"})
+@WebServlet(name = "AttendedEventController", urlPatterns = {"/attended-events"})
 public class AttendedEventController extends HttpServlet {
     private EventAttendedDAO dao = new EventAttendedDAO();
 

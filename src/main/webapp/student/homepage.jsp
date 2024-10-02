@@ -13,8 +13,10 @@
     </head>
     <body>
         <h1>Hello World!</h1>
-        <form method="GET">
-            <button type="submit">Move to attended events</button>
-        </form>
+        <a href="sign-in">Đăng nhập hok</a>
+        <br/>
+        <a href="profile">Profile ó</a>
+        <br/>
+        <a href="attended-events">Attended events</a>
     </body>
 </html>

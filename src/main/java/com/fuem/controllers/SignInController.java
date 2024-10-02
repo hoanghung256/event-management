@@ -64,7 +64,7 @@ public class SignInController extends HttpServlet {
             if(organizer != null){
                 HttpSession session = request.getSession();
                 session.setAttribute("userInfor", organizer);
-                request.getRequestDispatcher("test.jsp").forward(request, response);
+                request.getRequestDispatcher("index.html").forward(request, response);
             } else {
                 request.setAttribute("error", "Email hoặc mật khẩu không đúng");
                 request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
@@ -75,7 +75,7 @@ public class SignInController extends HttpServlet {
             if (user != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("userInfor", user);
-                response.sendRedirect("index.html");
+                request.getRequestDispatcher("student/hompage.jsp").forward(request, response);
             } else {
                 request.setAttribute("error", "Email hoặc mật khẩu không đúng");
                 request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);

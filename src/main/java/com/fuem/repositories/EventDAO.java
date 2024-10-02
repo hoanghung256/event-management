@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 
 public class EventDAO extends SQLDatabase {
 
-     private static final Logger logger = Logger.getLogger(EventDAO.class.getName());
+    private static final Logger logger = Logger.getLogger(EventDAO.class.getName());
     private static final String SELECT_IMG_BY_ID = "SELECT path FROM EventImage WHERE eventId = ?";
     private static final String SELECT_EVENT_DETAILS_BY_ID = "SELECT e.id, "
             + "u.fullname AS organizerName, "
@@ -57,12 +57,12 @@ public class EventDAO extends SQLDatabase {
                 EventLocation location = new EventLocation();
                 location.setDescription(rs.getString("locationDescription"));
                 event.setLocation(location);
-                event.setDateOfEvent(rs.getDate("dateOfEvent"));
+                event.setDateOfEvent(rs.getDate("dateOfEvent").toLocalDate());
                 event.setStartTime(rs.getTimestamp("startTime").toLocalDateTime().toLocalTime());
                 event.setEndTime(rs.getTimestamp("endTime").toLocalDateTime().toLocalTime());
                 event.setGuestRegisterLimit(rs.getInt("guestRegisterLimit"));
                 event.setRegisterDeadline(rs.getTimestamp("registerDeadline").toLocalDateTime());
-                event.setGuestAttendedCount(rs.getInt("guestAttendedCount"));
+//                event.setGuestAttendedCount(rs.getInt("guestAttendedCount"));
                 event.setImages(getEventImages(eventId));
             } else {
                 System.out.println("No record found for eventId: " + eventId);

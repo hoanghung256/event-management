@@ -46,19 +46,9 @@
         box-sizing: border-box; 
     }
 
-
-
-
-
-
-
     .userInfor{
         padding-top: 30px;
     }
-
-
-
-
 </style>
 
 <section>
@@ -73,7 +63,7 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="dashboard.html">Home</a></span></li>
+                                    <li><span><a href="homepage">Home</a></span></li>
                                     <li class="active"><span>Profile</span></li>
                                 </ul>
                             </nav>
@@ -102,7 +92,7 @@
                     </div>
                     <div class="col-xxl-8 col-xl-7 col-lg-6 col-md-6">
                         <div class="profile__right p-relative">
-                            <a href="setting.html">
+                            <a href="#">
                                 <div class="profile__edit">
                                     <i class="flaticon-edit"></i>
                                 </div>
@@ -112,7 +102,7 @@
                                     <li>
                                         <div class="profile__user-item">
                                             <div class="profile__user-tiitle">
-                                                <span>First Name:</span>
+                                                <span>Full Name:</span>
                                             </div>
                                             <div class="profile__user-info">
                                                 <span>${sessionScope.userInfor.fullname}</span>
@@ -132,7 +122,7 @@
                                     <li>
                                         <div class="profile__user-item">
                                             <div class="profile__user-tiitle">
-                                                <span>StudentId:</span>
+                                                <span>Student ID:</span>
                                             </div>
                                             <div class="profile__user-info">
                                                 <span>${sessionScope.userInfor.studentId}</span>
@@ -144,7 +134,7 @@
                                 <div class="change-password-section">
                                     <div class="ticket__price-inner">
                                         <div class="ticket__price-item">
-                                            <button class="unfield__input-btn" type="button" onclick="window.location.href = 'authentication/forget-password.jsp'">
+                                            <button class="unfield__input-btn" type="button">
                                                 <i class="flaticon-lock"></i> Change Password
                                             </button>
                                         </div>

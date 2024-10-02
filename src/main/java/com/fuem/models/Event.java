@@ -52,7 +52,7 @@ public class Event {
         this.registerDeadline = registerDeadline;
     }
 
-    public Event(String fullname, String organizerAcronym, String avatarPath, Date dateOfEvent) {
+    public Event(String fullname, String organizerAcronym, String avatarPath, LocalDate dateOfEvent) {
         this.fullname = fullname;
         this.organizer = new Organizer();
         this.organizer.setAcronym(organizerAcronym);
