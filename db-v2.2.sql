@@ -71,7 +71,7 @@ CREATE TABLE [User] (
 	[fullname] NVARCHAR(50),
 	[studentId] VARCHAR(8),
 	[email] NVARCHAR(30) NOT NULL UNIQUE,
-	[password] NVARCHAR(32) NOT NULL,
+	[password] NVARCHAR(64) NOT NULL,
 	[avatarPath] NVARCHAR(MAX),
 
 	CONSTRAINT PK_User PRIMARY KEY ([id])
@@ -236,21 +236,21 @@ GO
 */
 INSERT INTO [User] ([fullname], [studentId], [email], [password], [avatarPath])
 VALUES
-('Hoang Vu Hung', 'DE180038', 'hunghvde180038@fpt.edu.vn', '123', NULL),
-('Nguyen Quoc Anh', 'DE180064', 'anhnqde180064@fpt.edu.vn', '123', NULL),
-('Nguyen Minh Thang', 'DE180145', 'thangnmde180145@fpt.edu.vn', '123', NULL),
-('Huynh Viet Khiem', 'DE180067', 'khiemhvde180067@fpt.edu.vn', '123', NULL),
-('Dinh Kim Tu', 'DE180052', 'tudkde180052@fpt.edu.vn', '123', NULL),
-('Trinh Ba Hoang Huy', 'DE180057', 'huytbhde180057@fpt.edu.vn', '123', NULL);
+('Hoang Vu Hung', 'DE180038', 'hunghvde180038@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL),
+('Nguyen Quoc Anh', 'DE180064', 'anhnqde180064@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL),
+('Nguyen Minh Thang', 'DE180145', 'thangnmde180145@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL),
+('Huynh Viet Khiem', 'DE180067', 'khiemhvde180067@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL),
+('Dinh Kim Tu', 'DE180052', 'tudkde180052@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL),
+('Trinh Ba Hoang Huy', 'DE180057', 'huytbhde180057@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL);
 
 
 INSERT INTO [Organizer] ([acronym], [fullname], [description], [email], [password], [avatarPath], [isAdmin])
 VALUES
-('ICPDP Department', 'Study Overseas & Personal Development with FPTU Danang', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'icpdp@gmail.com', '123', NULL, 1),
-('FU - Dever', 'FPT University Programming Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'club.dever@gmail.com', '123', NULL, 0),
-('TIA', 'Traditional Instrument Abide Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'tia@gmail.com', '123', NULL, 0),
-('FUFC', 'FPT University Football Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'fufc@gmail.com', '123', NULL, 0),
-('FUV', 'FPT University Volleyball Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'fudavolleyball@gmail.com', '123', NULL, 0);
+('ICPDP Department', 'Study Overseas & Personal Development with FPTU Danang', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'icpdp@gmail.com', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL, 1),
+('FU - Dever', 'FPT University Programming Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'club.dever@gmail.com', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL, 0),
+('TIA', 'Traditional Instrument Abide Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'tia@gmail.com', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL, 0),
+('FUFC', 'FPT University Football Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'fufc@gmail.com', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL, 0),
+('FUV', 'FPT University Volleyball Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'fudavolleyball@gmail.com', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL, 0);
 
 INSERT INTO [EventType] ([typeName], [description])
 VALUES 
