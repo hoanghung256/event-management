@@ -124,7 +124,7 @@
                                                 />
                                         </div>
                                         <div class="user__content">
-                                            <span>${sessionScope.userInfor.fullName != null ? sessionScope.userInfor.fullName : "Guest"}</span>
+                                            <span>${sessionScope.userInfor.fullname != null ? sessionScope.userInfor.fullname : "Guest"}</span>
                                         </div>
                                     </div>
                                 </div>
