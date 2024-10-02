@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <html class="no-js" lang="zxx">
    
 <!-- Mirrored from codeskdhaka.com/html/expovent-prev/expovent/signup.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 22 Sep 2024 08:45:00 GMT -->
@@ -94,8 +95,11 @@
                         </div>
                         <div class="sing__button mb-20">
                             <c:if test="${not empty error}">
-                        <p style="color: red;">${error}</p>
-                    </c:if>
+                                <p class="text-danger">${error}</p>
+                            </c:if>
+                            <c:if test="${not empty message}">
+                                <p class="text-info">${message}</p>
+                            </c:if>
                            <button class="input__btn w-100 mb-20" type="submit">Sign-up</button>
                            <button class="gamil__sign-btn w-100" type="submit"><span><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                               <g clip-path="url(#clip0_322_540)">
@@ -114,7 +118,7 @@
                         </div>
                      </form>
                      <div class="if__account mt-90">
-                         <p>Already have an account? <a href="authentication/sign-in.jsp" <Sign in></a></p>
+                         <p>Already have an account? <a href="sign-in">Sign in</a></p>
                      </div>
                   </div>
                </div>

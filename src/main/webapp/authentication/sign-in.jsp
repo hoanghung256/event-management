@@ -43,12 +43,6 @@
                             <h3 class="sign__title">FPT EVENT MANAGEMENT </h3>
                             <p>The faster you fill up, the faster you register events.</p>
                         </div>
-
-                        <!-- Hiển thị thông báo lỗi nếu có -->
-                        <c:if test="${not empty error}">
-                            <p style="color: red;">${error}</p>
-                        </c:if>
-
                         <div class="sign__input-form text-center">
                             <form action="sign-in" method="POST">
                                 <div class="sign__input">
@@ -70,6 +64,12 @@
                                 </div>
 
                                 <div class="sing__button mb-20">
+                                    <c:if test="${not empty error}">
+                                        <p class="text-danger">${error}</p>
+                                    </c:if>
+                                    <c:if test="${not empty message}">
+                                        <p class="text-info">${message}</p>
+                                    </c:if>
                                     <button class="input__btn w-100 mb-20" type="submit">Sign in</button>
                                     <button class="gamil__sign-btn w-100" type="submit">
                                         <span>
@@ -87,7 +87,7 @@
                                             </defs>
                                             </svg>
                                         </span>
-                                        <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/event-management/LoginGoogleHandler&response_type=code&client_id=89142229238-cu1tiul7dl16gs4qigcjsgd0emkk3j0d.apps.googleusercontent.com&approval_prompt=force">
+                                        <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/event-management/login-google&response_type=code&client_id=89142229238-cu1tiul7dl16gs4qigcjsgd0emkk3j0d.apps.googleusercontent.com&approval_prompt=force">
                                             Sign in With Google
                                         </a>
                                     </button>

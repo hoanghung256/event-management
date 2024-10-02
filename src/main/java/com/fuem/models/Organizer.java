@@ -32,6 +32,16 @@ public class Organizer {
         this.avatarPath = avatarPath;
         this.isAdmin = isAdmin;
     }
+    
+    public Organizer(int id, String acronym, String fullname, String description, String email, String avatarPath, boolean isAdmin) {
+        this.id = id;
+        this.acronym = acronym;
+        this.fullname = fullname;
+        this.description = description;
+        this.email = email;
+        this.avatarPath = avatarPath;
+        this.isAdmin = isAdmin;
+    }
 
     public int getId() {
         return id;

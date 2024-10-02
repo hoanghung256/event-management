@@ -8,6 +8,7 @@ import com.fuem.models.Organizer;
 import com.fuem.repositories.UserDAO;
 import com.fuem.models.User;
 import com.fuem.repositories.OrganizerDAO;
+import com.fuem.utils.Hash;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -33,7 +34,7 @@ public class SignInController extends HttpServlet {
     
     @Override
     public void init() {
-        userDAO = new UserDAO(); // Khởi tạo UserDAO
+        userDAO = new UserDAO();
         organizerDAO= new OrganizerDAO();
     }
 
@@ -53,11 +54,14 @@ public class SignInController extends HttpServlet {
             throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        String role = request.getParameter("role");
+        String chooseRole = request.getParameter("role");
+        String hashPassword = Hash.doHash(password);
+        System.out.println(hashPassword);
         
-        if ("organizer".equalsIgnoreCase(role)) {
-            if(organizerDAO.isEmailAndPasswordExist(email, password)){
-                Organizer organizer = organizerDAO.getOrganizerByEmailAndPassword(email, password);
+        if ("organizer".equalsIgnoreCase(chooseRole)) {
+             Organizer organizer = organizerDAO.getOrganizerByEmailAndPassword(email, hashPassword);
+             
+            if(organizer != null){
                 HttpSession session = request.getSession();
                 session.setAttribute("userInfor", organizer);
                 request.getRequestDispatcher("test.jsp").forward(request, response);
@@ -66,14 +70,13 @@ public class SignInController extends HttpServlet {
                 request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
             }
         } else {
-            if (userDAO.isEmailAndPasswordExist(email, password)) {
-                // Đăng nhập thành công
-                User user = userDAO.getUserByEmailAndPassword(email, password);
+            User user = userDAO.getUserByEmailAndPassword(email, hashPassword);
+            
+            if (user != null) {
                 HttpSession session = request.getSession();
                 session.setAttribute("userInfor", user);
-                response.sendRedirect("index.html"); // Chuyển hướng đến trang chính
+                response.sendRedirect("index.html");
             } else {
-                // Đăng nhập thất bại
                 request.setAttribute("error", "Email hoặc mật khẩu không đúng");
                 request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
             }

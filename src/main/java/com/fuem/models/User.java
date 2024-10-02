@@ -36,6 +36,14 @@ public class User {
         this.avatarPath = avatarPath;
     }
 
+    public User(int id, String fullname, String studentId, String email,  String avatarPath) {
+       this.id = id;
+        this.fullname = fullname;
+        this.studentId = studentId;
+        this.email = email;
+        this.avatarPath = avatarPath;
+    }
+
     public int getId() {
         return id;
     }

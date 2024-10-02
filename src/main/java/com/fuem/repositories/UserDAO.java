@@ -9,7 +9,8 @@ import java.util.logging.Logger;
 public class UserDAO extends SQLDatabase {
     private static final Logger logger = Logger.getLogger(UserDAO.class.getName());
     private static final String SELECT_USER_BY_EMAIL = "SELECT * FROM [User] WHERE email = ?";
-    private static final String SELECT_USER_BY_EMAIL_AND_PASSWORD = "SELECT * FROM [User] WHERE email = ? AND password = ?";
+    private static final String SELECT_USER_BY_EMAIL_AND_PASSWORD = "SELECT id, fullname, studentId, email, avatarPath FROM [User] WHERE email = ? AND password = ?";
+    private static final String SELECT_USER_BY_STUDENT_ID = "SELECT * FROM [User] WHERE studentId=?";
     private static final String UPDATE_PASSWORD_BY_EMAIL = "Update [User] " +
             "SET password = ? " +
             "WHERE email = ?";
@@ -37,7 +38,7 @@ public class UserDAO extends SQLDatabase {
 
     public User getUserByEmail(String email) {
         ResultSet rs = executeQueryPreparedStatement(SELECT_USER_BY_EMAIL, email);
-        User user = new User();
+        User user = null;
 
         try {
             while (rs.next()) {
@@ -46,7 +47,6 @@ public class UserDAO extends SQLDatabase {
                         rs.getString("fullname"),
                         rs.getString("studentId"),
                         rs.getString("email"),
-                        rs.getString("password"),
                         rs.getString("avatarPath")
                 );
             }
@@ -60,7 +60,7 @@ public class UserDAO extends SQLDatabase {
     // Lấy thông tin người dùng qua email và mật khẩu
     public User getUserByEmailAndPassword(String email, String password) {
         ResultSet rs = executeQueryPreparedStatement(SELECT_USER_BY_EMAIL_AND_PASSWORD, email, password);
-        User user = new User();
+        User user = null;
 
         try {
             while (rs.next()) {
@@ -69,7 +69,6 @@ public class UserDAO extends SQLDatabase {
                         rs.getString("fullname"),
                         rs.getString("studentId"),
                         rs.getString("email"),
-                        rs.getString("password"),
                         rs.getString("avatarPath")
                 );
             }
@@ -98,5 +97,19 @@ public class UserDAO extends SQLDatabase {
     public boolean addUser(User user) {
         int result = executeUpdatePreparedStatement(INSERT_USER, user.getFullname(), user.getStudentId(), user.getEmail(), user.getPassword());
         return result > 0; 
+    }
+    
+    public boolean isStudentIdExist(String studentId) {
+        ResultSet rs = executeQueryPreparedStatement(SELECT_USER_BY_STUDENT_ID, studentId);
+
+        try {
+            while (rs.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+
+        return false;
     }
 }
