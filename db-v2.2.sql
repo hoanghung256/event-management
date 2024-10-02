@@ -71,7 +71,7 @@ CREATE TABLE [User] (
 	[fullname] NVARCHAR(50),
 	[studentId] VARCHAR(8),
 	[email] NVARCHAR(30) NOT NULL UNIQUE,
-	[password] NVARCHAR(32) NOT NULL,
+	[password] NVARCHAR(64) NOT NULL,
 	[avatarPath] NVARCHAR(MAX),
 
 	CONSTRAINT PK_User PRIMARY KEY ([id])
@@ -118,7 +118,7 @@ CREATE TABLE [Event] (
 	[endTime] TIME,
 	[guestRegisterLimit] INT,
 	[registerDeadline] DATETIME,
-	[guestAttendedCount] INT
+	[collaboratorRegisterLimit] INT,
 		
 	CONSTRAINT PK_Event PRIMARY KEY ([id]),
 	FOREIGN KEY ([organizerId]) REFERENCES [Organizer]([id]),
@@ -185,6 +185,8 @@ CREATE TABLE [EventCollaborator] (
 CREATE TABLE [EventGuest] (
 	[studentId] INT,
 	[eventId] INT,
+	[isRegistered] BIT DEFAULT(0),
+	[isAttended] BIT DEFAULT(0),
 
 	CONSTRAINT PK_EventGuest PRIMARY KEY ([studentId], [eventId]),
 	FOREIGN KEY ([studentId]) REFERENCES [User]([id]),
@@ -234,21 +236,21 @@ GO
 */
 INSERT INTO [User] ([fullname], [studentId], [email], [password], [avatarPath])
 VALUES
-('Hoang Vu Hung', 'DE180038', 'hunghvde180038@fpt.edu.vn', '123', NULL),
-('Nguyen Quoc Anh', 'DE180064', 'anhnqde180064@fpt.edu.vn', '123', NULL),
-('Nguyen Minh Thang', 'DE180145', 'thangnmde180145@fpt.edu.vn', '123', NULL),
-('Huynh Viet Khiem', 'DE180067', 'khiemhvde180067@fpt.edu.vn', '123', NULL),
-('Dinh Kim Tu', 'DE180052', 'tudkde180052@fpt.edu.vn', '123', NULL),
-('Trinh Ba Hoang Huy', 'DE180057', 'huytbhde180057@fpt.edu.vn', '123', NULL);
+('Hoang Vu Hung', 'DE180038', 'hunghvde180038@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL),
+('Nguyen Quoc Anh', 'DE180064', 'anhnqde180064@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL),
+('Nguyen Minh Thang', 'DE180145', 'thangnmde180145@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL),
+('Huynh Viet Khiem', 'DE180067', 'khiemhvde180067@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL),
+('Dinh Kim Tu', 'DE180052', 'tudkde180052@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL),
+('Trinh Ba Hoang Huy', 'DE180057', 'huytbhde180057@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL);
 
 
 INSERT INTO [Organizer] ([acronym], [fullname], [description], [email], [password], [avatarPath], [isAdmin])
 VALUES
-('ICPDP Department', 'Study Overseas & Personal Development with FPTU Danang', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'icpdp@gmail.com', '123', NULL, 1),
-('FU - Dever', 'FPT University Programming Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'club.dever@gmail.com', '123', NULL, 0),
-('TIA', 'Traditional Instrument Abide Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'tia@gmail.com', '123', NULL, 0),
-('FUFC', 'FPT University Football Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'fufc@gmail.com', '123', NULL, 0),
-('FUV', 'FPT University Volleyball Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'fudavolleyball@gmail.com', '123', NULL, 0);
+('ICPDP Department', 'Study Overseas & Personal Development with FPTU Danang', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'icpdp@gmail.com', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL, 1),
+('FU - Dever', 'FPT University Programming Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'club.dever@gmail.com', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL, 0),
+('TIA', 'Traditional Instrument Abide Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'tia@gmail.com', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL, 0),
+('FUFC', 'FPT University Football Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'fufc@gmail.com', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL, 0),
+('FUV', 'FPT University Volleyball Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'fudavolleyball@gmail.com', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL, 0);
 
 INSERT INTO [EventType] ([typeName], [description])
 VALUES 
@@ -274,7 +276,7 @@ BEGIN
     SET @randomOrganizerId = 1 + FLOOR(RAND() * (5 - 1 + 1));
 
     INSERT INTO [Event] 
-    ([organizerId], [fullname], [description], [typeId], [locationId], [dateOfEvent], [startTime], [endTime], [guestRegisterLimit], [registerDeadline], [guestAttendedCount])
+    ([organizerId], [fullname], [description], [typeId], [locationId], [dateOfEvent], [startTime], [endTime], [guestRegisterLimit], [registerDeadline])
     VALUES 
     (
         @randomOrganizerId,
@@ -286,12 +288,18 @@ BEGIN
 		CAST(DATEADD(DAY, 8, GETDATE()) AS TIME),
 		CAST(DATEADD(DAY, 12, GETDATE()) AS TIME),
         100,
-        DATEADD(DAY, @i, GETDATE()),
-		50
+        DATEADD(DAY, @i, GETDATE())
     );
 
     SET @i = @i + 1;
 END;
+
+DECLARE @j INT = 1;
+WHILE @j <= 6
+BEGIN
+	INSERT INTO [EventGuest](eventId, studentId, isRegistered) VALUES (2, @j, 1);
+	SET @j = @j + 1;
+END
 /*
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 >>>>>>>>>> END: EXAMPLE DATA >>>>>>>>>>

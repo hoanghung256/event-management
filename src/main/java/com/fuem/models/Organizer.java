@@ -32,6 +32,16 @@ public class Organizer {
         this.avatarPath = avatarPath;
         this.isAdmin = isAdmin;
     }
+    
+    public Organizer(int id, String acronym, String fullname, String description, String email, String avatarPath, boolean isAdmin) {
+        this.id = id;
+        this.acronym = acronym;
+        this.fullname = fullname;
+        this.description = description;
+        this.email = email;
+        this.avatarPath = avatarPath;
+        this.isAdmin = isAdmin;
+    }
 
     public int getId() {
         return id;
@@ -96,4 +106,15 @@ public class Organizer {
     public void setAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
+<<<<<<< HEAD
 }
+=======
+
+    @Override
+    public String toString() {
+        return "Organizer{" + "id=" + id + ", acronym=" + acronym + ", fullname=" + fullname + ", description=" + description + ", email=" + email + ", password=" + password + ", avatarPath=" + avatarPath + ", isAdmin=" + isAdmin + '}';
+    }
+    
+}
+
+>>>>>>> master
