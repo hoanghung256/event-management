@@ -71,7 +71,7 @@ CREATE TABLE [User] (
 	[fullname] NVARCHAR(50),
 	[studentId] VARCHAR(8),
 	[email] NVARCHAR(30) NOT NULL UNIQUE,
-	[password] NVARCHAR(32) NOT NULL,
+	[password] NVARCHAR(64) NOT NULL,
 	[avatarPath] NVARCHAR(MAX),
 
 	CONSTRAINT PK_User PRIMARY KEY ([id])
@@ -234,12 +234,12 @@ GO
 */
 INSERT INTO [User] ([fullname], [studentId], [email], [password], [avatarPath])
 VALUES
-('Hoang Vu Hung', 'DE180038', 'hunghvde180038@fpt.edu.vn', '123', NULL),
-('Nguyen Quoc Anh', 'DE180064', 'anhnqde180064@fpt.edu.vn', '123', NULL),
-('Nguyen Minh Thang', 'DE180145', 'thangnmde180145@fpt.edu.vn', '123', NULL),
-('Huynh Viet Khiem', 'DE180067', 'khiemhvde180067@fpt.edu.vn', '123', NULL),
-('Dinh Kim Tu', 'DE180052', 'tudkde180052@fpt.edu.vn', '123', NULL),
-('Trinh Ba Hoang Huy', 'DE180057', 'huytbhde180057@fpt.edu.vn', '123', NULL);
+('Hoang Vu Hung', 'DE180038', 'hunghvde180038@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL),
+('Nguyen Quoc Anh', 'DE180064', 'anhnqde180064@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL),
+('Nguyen Minh Thang', 'DE180145', 'thangnmde180145@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL),
+('Huynh Viet Khiem', 'DE180067', 'khiemhvde180067@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL),
+('Dinh Kim Tu', 'DE180052', 'tudkde180052@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL),
+('Trinh Ba Hoang Huy', 'DE180057', 'huytbhde180057@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL);
 
 
 INSERT INTO [Organizer] ([acronym], [fullname], [description], [email], [password], [avatarPath], [isAdmin])
