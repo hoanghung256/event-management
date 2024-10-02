@@ -29,6 +29,9 @@ public class Hash {
      * The two case that need to use this function is
      * 1. When user sign up for the first time and provide a password, the string insert into database is the hash code of this password
      * 2. When user sign in, hash input password then compare to the hash code in database
+     * 
+     * @param input the input string that tend to hash
+     * @return hashed string
      */
     public static String doHash(String input) {
         String rs = null;
