@@ -4,13 +4,13 @@
     Author     : TRINHHUY
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
-<html class="no-js" lang="zxx">
-
+<html class="no-js">
     <!-- Mirrored from codeskdhaka.com/html/expovent-prev/expovent/event-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 22 Sep 2024 08:44:54 GMT -->
     <head>
-        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title>Expovent - Event Management Dashboard HTML5 Template</title>
         <meta name="description" content="">

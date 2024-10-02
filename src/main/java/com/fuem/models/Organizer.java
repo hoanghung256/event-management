@@ -22,7 +22,8 @@ public class Organizer {
     public Organizer() {
     }
 
-    public Organizer(int id, String acronym, String fullname, String description, String email, String password, String avatarPath, boolean isAdmin) {
+    public Organizer(int id, String acronym, String fullname, String description, String email, String password,
+            String avatarPath, boolean isAdmin) {
         this.id = id;
         this.acronym = acronym;
         this.fullname = fullname;
@@ -32,8 +33,9 @@ public class Organizer {
         this.avatarPath = avatarPath;
         this.isAdmin = isAdmin;
     }
-    
-    public Organizer(int id, String acronym, String fullname, String description, String email, String avatarPath, boolean isAdmin) {
+
+    public Organizer(int id, String acronym, String fullname, String description, String email, String avatarPath,
+            boolean isAdmin) {
         this.id = id;
         this.acronym = acronym;
         this.fullname = fullname;
@@ -106,15 +108,11 @@ public class Organizer {
     public void setAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
-<<<<<<< HEAD
-}
-=======
 
     @Override
     public String toString() {
-        return "Organizer{" + "id=" + id + ", acronym=" + acronym + ", fullname=" + fullname + ", description=" + description + ", email=" + email + ", password=" + password + ", avatarPath=" + avatarPath + ", isAdmin=" + isAdmin + '}';
+        return "Organizer{" + "id=" + id + ", acronym=" + acronym + ", fullname=" + fullname + ", description="
+                + description + ", email=" + email + ", password=" + password + ", avatarPath=" + avatarPath
+                + ", isAdmin=" + isAdmin + '}';
     }
-    
 }
-
->>>>>>> master

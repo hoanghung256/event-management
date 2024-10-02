@@ -16,6 +16,10 @@ public class EventType {
 
     public EventType() {
     }
+    
+    public EventType(int id){
+        this.id = id;
+    }
 
     public EventType(int id, String name, String description) {
         this.id = id;
