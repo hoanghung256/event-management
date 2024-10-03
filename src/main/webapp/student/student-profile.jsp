@@ -63,7 +63,7 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="homepage">Home</a></span></li>
+                                    <li><span><a href="home">Home</a></span></li>
                                     <li class="active"><span>Profile</span></li>
                                 </ul>
                             </nav>

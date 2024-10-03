@@ -1,18 +1,10 @@
 <%-- 
     Document   : event-details
-    Created on : Sep 25, 2024, 5:07:43 PM
+    Created on : Sep 25, 2024, 5:07:43?PM
     Author     : Administrator
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
-
-<!DOCTYPE html>
 <%@include file="../include/student-layout-header.jsp"%>
-
-
 
 <section>
     <div class="app__slide-wrapper">
@@ -26,7 +18,7 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="dashboard.html">Home</a></span></li>
+                                    <li><span><a href="home">Home</a></span></li>
                                     <li class="active"><span>Event Details</span></li>
                                 </ul>
                             </nav>
@@ -91,10 +83,14 @@
                                                                 <h4 class="ticket__purchase-title">Register Now</h4>
                                                                 <div class="ticket__price-inner">
                                                                     <div class="ticket__price-item">
-                                                                        <button class="unfield__input-btn" type="submit">Register as Collaborator</button>
+                                                                        <c:if test="${event.collaboratorRegisterLimit != 0}">
+                                                                            <button class="unfield__input-btn" type="submit">Collaborator register</button>
+                                                                        </c:if>
                                                                     </div>
                                                                     <div class="ticket__price-item">
-                                                                        <button class="unfield__input-btn" type="submit">Register as Attendant</button>
+                                                                        <c:if test="${event.guestRegisterLimit != 0}">
+                                                                            <button class="unfield__input-btn" type="submit">Guest register</button>
+                                                                        </c:if>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -116,7 +112,7 @@
                                                     </li>
                                                     <li>
                                                         <span>Time: </span>
-                                                        
+
                                                         <i id="time">${event.startTime}</i> - <i id="time">${event.endTime}</i> 
                                                     </li>
                                                     <li>
@@ -126,7 +122,7 @@
                                                     <li>
                                                         <span>Venue: </span>
                                                         ${event.location.description}
-                                                    </li>                                           
+                                                    </li>                                 
                                                 </ul>
                                             </div>
                                         </div>

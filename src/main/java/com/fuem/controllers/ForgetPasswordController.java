@@ -7,13 +7,6 @@ package com.fuem.controllers;
 import com.fuem.repositories.UserDAO;
 import com.fuem.utils.Gmail;
 import com.fuem.utils.RandomGenerator;
-import jakarta.mail.Message;
-import jakarta.mail.MessagingException;
-import jakarta.mail.PasswordAuthentication;
-import jakarta.mail.Session;
-import jakarta.mail.Transport;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -37,7 +30,7 @@ public class ForgetPasswordController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        throw new IllegalArgumentException("Method not support");
+        request.getRequestDispatcher("authentication/forget-password.jsp").forward(request, response);
     }
 
     @Override

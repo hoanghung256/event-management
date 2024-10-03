@@ -22,6 +22,11 @@ public class Organizer {
     public Organizer() {
     }
 
+    public Organizer(int id, String acronym) {
+        this.id = id;
+        this.acronym = acronym;
+    }
+
     public Organizer(int id, String acronym, String fullname, String description, String email, String password,
             String avatarPath, boolean isAdmin) {
         this.id = id;

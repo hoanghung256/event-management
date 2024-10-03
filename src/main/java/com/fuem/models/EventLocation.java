@@ -15,6 +15,10 @@ public class EventLocation {
 
     public EventLocation() {
     }
+    
+    public EventLocation(int id) {
+        this.id = id;
+    }
 
     public EventLocation(int id, String description) {
         this.id = id;

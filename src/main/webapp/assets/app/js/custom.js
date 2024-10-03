@@ -33,8 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (dateTags !== null) {
         dateTags.forEach(tag => {
-            let formatDate = new Date(tag.textContent).toLocaleDateString("en-US");
-
+            let formatDate = new Date(tag.textContent).toLocaleDateString("en-UK");
             tag.textContent = formatDate;
         });
     }
@@ -54,8 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const formattedTime = datetime.toString().substring(16, 21);;
             const formattedDate = `${datetime.getMonth() + 1}/${datetime.getDate()}/${datetime.getFullYear()}`;
 
-            const formatDatetime = `${formattedTime} ${formattedDate}`;
-            tag.textContent = formatDatetime;
+            tag.textContent = `${formattedTime} - ${formattedDate}`;
         });
     }
 });

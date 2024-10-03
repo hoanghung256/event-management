@@ -23,6 +23,11 @@ import javax.net.ssl.HttpsURLConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ *
+ * @author khim
+ */
+
 @WebServlet("/login-google")
 public class LoginGoogleController extends HttpServlet {
 

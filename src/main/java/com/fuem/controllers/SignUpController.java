@@ -1,7 +1,6 @@
 package com.fuem.controllers;
 
 import com.fuem.models.User;
-import com.fuem.repositories.SQLDatabase;
 import com.fuem.repositories.UserDAO;
 import com.fuem.utils.Gmail;
 import com.fuem.utils.Hash;
@@ -14,6 +13,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+
+/**
+ *
+ * @author khim
+ */
 
 @WebServlet(name = "SignUpController", urlPatterns = {"/sign-up"})
 public class SignUpController extends HttpServlet {

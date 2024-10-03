@@ -9,7 +9,6 @@ import com.fuem.repositories.UserDAO;
 import com.fuem.models.User;
 import com.fuem.repositories.OrganizerDAO;
 import com.fuem.utils.Hash;
-import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -56,30 +55,34 @@ public class SignInController extends HttpServlet {
         String password = request.getParameter("password");
         String chooseRole = request.getParameter("role");
         String hashPassword = Hash.doHash(password);
-        System.out.println(hashPassword);
         
-        if ("organizer".equalsIgnoreCase(chooseRole)) {
-             Organizer organizer = organizerDAO.getOrganizerByEmailAndPassword(email, hashPassword);
-             
-            if(organizer != null){
-                HttpSession session = request.getSession();
-                session.setAttribute("userInfor", organizer);
-                request.getRequestDispatcher("index.html").forward(request, response);
+        try {
+            if ("organizer".equalsIgnoreCase(chooseRole)) {
+                Organizer organizer = organizerDAO.getOrganizerByEmailAndPassword(email, hashPassword);
+
+                if(organizer != null){
+                    HttpSession session = request.getSession();
+                    session.setAttribute("userInfor", organizer);
+                    request.getRequestDispatcher("index.html").forward(request, response);
+                } else {
+                    request.setAttribute("error", "Email hoặc mật khẩu không đúng");
+                    request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
+                }
             } else {
-                request.setAttribute("error", "Email hoặc mật khẩu không đúng");
-                request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
+                User user = userDAO.getUserByEmailAndPassword(email, hashPassword);
+
+                if (user != null) {
+                    HttpSession session = request.getSession();
+                    session.setAttribute("userInfor", user);
+                    response.sendRedirect(request.getContextPath() + "/home");
+                } else {
+                    request.setAttribute("error", "Email hoặc mật khẩu không đúng");
+                    request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
+                }
+                return;
             }
-        } else {
-            User user = userDAO.getUserByEmailAndPassword(email, hashPassword);
-            
-            if (user != null) {
-                HttpSession session = request.getSession();
-                session.setAttribute("userInfor", user);
-                request.getRequestDispatcher("student/hompage.jsp").forward(request, response);
-            } else {
-                request.setAttribute("error", "Email hoặc mật khẩu không đúng");
-                request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
-            }
+        } catch (IOException | ServletException e) {
+            Logger.getLogger(SignInController.class.getName()).log(Level.SEVERE, null, e);
         }
     }
 

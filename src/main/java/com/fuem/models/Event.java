@@ -5,6 +5,7 @@
 package com.fuem.models;
 
 import com.fuem.models.EventLocation;
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -58,6 +59,20 @@ public class Event {
         this.organizer.setAcronym(organizerAcronym);
         this.organizer.setAvatarPath(avatarPath);
         this.dateOfEvent = dateOfEvent;
+    }
+
+    public Event(int id, Organizer organizer, String fullname, String description, EventType type, EventLocation location, LocalDate dateOfEvent, LocalTime startTime, LocalTime endTime, int guestRegisterLimit, LocalDateTime registerDeadline) {
+        this.id = id;
+        this.organizer = organizer;
+        this.fullname = fullname;
+        this.description = description;
+        this.type = type;
+        this.location = location;
+        this.dateOfEvent = dateOfEvent;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.guestRegisterLimit = guestRegisterLimit;
+        this.registerDeadline = registerDeadline;
     }
 
     public int getId() {
