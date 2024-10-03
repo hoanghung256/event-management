@@ -27,13 +27,25 @@ public class Organizer {
         this.acronym = acronym;
     }
 
-    public Organizer(int id, String acronym, String fullname, String description, String email, String password, String avatarPath, boolean isAdmin) {
+    public Organizer(int id, String acronym, String fullname, String description, String email, String password,
+            String avatarPath, boolean isAdmin) {
         this.id = id;
         this.acronym = acronym;
         this.fullname = fullname;
         this.description = description;
         this.email = email;
         this.password = password;
+        this.avatarPath = avatarPath;
+        this.isAdmin = isAdmin;
+    }
+
+    public Organizer(int id, String acronym, String fullname, String description, String email, String avatarPath,
+            boolean isAdmin) {
+        this.id = id;
+        this.acronym = acronym;
+        this.fullname = fullname;
+        this.description = description;
+        this.email = email;
         this.avatarPath = avatarPath;
         this.isAdmin = isAdmin;
     }
@@ -101,5 +113,11 @@ public class Organizer {
     public void setAdmin(boolean isAdmin) {
         this.isAdmin = isAdmin;
     }
-}
 
+    @Override
+    public String toString() {
+        return "Organizer{" + "id=" + id + ", acronym=" + acronym + ", fullname=" + fullname + ", description="
+                + description + ", email=" + email + ", password=" + password + ", avatarPath=" + avatarPath
+                + ", isAdmin=" + isAdmin + '}';
+    }
+}

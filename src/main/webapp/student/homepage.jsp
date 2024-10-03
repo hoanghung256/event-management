@@ -125,7 +125,7 @@
             </div>
         </div>
     </div>
-    <!--B?t ??u n?i dung c?a trang ? ?ây-->
+    <!--B?t ??u n?i dung c?a trang ? ?ï¿½y-->
     <div class="pb-20">
         <div class="row">
             <div>
@@ -228,7 +228,7 @@
                 </nav>
             </div>
         </div>
-        <!-- K?t thúc n?i dung c?a trang -->
+        <!-- K?t thï¿½c n?i dung c?a trang -->
     </div>
 </div>
 </section>

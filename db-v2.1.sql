@@ -159,7 +159,10 @@ CREATE TABLE [Notification] (
 	[id] INT IDENTITY(1, 1),
 	[senderId] INT,
 	[content] NVARCHAR(500),
+<<<<<<< HEAD
 	[sendingTime] DATETIME DEFAULT GETDATE(),
+=======
+>>>>>>> master
 
 	CONSTRAINT PK_Notification PRIMARY KEY ([id]),
 	FOREIGN KEY ([senderId]) REFERENCES [Organizer]([id]),
@@ -245,11 +248,19 @@ VALUES
 
 INSERT INTO [Organizer] ([acronym], [fullname], [description], [email], [password], [avatarPath], [isAdmin])
 VALUES
+<<<<<<< HEAD
 ('ICPDP Department', 'Study Overseas & Personal Development with FPTU Danang', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'icpdp@gmail.com', '123', NULL, 1),
 ('FU - Dever', 'FPT University Programming Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'club.dever@gmail.com', '123', NULL, 0),
 ('TIA', 'Traditional Instrument Abide Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'tia@gmail.com', '123', NULL, 0),
 ('FUFC', 'FPT University Football Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'fufc@gmail.com', '123', NULL, 0),
 ('FUV', 'FPT University Volleyball Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'fudavolleyball@gmail.com', '123', NULL, 0);
+=======
+('ICPDP Department', 'Study Overseas & Personal Development with FPTU Danang', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'icpdp@gmail.com', '123', 'assets\img\user\1\logo-icpdp.jpg', 1),
+('FU - Dever', 'FPT University Programming Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'club.dever@gmail.com', '123', 'assets\img\user\1\logo-club-dever.jpg', 0),
+('TIA', 'Traditional Instrument Abide Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'tia@gmail.com', '123', 'assets\img\user\1\logo-club-tia.jpg', 0),
+('FUFC', 'FPT University Football Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'fufc@gmail.com', '123', 'assets\img\user\1\logo-club-fufc.jpg', 0),
+('FUV', 'FPT University Volleyball Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'fudavolleyball@gmail.com', '123', 'assets\img\user\1\logo-club-fuv.jpg', 0);
+>>>>>>> master
 
 INSERT INTO [EventType] ([typeName], [description])
 VALUES 
@@ -294,12 +305,38 @@ BEGIN
     SET @i = @i + 1;
 END;
 
+<<<<<<< HEAD
+=======
+INSERT INTO [EventGuest] (studentId, eventId)
+VALUES 
+    (1, 1),
+    (1, 2),
+    (2, 1),
+    (3, 2),
+    (4, 3);
+
+
+DECLARE @a INT = 1;
+
+WHILE @a <= 200
+BEGIN
+    INSERT INTO [EventGuest] (studentId, eventId)
+    VALUES 
+        (FLOOR(1 + (RAND() * 6)),
+        FLOOR(1 + (RAND() * 100))
+		);
+		
+    SET @a = @a + 1;
+END
+
+>>>>>>> master
 /*
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 >>>>>>>>>> END: EXAMPLE DATA >>>>>>>>>>
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 */
 
+<<<<<<< HEAD
 select * from [Notification]
  SELECT n.id, n.senderId, n.content, n.sendingTime, o.acronym AS senderName
                 FROM Notification n 
@@ -314,3 +351,23 @@ VALUES
 INSERT INTO NotificationReceiver (notificationId, receiverId)
 VALUES
 (67, 1)
+=======
+SELECT 
+    E.fullname AS eventName,
+    O.acronym AS organizerName,
+	O.avatarPath AS avatarPath,
+    E.dateOfEvent AS eventDate
+FROM 
+    [EventGuest] EG
+JOIN 
+    [Event] E ON EG.eventId = E.id
+JOIN 
+    [Organizer] O ON E.organizerId = O.id
+JOIN 
+    [User] U ON EG.studentId = U.id
+WHERE 
+    EG.studentId = 4 
+    AND E.dateOfEvent < '2024-10-31'
+ORDER BY 
+    E.dateOfEvent DESC;
+>>>>>>> master

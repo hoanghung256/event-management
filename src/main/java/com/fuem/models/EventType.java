@@ -25,6 +25,7 @@ public class EventType {
         this.id = id;
         this.name = name;
     }
+
     public EventType(int id, String name, String description) {
         this.id = id;
         this.name = name;
