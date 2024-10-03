@@ -20,7 +20,11 @@ public class EventType {
     public EventType(int id) {
         this.id = id;
     }
-
+    
+    public EventType(int id, String name) {
+        this.id = id;
+        this.name = name;
+    }
     public EventType(int id, String name, String description) {
         this.id = id;
         this.name = name;

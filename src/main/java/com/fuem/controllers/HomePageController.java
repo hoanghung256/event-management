@@ -6,10 +6,16 @@
 package com.fuem.controllers;
 
 import com.fuem.models.Event;
+import com.fuem.models.EventType;
 import com.fuem.models.Notification;
+import com.fuem.models.Organizer;
 import com.fuem.models.User;
 import com.fuem.repositories.EventDAO;
 import com.fuem.repositories.NotificationDAO;
+import com.fuem.repositories.helper.EventOrderBy;
+import com.fuem.repositories.helper.Page;
+import com.fuem.repositories.helper.PagingCriteria;
+import com.fuem.repositories.helper.SearchEventCriteria;
 import jakarta.mail.Session;
 import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
@@ -19,6 +25,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -42,8 +49,56 @@ public class HomePageController extends HttpServlet {
         List<Notification> notiList = notiDAO.getNotificationsForUser(1);
         System.out.println(notiList.size());
         request.setAttribute("notiList", notiList);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("student/homepage.jsp");
-        dispatcher.forward(request, response);
+        
+        List<EventType> typeList = eventDAO.getAllEventType();
+        request.setAttribute("eventTypeList", typeList);
+        
+        List<Organizer> organizerList = eventDAO.getAllOrganizer();
+        request.setAttribute("organizerList", organizerList);
+        
+        String name = request.getParameter("name");
+        String typeId = request.getParameter("typeId");
+        String organizerId = request.getParameter("organizerId");
+        String fromDate = request.getParameter("from");
+        String toDate = request.getParameter("to");
+        String orderBy = request.getParameter("orderBy");
+        String pageNumberStr = request.getParameter("page");
+        
+        SearchEventCriteria searchEventCriteria = new SearchEventCriteria();
+        PagingCriteria pagingCriteria = new PagingCriteria();
+        
+        // Set attribute for SearchEventCriteria
+        if (name != null || typeId != null || organizerId != null || fromDate != null || toDate != null) {
+            if (!name.isBlank()) searchEventCriteria.setName(name);
+            if (!typeId.isBlank()) searchEventCriteria.setTypeId(Integer.valueOf(typeId));
+            if (!organizerId.isBlank()) searchEventCriteria.setOrganizerId(Integer.valueOf(organizerId));
+            if (!fromDate.isBlank()) searchEventCriteria.setFrom(LocalDate.parse(fromDate));
+            if (!toDate.isBlank()) searchEventCriteria.setTo(LocalDate.parse(toDate));
+            if (orderBy != null) searchEventCriteria.setOrderBy(EventOrderBy.valueOf(orderBy));
+            
+            request.setAttribute("previousSearchEventCriteria", searchEventCriteria);
+        }
+        
+        Integer pageNumber = null;
+        
+        if (pageNumberStr == null) {
+            pageNumber = 0;
+        } else {
+            pageNumber = Integer.valueOf(pageNumberStr);
+        }
+        
+        pagingCriteria = new PagingCriteria(
+                pageNumber, 
+                10
+        );
+        
+        Page<Event> result = eventDAO.get(
+                pagingCriteria,
+                searchEventCriteria
+        );
+        
+        request.setAttribute("page", result);
+        request.getRequestDispatcher("student/homepage.jsp").forward(request, response);
     } 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

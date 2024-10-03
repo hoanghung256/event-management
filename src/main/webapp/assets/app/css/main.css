@@ -1880,14 +1880,14 @@ input[type=file] {
     display: -webkit-box;
     display: -moz-box;
     display: -ms-flexbox;
-    display: -webkit-flex;
+    /*display: -webkit-flex;*/
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 25px;
 }
 .breadcrumb__wrapper {
-    padding: 35px 0 15px;
+    padding: 15px 0 25px;
     border-bottom: 1px solid var(--clr-border-1);
 }
 .breadcrumb__menu ul {
@@ -9037,6 +9037,7 @@ input[type=file] {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: box-shadow 0.3s ease, border-color 0.3s ease;
     background-color: #fff;
+    margin: 0 2%;
 }
 
 .event-list-item:hover {
@@ -9179,20 +9180,51 @@ input[type=file] {
 }
 
 .notification {
-    position: relative; /* Để dropdown có thể căn chỉnh dựa trên phần tử cha */
+    position: absolute;
+    right: 5vw ;
+    margin-top: 2%;
 }
 
 .notification__dropdown {
     position: absolute; /* Đặt dropdown ở vị trí tuyệt đối */
     top: 100%; /* Đặt nó ngay bên dưới icon */
-    right: 0; /* Đặt nó ở bên phải của notification icon */
+    right: 5vw; /* Đặt nó ở bên phải của notification icon */
     z-index: 1000; /* Đảm bảo nó nằm trên các phần tử khác */
     /*display: none;  Bắt đầu ẩn dropdown */
+    box-shadow: 5px 5px 10px 0px rgba(0, 0, 0, 0.5);
 }
 
 .notification__icon:hover + .notification__dropdown,
 .notification__dropdown:hover {
     display: block; /* Hiển thị dropdown khi hover */
+}
+
+/* Thu nhỏ kích thước chữ trong label */
+.form-label {
+    font-size: 12px; /* Giảm kích thước chữ */
+    width: auto;     /* Để chiều rộng tự động theo nội dung */
+    margin-right: 5px; /* Tăng khoảng cách với phần tử kế tiếp */
+    margin-bottom: 0px;
+}
+
+/* Điều chỉnh kích thước của select */
+.form-select {
+    font-size: 14px; /* Điều chỉnh kích thước chữ */
+    min-width: 100px; /* Đặt chiều rộng tối thiểu nếu cần */
+}
+
+#organizerId .form-select{
+    width: 100px;
+}
+.find-button{
+   margin-top: 29%;
+   font-size: 14px;
+   padding: 0 15px;
+   height: 40px
+}
+
+.filter-form .input{
+    margin-left: 1%;
 }
 
 /*# sourceMappingURL=main.css.map */

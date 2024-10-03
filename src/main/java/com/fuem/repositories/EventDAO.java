@@ -24,10 +24,16 @@ import java.util.logging.Logger;
  * @author AnhNQ
  */
 public class EventDAO extends SQLDatabase {
-    private static final String SELECT = "SELECT *, COUNT(*) OVER() AS 'TotalRow' FROM [Event]";
+    private static final String SELECT_FOR_FILTER = "SELECT e.*, COUNT(*) OVER() AS 'TotalRow', " +
+                                        "t.id as typeId, t.typeName as typeName, " +
+                                        "l.locationDescription AS locationDescription " +
+                                        "FROM [Event] e " + 
+                                        "JOIN EventType t ON e.typeId = t.id " +
+                                        "JOIN EventLocation l ON e.locationId = l.id";
+
     public List<Event> getAllEvents() {
         List<Event> events = new ArrayList<>();
-        String sql = "SELECT TOP 10 e.*, o.fullname AS organizerName, o.id AS organizerId, " +
+        String sql = "SELECT e.*, o.fullname AS organizerName, o.id AS organizerId, " +
                      "t.id AS typeId, t.typeName AS typeName, t.description AS typeDescription, " +
                      "l.id AS locationId, l.locationDescription AS locationDescription " +
                      "FROM Event e " +
@@ -65,7 +71,7 @@ public class EventDAO extends SQLDatabase {
                 eventLocation.setId(rs.getInt("locationId"));
                 eventLocation.setDescription(rs.getString("locationDescription"));
                 event.setLocation(eventLocation);
-
+                
                 events.add(event);
             }
         } catch (SQLException e) {
@@ -73,6 +79,50 @@ public class EventDAO extends SQLDatabase {
         }
         
         return events;
+    }
+    
+    public List<EventType> getAllEventType() {
+        List<EventType> eventTypes = new ArrayList<>();
+        String sql = "SELECT * FROM [EventType]";
+        ResultSet rs = executeQueryPreparedStatement(sql);
+        
+        try {
+            while (rs.next()) {
+
+                EventType eventType = new EventType();
+                eventType.setId(rs.getInt("id"));
+                eventType.setName(rs.getString("typeName"));
+                eventType.setDescription(rs.getString("description"));
+                
+                eventTypes.add(eventType);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return eventTypes;
+    }
+    
+    public List<Organizer> getAllOrganizer() {
+        List<Organizer> organizers = new ArrayList<>();
+        String sql = "SELECT * FROM [Organizer]";
+        ResultSet rs = executeQueryPreparedStatement(sql);
+        
+        try {
+            while (rs.next()) {
+
+                Organizer organizer = new Organizer();
+                organizer.setId(rs.getInt("id"));
+                organizer.setFullname(rs.getString("fullname"));
+                
+                organizers.add(organizer);
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return organizers;
     }
     
     public Page<Event> get(PagingCriteria pagingCriteria, SearchEventCriteria searchEventCriteria) {
@@ -100,13 +150,13 @@ public class EventDAO extends SQLDatabase {
                                 rs.getNString("fullname"),
                                 rs.getNString("description"),
                                 new EventType(
-                                        rs.getInt("typeId")
-//                                        rs.getNString("typeName"),
+                                        rs.getInt("typeId"),
+                                        rs.getNString("typeName")
 //                                        rs.getNString("description")
                                 ),
                                 new EventLocation(
-                                        rs.getInt("typeId")
-//                                        rs.getNString("description")
+                                        rs.getInt("typeId"),
+                                        rs.getNString("locationDescription")
                                 ),
                                 rs.getDate("dateOfEvent"),
                                 rs.getTimestamp("startTime"),
@@ -126,7 +176,7 @@ public class EventDAO extends SQLDatabase {
     }
     
     private String buildSelectQuery(PagingCriteria pagingCriteria, SearchEventCriteria searchEventCriteria) {
-        StringBuilder query = new StringBuilder(SELECT);
+        StringBuilder query = new StringBuilder(SELECT_FOR_FILTER);
         
         if (!searchEventCriteria.isEmpty()) {
             query.append("\n WHERE");
