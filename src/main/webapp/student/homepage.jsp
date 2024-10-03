@@ -18,13 +18,13 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="event-list">Home</a></span></li>
+                                    <li class="active"><span>Home</span></li>
                                 </ul>
                             </nav>
                         </div>
                     </div>
                     <div class="col-md-12 d-flex">
-                        <form action="event-list" method="GET" class="row filter-form">
+                        <form action="home" method="GET" class="row filter-form">
                             <!-- Row 1: Event Name, Event Type, Organizer -->
                             <div class="col-md-2 input">
                                 <label for="name" class="form-label">Event Name</label>
@@ -137,11 +137,11 @@
                                 <!-- Event Image - Start -->
                                 <div class="event-image" style="height: 100%; position: relative; width: 30%;">
                                     <div class="post-date" style="position: absolute; top: 10px; left: 10px; padding: 5px;">
-                                        <span class="date" style="font-size: 20px; font-weight: bold;">
-                                            <fmt:formatDate value="${event.dateOfEvent}" pattern="dd"/>
-                                        </span>
-                                        <small class="month" style="display: block;">
-                                            <fmt:formatDate value="${event.dateOfEvent}" pattern="MMM"/>
+<!--                                        <span id="date" class="date" style="font-size: 20px; font-weight: bold;">
+                                            ${event.dateOfEvent}
+                                        </span>-->
+                                        <small id="date" class="month" style="display: block;">
+                                            ${event.dateOfEvent}
                                         </small>
                                     </div>
                                     <img src="assets/img/event/event-details.jpg" alt="Event Image" style="width: 100%; height: auto;">
@@ -153,7 +153,7 @@
                                     <h3 class="event-title" style="margin-bottom: 10px; font-size: 24px;">
                                         ${event.fullname}
                                     </h3>
-                                    <p>Register Deadline: <fmt:formatDate value="${event.registerDeadline}" pattern="dd/MM/yyyy"/></p>
+                                    <p>Register Deadline: <span id="datetime">${event.registerDeadline}</span></p>
                                     <p class="description-text truncated-text">
                                         ${event.description}
                                     </p>
@@ -165,9 +165,9 @@
                                             <p class="location"><i class="fas fa-location-dot"></i> ${event.location.description}</p>
                                         </div>
                                         <div>
-                                            <p><i class="fa-solid fa-user-group"></i> ${event.guestAttendedCount}/${event.guestRegisterLimit} registered</p>
+                                            <p><i class="fa-solid fa-user-group"></i> ${event.guestRegisterLimit}/${event.guestRegisterLimit} registered</p>
                                         </div> 
-                                        <a class="element__btn border-yellow" href="#">Details</a>
+                                        <a class="element__btn border-yellow" href="event-detail?eventId=${event.id}">Details</a>
                                     </div>
                                 </div>
                                 <!-- Event Content - End -->
@@ -186,7 +186,7 @@
                             <c:choose>
                                 <c:when test="${i == 0 && page.currentPage > 0}">
                                     <li>
-                                        <a href="event-list?page=${page.currentPage - 1}&name=${previousSearchEventCriteria.name}&typeId=${previousSearchEventCriteria.typeId}&organizerId=${previousSearchEventCriteria.organizerId}&from=${previousSearchEventCriteria.from}&to=${previousSearchEventCriteria.to}">
+                                        <a href="home?page=${page.currentPage - 1}&name=${previousSearchEventCriteria.name}&typeId=${previousSearchEventCriteria.typeId}&organizerId=${previousSearchEventCriteria.organizerId}&from=${previousSearchEventCriteria.from}&to=${previousSearchEventCriteria.to}">
                                             <i class="fa-regular fa-arrow-left-long"></i>
                                         </a>
                                     </li>
@@ -200,7 +200,7 @@
                                         </c:when>
                                         <c:otherwise>
                                             <li>
-                                                <a href="event-list?page=${i}&name=${previousSearchEventCriteria.name}&typeId=${previousSearchEventCriteria.typeId}&organizerId=${previousSearchEventCriteria.organizerId}&from=${previousSearchEventCriteria.from}&to=${previousSearchEventCriteria.to}">${i + 1}</a>
+                                                <a href="home?page=${i}&name=${previousSearchEventCriteria.name}&typeId=${previousSearchEventCriteria.typeId}&organizerId=${previousSearchEventCriteria.organizerId}&from=${previousSearchEventCriteria.from}&to=${previousSearchEventCriteria.to}">${i + 1}</a>
                                             </li>
                                         </c:otherwise>
                                     </c:choose>
@@ -210,14 +210,14 @@
                                     </c:when>
                                     <c:when test="${i == page.totalPage - 1 && page.currentPage + 5 < page.totalPage - 1}">
                                     <li>
-                                        <a href="event-list?page=${page.totalPage - 1}&name=${previousSearchEventCriteria.name}&typeId=${previousSearchEventCriteria.typeId}&organizerId=${previousSearchEventCriteria.organizerId}&from=${previousSearchEventCriteria.from}&to=${previousSearchEventCriteria.to}">
+                                        <a href="home?page=${page.totalPage - 1}&name=${previousSearchEventCriteria.name}&typeId=${previousSearchEventCriteria.typeId}&organizerId=${previousSearchEventCriteria.organizerId}&from=${previousSearchEventCriteria.from}&to=${previousSearchEventCriteria.to}">
                                             ${page.totalPage}
                                         </a>
                                     </li>
                                 </c:when>
                                 <c:when test="${i == page.totalPage - 1 && page.currentPage < page.totalPage - 1}">
                                     <li>
-                                        <a href="event-list?page=${page.currentPage + 1}&name=${previousSearchEventCriteria.name}&typeId=${previousSearchEventCriteria.typeId}&organizerId=${previousSearchEventCriteria.organizerId}&from=${previousSearchEventCriteria.from}&to=${previousSearchEventCriteria.to}">
+                                        <a href="home?page=${page.currentPage + 1}&name=${previousSearchEventCriteria.name}&typeId=${previousSearchEventCriteria.typeId}&organizerId=${previousSearchEventCriteria.organizerId}&from=${previousSearchEventCriteria.from}&to=${previousSearchEventCriteria.to}">
                                             <i class="fa-regular fa-arrow-right-long"></i>
                                         </a>
                                     </li>
@@ -230,7 +230,7 @@
         </div>
         <!-- K?t th�c n?i dung c?a trang -->
     </div>
-</div>
+<!--</div>-->
 </section>
 <%@include file="../include/master-footer.jsp" %>
 

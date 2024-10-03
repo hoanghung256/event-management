@@ -151,7 +151,6 @@ public abstract class SQLDatabase {
         ResultSet rs = null;
         
         try {
-            System.out.println("Conn " + (conn == null));
             rs = getPreparedStatement(sql, values).executeQuery();
         } catch (SQLException e) {
             Logger.getLogger(SQLDatabase.class.getName()).log(Level.SEVERE, null, e);

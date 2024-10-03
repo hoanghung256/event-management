@@ -61,7 +61,7 @@
                      </a>
                   </div>
                   <div class="sign__link">
-                 <a class="sign__link-text" href="SignInController">Sign in</a>
+                 <a class="sign__link-text" href="sign-in">Sign in</a>
 
                      <a class="sign__link-active" href="#">Sign Up</a>
                   </div>
@@ -100,7 +100,7 @@
                             <c:if test="${not empty message}">
                                 <p class="text-info">${message}</p>
                             </c:if>
-                           <button class="input__btn w-100 mb-20" type="submit">Sign-up</button>
+                           <button class="input__btn w-100 mb-20" type="submit">Sign up</button>
                            <button class="gamil__sign-btn w-100" type="submit"><span><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                               <g clip-path="url(#clip0_322_540)">
                               <path d="M4.43242 12.0863L3.73625 14.6852L1.19176 14.739C0.431328 13.3286 0 11.7149 0 10C0 8.34179 0.403281 6.77804 1.11812 5.40112H1.11867L3.38398 5.81644L4.37633 8.06815C4.16863 8.67366 4.05543 9.32366 4.05543 10C4.05551 10.7341 4.18848 11.4374 4.43242 12.0863Z" fill="#FBBB00"/>

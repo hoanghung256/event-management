@@ -1,11 +1,11 @@
 package com.fuem.controllers;
 
 import com.fuem.repositories.EventDAO;
-import com.fuem.repositories.helper.SearchEventCriteria;
-import com.fuem.repositories.helper.PagingCriteria;
+import com.fuem.repositories.helpers.SearchEventCriteria;
+import com.fuem.repositories.helpers.PagingCriteria;
 import com.fuem.models.Event;
-import com.fuem.repositories.helper.EventOrderBy;
-import com.fuem.repositories.helper.Page;
+import com.fuem.repositories.helpers.EventOrderBy;
+import com.fuem.repositories.helpers.Page;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;

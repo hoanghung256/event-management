@@ -98,7 +98,7 @@ CREATE TABLE [Organizer] (
 	[fullname] NVARCHAR(200) NOT NULL,
 	[description] NVARCHAR(2000),
 	[email] NVARCHAR(30) NOT NULL UNIQUE,
-	[password] NVARCHAR(32) NOT NULL,
+	[password] NVARCHAR(64) NOT NULL,
 	[avatarPath] NVARCHAR(MAX),
 	[isAdmin] BIT DEFAULT(0),
 
@@ -158,7 +158,8 @@ CREATE TABLE [File] (
 CREATE TABLE [Notification] (
 	[id] INT IDENTITY(1, 1),
 	[senderId] INT,
-	[content] NVARCHAR(500),
+	[content] NVARCHAR(300),
+	[sendingTime] DATETIME DEFAULT GETDATE(),
 
 	CONSTRAINT PK_Notification PRIMARY KEY ([id]),
 	FOREIGN KEY ([senderId]) REFERENCES [Organizer]([id]),
@@ -300,6 +301,58 @@ BEGIN
 	INSERT INTO [EventGuest](eventId, studentId, isRegistered) VALUES (2, @j, 1);
 	SET @j = @j + 1;
 END
+
+DECLARE @k INT = 1;
+DECLARE @organizerId INT;
+DECLARE @userId INT;
+DECLARE @notificationId INT;
+
+-- Insert 10 notifications for each organizer
+DECLARE organizerCursor CURSOR FOR
+SELECT id FROM [Organizer];
+
+OPEN organizerCursor;
+FETCH NEXT FROM organizerCursor INTO @organizerId;
+
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    WHILE @k <= 10
+    BEGIN
+        -- Insert a new notification for the organizer
+        INSERT INTO [Notification] ([senderId], [content])
+        VALUES (@organizerId, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.' + CAST(@organizerId AS NVARCHAR(10)));
+
+        -- Get the ID of the inserted notification
+        SET @notificationId = SCOPE_IDENTITY();
+
+        -- Send this notification to all users
+        DECLARE userCursor CURSOR FOR
+        SELECT id FROM [User];
+
+        OPEN userCursor;
+        FETCH NEXT FROM userCursor INTO @userId;
+
+        WHILE @@FETCH_STATUS = 0
+        BEGIN
+            INSERT INTO [NotificationReceiver] ([notificationId], [receiverId])
+            VALUES (@notificationId, @userId);
+
+            FETCH NEXT FROM userCursor INTO @userId;
+        END;
+
+        CLOSE userCursor;
+        DEALLOCATE userCursor;
+
+        SET @k = @k + 1;
+    END;
+
+    SET @k = 1; -- Reset the counter for the next organizer
+    FETCH NEXT FROM organizerCursor INTO @organizerId;
+END;
+
+CLOSE organizerCursor;
+DEALLOCATE organizerCursor;
+
 /*
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 >>>>>>>>>> END: EXAMPLE DATA >>>>>>>>>>

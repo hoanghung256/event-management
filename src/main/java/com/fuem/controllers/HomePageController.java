@@ -12,14 +12,11 @@ import com.fuem.models.Organizer;
 import com.fuem.models.User;
 import com.fuem.repositories.EventDAO;
 import com.fuem.repositories.NotificationDAO;
-import com.fuem.repositories.helper.EventOrderBy;
-import com.fuem.repositories.helper.Page;
-import com.fuem.repositories.helper.PagingCriteria;
-import com.fuem.repositories.helper.SearchEventCriteria;
-import jakarta.mail.Session;
-import jakarta.servlet.RequestDispatcher;
+import com.fuem.repositories.helpers.EventOrderBy;
+import com.fuem.repositories.helpers.Page;
+import com.fuem.repositories.helpers.PagingCriteria;
+import com.fuem.repositories.helpers.SearchEventCriteria;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -33,20 +30,19 @@ import java.util.logging.Logger;
  *
  * @author AnhNQ
  */
-@WebServlet(name="HomePageController", urlPatterns={"/event-list"})
+@WebServlet(name="HomePageController", urlPatterns={"/home"})
 public class HomePageController extends HttpServlet {
     private EventDAO eventDAO = new EventDAO();
     private NotificationDAO notiDAO = new NotificationDAO();
     private static final Logger logger = Logger.getLogger(HomePageController.class.getName());
     
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Event> eventList = eventDAO.getAllEvents();
         request.setAttribute("eventList", eventList);
-//        User user = (User) request.getSession().getAttribute("userInfor");
+        User user = (User) request.getSession().getAttribute("userInfor");
 
-        List<Notification> notiList = notiDAO.getNotificationsForUser(1);
+        List<Notification> notiList = notiDAO.getNotificationsForUser(user.getId());
         System.out.println(notiList.size());
         request.setAttribute("notiList", notiList);
         
@@ -100,13 +96,4 @@ public class HomePageController extends HttpServlet {
         request.setAttribute("page", result);
         request.getRequestDispatcher("student/homepage.jsp").forward(request, response);
     } 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-    }
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }

@@ -81,7 +81,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#" aria-expanded="false">
+                                <a href="profile" aria-expanded="false">
                                     <i class="flaticon-user-1"></i>
                                     <span class="nav-text">Profile</span>
                                 </a>
@@ -131,7 +131,7 @@
                                 <div class="user__dropdown">
                                     <ul>
                                         <li>
-                                            <a href="profile.html"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                            <a href="profile"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                                                         xmlns="http://www.w3.org/2000/svg">
                                                 <g clip-path="url(#clip0_643_344)">
                                                 <path

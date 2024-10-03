@@ -8,10 +8,10 @@ import com.fuem.models.Event;
 import com.fuem.models.EventLocation;
 import com.fuem.models.EventType;
 import com.fuem.models.Organizer;
-import com.fuem.repositories.helper.EventOrderBy;
-import com.fuem.repositories.helper.Page;
-import com.fuem.repositories.helper.PagingCriteria;
-import com.fuem.repositories.helper.SearchEventCriteria;
+import com.fuem.repositories.helpers.EventOrderBy;
+import com.fuem.repositories.helpers.Page;
+import com.fuem.repositories.helpers.PagingCriteria;
+import com.fuem.repositories.helpers.SearchEventCriteria;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -24,12 +24,33 @@ import java.util.logging.Logger;
  * @author AnhNQ
  */
 public class EventDAO extends SQLDatabase {
+    
+    private static final Logger logger = Logger.getLogger(EventDAO.class.getName());
     private static final String SELECT_FOR_FILTER = "SELECT e.*, COUNT(*) OVER() AS 'TotalRow', " +
                                         "t.id as typeId, t.typeName as typeName, " +
                                         "l.locationDescription AS locationDescription " +
                                         "FROM [Event] e " + 
                                         "JOIN EventType t ON e.typeId = t.id " +
                                         "JOIN EventLocation l ON e.locationId = l.id";
+    private static final String SELECT_IMG_BY_ID = "SELECT path FROM EventImage WHERE eventId = ?";
+    private static final String SELECT_EVENT_DETAILS_BY_ID = "SELECT e.id, "
+            + "u.fullname AS organizerName, "
+            + "e.fullname AS eventName, "
+            + "e.description, "
+            + "et.typeName AS eventTypeName, "
+            + "el.locationDescription AS locationDescription, "
+            + "e.dateOfEvent, "
+            + "e.startTime, "
+            + "e.endTime, "
+            + "e.guestRegisterLimit, "
+            + "e.registerDeadline, "
+//            + "e.guestAttendedCount, "
+            + "u.avatarPath AS organizerAvatarPath "
+            + "FROM Event e "
+            + "JOIN [Organizer] u ON e.organizerId = u.id "
+            + "JOIN EventType et ON e.typeId = et.id "
+            + "JOIN EventLocation el ON e.locationId = el.id "
+            + "WHERE e.id = ?;";
 
     public List<Event> getAllEvents() {
         List<Event> events = new ArrayList<>();
@@ -49,17 +70,17 @@ public class EventDAO extends SQLDatabase {
                 event.setId(rs.getInt("id"));
                 event.setFullname(rs.getString("fullname"));
                 event.setDescription(rs.getString("description"));
-                event.setDateOfEvent(rs.getDate("dateOfEvent"));
-                event.setStartTime(rs.getTimestamp("startTime"));
-                event.setEndTime(rs.getTimestamp("endTime"));
+                event.setDateOfEvent(rs.getDate("dateOfEvent").toLocalDate());
+                event.setStartTime(rs.getTimestamp("startTime").toLocalDateTime().toLocalTime());
+                event.setEndTime(rs.getTimestamp("endTime").toLocalDateTime().toLocalTime());
                 event.setGuestRegisterLimit(rs.getInt("guestRegisterLimit"));
-                event.setRegisterDeadline(rs.getDate("registerDeadline"));
-                event.setGuestAttendedCount(rs.getInt("guestAttendedCount"));
+                event.setRegisterDeadline(rs.getTimestamp("registerDeadline").toLocalDateTime());
+//                event.setGuestAttendedCount(rs.getInt("guestAttendedCount"));
                 
                 Organizer organizer = new Organizer();
                 organizer.setId(rs.getInt("organizerId"));
                 organizer.setFullname(rs.getString("organizerName"));
-                event.setOrganizerId(organizer);  
+                event.setOrganizer(organizer);  
 
                 EventType eventType = new EventType();
                 eventType.setId(rs.getInt("typeId"));
@@ -158,12 +179,12 @@ public class EventDAO extends SQLDatabase {
                                         rs.getInt("typeId"),
                                         rs.getNString("locationDescription")
                                 ),
-                                rs.getDate("dateOfEvent"),
-                                rs.getTimestamp("startTime"),
-                                rs.getTimestamp("endTime"),
+                                rs.getDate("dateOfEvent").toLocalDate(),
+                                rs.getTimestamp("startTime").toLocalDateTime().toLocalTime(),
+                                rs.getTimestamp("endTime").toLocalDateTime().toLocalTime(),
                                 rs.getInt("guestRegisterLimit"),
-                                rs.getTimestamp("registerDeadline"),
-                                rs.getInt("guestAttendedCount")
+                                rs.getTimestamp("registerDeadline").toLocalDateTime()
+//                                rs.getInt("guestAttendedCount")
                         )
                 );
             }
@@ -224,28 +245,7 @@ public class EventDAO extends SQLDatabase {
         }
         
         return query.toString();
-public class EventDAO extends SQLDatabase {
-
-    private static final Logger logger = Logger.getLogger(EventDAO.class.getName());
-    private static final String SELECT_IMG_BY_ID = "SELECT path FROM EventImage WHERE eventId = ?";
-    private static final String SELECT_EVENT_DETAILS_BY_ID = "SELECT e.id, "
-            + "u.fullname AS organizerName, "
-            + "e.fullname AS eventName, "
-            + "e.description, "
-            + "et.typeName AS eventTypeName, "
-            + "el.locationDescription AS locationDescription, "
-            + "e.dateOfEvent, "
-            + "e.startTime, "
-            + "e.endTime, "
-            + "e.guestRegisterLimit, "
-            + "e.registerDeadline, "
-            + "e.guestAttendedCount, "
-            + "u.avatarPath AS organizerAvatarPath "
-            + "FROM Event e "
-            + "JOIN [Organizer] u ON e.organizerId = u.id "
-            + "JOIN EventType et ON e.typeId = et.id "
-            + "JOIN EventLocation el ON e.locationId = el.id "
-            + "WHERE e.id = ?;";
+    }
 
     public Event getEventDetails(int eventId) {
         Event event = null;

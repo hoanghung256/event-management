@@ -1,3 +1,8 @@
+<%-- 
+    Document   : sign-in
+    Created on : Sep 24, 2024, 9:01:44 AM
+    Author     : huynh khiem
+--%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -59,7 +64,7 @@
                                         <label class="sign__check-text" for="isOrganizer"><span>Is Organizer</span></label>
                                     </div>
                                     <div class="sign__forget">
-                                        <span><a href="authentication/forget-password.jsp">Forget Password?</a></span>
+                                        <span><a href="forget">Forget Password?</a></span>
                                     </div>
                                 </div>
 
