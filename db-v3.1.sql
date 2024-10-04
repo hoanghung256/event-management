@@ -373,14 +373,6 @@ BEGIN
     SET @i = @i + 1;
 END;
 
--- Insert event guests
-DECLARE @j INT = 1;
-WHILE @j <= 6
-BEGIN
-	INSERT INTO [EventGuest](eventId, guestId, isRegistered) VALUES (2, @j, 1);
-	SET @j = @j + 1;
-END;
-
 -- Insert notifications for organizers and send to students
 DECLARE @k INT = 1;
 DECLARE @organizerId INT;
