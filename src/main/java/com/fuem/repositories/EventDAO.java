@@ -51,6 +51,10 @@ public class EventDAO extends SQLDatabase {
             + "JOIN EventType et ON e.typeId = et.id "
             + "JOIN EventLocation el ON e.locationId = el.id "
             + "WHERE e.id = ?;";
+    
+    public EventDAO() {
+        super();
+    }
 
     public List<Event> getAllEvents() {
         List<Event> events = new ArrayList<>();
