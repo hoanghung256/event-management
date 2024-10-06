@@ -20,18 +20,17 @@ import java.io.IOException;
  */
 @WebServlet(name = "ResetPasswordController", urlPatterns = {"/reset"})
 public class ResetPasswordController extends HttpServlet {
-    private final UserDAO dao = new UserDAO();
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        UserDAO userDao = new UserDAO();
         HttpSession session = request.getSession();
         String inputOtp = request.getParameter("otp");
         String email = String.valueOf(session.getAttribute("email"));
         String newPassword = request.getParameter("new-password");
         
         if (inputOtp.equalsIgnoreCase(String.valueOf(session.getAttribute("otp")))) {
-            dao.updatePassword(email, Hash.doHash(newPassword));
+            userDao.updatePassword(email, Hash.doHash(newPassword));
             request.setAttribute("message", "Change password successfully, please Sign In!");
             request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
             request.getSession().removeAttribute("otp");

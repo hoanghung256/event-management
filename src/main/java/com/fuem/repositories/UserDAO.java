@@ -15,8 +15,11 @@ public class UserDAO extends SQLDatabase {
             "SET password = ? " +
             "WHERE email = ?";
     private static final String INSERT_USER = "INSERT INTO [User] (fullname, studentId, email, password) VALUES (?, ?, ?, ?)";
-//    private static final String INSERT_USER = "INSERT INTO [User] (fullname, email, password) VALUES (?, ?, ?)";
 
+    public UserDAO() {
+        super();
+    }
+    
     // Check email
     public boolean isEmailInDatabase(String toEmail) {
         ResultSet rs = executeQueryPreparedStatement(SELECT_USER_BY_EMAIL, toEmail);

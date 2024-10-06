@@ -17,29 +17,22 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author Administrator
  */
-@WebServlet(name = "EventDetailsController", urlPatterns = {"/event-detail"})
+@WebServlet(name = "EventDetailsController", urlPatterns = { "/event-detail" })
 public class EventDetailsController extends HttpServlet {
 
-    private EventDAO eventDAO;
-
     @Override
-    public void init() throws ServletException {
-        eventDAO = new EventDAO();
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int eventId = Integer.parseInt(request.getParameter("eventId"));
+        EventDAO eventDAO = new EventDAO();
 
         Event event = eventDAO.getEventDetails(eventId);
-        System.out.println(event);
+
         if (event != null) {
             request.setAttribute("event", event);
-            request.getRequestDispatcher("student/event-details.jsp").forward(request, response);
         } else {
-//            response.sendError(HttpServletResponse.SC_NOT_FOUND, "Event not found");
-            request.getRequestDispatcher("student/event-details.jsp").forward(request, response);
+            request.setAttribute("error", "Get data failed!");
         }
+        request.getRequestDispatcher("student/event-details.jsp").forward(request, response);
+
     }
 }

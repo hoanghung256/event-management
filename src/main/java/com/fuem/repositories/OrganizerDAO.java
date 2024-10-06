@@ -5,7 +5,6 @@
 package com.fuem.repositories;
 
 import com.fuem.models.Organizer;
-import com.fuem.models.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -20,6 +19,10 @@ public class OrganizerDAO extends SQLDatabase {
     private static final Logger logger = Logger.getLogger(OrganizerDAO.class.getName());
     private static final String SELECT_ORGANIZER_BY_EMAIL_AND_PASSWORD = "SELECT id, acronym, fullname, description, email, avatarPath, isAdmin FROM [Organizer] WHERE email = ? AND password = ?";
 
+    public OrganizerDAO() {
+        super();
+    }
+    
     public boolean isEmailAndPasswordExist(String email, String password) {
         ResultSet rs = executeQueryPreparedStatement(SELECT_ORGANIZER_BY_EMAIL_AND_PASSWORD, email, password);
 

@@ -102,6 +102,10 @@ public class EventDAO extends SQLDatabase {
             + "JOIN EventLocation l ON e.locationId = l.id "
             + "LEFT JOIN Follow f ON e.organizerId = f.followedId AND f.followerId = ? ";
 
+    public EventDAO() {
+        super();
+    }
+    
     public List<Event> getAllEvents() {
         List<Event> events = new ArrayList<>();
         ResultSet rs = executeQueryPreparedStatement(SELECT_ALL_EVENT);
