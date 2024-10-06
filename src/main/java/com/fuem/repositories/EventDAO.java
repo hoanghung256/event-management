@@ -53,10 +53,6 @@ public class EventDAO extends SQLDatabase {
             + "JOIN EventType et ON e.typeId = et.id "
             + "JOIN EventLocation el ON e.locationId = el.id "
             + "WHERE e.id = ?;";
-    
-    public EventDAO() {
-        super();
-    }
 
     private static final String SELECT_ALL_EVENT = "SELECT e.*, o.fullname AS organizerName, o.id AS organizerId, "
             + "t.id AS typeId, t.typeName AS typeName, t.description AS typeDescription, "
@@ -106,6 +102,10 @@ public class EventDAO extends SQLDatabase {
             + "JOIN EventLocation l ON e.locationId = l.id "
             + "LEFT JOIN Follow f ON e.organizerId = f.followedId AND f.followerId = ? ";
 
+    public EventDAO() {
+        super();
+    }
+    
     public List<Event> getAllEvents() {
         List<Event> events = new ArrayList<>();
         ResultSet rs = executeQueryPreparedStatement(SELECT_ALL_EVENT);

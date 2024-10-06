@@ -22,8 +22,6 @@ import java.io.IOException;
 @WebServlet(name = "SignUpController", urlPatterns = {"/sign-up"})
 public class SignUpController extends HttpServlet {
 
-    private UserDAO userDao = new UserDAO();
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -31,8 +29,8 @@ public class SignUpController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        UserDAO userDao = new UserDAO();
         String fullname = request.getParameter("fullname");
         String password = request.getParameter("password");
         String studentId = request.getParameter("studentId");
@@ -64,6 +62,8 @@ public class SignUpController extends HttpServlet {
                 request.setAttribute("error", "Sign up failed. Try again!");
                 request.getRequestDispatcher("authentication/sign-up.jsp").forward(request, response);
             }
+            request.getSession().removeAttribute("otp");
+            request.getSession().removeAttribute("registerInfor");
             return;
         }
         

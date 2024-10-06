@@ -19,7 +19,11 @@ import java.util.logging.Logger;
 
 public class NotificationDAO extends SQLDatabase {
 
-    public List<Notification> getNotificationsForUser(int userId){
+    public NotificationDAO() {
+        super();
+    }
+
+    public List<Notification> getNotificationsForUser(int userId) {
         List<Notification> notifications = new ArrayList<>();
 
         String sql = "SELECT n.id, n.senderId, n.content, n.sendingTime, o.acronym AS senderName "
@@ -32,13 +36,13 @@ public class NotificationDAO extends SQLDatabase {
         try {
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
-                
+
                 int senderId = resultSet.getInt("senderId");
                 String senderAcronym = resultSet.getString("senderName");
                 Organizer sender = new Organizer(senderId, senderAcronym);
                 String content = resultSet.getString("content");
                 LocalDateTime sendingTime = resultSet.getTimestamp("sendingTime").toLocalDateTime();
-                
+
                 Notification notification = new Notification(id, sender, content, sendingTime);
                 notifications.add(notification);
             }

@@ -17,11 +17,9 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name = "ProfileController", urlPatterns = "/profile")
 public class ProfileController extends HttpServlet {
 
-    private UserDAO userDAO = new UserDAO();
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        UserDAO userDAO = new UserDAO();
         User u = (User) req.getSession().getAttribute("userInfor");
         String email = u.getEmail();
         
@@ -32,12 +30,10 @@ public class ProfileController extends HttpServlet {
             } else {
                 req.setAttribute("errorMessage", "User not found.");
             }
+            req.getRequestDispatcher("student/student-profile.jsp").forward(req, resp);
         } else {
             req.setAttribute("errorMessage", "You must be logged in to view this page.");
-            resp.sendRedirect("login.jsp");
-            return;
+            req.getRequestDispatcher("authentication/sign-in.jsp").forward(req, resp);
         }
-
-        req.getRequestDispatcher("student/student-profile.jsp").forward(req, resp);
     }
 }

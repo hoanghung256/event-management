@@ -22,11 +22,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.logging.Logger;
 
 /**
  *
@@ -35,27 +31,13 @@ import java.util.logging.Logger;
 @WebServlet(name = "HomePageController", urlPatterns = {"/home"})
 public class HomePageController extends HttpServlet {
 
-    private EventDAO eventDAO = new EventDAO();
-    private NotificationDAO notiDAO = new NotificationDAO();
-    private static final Logger logger = Logger.getLogger(HomePageController.class.getName());
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        EventDAO eventDAO = new EventDAO();
+        NotificationDAO notiDAO = new NotificationDAO();
         User user = (User) request.getSession().getAttribute("userInfor");
-//        List<Event> events = new ArrayList<>();
-//        if (user != null) {
-//            List<Event> followEvents = eventDAO.getEventsByFollowingOrganizers(user.getId());
-//            events.addAll(followEvents);
-//            List<Event> notFollowEvents = eventDAO.getEventsNotFollowing(user.getId());
-//            events.addAll(notFollowEvents);
-//            request.setAttribute("allEvents", events);
-//        } else {
-//            List<Event> eventList = eventDAO.getAllEvents();
-//            request.setAttribute("allEvents", eventList);
-//        }
-
+        
         List<Notification> notiList = notiDAO.getNotificationsForUser(user.getId());
-        System.out.println(notiList.size());
         request.setAttribute("notiList", notiList);
 
         List<EventType> typeList = eventDAO.getAllEventType();

@@ -28,15 +28,6 @@ import java.util.logging.Logger;
 @WebServlet("/sign-in")
 public class SignInController extends HttpServlet {
 
-    private UserDAO userDAO;
-    private OrganizerDAO organizerDAO;
-
-    @Override
-    public void init() {
-        userDAO = new UserDAO();
-        organizerDAO = new OrganizerDAO();
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -44,8 +35,7 @@ public class SignInController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String chooseRole = request.getParameter("role");
@@ -53,17 +43,19 @@ public class SignInController extends HttpServlet {
 
         try {
             if ("organizer".equalsIgnoreCase(chooseRole)) {
+                OrganizerDAO organizerDAO = new OrganizerDAO();
                 Organizer organizer = organizerDAO.getOrganizerByEmailAndPassword(email, hashPassword);
 
                 if (organizer != null) {
                     HttpSession session = request.getSession();
                     session.setAttribute("userInfor", organizer);
-                    request.getRequestDispatcher("index.html").forward(request, response);
+                    request.getRequestDispatcher("homepage").forward(request, response);
                 } else {
                     request.setAttribute("error", "Email hoặc mật khẩu không đúng");
                     request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
                 }
             } else {
+                UserDAO userDAO = new UserDAO();
                 User user = userDAO.getUserByEmailAndPassword(email, hashPassword);
 
                 if (user != null) {

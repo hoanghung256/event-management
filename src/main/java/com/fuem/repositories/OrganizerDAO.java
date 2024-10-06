@@ -5,7 +5,6 @@
 package com.fuem.repositories;
 
 import com.fuem.models.Organizer;
-import com.fuem.models.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
