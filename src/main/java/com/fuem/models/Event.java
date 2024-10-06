@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 import java.sql.Date;
 
 public class Event {
-    
+
     private int id;
     private Organizer organizer;
     private String fullname;
@@ -23,7 +23,9 @@ public class Event {
     private Date dateOfEvent;
     private Timestamp startTime;
     private Timestamp endTime;
+    private String status;
     private int guestRegisterLimit;
+    private int guestRegisterCount;
     private Date registerDeadline;
     private int guestAttendedCount;
 
@@ -41,16 +43,38 @@ public class Event {
         this.registerDeadline = registerDeadline;
         this.guestAttendedCount = guestAttendedCount;
     }
-    
-    public Event(String fullname, String organizerAcronym, String avatarPath, Date dateOfEvent){
+
+    public Event(String fullname, String organizerAcronym, String avatarPath, Date dateOfEvent) {
         this.fullname = fullname;
         this.organizer = new Organizer();
         this.organizer.setAcronym(organizerAcronym);
         this.organizer.setAvatarPath(avatarPath);
         this.dateOfEvent = dateOfEvent;
     }
-    
-    public Event(){
+
+    public Event(String fullname, Date dateOfEvent, String location, String category) {
+        this.fullname = fullname;
+        this.dateOfEvent = dateOfEvent;
+        this.location = new EventLocation();
+        this.location.setDescription(location);
+        this.type = new EventType();
+        this.type.setName(category);
+    }
+
+    public Event(int id, String fullname, Date dateOfEvent, String location, String category, String status, int guestRegisterLimit, int guestRegisterCount) {
+        this.id = id;
+        this.fullname = fullname;
+        this.dateOfEvent = dateOfEvent;
+        this.location = new EventLocation();
+        this.location.setDescription(location);
+        this.type = new EventType();
+        this.type.setName(category);
+        this.status = status;
+        this.guestRegisterLimit = guestRegisterLimit;
+        this.guestRegisterCount = guestRegisterCount;
+    }
+
+    public Event() {
     }
 
     public int getId() {
@@ -125,12 +149,28 @@ public class Event {
         this.endTime = endTime;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public int getGuestRegisterLimit() {
         return guestRegisterLimit;
     }
 
     public void setGuestRegisterLimit(int guestRegisterLimit) {
         this.guestRegisterLimit = guestRegisterLimit;
+    }
+
+    public void setGuestRegisterCount(int guestRegisterCount) {
+        this.guestRegisterCount = guestRegisterCount;
+    }
+
+    public int getGuestRegisterCount() {
+        return guestRegisterCount;
     }
 
     public Date getRegisterDeadline() {
@@ -148,23 +188,21 @@ public class Event {
     public void setGuestAttendedCount(int guestAttendedCount) {
         this.guestAttendedCount = guestAttendedCount;
     }
-    
+
     public String getAvatarPath() {
         return organizer != null ? organizer.getAvatarPath() : null;
     }
-    
+
     public String getOrganizerName() {
         return organizer != null ? organizer.getAcronym() : null;
     }
-
-
 
     @Override
     public String toString() {
         return "Event{" + "id=" + id + ", organizer=" + organizer + ", fullname=" + fullname + ", description=" + description + ", type=" + type + ", location=" + location + ", dateOfEvent=" + dateOfEvent + ", startTime=" + startTime + ", endTime=" + endTime + ", guestRegisterLimit=" + guestRegisterLimit + ", registerDeadline=" + registerDeadline + ", guestAttendedCount=" + guestAttendedCount + '}';
     }
-    
-    public void print(){
-        System.out.println("Event Name: " + fullname + ", Organizer Name: " + organizer.getAcronym() + ", Avatar Path: " + organizer.getAvatarPath() + ", Event Date: " + dateOfEvent); 
+
+    public void print() {
+        System.out.println("Event Name: " + fullname + ", Organizer Name: " + organizer.getAcronym() + ", Avatar Path: " + organizer.getAvatarPath() + ", Event Date: " + dateOfEvent);
     }
 }

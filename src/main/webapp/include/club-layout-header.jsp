@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
 <html class="no-js" lang="zxx">
 
@@ -55,7 +56,7 @@
                     </span>
                     <span>
                         <a href="dashboard.html">
-                            <img class="log__smnall" style="margin-left: 1rem;" src="assets/img/logo/logoFpt.svg.png" width="65%" alt="logo not found">
+                            <img class="log__smnall" style="margin-left: 1rem;" src="assets/img/logo/logo-fpt.png" width="65%" alt="logo not found">
                         </a>
                     </span>
                 </div>
