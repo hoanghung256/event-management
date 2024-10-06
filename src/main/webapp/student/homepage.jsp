@@ -120,8 +120,6 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
@@ -137,9 +135,9 @@
                                 <!-- Event Image - Start -->
                                 <div class="event-image" style="height: 100%; position: relative; width: 30%;">
                                     <div class="post-date" style="position: absolute; top: 10px; left: 10px; padding: 5px;">
-<!--                                        <span id="date" class="date" style="font-size: 20px; font-weight: bold;">
-                                            ${event.dateOfEvent}
-                                        </span>-->
+                                        <!--                                        <span id="date" class="date" style="font-size: 20px; font-weight: bold;">
+                                        ${event.dateOfEvent}
+                                    </span>-->
                                         <small id="date" class="month" style="display: block;">
                                             ${event.dateOfEvent}
                                         </small>
@@ -153,7 +151,8 @@
                                     <h3 class="event-title" style="margin-bottom: 10px; font-size: 24px;">
                                         ${event.fullname}
                                     </h3>
-                                    <p>Register Deadline: <span id="datetime">${event.registerDeadline}</span></p>
+                                    <p><strong>Organizer: </strong><span>${event.organizer.fullname}</span></p>
+                                    <p><strong>Register Deadline: </strong><span id="datetime">${event.registerDeadline}</span></p>
                                     <p class="description-text truncated-text">
                                         ${event.description}
                                     </p>
@@ -175,11 +174,12 @@
                             <!-- Event item - End -->
                         </c:forEach>
                     </div>
+
                 </div>
             </div>
         </div>
         <div>
-            <div class="basic__pagination d-flex align-items-center justify-content-end">
+            <div class="basic__pagination d-flex align-items-center justify-content-end" style="margin-right: 3vw;">
                 <nav>
                     <ul>
                         <c:forEach var="i" begin="0" end="${page.totalPage}">
@@ -230,7 +230,7 @@
         </div>
         <!-- K?t th�c n?i dung c?a trang -->
     </div>
-<!--</div>-->
+    <!--</div>-->
 </section>
 <%@include file="../include/master-footer.jsp" %>
 
