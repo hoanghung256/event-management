@@ -9113,7 +9113,7 @@ input[type=file] {
 
 /* Mô tả sự kiện */
 .description-text {
-    margin: 15px 0;
+/*    margin: 15px 0;*/
     color: #666;
     line-height: 1.6;
 }
@@ -9227,5 +9227,16 @@ input[type=file] {
 .filter-form .input{
     margin-left: 1%;
 }
+.suggest-button{
+    display: flex;
+    justify-content: center;
+    
+}
+.suggest-button .element__btn{
+   
+}
 
+.suggest-button button:active {
+    background-color: #3e8e41; /* Màu của nút sau khi click */
+}
 /*# sourceMappingURL=main.css.map */
