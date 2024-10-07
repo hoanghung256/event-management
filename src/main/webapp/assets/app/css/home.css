@@ -1,0 +1,216 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Sep 27, 2024, 8:33:17 AM
+    Author     : This PC
+*/
+
+.event-section .search-result-form {
+    position: relative;
+    margin-bottom: 30px;
+    padding-right: 100px;
+}
+.event-section .search-result-form ul {
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+    display: table;
+}
+.event-section .search-result-form ul li {
+    float: left;
+    min-width: 100px;
+    list-style: none;
+    margin-right: 30px;
+    display: inline-block;
+}
+.event-section .search-result-form ul li:last-child {
+    margin-right: 0px;
+}
+.event-section .search-result-form ul li .result-text {
+    font-weight: 600;
+    color: #878787;
+    font-size: 16px;
+}
+.event-section .search-result-form ul li #year-select,
+.event-section .search-result-form ul li #munth-select {
+    margin: 0px;
+    border: none;
+    padding: 0px;
+    position: relative;
+    padding-right: 20px;
+    display: inline-block;
+    -webkit-appearance: none;
+    background: transparent url(../images/2.down-arrow.png) no-repeat right 0px center;
+}
+.event-section .search-result-form ul li label {
+    float: left;
+    margin: 0px;
+    margin-right: 5px;
+}
+.event-section .search-result-form .event-layout-btngroup {
+    right: 0;
+    bottom: 0;
+    width: auto;
+    display: table;
+    position: absolute;
+}
+.event-section .search-result-form .event-layout-btngroup li {
+    width: auto;
+    min-width: auto;
+    line-height: 0px;
+    margin-right: 10px;
+}
+.event-section .search-result-form .event-layout-btngroup li:last-child {
+    margin-right: 0px;
+}
+.event-section .search-result-form .event-layout-btngroup li a {
+    line-height: 0px;
+    color: #878787;
+    font-size: 24px;
+}
+.event-section .search-result-form .event-layout-btngroup li > .active {
+    color: #333333;
+}
+
+.event-section .event-list-item {
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #ffffff;
+    -webkit-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+    border: 1px solid #f0f0f0;
+}
+.event-section .event-list-item .event-image {
+    float: left;
+    width: 250px;
+    height: 250px;
+    overflow: hidden;
+    position: relative;
+    margin-right: 30px;
+}
+.event-section .event-list-item .event-image img {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+.event-section .event-list-item .event-image .post-date {
+    top: 0px;
+    left: 0px;
+    z-index: 1;
+    width: 70px;
+    height: 70px;
+    padding: 10px;
+    text-align: center;
+    position: absolute;
+    color: #ffffff;
+    background: -webkit-gradient(linear, left top, right bottom, from(#ff3e00), to(#ffbe30));
+    background: -webkit-linear-gradient(top left, #ff3e00, #ffbe30);
+    background: -o-linear-gradient(top left, #ff3e00, #ffbe30);
+    background: linear-gradient(to bottom right, #ff3e00, #ffbe30);
+}
+.event-section .event-list-item .event-image .post-date .date {
+    font-weight: 900;
+    font-size: 24px;
+    font-family: "Roboto", sans-serif;
+}
+.event-section .event-list-item .event-image .post-date .month {
+    font-size: 16px;
+    text-transform: uppercase;
+}
+.event-section .event-list-item .event-content {
+    display: table;
+    padding: 10px 0px;
+}
+.event-section .event-list-item .event-content .event-title {
+    position: relative;
+}
+.event-section .event-list-item .event-content .event-title:after {
+    top: 0;
+    width: 6px;
+    left: -33px;
+    bottom: 0px;
+    content: '';
+    height: 100%;
+    position: absolute;
+    background-color: #ffbe30;
+}
+.event-section .event-list-item .event-content .event-title .title {
+    margin: 0px;
+    font-weight: 400;
+    color: #333333;
+    font-size: 24px;
+}
+.event-section .event-list-item .event-content .event-title .title strong {
+    font-weight: 900;
+}
+.event-section .event-list-item .event-content .event-info-list ul li {
+    margin-right: 10px;
+}
+.event-section .event-list-item .event-content .event-info-list ul li:last-child {
+    margin-right: 0px;
+}
+.event-section .event-list-item .event-content .event-info-list ul li .icon {
+    float: left;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    margin-right: 10px;
+    color: #ffffff;
+    border-radius: 100%;
+    background-color: #ffbe30;
+}
+.event-section .event-list-item .event-content .event-info-list ul li .info-content {
+    display: table;
+}
+.event-section .event-list-item .event-content .event-info-list ul li .info-content small {
+    font-weight: 700;
+    font-size: 14px;
+}
+.event-section .event-list-item .event-content .event-info-list ul li .info-content h3 {
+    font-weight: 900;
+    font-size: 18px;
+}
+.event-section .event-list-item .event-content .tickets-details-btn {
+    z-index: 1;
+    font-weight: 600;
+    overflow: hidden;
+    padding: 15px 45px;
+    position: relative;
+    border-radius: 30px;
+    color: #878787;
+    font-size: 14px;
+    text-transform: uppercase;
+    background: #f7f7f7;
+}
+.event-section .event-list-item .event-content .tickets-details-btn:before {
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    opacity: 0;
+    z-index: -1;
+    content: '';
+    position: absolute;
+    border-radius: 30px;
+    background: -webkit-gradient(linear, left top, right bottom, from(#ff3e00), to(#ffbe30));
+    background: -webkit-linear-gradient(top left, #ff3e00, #ffbe30);
+    background: -o-linear-gradient(top left, #ff3e00, #ffbe30);
+    background: linear-gradient(to bottom right, #ff3e00, #ffbe30);
+    -webkit-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+.event-section .event-list-item .event-content .tickets-details-btn:hover {
+    color: #ffffff;
+    background: #ffbe30;
+}
+.event-section .event-list-item .event-content .tickets-details-btn:hover:before {
+    opacity: 1;
+}
+.event-section .event-list-item:hover {
+    border-color: #ffbe30;
+}

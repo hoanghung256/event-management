@@ -7,13 +7,6 @@ package com.fuem.controllers;
 import com.fuem.repositories.UserDAO;
 import com.fuem.utils.Gmail;
 import com.fuem.utils.RandomGenerator;
-import jakarta.mail.Message;
-import jakarta.mail.MessagingException;
-import jakarta.mail.PasswordAuthentication;
-import jakarta.mail.Session;
-import jakarta.mail.Transport;
-import jakarta.mail.internet.InternetAddress;
-import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -31,23 +24,21 @@ import java.util.logging.Logger;
  */
 @WebServlet(name = "ForgetPasswordController", urlPatterns = {"/forget"})
 public class ForgetPasswordController extends HttpServlet {
-    private final UserDAO dao = new UserDAO();
-    private static final Logger logger = Logger.getLogger(ResetPasswordController.class.getName());
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        throw new IllegalArgumentException("Method not support");
+        request.getRequestDispatcher("authentication/forget-password.jsp").forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        UserDAO userDao = new UserDAO();
         String email = request.getParameter("email");
         String otp = RandomGenerator.generate(RandomGenerator.NUMERIC, 6);
         
         try {
-            if (dao.isEmailInDatabase(email)) {
+            if (userDao.isEmailInDatabase(email)) {
                 Gmail.sendWithOTP(email, otp);
                 HttpSession session = request.getSession();
                 session.setAttribute("otp", otp);
@@ -58,7 +49,7 @@ public class ForgetPasswordController extends HttpServlet {
                 request.getRequestDispatcher("authentication/forget-password.jsp").forward(request, response);
             } 
         } catch (MalformedURLException e) {
-           logger.log(Level.SEVERE, email, e);
+           Logger.getLogger(ForgetPasswordController.class.getName()).log(Level.SEVERE, email, e);
         }
     }
 }

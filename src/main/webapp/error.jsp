@@ -1,11 +1,10 @@
 <%-- 
-    Document   : test
-    Created on : Sep 18, 2024, 10:31:21 PM
+    Document   : error
+    Created on : Oct 3, 2024, 12:24:22 PM
     Author     : hoang hung 
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -13,10 +12,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Email not exist</h1>
-        
-        <c:forEach var="s" items="${names}">
-            <div>${s}</div>
-        </c:forEach>
+        <h1>error</h1>
     </body>
 </html>

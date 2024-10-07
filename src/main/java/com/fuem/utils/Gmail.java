@@ -13,7 +13,6 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -119,9 +118,9 @@ public class Gmail {
         if (content != null || macrosMap == null) {
             return;
         }
-//            filePath = Configuration.templatePath.concat(filePath);
+        // filePath = Configuration.templatePath.concat(filePath);
         filePath = "";
-        
+
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath)));
             String line;
@@ -130,19 +129,21 @@ public class Gmail {
             while ((line = br.readLine()) != null) {
                 g = g.appendContent(insertMarco(line)).appendContent("\n");
             }
+            br.close();
             g.send();
         } catch (IOException e) {
             Logger.getLogger(Gmail.class.getName()).log(Level.SEVERE, null, e);
         }
     }
-    
+
     public void sendTemplate(URL filePath) {
         if (content != null || macrosMap == null) {
             return;
         }
-        
+
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(filePath.openStream(), StandardCharsets.UTF_8));
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader(filePath.openStream(), StandardCharsets.UTF_8));
             String line;
             Gmail g = this.initContent("");
 
@@ -154,14 +155,14 @@ public class Gmail {
             Logger.getLogger(Gmail.class.getName()).log(Level.SEVERE, null, e);
         }
     }
-    
+
     public static void sendWithOTP(String email, String otp) throws MalformedURLException {
         Gmail g = new Gmail(email)
-                    .setContentType("text/html; charset=UTF-8")
-                    .setSubject("Verify account")
-                    .initMacro()
-                    .appendMacro("OTP", otp);
-        
+                .setContentType("text/html; charset=UTF-8")
+                .setSubject("Verify account")
+                .initMacro()
+                .appendMacro("OTP", otp);
+
         g.sendTemplate(new URL("http://localhost:8080/event-management/gmail-template/send-otp.jsp"));
     }
 }

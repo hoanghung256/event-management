@@ -41,6 +41,10 @@ public class EventAttendedDAO extends SQLDatabase{
                                                             "    E.dateOfEvent DESC\n"+ 
                                                             "OFFSET ? ROWS\n" +
                                                             "FETCH NEXT ? ROWS ONLY";
+
+    public EventAttendedDAO() {
+        super();
+    } 
     
     public Page<Event> getAttendedEventsList(PagingCriteria pagingCriteria, int userId){
         ResultSet rs = executeQueryPreparedStatement(SELECT_ATTENDED_EVENTS, userId, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());
@@ -59,7 +63,7 @@ public class EventAttendedDAO extends SQLDatabase{
                 String avatarPath = rs.getNString("avatarPath");
                 Date dateOfEvent  = rs.getDate("eventDate");
                 
-                Event event = new Event(eventName, organizerAcronym, avatarPath, dateOfEvent);
+                Event event = new Event(eventName, organizerAcronym, avatarPath, dateOfEvent.toLocalDate());
                 eventsAttendedList.add(event);
             }
         }catch(SQLException e){

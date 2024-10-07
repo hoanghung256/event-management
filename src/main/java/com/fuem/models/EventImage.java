@@ -2,13 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.fuem.repositories;
+package com.fuem.models;
 
 /**
  *
- * @author hoang hung
+ * @author This PC
  */
-public class Contexts {
+public class EventImage {
     
-    public static TestRepository testRepository;
+    
 }

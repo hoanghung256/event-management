@@ -5,6 +5,7 @@
 package com.fuem.controllers;
 
 import com.fuem.models.Event;
+import com.fuem.models.User;
 import com.fuem.repositories.EventAttendedDAO;
 import com.fuem.repositories.helpers.Page;
 import com.fuem.repositories.helpers.PagingCriteria;
@@ -19,18 +20,15 @@ import java.io.IOException;
  *
  * @author ThangNM
  */
-@WebServlet(name = "AttendedEventController", urlPatterns = {"/attended"})
+@WebServlet(name = "AttendedEventController", urlPatterns = {"/attended-events"})
 public class AttendedEventController extends HttpServlet {
-    private EventAttendedDAO dao = new EventAttendedDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //if sign-in
-        /*
-        HttpSession session = request.getSession();
-        session.getAttribute("userId", userId);    
-        */
+        User user = (User) request.getSession().getAttribute("userInfor");
+        EventAttendedDAO eventAttendedDAO = new EventAttendedDAO();
+
         PagingCriteria pagingCriteria = new PagingCriteria();
         String pageNumberStr = request.getParameter("page");
         
@@ -47,16 +45,9 @@ public class AttendedEventController extends HttpServlet {
                 10
         );
         
-        Page<Event> attendedEvents = dao.getAttendedEventsList(pagingCriteria, 4);
+        Page<Event> attendedEvents = eventAttendedDAO.getAttendedEventsList(pagingCriteria, user.getId());
         
         request.setAttribute("page", attendedEvents);
         request.getRequestDispatcher("student/attended-events.jsp").forward(request, response);
     }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-       
-    }
-
 }
