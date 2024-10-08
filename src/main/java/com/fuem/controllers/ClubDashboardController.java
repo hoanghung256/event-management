@@ -33,6 +33,8 @@ public class ClubDashboardController extends HttpServlet {
         ArrayList<Event> organizedEvent = dao.getOrganizedEvent(3);
         ArrayList<Event> upcomingEvent = dao.getUpcomingEvent(3);
         
+        System.out.println(upcomingEvent);
+        
         request.setAttribute("totalEvents", totalEvents);
         request.setAttribute("totalFollowers", totalFollowers);
         request.setAttribute("totalUpcomingEvents", totalUpcomingEvents);

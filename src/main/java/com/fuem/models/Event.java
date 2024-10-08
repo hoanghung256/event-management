@@ -5,8 +5,6 @@
 package com.fuem.models;
 
 import com.fuem.models.EventLocation;
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.LocalDate;
@@ -23,11 +21,13 @@ public class Event {
     private String fullname;
     private String description;
     private EventType type;
+    private String status;
     private EventLocation location;
     private LocalDate dateOfEvent;
     private LocalTime startTime;
     private LocalTime endTime;
     private int guestRegisterLimit;
+    private int guestRegisterCount;
     private LocalDateTime registerDeadline;
     private int collaboratorRegisterLimit;
     private List<String> images;
@@ -73,6 +73,52 @@ public class Event {
         this.endTime = endTime;
         this.guestRegisterLimit = guestRegisterLimit;
         this.registerDeadline = registerDeadline;
+    }
+    
+    public Event(String fullname, LocalDate dateOfEvent, String locationName, String category){
+        this.fullname = fullname;
+        this.dateOfEvent = dateOfEvent;
+        this.location = new EventLocation();
+        this.location.setDescription(locationName);
+        this.type = new EventType();
+        this.type.setName(category);
+    }
+    
+     public Event(int id, String fullname, LocalDate dateOfEvent, String locationName, String category, String status, int registerLimit, int registerCount){
+        this.fullname = fullname;
+        this.dateOfEvent = dateOfEvent;
+        this.location = new EventLocation();
+        this.location.setDescription(locationName);
+        this.type = new EventType();
+        this.type.setName(category);
+        this.status = status;
+        this.guestRegisterLimit = registerLimit;
+        this.guestRegisterCount = registerCount;
+    }
+     
+    public Event(int id, String clubName, String avatarPath, String fullname, LocalDate dateOfEvent, String category, String location, String status){
+        this.id = id;
+        this.organizer = new Organizer();
+        this.organizer.setFullname(clubName);
+        this.organizer.setAvatarPath(avatarPath);
+        this.fullname = fullname;
+        this.dateOfEvent = dateOfEvent;
+        this.type = new EventType();
+        this.type.setName(category);
+        this.location = new EventLocation();
+        this.location.setDescription(location);
+        this.status = status; 
+    }
+    
+    public Event(String eventName, String clubName, LocalDate dateOfEvent, String location, String category){
+        this.fullname = eventName;
+        this.organizer = new Organizer();
+        this.organizer.setAcronym(clubName);
+        this.dateOfEvent = dateOfEvent;
+        this.location = new EventLocation();
+        this.location.setDescription(location);
+        this.type = new EventType();
+        this.type.setName(category);
     }
 
     public int getId() {
@@ -161,6 +207,14 @@ public class Event {
 
     public void setGuestRegisterLimit(int guestRegisterLimit) {
         this.guestRegisterLimit = guestRegisterLimit;
+    }
+
+    public int getGuestRegisterCount() {
+        return guestRegisterCount;
+    }
+
+    public void setGuestRegisterCount(int guestRegisterCount) {
+        this.guestRegisterCount = guestRegisterCount;
     }
 
     public LocalDateTime getRegisterDeadline() {

@@ -5,9 +5,9 @@
 package com.fuem.repositories;
 
 import com.fuem.models.Event;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -132,7 +132,7 @@ public class ClubDashboardDAO extends SQLDatabase{
         try {
             while(rs.next()){
                 String eventName = rs.getString("EventName");
-                Date eventDate = rs.getDate("EventDate");
+                LocalDate eventDate = rs.getDate("EventDate").toLocalDate();
                 String locationName = rs.getString("LocationName");
                 String category = rs.getString("CategoryName");
                 
@@ -152,13 +152,13 @@ public class ClubDashboardDAO extends SQLDatabase{
             while(rs.next()){
                 int id = rs.getInt("EventId");
                 String eventName = rs.getString("EventName");
-                Date eventDate = rs.getDate("EventDate");
+                LocalDate eventDate = rs.getDate("EventDate").toLocalDate();
                 String locationName = rs.getString("LocationName");
                 String category = rs.getString("CategoryName");
                 String status = rs.getString("Status");
                 int registerLimit = rs.getInt("RegisterLimit");
                 int registerCount = rs.getInt("RegisterCount");
-                
+
                 upcomingEvent.add(new Event(id, eventName, eventDate, locationName, category, status, registerLimit, registerCount));
             }
         } catch (SQLException e){

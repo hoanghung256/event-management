@@ -73,57 +73,63 @@
 
         <!<!-- Start of Upcoming Event-->
         <div>
-            <c:forEach var="event" items="${upcomingEvent}">
-                <div class="card__wrapper">
-                    <div class="card__header">
-                        <div class="card__header-top">
-                            <div class="card__title-inner">
-                                <div class="card__header-icon">
-                                    <i class="flaticon-reminder"></i>
-                                </div>
-                                <div class="card__header-title">
-                                    <h4>Upcoming Events: ${event.fullname}</h4>
+            <c:if test="${not empty upcomingEvent}">
+                <c:forEach var="event" items="${upcomingEvent}">
+                    <div class="card__wrapper">
+                        <div class="card__header">
+                            <div class="card__header-top">
+                                <div class="card__title-inner">
+                                    <div class="card__header-icon">
+                                        <i class="flaticon-reminder"></i>
+                                    </div>
+                                    <div class="card__header-title">
+                                        <h4>Upcoming Events: ${event.fullname}</h4>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div>
-                        <div class="card__inner">
-                            <div class="card-body" style="display: flex; align-items: center;">
-                                <div class="col-xxl-6 col-xl-6">
-                                    <div class="event__meta-time">
-                                        <ul>
-                                            <li>
-                                                <span> Date : </span>
-                                                ${event.dateOfEvent}						
-                                            </li>
-                                            <li>
-                                                <span>Category :</span>
-                                                ${event.type.name}
-                                            </li>
-                                            <li>
-                                                <span>Location : </span>
-                                                ${event.location.description}							
-                                            </li>
-                                            <li>
-                                                <span>Status : </span>
-                                                ${event.status}
-                                            </li>
-                                        </ul>
+                        <div>
+                            <div class="card__inner">
+                                <div class="card-body" style="display: flex; align-items: center;">
+                                    <div class="col-xxl-6 col-xl-6">
+                                        <div class="event__meta-time">
+                                            <ul>
+                                                <li><span>Date : </span>${event.dateOfEvent}</li>
+                                                <li><span>Category : </span>${event.type.name}</li>
+                                                <li><span>Location : </span>${event.location.description}</li>
+                                                <li>
+                                                    <span>Status : </span>
+                                                    <c:choose>
+                                                        <c:when test="${event.status == 'APPROVE'}">
+                                                            <span style="color: green;">${event.status}</span>
+                                                        </c:when>
+                                                        <c:when test="${event.status == 'PENDING'}">
+                                                            <span style="color: yellow;">${event.status}</span>
+                                                        </c:when>
+                                                        <c:when test="${event.status == 'CANCEL'}">
+                                                            <span style="color: red;">${event.status}</span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span>${event.status}</span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </li>
+                                            </ul>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <!-- Pie chart section -->
-                                <div class="col-xxl-6 col-xl-6" style=" display: flex; justify-content: end;">
-                                    <div class="chart-section" style="width: 300px; margin-left: 0px;">
-                                        <canvas id="registrationPieChart${event.id}" width="300" height="400"></canvas>
+                                    <!-- Chart section -->
+                                    <div class="col-xxl-6 col-xl-6" style="display: flex; justify-content: end;">
+                                        <div class="chart-section" style="width: 300px; margin-left: 0px;">
+                                            <canvas id="registrationChart${event.fullname}" width="300" height="400"></canvas>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </c:forEach>
+                </c:forEach>
+            </c:if>
         </div>
         <!-- End of notification -->
 
@@ -195,9 +201,7 @@
                 </div>
             </div>
         </div>
-        <!-- end of Notification & Organized Events -->
-
-        <!-- App side area end -->
+        <!-- end of organize event -->
         <!-- Dashboard area end -->
 
 </section>
@@ -206,23 +210,23 @@
 <script>
     // Loop through each event to create a chart
     <c:forEach var="event" items="${upcomingEvent}">
-        const ctx${event.id} = document.getElementById('registrationPieChart${event.id}').getContext('2d');
-        
-        const data${event.id} = {
+        const ctx${event.fullname} = document.getElementById('registrationChart${event.fullname}').getContext('2d');
+
+        const data${event.fullname} = {
             labels: ['Registered', 'Available Slots'],
             datasets: [{
-                data: [${event.guestRegisterCount}, ${event.guestRegisterLimit - event.guestRegisterCount}], // Registered vs Available slots
-                backgroundColor: ['#FF6500', '#ECDFCC']
-            }]
+                    data: [${event.guestRegisterCount}, ${event.guestRegisterLimit - event.guestRegisterCount}], // Registered vs Available slots
+                    backgroundColor: ['#FF6500', '#ECDFCC']
+                }]
         };
 
-        const config${event.id} = {
+        const config${event.fullname} = {
             type: 'doughnut',
-            data: data${event.id}
+            data: data${event.fullname}
         };
 
-        const registrationPieChart${event.id} = new Chart(ctx${event.id}, config${event.id});
+        const registrationChart${event.fullname} = new Chart(ctx${event.fullname}, config${event.fullname});
     </c:forEach>
 </script>
-   
+
 <%@include file="../include/master-footer.jsp" %>
