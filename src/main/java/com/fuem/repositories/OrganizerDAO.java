@@ -36,7 +36,8 @@ public class OrganizerDAO extends SQLDatabase {
 
     public Organizer getOrganizerByEmailAndPassword(String email, String password) {
         ResultSet rs = executeQueryPreparedStatement(SELECT_ORGANIZER_BY_EMAIL_AND_PASSWORD, email, password);
-        Organizer organizer = new Organizer();
+//        Organizer organizer = new Organizer();
+        Organizer organizer = null;
 
         try {
             while (rs.next()) {

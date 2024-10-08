@@ -24,17 +24,16 @@ import java.util.logging.Logger;
  *
  * @author khim
  */
-
 @WebServlet("/sign-in")
 public class SignInController extends HttpServlet {
 
     private UserDAO userDAO;
     private OrganizerDAO organizerDAO;
-    
+
     @Override
     public void init() {
         userDAO = new UserDAO();
-        organizerDAO= new OrganizerDAO();
+        organizerDAO = new OrganizerDAO();
     }
 
     @Override
@@ -55,15 +54,20 @@ public class SignInController extends HttpServlet {
         String password = request.getParameter("password");
         String chooseRole = request.getParameter("role");
         String hashPassword = Hash.doHash(password);
-        
+
         try {
             if ("organizer".equalsIgnoreCase(chooseRole)) {
                 Organizer organizer = organizerDAO.getOrganizerByEmailAndPassword(email, hashPassword);
 
-                if(organizer != null){
+                if (organizer != null) {
                     HttpSession session = request.getSession();
                     session.setAttribute("userInfor", organizer);
-                    request.getRequestDispatcher("index.html").forward(request, response);
+
+                    if (organizer.isAdmin()) {
+                        request.getRequestDispatcher("admin.html").forward(request, response);
+                    } else {
+                        request.getRequestDispatcher("club.html").forward(request, response);
+                    }
                 } else {
                     request.setAttribute("error", "Email hoặc mật khẩu không đúng");
                     request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
@@ -79,7 +83,6 @@ public class SignInController extends HttpServlet {
                     request.setAttribute("error", "Email hoặc mật khẩu không đúng");
                     request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
                 }
-                return;
             }
         } catch (IOException | ServletException e) {
             Logger.getLogger(SignInController.class.getName()).log(Level.SEVERE, null, e);
@@ -91,4 +94,3 @@ public class SignInController extends HttpServlet {
         userDAO.closeConnection(); // Đóng kết nối khi servlet hủy
     }
 }
-
