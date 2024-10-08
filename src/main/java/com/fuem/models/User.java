@@ -4,44 +4,64 @@
  */
 package com.fuem.models;
 
+import com.fuem.enums.Role;
+
 /**
  *
- * @author AnhNQ
+ * @author hoang hung
  */
-public class User {
+public abstract class User {
+    
     private int id;
-    private String fullname; // Chỉnh sửa từ fullName thành fullname
-    private String studentId;
+    private String fullname;
     private String email;
     private String password;
     private String avatarPath;
+    private Role role;
 
     public User() {
     }
-
-    public User(String fullname, String studentId, String email, String password) {
+    
+    public User(int id) {
+        this.id = id;
+    }
+    
+    public User(String fullname, String email, String password) {
         this.fullname = fullname;
-        this.studentId = studentId;
         this.email = email;
         this.password = password;
     }
-
-  
-    public User(int id, String fullname, String studentId, String email, String password, String avatarPath) {
+    
+    public User(int id, String fullname, String email, String avatarPath) {
         this.id = id;
         this.fullname = fullname;
-        this.studentId = studentId;
+        this.email = email;
+        this.avatarPath = avatarPath;
+    }
+    
+    public User(int id, String fullname, String email, String password, String avatarPath) {
+        this.id = id;
+        this.fullname = fullname;
         this.email = email;
         this.password = password;
         this.avatarPath = avatarPath;
     }
-
-    public User(int id, String fullname, String studentId, String email,  String avatarPath) {
-       this.id = id;
+    
+    public User(int id, String fullname, String email, String avatarPath, Role role) {
+        this.id = id;
         this.fullname = fullname;
-        this.studentId = studentId;
         this.email = email;
         this.avatarPath = avatarPath;
+        this.role = role;
+    }
+
+    public User(int id, String fullname, String email, String password, String avatarPath, Role role) {
+        this.id = id;
+        this.fullname = fullname;
+        this.email = email;
+        this.password = password;
+        this.avatarPath = avatarPath;
+        this.role = role;
     }
 
     public int getId() {
@@ -58,14 +78,6 @@ public class User {
 
     public void setFullname(String fullname) {
         this.fullname = fullname;
-    }
-
-    public String getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
     }
 
     public String getEmail() {
@@ -92,8 +104,16 @@ public class User {
         this.avatarPath = avatarPath;
     }
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", fullname=" + fullname + ", studentId=" + studentId + ", email=" + email + ", password=" + password + ", avatarPath=" + avatarPath + '}';
+        return "User{" + "id=" + id + ", fullname=" + fullname + ", email=" + email + ", password=" + password + ", avatarPath=" + avatarPath + ", role=" + role + '}';
     }
 }

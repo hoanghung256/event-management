@@ -8,25 +8,25 @@ package com.fuem.models;
  *
  * @author hoang hung
  */
-public class EventType {
+public class Category {
     
     private int id;
     private String name;
     private String description;
 
-    public EventType() {
+    public Category() {
     }
     
-    public EventType(int id) {
+    public Category(int id) {
         this.id = id;
     }
     
-    public EventType(int id, String name) {
+    public Category(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public EventType(int id, String name, String description) {
+    public Category(int id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -58,6 +58,6 @@ public class EventType {
 
     @Override
     public String toString() {
-        return "EventType{" + "id=" + id + ", name=" + name + ", description=" + description + '}';
+        return "Category{" + "id=" + id + ", name=" + name + ", description=" + description + '}';
     }
 }

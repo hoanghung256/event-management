@@ -1,7 +1,7 @@
 <%-- 
     Document   : event-details
     Created on : Sep 25, 2024, 5:07:43?PM
-    Author     : Administrator
+    Author     : TuDK
 --%>
 
 <%@include file="../include/student-layout-header.jsp"%>

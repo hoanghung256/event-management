@@ -5,7 +5,8 @@
 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@include file="../include/student-layout-header.jsp"%>
+<%@include file="include/student-layout-header.jsp"%>
+
 <section>
     <div class="app__slide-wrapper">
         <div class="breadcrumb__area">
@@ -19,6 +20,9 @@
                             <nav>
                                 <ul>
                                     <li class="active"><span>Home</span></li>
+                                    <a href="${pageContext.request.contextPath}/student/attended-events">
+                                        Go
+                                    </a>
                                 </ul>
                             </nav>
                         </div>
@@ -158,10 +162,10 @@
                                     </p>
                                     <div class="event-info-list" style="display: flex; justify-content: space-between;">
                                         <div style="margin-bottom: 10px;">
-                                            <span class="event-type"><i class="fa-solid fa-list"></i> ${event.type.name}</span>
+                                            <span class="event-type"><i class="fa-solid fa-list"></i> ${event.category.name}</span>
                                         </div>
                                         <div>
-                                            <p class="location"><i class="fas fa-location-dot"></i> ${event.location.description}</p>
+                                            <p class="location"><i class="fas fa-location-dot"></i> ${event.location.name}</p>
                                         </div>
                                         <div>
                                             <p><i class="fa-solid fa-user-group"></i> ${event.guestRegisterLimit}/${event.guestRegisterLimit} registered</p>
@@ -232,5 +236,6 @@
     </div>
     <!--</div>-->
 </section>
-<%@include file="../include/master-footer.jsp" %>
+                                
+<%@include file="include/master-footer.jsp" %>
 

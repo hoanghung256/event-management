@@ -4,7 +4,7 @@
     Author     : TRINHHUY
 --%>
 
-<%@include file="../include/student-layout-header.jsp"%>
+<%--<%@include file="../include/student-layout-header.jsp"%>--%>
 
 <style>
 
@@ -155,4 +155,4 @@
     </div>
 </section>
 
-<%@include file="../include/master-footer.jsp" %>
+<%--<%@include file="../include/master-footer.jsp" %>--%>

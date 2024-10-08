@@ -8,21 +8,36 @@ package com.fuem.models;
  *
  * @author hoang hung
  */
-public class EventLocation {
+public class Location {
     
     private int id;
+    private String name;
     private String description;
 
-    public EventLocation() {
+    public Location() {
     }
     
-    public EventLocation(int id) {
+    public Location(int id) {
         this.id = id;
     }
 
-    public EventLocation(int id, String description) {
+    public Location(int id, String name) {
         this.id = id;
+        this.name = name;
+    }
+
+    public Location(int id, String name, String description) {
+        this.id = id;
+        this.name = name;
         this.description = description;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public int getId() {

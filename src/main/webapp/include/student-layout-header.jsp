@@ -1,5 +1,5 @@
 <%-- 
-    Document   : test-student-layout
+    Document   : student-layout-header
     Created on : Sep 26, 2024, 4:37:04 PM
     Author     : TRINHHUY
 --%>
@@ -49,12 +49,12 @@
             <div class="expovent__sidebar">
                 <div class="logo-details">
                     <span>
-                        <a href="dashboard.html">
+                        <a href="home">
                             <img class="logo__white" src="assets/img/logo/logo-fpt-small.svg" alt="logo not found">
                         </a>
                     </span>
                     <span>
-                        <a href="dashboard.html">
+                        <a href="home">
                             <img class="log__smnall" style="margin-left: 1rem;" src="assets/img/logo/logoFpt.svg.png" width="65%" alt="logo not found">
                         </a>
                     </span>
@@ -63,13 +63,13 @@
                     <div class="dlabnav">
                         <ul class="metismenu" id="menu">
                             <li>
-                                <a href="#" aria-expanded="false">
+                                <a href="home" aria-expanded="false">
                                     <i class="flaticon-home"></i>
                                     <span class="nav-text">Home</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#" aria-expanded="false">
+                                <a href="${pageContext.request.contextPath}/student/attended-events" aria-expanded="false">
                                     <i class="flaticon-calendar-1"></i>
                                     <span class="nav-text">Attended Events</span>
                                 </a>
@@ -81,7 +81,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="profile" aria-expanded="false">
+                                <a href="${pageContext.request.contextPath}/student/profile" aria-expanded="false">
                                     <i class="flaticon-user-1"></i>
                                     <span class="nav-text">Profile</span>
                                 </a>

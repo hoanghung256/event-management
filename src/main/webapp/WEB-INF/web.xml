@@ -11,18 +11,24 @@
         <session-timeout>30</session-timeout>
     </session-config>
 
-    <error-page>
+<!--    <error-page>
         <exception-type>java.lang.Throwable</exception-type>
-        <location>/error.jsp</location>
-    </error-page>
+        <location>error/error.jsp</location>
+    </error-page>-->
     
     <error-page>
         <error-code>404</error-code>
-        <location>/404.jsp</location>
+        <location>/error/404.jsp</location>
     </error-page>
 
     <error-page>
         <error-code>500</error-code>
-        <location>/500.jsp</location>
+        <location>/error/500.jsp</location>
     </error-page>
+    
+<!--    <filter>
+        <filter-name>AuthorizationFilter</filter-name>
+        <filter-class>com.fuem.filters.AuthorizationFilter</filter-class>
+    </filter>-->
+    
 </web-app>

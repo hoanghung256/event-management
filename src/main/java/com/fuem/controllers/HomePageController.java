@@ -5,10 +5,10 @@
 package com.fuem.controllers;
 
 import com.fuem.models.Event;
-import com.fuem.models.EventType;
+import com.fuem.models.Category;
 import com.fuem.models.Notification;
 import com.fuem.models.Organizer;
-import com.fuem.models.User;
+import com.fuem.models.Student;
 import com.fuem.repositories.EventDAO;
 import com.fuem.repositories.NotificationDAO;
 import com.fuem.repositories.helpers.EventOrderBy;
@@ -35,12 +35,12 @@ public class HomePageController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         EventDAO eventDAO = new EventDAO();
         NotificationDAO notiDAO = new NotificationDAO();
-        User user = (User) request.getSession().getAttribute("userInfor");
+        Student user = (Student) request.getSession().getAttribute("userInfor");
         
         List<Notification> notiList = notiDAO.getNotificationsForUser(user.getId());
         request.setAttribute("notiList", notiList);
 
-        List<EventType> typeList = eventDAO.getAllEventType();
+        List<Category> typeList = eventDAO.getAllEventType();
         request.setAttribute("eventTypeList", typeList);
 
         List<Organizer> organizerList = eventDAO.getAllOrganizer();
@@ -100,7 +100,6 @@ public class HomePageController extends HttpServlet {
                 user.getId()
         );
         request.setAttribute("page", result);
-        request.getRequestDispatcher("student/homepage.jsp").forward(request, response);
-
+        request.getRequestDispatcher("homepage.jsp").forward(request, response);
     }
 }

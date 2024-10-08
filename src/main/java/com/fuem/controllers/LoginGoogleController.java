@@ -1,7 +1,7 @@
 package com.fuem.controllers;
 
-import com.fuem.repositories.UserDAO;
-import com.fuem.models.User;
+import com.fuem.repositories.StudentDAO;
+import com.fuem.models.Student;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -46,11 +46,11 @@ public class LoginGoogleController extends HttpServlet {
                 JsonObject userInfo = getUserInfo(accessToken);
                 if (userInfo != null) {
                     String email = userInfo.getString("email");
-                    UserDAO userDAO = new UserDAO();
+                    StudentDAO userDAO = new StudentDAO();
 
-                    User user = new User();
+                    Student user = new Student();
 
-                    if (userDAO.isEmailInDatabase(email)) {
+                    if (userDAO.getUserByEmail(email) != null) {
                         user = userDAO.getUserByEmail(email);
 
                         HttpSession session = request.getSession();

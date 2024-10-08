@@ -4,10 +4,8 @@
  */
 package com.fuem.models;
 
-import com.fuem.models.EventLocation;
-import java.sql.Date;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import com.fuem.enums.Status;
+import com.fuem.models.Location;
 import java.time.LocalTime;
 import java.time.LocalDate;
 import java.util.List;
@@ -21,36 +19,38 @@ public class Event {
     private int id;
     private Organizer organizer;
     private String fullname;
+    private Status status;
     private String description;
-    private EventType type;
-    private EventLocation location;
+    private Category category;
+    private Location location;
     private LocalDate dateOfEvent;
     private LocalTime startTime;
     private LocalTime endTime;
     private int guestRegisterLimit;
-    private LocalDateTime registerDeadline;
+    private LocalDate guestRegisterDeadline;
     private int collaboratorRegisterLimit;
+    private LocalDate collaboratorRegisterDeadline;
     private List<String> images;
 
     public Event() {
     }
 
-    public Event(int id, Organizer organizer, String fullname, String description, EventType type,
-            EventLocation location, LocalDate dateOfEvent, LocalTime startTime, LocalTime endTime,
+    public Event(int id, Organizer organizer, String fullname, String description, Category category,
+            Location location, LocalDate dateOfEvent, LocalTime startTime, LocalTime endTime,
             int guestRegisterLimit,
-            LocalDateTime registerDeadline, int guestAttendedCount, int collaboratorRegisterLimit,
+            LocalDate guestRegisterDeadline, int guestAttendedCount, int collaboratorRegisterLimit,
             List<String> images) {
         this.id = id;
         this.organizer = organizer;
         this.fullname = fullname;
         this.description = description;
-        this.type = type;
+        this.category = category;
         this.location = location;
         this.dateOfEvent = dateOfEvent;
         this.startTime = startTime;
         this.endTime = endTime;
         this.guestRegisterLimit = guestRegisterLimit;
-        this.registerDeadline = registerDeadline;
+        this.guestRegisterDeadline = guestRegisterDeadline;
     }
 
     public Event(String fullname, String organizerAcronym, String avatarPath, LocalDate dateOfEvent) {
@@ -61,18 +61,18 @@ public class Event {
         this.dateOfEvent = dateOfEvent;
     }
 
-    public Event(int id, Organizer organizer, String fullname, String description, EventType type, EventLocation location, LocalDate dateOfEvent, LocalTime startTime, LocalTime endTime, int guestRegisterLimit, LocalDateTime registerDeadline) {
+    public Event(int id, Organizer organizer, String fullname, String description, Category category, Location location, LocalDate dateOfEvent, LocalTime startTime, LocalTime endTime, int guestRegisterLimit, LocalDate guestRegisterDeadline) {
         this.id = id;
         this.organizer = organizer;
         this.fullname = fullname;
         this.description = description;
-        this.type = type;
+        this.category = category;
         this.location = location;
         this.dateOfEvent = dateOfEvent;
         this.startTime = startTime;
         this.endTime = endTime;
         this.guestRegisterLimit = guestRegisterLimit;
-        this.registerDeadline = registerDeadline;
+        this.guestRegisterDeadline = guestRegisterDeadline;
     }
 
     public int getId() {
@@ -107,19 +107,19 @@ public class Event {
         this.description = description;
     }
 
-    public EventType getType() {
-        return type;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setType(EventType type) {
-        this.type = type;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
-    public EventLocation getLocation() {
+    public Location getLocation() {
         return location;
     }
 
-    public void setLocation(EventLocation location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 
@@ -155,12 +155,12 @@ public class Event {
         this.guestRegisterLimit = guestRegisterLimit;
     }
 
-    public LocalDateTime getRegisterDeadline() {
-        return registerDeadline;
+    public LocalDate getRegisterDeadline() {
+        return guestRegisterDeadline;
     }
 
-    public void setRegisterDeadline(LocalDateTime registerDeadline) {
-        this.registerDeadline = registerDeadline;
+    public void setRegisterDeadline(LocalDate guestRegisterDeadline) {
+        this.guestRegisterDeadline = guestRegisterDeadline;
     }
 
     public int getCollaboratorRegisterLimit() {
@@ -182,9 +182,9 @@ public class Event {
     @Override
     public String toString() {
         return "Event{" + "id=" + id + ", organizer=" + organizer + ", fullname=" + fullname + ", description="
-                + description + ", type=" + type + ", location=" + location + ", dateOfEvent=" + dateOfEvent
+                + description + ", category=" + category + ", location=" + location + ", dateOfEvent=" + dateOfEvent
                 + ", startTime=" + startTime + ", endTime=" + endTime + ", guestRegisterLimit=" + guestRegisterLimit
-                + ", registerDeadline=" + registerDeadline + ", collaboratorRegisterLimit=" + collaboratorRegisterLimit
+                + ", guestRegisterDeadline=" + guestRegisterDeadline + ", collaboratorRegisterLimit=" + collaboratorRegisterLimit
                 + ", images="
                 + images + '}';
     }

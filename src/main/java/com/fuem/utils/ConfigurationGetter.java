@@ -14,20 +14,19 @@ import java.util.logging.Logger;
  *
  * @author hoang hung
  */
-public class Configuration {
+public class ConfigurationGetter {
 
     private static Properties properties;
-    private static final Logger logger = Logger.getLogger(Configuration.class.getName());
 
     private static void loadProperties() {
         if (properties == null) {
             properties = new Properties();
-            try (InputStream input = Configuration.class.getClassLoader().getResourceAsStream("application.properties")) {
+            try (InputStream input = ConfigurationGetter.class.getClassLoader().getResourceAsStream("application.properties")) {
                 if (input != null) {
                     properties.load(input);
                 }
             } catch (IOException e) {
-                logger.log(Level.SEVERE, null, e);
+                Logger.getLogger(ConfigurationGetter.class.getName()).log(Level.SEVERE, null, e);
             }
         }
     }

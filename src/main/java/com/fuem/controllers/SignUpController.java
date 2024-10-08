@@ -1,7 +1,7 @@
 package com.fuem.controllers;
 
-import com.fuem.models.User;
-import com.fuem.repositories.UserDAO;
+import com.fuem.models.Student;
+import com.fuem.repositories.StudentDAO;
 import com.fuem.utils.Gmail;
 import com.fuem.utils.Hash;
 import com.fuem.utils.RandomGenerator;
@@ -30,7 +30,7 @@ public class SignUpController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserDAO userDao = new UserDAO();
+        StudentDAO userDao = new StudentDAO();
         String fullname = request.getParameter("fullname");
         String password = request.getParameter("password");
         String studentId = request.getParameter("studentId");
@@ -47,7 +47,7 @@ public class SignUpController extends HttpServlet {
                 request.getRequestDispatcher("authentication/verify-email.jsp").forward(request, response);
                 return;
             }
-            User u = new User(
+            Student u = new Student(
                     fullname, 
                     studentId, 
                     email, 
@@ -78,7 +78,7 @@ public class SignUpController extends HttpServlet {
             request.setAttribute("error", "Email not allow, must be FPT Education email");
             request.getRequestDispatcher("authentication/sign-up.jsp").forward(request, response);
             return;
-        } else if (userDao.isEmailInDatabase(email)) {
+        } else if (userDao.getUserByEmail(email) != null) {
             request.setAttribute("error", "Email have been registered! Want to sign in?");
             request.getRequestDispatcher("authentication/sign-up.jsp").forward(request, response);
             return;
@@ -87,7 +87,7 @@ public class SignUpController extends HttpServlet {
             request.getRequestDispatcher("authentication/sign-up.jsp").forward(request, response);
             return;
         } else {
-            User u = new User(fullname, studentId, email, password);
+            Student u = new Student(fullname, studentId, email, password);
             String otp = RandomGenerator.generate(RandomGenerator.NUMERIC, 6);
             Gmail.sendWithOTP(email, otp);
             request.getSession().setAttribute("OTP", otp);
