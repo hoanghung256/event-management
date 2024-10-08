@@ -49,7 +49,7 @@ public class EventDAO extends SQLDatabase {
             + "e.guestRegisterDeadline, "
             + "e.guestRegisterCount, "
             + "e.collaboratorRegisterLimit, "
-            + "e.colaboratorRegisterDeadline, "
+            + "e.collaboratorRegisterDeadline, "
             + "e.collaboratorRegisterCount, "
             + "u.avatarPath AS organizerAvatarPath "
             + "FROM Event e "
@@ -67,8 +67,7 @@ public class EventDAO extends SQLDatabase {
             + "JOIN EventLocation l ON e.locationId = l.id "
             + "WHERE e.dateOfEvent > GETDATE() "
             + "ORDER BY e.dateOfEvent DESC";
-    private static final String SELECT_EVENTS_FOLLOWED
-            = "SELECT e.*, "
+    private static final String SELECT_EVENTS_FOLLOWED = "SELECT e.*, "
             + "o.fullname AS organizerName, o.id AS organizerId, "
             + "c.id AS categoryId, c.categoryName, c.categoryDescription, "
             + "l.id AS locationId, l.locationDescription "
@@ -80,8 +79,7 @@ public class EventDAO extends SQLDatabase {
             + "WHERE f.followerId = ? "
             + "AND e.dateOfEvent > GETDATE() "
             + "ORDER BY e.dateOfEvent DESC";
-    private static final String SELECT_EVENTS_NOT_FOLLOWED
-            = "SELECT e.*, "
+    private static final String SELECT_EVENTS_NOT_FOLLOWED = "SELECT e.*, "
             + "o.fullname AS organizerName, o.id AS organizerId, "
             + "t.id AS categoryId, c.categoryName, c.categoryDescription, "
             + "l.id AS locationId, l.locationDescription "
@@ -93,8 +91,7 @@ public class EventDAO extends SQLDatabase {
             + "WHERE f.followedId IS NULL "
             + "AND e.dateOfEvent > GETDATE() "
             + "ORDER BY e.dateOfEvent DESC";
-    private static final String SELECT_EVENTS_FOLLOWED_AND_NOT_FOLLOWED
-            = "SELECT e.*, "
+    private static final String SELECT_EVENTS_FOLLOWED_AND_NOT_FOLLOWED = "SELECT e.*, "
             + "COUNT(*) OVER() AS 'TotalRow', "
             + "o.fullname AS organizerName, o.id AS organizerId, "
             + "c.id AS categoryId, c.categoryName, c.categoryDescription, "
@@ -110,7 +107,7 @@ public class EventDAO extends SQLDatabase {
     public EventDAO() {
         super();
     }
-    
+
     public List<Event> getAllEvents() {
         List<Event> events = new ArrayList<>();
         ResultSet rs = executeQueryPreparedStatement(SELECT_ALL_EVENT);
@@ -126,7 +123,7 @@ public class EventDAO extends SQLDatabase {
                 event.setEndTime(rs.getTimestamp("endTime").toLocalDateTime().toLocalTime());
                 event.setGuestRegisterLimit(rs.getInt("guestRegisterLimit"));
                 event.setRegisterDeadline(rs.getDate("guestRegisterDeadline").toLocalDate());
-//                event.setGuestAttendedCount(rs.getInt("guestAttendedCount"));
+                // event.setGuestAttendedCount(rs.getInt("guestAttendedCount"));
 
                 Organizer organizer = new Organizer();
                 organizer.setId(rs.getInt("organizerId"));
@@ -166,7 +163,7 @@ public class EventDAO extends SQLDatabase {
                 event.setEndTime(rs.getTimestamp("endTime").toLocalDateTime().toLocalTime());
                 event.setGuestRegisterLimit(rs.getInt("guestRegisterLimit"));
                 event.setRegisterDeadline(rs.getDate("guestRegisterDeadline").toLocalDate());
-//                event.setGuestAttendedCount(rs.getInt("guestAttendedCount"));
+                // event.setGuestAttendedCount(rs.getInt("guestAttendedCount"));
 
                 Organizer organizer = new Organizer();
                 organizer.setId(rs.getInt("organizerId"));
@@ -205,7 +202,7 @@ public class EventDAO extends SQLDatabase {
                 event.setEndTime(rs.getTimestamp("endTime").toLocalDateTime().toLocalTime());
                 event.setGuestRegisterLimit(rs.getInt("guestRegisterLimit"));
                 event.setRegisterDeadline(rs.getDate("guestRegisterDeadline").toLocalDate());
-//                event.setGuestAttendedCount(rs.getInt("guestAttendedCount"));
+                // event.setGuestAttendedCount(rs.getInt("guestAttendedCount"));
 
                 Organizer organizer = new Organizer();
                 organizer.setId(rs.getInt("organizerId"));
@@ -290,27 +287,25 @@ public class EventDAO extends SQLDatabase {
                 organizer.setId(rs.getInt("organizerId"));
                 organizer.setFullname(rs.getString("organizerName"));
                 events.add(new Event(
+                        rs.getInt("id"),
+                        organizer,
+                        rs.getNString("fullname"),
+                        rs.getNString("description"),
+                        new Category(
                                 rs.getInt("id"),
-                                organizer,
-                                rs.getNString("fullname"),
-                                rs.getNString("description"),
-                                new Category(
-                                        rs.getInt("id"),
-                                        rs.getNString("categoryName")
-                                //                                        rs.getNString("description")
-                                ),
-                                new Location(
-                                        rs.getInt("id"),
-                                        rs.getNString("locationName")
-                                ),
-                                rs.getDate("dateOfEvent").toLocalDate(),
-                                rs.getTimestamp("startTime").toLocalDateTime().toLocalTime(),
-                                rs.getTimestamp("endTime").toLocalDateTime().toLocalTime(),
-                                rs.getInt("guestRegisterLimit"),
-                                rs.getDate("guestRegisterDeadline").toLocalDate()
-                        //                                rs.getInt("guestAttendedCount")
-                        )
-                );
+                                rs.getNString("categoryName")
+                        // rs.getNString("description")
+                        ),
+                        new Location(
+                                rs.getInt("id"),
+                                rs.getNString("locationName")),
+                        rs.getDate("dateOfEvent").toLocalDate(),
+                        rs.getTimestamp("startTime").toLocalDateTime().toLocalTime(),
+                        rs.getTimestamp("endTime").toLocalDateTime().toLocalTime(),
+                        rs.getInt("guestRegisterLimit"),
+                        rs.getDate("guestRegisterDeadline").toLocalDate()
+                // rs.getInt("guestAttendedCount")
+                ));
             }
         } catch (SQLException e) {
             Logger.getLogger(EventDAO.class.getName()).log(Level.SEVERE, null, e);
@@ -382,18 +377,15 @@ public class EventDAO extends SQLDatabase {
                 Organizer organizer = new Organizer(
                         rs.getInt("organizerId"),
                         rs.getString("organizerName"),
-                        rs.getString("organizerAvatarPath")
-                );
+                        rs.getString("organizerAvatarPath"));
                 event.setOrganizer(organizer);
                 event.setFullname(rs.getString("eventName"));
                 event.setDescription(rs.getString("description"));
                 Category category = new Category(
-                        rs.getString("categoryName")
-                );
+                        rs.getString("categoryName"));
                 event.setCategory(category);
                 Location location = new Location(
-                        rs.getString("locationName")
-                );
+                        rs.getString("locationName"));
                 event.setLocation(location);
                 event.setDateOfEvent(rs.getDate("dateOfEvent").toLocalDate());
                 event.setStartTime(rs.getTimestamp("startTime").toLocalDateTime().toLocalTime());
@@ -402,7 +394,7 @@ public class EventDAO extends SQLDatabase {
                 event.setRegisterDeadline(rs.getDate("guestRegisterDeadline").toLocalDate());
                 event.setGuestRegisterCount(rs.getInt("guestRegisterCount"));
                 event.setCollaboratorRegisterLimit(rs.getInt("collaboratorRegisterLimit"));
-                event.setCollaboratorRegisterDeadline(rs.getDate("colaboratorRegisterDeadline").toLocalDate());
+                event.setCollaboratorRegisterDeadline(rs.getDate("collaboratorRegisterDeadline").toLocalDate());
                 event.setCollaboratorRegisterCount(rs.getInt("collaboratorRegisterCount"));
                 event.setImages(getEventImages(eventId));
             } else {

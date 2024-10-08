@@ -130,7 +130,8 @@ CREATE TABLE [Event] (
 	[guestRegisterCancelCount] INT DEFAULT(0),
 	[collaboratorRegisterCount] INT DEFAULT (0),
 	[guestRegisterDeadline] DATE,
-	[colaboratorRegisterDeadline] DATE,
+	[collaboratorRegisterDeadline] DATE,
+	[guestRegisterCancelCount] INT DEFAULT(0),
 
 	CONSTRAINT PK_Event PRIMARY KEY ([id]),
 	FOREIGN KEY ([organizerId]) REFERENCES [Organizer]([id]),
