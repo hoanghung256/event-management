@@ -141,6 +141,52 @@ public class Event {
         this.type = new EventType();
         this.type.setName(category);
     }
+    
+    public Event(String fullname, LocalDate dateOfEvent, String locationName, String category){
+        this.fullname = fullname;
+        this.dateOfEvent = dateOfEvent;
+        this.location = new EventLocation();
+        this.location.setDescription(locationName);
+        this.type = new EventType();
+        this.type.setName(category);
+    }
+    
+     public Event(int id, String fullname, LocalDate dateOfEvent, String locationName, String category, String status, int registerLimit, int registerCount){
+        this.fullname = fullname;
+        this.dateOfEvent = dateOfEvent;
+        this.location = new EventLocation();
+        this.location.setDescription(locationName);
+        this.type = new EventType();
+        this.type.setName(category);
+        this.status = status;
+        this.guestRegisterLimit = registerLimit;
+        this.guestRegisterCount = registerCount;
+    }
+     
+    public Event(int id, String clubName, String avatarPath, String fullname, LocalDate dateOfEvent, String category, String location, String status){
+        this.id = id;
+        this.organizer = new Organizer();
+        this.organizer.setFullname(clubName);
+        this.organizer.setAvatarPath(avatarPath);
+        this.fullname = fullname;
+        this.dateOfEvent = dateOfEvent;
+        this.type = new EventType();
+        this.type.setName(category);
+        this.location = new EventLocation();
+        this.location.setDescription(location);
+        this.status = status; 
+    }
+    
+    public Event(String eventName, String clubName, LocalDate dateOfEvent, String location, String category){
+        this.fullname = eventName;
+        this.organizer = new Organizer();
+        this.organizer.setAcronym(clubName);
+        this.dateOfEvent = dateOfEvent;
+        this.location = new EventLocation();
+        this.location.setDescription(location);
+        this.type = new EventType();
+        this.type.setName(category);
+    }
 
     public int getId() {
         return id;
