@@ -9,7 +9,22 @@ package com.fuem.enums;
  * @author hoang hung
  */
 public enum Gender {
-    MALE,
-    FEMALE,
-    OTHER;
+    MALE {
+        @Override
+        public String toString() {
+            return "Male";
+        }
+    },
+    FEMALE {
+        @Override
+        public String toString() {
+            return "Female";
+        }
+    },
+    OTHER {
+        @Override
+        public String toString() {
+            return "Other";
+        }
+    };
 }
