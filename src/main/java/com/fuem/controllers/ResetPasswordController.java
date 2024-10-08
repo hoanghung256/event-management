@@ -4,7 +4,7 @@
  */
 package com.fuem.controllers;
 
-import com.fuem.repositories.UserDAO;
+import com.fuem.repositories.StudentDAO;
 import com.fuem.utils.Hash;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -23,7 +23,7 @@ public class ResetPasswordController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserDAO userDao = new UserDAO();
+        StudentDAO userDao = new StudentDAO();
         HttpSession session = request.getSession();
         String inputOtp = request.getParameter("otp");
         String email = String.valueOf(session.getAttribute("email"));

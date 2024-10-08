@@ -32,7 +32,7 @@ public class EventDetailsController extends HttpServlet {
         } else {
             request.setAttribute("error", "Get data failed!");
         }
-        request.getRequestDispatcher("student/event-details.jsp").forward(request, response);
+        request.getRequestDispatcher("event-details.jsp").forward(request, response);
 
     }
 }

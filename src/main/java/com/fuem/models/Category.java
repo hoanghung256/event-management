@@ -8,20 +8,31 @@ package com.fuem.models;
  *
  * @author hoang hung
  */
-public class EventLocation {
+public class Category {
     
     private int id;
+    private String name;
     private String description;
 
-    public EventLocation() {
+    public Category() {
     }
     
-    public EventLocation(int id) {
+    public Category(int id) {
         this.id = id;
     }
-
-    public EventLocation(int id, String description) {
+    
+    public Category(String name) {
+        this.name = name;
+    }
+    
+    public Category(int id, String name) {
         this.id = id;
+        this.name = name;
+    }
+
+    public Category(int id, String name, String description) {
+        this.id = id;
+        this.name = name;
         this.description = description;
     }
 
@@ -31,6 +42,14 @@ public class EventLocation {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -43,6 +62,6 @@ public class EventLocation {
 
     @Override
     public String toString() {
-        return "EventLocation{" + "id=" + id + ", description=" + description + '}';
+        return "Category{" + "id=" + id + ", name=" + name + ", description=" + description + '}';
     }
 }

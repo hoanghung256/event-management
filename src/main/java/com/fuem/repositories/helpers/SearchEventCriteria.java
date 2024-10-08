@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class SearchEventCriteria {
     
     private String name;
-    private Integer typeId;
+    private Integer categoryId;
     private Integer organizerId;
     private LocalDate from;
     private LocalDate to;
@@ -21,9 +21,9 @@ public class SearchEventCriteria {
     
     public SearchEventCriteria() {}
 
-    public SearchEventCriteria(String name, Integer typeId, Integer organizerId, LocalDate from, LocalDate to, EventOrderBy orderBy) {
+    public SearchEventCriteria(String name, Integer categoryId, Integer organizerId, LocalDate from, LocalDate to, EventOrderBy orderBy) {
         this.name = name;
-        this.typeId = typeId;
+        this.categoryId = categoryId;
         this.organizerId = organizerId;
         this.from = from;
         this.to = to;
@@ -38,12 +38,12 @@ public class SearchEventCriteria {
         this.name = name;
     }
 
-    public Integer getTypeId() {
-        return typeId;
+    public Integer getCategoryId() {
+        return categoryId;
     }
 
-    public void setTypeId(Integer typeId) {
-        this.typeId = typeId;
+    public void setCategoryId(Integer categoryId) {
+        this.categoryId = categoryId;
     }
 
     public Integer getOrganizerId() {
@@ -79,11 +79,11 @@ public class SearchEventCriteria {
     }
     
     public boolean isEmpty() {
-        return (name == null && typeId == null && organizerId == null && from == null && to == null && orderBy == null);
+        return (name == null && categoryId == null && organizerId == null && from == null && to == null && orderBy == null);
     }
 
     @Override
     public String toString() {
-        return "SearchEventCriteria{" + "name=" + name + ", typeId=" + typeId + ", organizerId=" + organizerId + ", from=" + from + ", to=" + to + ", orderBy=" + orderBy + '}';
+        return "SearchEventCriteria{" + "name=" + name + ", categoryId=" + categoryId + ", organizerId=" + organizerId + ", from=" + from + ", to=" + to + ", orderBy=" + orderBy + '}';
     }
 }
