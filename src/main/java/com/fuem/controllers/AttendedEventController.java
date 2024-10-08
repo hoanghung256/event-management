@@ -20,7 +20,7 @@ import java.io.IOException;
  *
  * @author ThangNM
  */
-@WebServlet(urlPatterns = {"/student/attended-events"})
+@WebServlet(name = "AttendedEventController", urlPatterns = {"/student/attended-events"})
 public class AttendedEventController extends HttpServlet {
 
     @Override

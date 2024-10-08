@@ -31,6 +31,12 @@ public abstract class User {
         this.email = email;
         this.password = password;
     }
+
+    public User(int id, String fullname, String avatarPath) {
+        this.id = id;
+        this.fullname = fullname;
+        this.avatarPath = avatarPath;
+    }
     
     public User(int id, String fullname, String email, String avatarPath) {
         this.id = id;
@@ -114,6 +120,6 @@ public abstract class User {
 
     @Override
     public String toString() {
-        return "User{" + "id=" + id + ", fullname=" + fullname + ", email=" + email + ", password=" + password + ", avatarPath=" + avatarPath + ", role=" + role + '}';
+        return "id=" + id + ", fullname=" + fullname + ", email=" + email + ", password=" + password + ", avatarPath=" + avatarPath + ", role=" + role + ", ";
     }
 }

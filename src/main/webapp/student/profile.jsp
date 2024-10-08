@@ -4,10 +4,9 @@
     Author     : TRINHHUY
 --%>
 
-<%--<%@include file="../include/student-layout-header.jsp"%>--%>
+<%@include file="../include/student-layout-header.jsp"%>
 
 <style>
-
     .profile__left{
         display: flex;
         justify-content: center;
@@ -63,7 +62,7 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="home">Home</a></span></li>
+                                    <li><span><a href="<c:url value="/home"/>">Home</a></span></li>
                                     <li class="active"><span>Profile</span></li>
                                 </ul>
                             </nav>
@@ -150,9 +149,7 @@
                 </div>
             </div>
         </div>
-
-
     </div>
 </section>
 
-<%--<%@include file="../include/master-footer.jsp" %>--%>
+<%@include file="../include/master-footer.jsp" %>

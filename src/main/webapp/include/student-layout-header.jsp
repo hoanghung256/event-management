@@ -19,18 +19,18 @@
         <!-- Place favicon.ico in the root directory -->
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
         <!-- CSS here -->
-        <link rel="stylesheet" href="assets/app/css/bootstrap.min.css">
-        <link rel="stylesheet" href="assets/app/css/meanmenu.min.css">
-        <link rel="stylesheet" href="assets/app/css/animate.css">
-        <link rel="stylesheet" href="assets/app/css/metisMenu.min.css">
-        <link rel="stylesheet" href="assets/app/css/swiper-bundle.min.css">
-        <link rel="stylesheet" href="assets/app/css/slick.css">
-        <link rel="stylesheet" href="assets/app/css/backtotop.css">
-        <link rel="stylesheet" href="assets/app/css/magnific-popup.css">
-        <link rel="stylesheet" href="assets/app/css/flaticon_expovent.css">
-        <link rel="stylesheet" href="assets/app/css/fontawesome-pro.css">
-        <link rel="stylesheet" href="assets/app/css/spacing.css">
-        <link rel="stylesheet" href="assets/app/css/main.css">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/bootstrap.min.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/meanmenu.min.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/animate.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/metisMenu.min.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/swiper-bundle.min.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/slick.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/backtotop.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/magnific-popup.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/flaticon_expovent.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/fontawesome-pro.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/spacing.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/main.css' />">
     </head> 
     <body class="body-area">
         <!-- Preloder start -->
@@ -49,13 +49,13 @@
             <div class="expovent__sidebar">
                 <div class="logo-details">
                     <span>
-                        <a href="home">
-                            <img class="logo__white" src="assets/img/logo/logo-fpt-small.svg" alt="logo not found">
+                        <a href="<c:url value="/home"/>">
+                            <img class="logo__white" src="<c:url value="/assets/img/logo/logo-fpt-small.svg"/>" alt="logo not found">
                         </a>
                     </span>
                     <span>
-                        <a href="home">
-                            <img class="log__smnall" style="margin-left: 1rem;" src="assets/img/logo/logoFpt.svg.png" width="65%" alt="logo not found">
+                        <a href="<c:url value="/home"/>">
+                            <img class="log__smnall" style="margin-left: 1rem;" src="<c:url value="/assets/img/logo/logoFpt.svg.png"/>" width="65%" alt="logo not found">
                         </a>
                     </span>
                 </div>
@@ -63,13 +63,13 @@
                     <div class="dlabnav">
                         <ul class="metismenu" id="menu">
                             <li>
-                                <a href="home" aria-expanded="false">
+                                <a href="<c:url value="/home"/>" aria-expanded="false">
                                     <i class="flaticon-home"></i>
                                     <span class="nav-text">Home</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="${pageContext.request.contextPath}/student/attended-events" aria-expanded="false">
+                                <a href="<c:url value="/student/attended-events"/>" aria-expanded="false">
                                     <i class="flaticon-calendar-1"></i>
                                     <span class="nav-text">Attended Events</span>
                                 </a>
@@ -81,13 +81,13 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="${pageContext.request.contextPath}/student/profile" aria-expanded="false">
+                                <a href="<c:url value="/student/profile"/>" aria-expanded="false">
                                     <i class="flaticon-user-1"></i>
                                     <span class="nav-text">Profile</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#" aria-expanded="false">
+                                <a href="<c:url value="/#"/>" aria-expanded="false">
                                     <i class="flaticon-log-out-3"></i>
                                     <span class="nav-text">Log out</span>
                                 </a>
@@ -118,10 +118,11 @@
                                 <div id="userportfolio" href="/profile">
                                     <div class="user__portfolio">
                                         <div class="user__portfolio-thumb">
-                                            <img
-                                                src="${sessionScope.userInfor.avatarPath != null ? sessionScope.userInfor.avatarPath : "http://localhost:8080/event-management/assets/img/user/default-avatar.jpg"}"
-                                                alt="Image not found"s
-                                                />
+                                            <c:url value="/assets/img/user/default-avatar.jpg" var="defaultAvatar" />
+                                            <img 
+                                                src="${sessionScope.userInfor.avatarPath != null ? sessionScope.userInfor.avatarPath : defaultAvatar}" 
+                                                alt="Default Avatar" 
+                                            />
                                         </div>
                                         <div class="user__content">
                                             <span>${sessionScope.userInfor.fullname != null ? sessionScope.userInfor.fullname : "Guest"}</span>
@@ -131,7 +132,7 @@
                                 <div class="user__dropdown">
                                     <ul>
                                         <li>
-                                            <a href="profile"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                            <a href="<c:url value="/student/profile" />"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                                                         xmlns="http://www.w3.org/2000/svg">
                                                 <g clip-path="url(#clip0_643_344)">
                                                 <path
@@ -147,7 +148,7 @@
                                                 Profile</a>
                                         </li>
                                         <li>
-                                            <a href="signin.html"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                            <a href="<c:url value="/sign-in" />"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                                                        xmlns="http://www.w3.org/2000/svg">
                                                 <g clip-path="url(#clip0_643_343)">
                                                 <path
@@ -175,7 +176,7 @@
                                                 Log in</a>
                                         </li>
                                         <li>
-                                            <a href="signin.html"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                            <a href="<c:url value="/sign-up" />"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                                                        xmlns="http://www.w3.org/2000/svg">
                                                 <g clip-path="url(#clip0_643_343)">
                                                 <path

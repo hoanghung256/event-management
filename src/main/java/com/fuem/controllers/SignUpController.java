@@ -18,7 +18,6 @@ import java.io.IOException;
  *
  * @author khim
  */
-
 @WebServlet(name = "SignUpController", urlPatterns = {"/sign-up"})
 public class SignUpController extends HttpServlet {
 

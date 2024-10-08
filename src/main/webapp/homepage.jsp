@@ -36,11 +36,11 @@
                             </div>
 
                             <div class="col-md-2 input">
-                                <label for="typeId" class="form-label">Event Type</label>
-                                <select id="typeId" name="typeId" class="form-select">
-                                    <c:forEach var="eventType" items="${eventTypeList}">
-                                        <option value="${eventType.id}" ${previousSearchEventCriteria != null && previousSearchEventCriteria.typeId == eventType.id ? 'selected' : ''}>
-                                            ${eventType.name}
+                                <label for="categoryId" class="form-label">Event Type</label>
+                                <select id="categoryId" name="categoryId" class="form-select">
+                                    <c:forEach var="category" items="${cateList}">
+                                        <option value="${category.id}" ${previousSearchEventCriteria != null && previousSearchEventCriteria.categoryId == category.id ? 'selected' : ''}>
+                                            ${category.name}
                                         </option>
                                     </c:forEach>
                                 </select>
@@ -156,7 +156,7 @@
                                         ${event.fullname}
                                     </h3>
                                     <p><strong>Organizer: </strong><span>${event.organizer.fullname}</span></p>
-                                    <p><strong>Register Deadline: </strong><span id="datetime">${event.registerDeadline}</span></p>
+                                    <p><strong>Register Deadline: </strong><span id="datetime">${event.guestRegisterDeadline}</span></p>
                                     <p class="description-text truncated-text">
                                         ${event.description}
                                     </p>
@@ -168,7 +168,7 @@
                                             <p class="location"><i class="fas fa-location-dot"></i> ${event.location.name}</p>
                                         </div>
                                         <div>
-                                            <p><i class="fa-solid fa-user-group"></i> ${event.guestRegisterLimit}/${event.guestRegisterLimit} registered</p>
+                                            <p><i class="fa-solid fa-user-group"></i> ${event.guestRegisterCount} / ${event.guestRegisterLimit} registered</p>
                                         </div> 
                                         <a class="element__btn border-yellow" href="event-detail?eventId=${event.id}">Details</a>
                                     </div>
@@ -236,6 +236,6 @@
     </div>
     <!--</div>-->
 </section>
-                                
+                             
 <%@include file="include/master-footer.jsp" %>
 

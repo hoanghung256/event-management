@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
 <html class="no-js" lang="zxx">
 
@@ -19,18 +20,18 @@
         <!-- Place favicon.ico in the root directory -->
         <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
         <!-- CSS here -->
-        <link rel="stylesheet" href="assets/app/css/bootstrap.min.css">
-        <link rel="stylesheet" href="assets/app/css/meanmenu.min.css">
-        <link rel="stylesheet" href="assets/app/css/animate.css">
-        <link rel="stylesheet" href="assets/app/css/metisMenu.min.css">
-        <link rel="stylesheet" href="assets/app/css/swiper-bundle.min.css">
-        <link rel="stylesheet" href="assets/app/css/slick.css">
-        <link rel="stylesheet" href="assets/app/css/backtotop.css">
-        <link rel="stylesheet" href="assets/app/css/magnific-popup.css">
-        <link rel="stylesheet" href="assets/app/css/flaticon_expovent.css">
-        <link rel="stylesheet" href="assets/app/css/fontawesome-pro.css">
-        <link rel="stylesheet" href="assets/app/css/spacing.css">
-        <link rel="stylesheet" href="assets/app/css/main.css">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/bootstrap.min.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/meanmenu.min.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/animate.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/metisMenu.min.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/swiper-bundle.min.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/slick.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/backtotop.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/magnific-popup.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/flaticon_expovent.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/fontawesome-pro.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/spacing.css' />">
+        <link rel="stylesheet" href="<c:url value='/assets/app/css/main.css' />">
     </head> 
     <body class="body-area">
         <!-- Preloder start -->
@@ -50,12 +51,12 @@
                 <div class="logo-details">
                     <span>
                         <a href="dashboard.html">
-                            <img class="logo__white" src="assets/img/logo/logo-fpt-small.svg" alt="logo not found">
+                            <img class="logo__white" src="<c:url value="/assets/img/logo/logo-fpt-small.svg"/>" alt="logo not found">
                         </a>
                     </span>
                     <span>
                         <a href="dashboard.html">
-                            <img class="log__smnall" style="margin-left: 1rem;" src="assets/img/logo/logoFpt.svg.png" width="65%" alt="logo not found">
+                            <img class="log__smnall" style="margin-left: 1rem;" src="<c:url value="/assets/img/logo/logoFpt.svg.png"/>" width="65%" alt="logo not found">
                         </a>
                     </span>
                 </div>
@@ -122,10 +123,11 @@
                                     <div id="userportfolio" href="/profile">
                                         <div class="user__portfolio">
                                             <div class="user__portfolio-thumb">
-                                                <img
-                                                    src="${sessionScope.userInfor.avatarPath != null ? sessionScope.userInfor.avatarPath : "http://localhost:8080/event-management/assets/img/user/default-avatar.jpg"}"
-                                                    alt="Image not found"s
-                                                    />
+                                                <c:url value="/assets/img/user/default-avatar.jpg" var="defaultAvatar" />
+                                                <img 
+                                                    src="${sessionScope.userInfor.avatarPath != null ? sessionScope.userInfor.avatarPath : defaultAvatar}" 
+                                                    alt="Default Avatar" 
+                                                />
                                             </div>
                                             <div class="user__content">
                                                 <span>${sessionScope.userInfor.fullname != null ? sessionScope.userInfor.fullname : "Guest"}</span>
@@ -135,7 +137,7 @@
                                 <div class="user__dropdown">
                                     <ul>
                                         <li>
-                                            <a href="profile.html"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                            <a href="#"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                                                         xmlns="http://www.w3.org/2000/svg">
                                                 <g clip-path="url(#clip0_643_344)">
                                                 <path
@@ -151,7 +153,7 @@
                                                 Profile</a>
                                         </li>
                                         <li>
-                                            <a href="signin.html"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                            <a href="<c:url value="/sign-up"/>"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                                                        xmlns="http://www.w3.org/2000/svg">
                                                 <g clip-path="url(#clip0_643_343)">
                                                 <path
@@ -179,7 +181,7 @@
                                                 Log in</a>
                                         </li>
                                         <li>
-                                            <a href="signin.html"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                            <a href="<c:url value="/sign-up"/>"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                                                        xmlns="http://www.w3.org/2000/svg">
                                                 <g clip-path="url(#clip0_643_343)">
                                                 <path

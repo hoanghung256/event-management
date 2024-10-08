@@ -24,23 +24,29 @@ import java.io.IOException;
         urlPatterns = {
             "/student/*",
             "/club/*",
-            "/admin/*"
+            "/admin/*",
+            "*.jsp"
         }
 )
 public class AuthorizationFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-//        HttpServletRequest request = (HttpServletRequest) servletRequest;
-//        HttpServletResponse response = (HttpServletResponse) servletResponse;
-//        
-//        User user = (User) request.getSession().getAttribute("userInfor");
-//        String url = request.getRequestURI();
-//        
-//        if (user == null) {
-//            request.getRequestDispatcher("sign-in").forward(servletRequest, servletResponse);
-//        } else if ((url.startsWith("/club") && user.getRole() != Role.CLUB) || (url.startsWith("/admin") && user.getRole() != Role.ADMIN)) {
-//            response.sendRedirect("error/403.jsp");
-//        }
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
+        
+        User user = (User) request.getSession().getAttribute("userInfor");
+//        String url = request.getRequestURI(); (in deployement environment)
+        String url = request.getRequestURI().substring(17); // (in development environment)
+        
+        if (user == null) {
+            response.sendRedirect(request.getContextPath() + "/sign-in");
+        } else if ((url.startsWith("/club") && user.getRole() != Role.CLUB) 
+                || (url.startsWith("/admin") && user.getRole() != Role.ADMIN) 
+                || (url.endsWith(".jsp") && !url.startsWith("/error")) ) {
+            response.sendRedirect(request.getContextPath() + "/error/403.jsp");
+        } else {
+            filterChain.doFilter(servletRequest, servletResponse);
+        }
     }
 }

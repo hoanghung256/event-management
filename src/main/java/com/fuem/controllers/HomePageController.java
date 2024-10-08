@@ -40,14 +40,14 @@ public class HomePageController extends HttpServlet {
         List<Notification> notiList = notiDAO.getNotificationsForUser(user.getId());
         request.setAttribute("notiList", notiList);
 
-        List<Category> typeList = eventDAO.getAllEventType();
-        request.setAttribute("eventTypeList", typeList);
+        List<Category> cateList = eventDAO.getAllCategory();
+        request.setAttribute("cateList", cateList);
 
         List<Organizer> organizerList = eventDAO.getAllOrganizer();
         request.setAttribute("organizerList", organizerList);
 
         String name = request.getParameter("name");
-        String typeId = request.getParameter("typeId");
+        String categoryId = request.getParameter("categoryId");
         String organizerId = request.getParameter("organizerId");
         String fromDate = request.getParameter("from");
         String toDate = request.getParameter("to");
@@ -71,12 +71,12 @@ public class HomePageController extends HttpServlet {
         );
 
         // Set attribute for SearchEventCriteria
-        if (name != null || typeId != null || organizerId != null || fromDate != null || toDate != null) {
+        if (name != null || categoryId != null || organizerId != null || fromDate != null || toDate != null) {
             if (!name.isBlank()) {
                 searchEventCriteria.setName(name);
             }
-            if (!typeId.isBlank()) {
-                searchEventCriteria.setTypeId(Integer.valueOf(typeId));
+            if (!categoryId.isBlank()) {
+                searchEventCriteria.setCategoryId(Integer.valueOf(categoryId));
             }
             if (!organizerId.isBlank()) {
                 searchEventCriteria.setOrganizerId(Integer.valueOf(organizerId));

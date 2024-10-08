@@ -24,6 +24,10 @@ public class Organizer extends User {
         super(id);
         this.acronym = acronym;
     }
+    
+    public Organizer(int id, String fullname, String avatarPath) {
+        super(id, fullname, avatarPath);
+    }
 
     public Organizer(int id, String acronym, String fullname, String description, String email, String password,
             String avatarPath, Role role) {

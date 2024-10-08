@@ -24,7 +24,7 @@ public class DataSourceWrapper {
         config.setConnectionTimeout(20000);
         config.setIdleTimeout(600000);
         config.setMaxLifetime(1800000);
-        config.setMaximumPoolSize(10);
+        config.setMaximumPoolSize(15);
         config.setMinimumIdle(5);
         dataSource = new HikariDataSource(config);
     }

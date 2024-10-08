@@ -27,11 +27,11 @@ public class StudentDAO extends SQLDatabase {
 
     public Student getUserByEmail(String email) {
         ResultSet rs = executeQueryPreparedStatement(SELECT_STUDENT_BY_EMAIL, email);
-        Student user = null;
+        Student student = null;
 
         try {
             while (rs.next()) {
-                user = new Student(
+                student = new Student(
                         rs.getInt("id"),
                         rs.getString("fullname"),
                         rs.getString("studentId"),
@@ -43,7 +43,7 @@ public class StudentDAO extends SQLDatabase {
             logger.log(Level.SEVERE, null, e);
         }
 
-        return user;
+        return student;
     }
 
     public Student getStudentByEmailAndPassword(String email, String password) {

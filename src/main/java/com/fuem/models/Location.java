@@ -20,6 +20,10 @@ public class Location {
     public Location(int id) {
         this.id = id;
     }
+    
+    public Location(String name) {
+        this.name = name;
+    }
 
     public Location(int id, String name) {
         this.id = id;
