@@ -49,11 +49,26 @@
                                                     <a href="#">
                                                         <div class="review__author-thumb">
                                                         <img src="${event.organizer.avatarPath}" alt="Organizer Avatar" onerror="this.onerror=null; this.src='assets/img/default-avatar.png';">
+<<<<<<< Updated upstream:src/main/webapp/event-details.jsp
                                                         </div>
                                                         <div class="review__author-name">
                                                             <h4>${event.organizer.fullname}</h4> 
                                                         </div>
                                                     </a>
+=======
+                                                    </div>
+                                                    <div class="review__author-name">
+                                                        <a href="OrganizerProfileController?organizerId=${event.organizer.id}" 
+                                                           style="text-decoration: none; color: inherit;">
+                                                            <h4 style="color: inherit; transition: color 0.3s ease;"
+                                                                onmouseover="this.style.color = '#F50963';" 
+                                                                onmouseout="this.style.color = 'inherit';">
+                                                                ${event.organizer.fullname}
+                                                            </h4>
+                                                        </a>
+                                                    </div>
+
+>>>>>>> Stashed changes:src/main/webapp/student/Event-Details.jsp
                                                 </div>
                                                 <div class="review__tab">
                                                     <nav>
