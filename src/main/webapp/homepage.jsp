@@ -5,7 +5,8 @@
 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@include file="../include/student-layout-header.jsp"%>
+<%@include file="include/student-layout-header.jsp"%>
+
 <section>
     <div class="app__slide-wrapper">
         <div class="breadcrumb__area">
@@ -19,6 +20,9 @@
                             <nav>
                                 <ul>
                                     <li class="active"><span>Home</span></li>
+                                    <a href="${pageContext.request.contextPath}/student/attended-events">
+                                        Go
+                                    </a>
                                 </ul>
                             </nav>
                         </div>
@@ -32,11 +36,11 @@
                             </div>
 
                             <div class="col-md-2 input">
-                                <label for="typeId" class="form-label">Event Type</label>
-                                <select id="typeId" name="typeId" class="form-select">
-                                    <c:forEach var="eventType" items="${eventTypeList}">
-                                        <option value="${eventType.id}" ${previousSearchEventCriteria != null && previousSearchEventCriteria.typeId == eventType.id ? 'selected' : ''}>
-                                            ${eventType.name}
+                                <label for="categoryId" class="form-label">Event Type</label>
+                                <select id="categoryId" name="categoryId" class="form-select">
+                                    <c:forEach var="category" items="${cateList}">
+                                        <option value="${category.id}" ${previousSearchEventCriteria != null && previousSearchEventCriteria.categoryId == category.id ? 'selected' : ''}>
+                                            ${category.name}
                                         </option>
                                     </c:forEach>
                                 </select>
@@ -120,8 +124,6 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
@@ -137,9 +139,9 @@
                                 <!-- Event Image - Start -->
                                 <div class="event-image" style="height: 100%; position: relative; width: 30%;">
                                     <div class="post-date" style="position: absolute; top: 10px; left: 10px; padding: 5px;">
-<!--                                        <span id="date" class="date" style="font-size: 20px; font-weight: bold;">
-                                            ${event.dateOfEvent}
-                                        </span>-->
+                                        <!--                                        <span id="date" class="date" style="font-size: 20px; font-weight: bold;">
+                                        ${event.dateOfEvent}
+                                    </span>-->
                                         <small id="date" class="month" style="display: block;">
                                             ${event.dateOfEvent}
                                         </small>
@@ -153,19 +155,20 @@
                                     <h3 class="event-title" style="margin-bottom: 10px; font-size: 24px;">
                                         ${event.fullname}
                                     </h3>
-                                    <p>Register Deadline: <span id="datetime">${event.registerDeadline}</span></p>
+                                    <p><strong>Organizer: </strong><span>${event.organizer.fullname}</span></p>
+                                    <p><strong>Register Deadline: </strong><span id="datetime">${event.guestRegisterDeadline}</span></p>
                                     <p class="description-text truncated-text">
                                         ${event.description}
                                     </p>
                                     <div class="event-info-list" style="display: flex; justify-content: space-between;">
                                         <div style="margin-bottom: 10px;">
-                                            <span class="event-type"><i class="fa-solid fa-list"></i> ${event.type.name}</span>
+                                            <span class="event-type"><i class="fa-solid fa-list"></i> ${event.category.name}</span>
                                         </div>
                                         <div>
-                                            <p class="location"><i class="fas fa-location-dot"></i> ${event.location.description}</p>
+                                            <p class="location"><i class="fas fa-location-dot"></i> ${event.location.name}</p>
                                         </div>
                                         <div>
-                                            <p><i class="fa-solid fa-user-group"></i> ${event.guestRegisterLimit}/${event.guestRegisterLimit} registered</p>
+                                            <p><i class="fa-solid fa-user-group"></i> ${event.guestRegisterCount} / ${event.guestRegisterLimit} registered</p>
                                         </div> 
                                         <a class="element__btn border-yellow" href="event-detail?eventId=${event.id}">Details</a>
                                     </div>
@@ -175,11 +178,12 @@
                             <!-- Event item - End -->
                         </c:forEach>
                     </div>
+
                 </div>
             </div>
         </div>
         <div>
-            <div class="basic__pagination d-flex align-items-center justify-content-end">
+            <div class="basic__pagination d-flex align-items-center justify-content-end" style="margin-right: 3vw;">
                 <nav>
                     <ul>
                         <c:forEach var="i" begin="0" end="${page.totalPage}">
@@ -230,7 +234,8 @@
         </div>
         <!-- K?t th�c n?i dung c?a trang -->
     </div>
-<!--</div>-->
+    <!--</div>-->
 </section>
-<%@include file="../include/master-footer.jsp" %>
+                             
+<%@include file="include/master-footer.jsp" %>
 

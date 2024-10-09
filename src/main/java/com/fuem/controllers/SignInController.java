@@ -5,8 +5,8 @@
 package com.fuem.controllers;
 
 import com.fuem.models.Organizer;
-import com.fuem.repositories.UserDAO;
-import com.fuem.models.User;
+import com.fuem.repositories.StudentDAO;
+import com.fuem.models.Student;
 import com.fuem.repositories.OrganizerDAO;
 import com.fuem.utils.Hash;
 import jakarta.servlet.ServletException;
@@ -27,29 +27,14 @@ import java.util.logging.Logger;
 @WebServlet("/sign-in")
 public class SignInController extends HttpServlet {
 
-    private UserDAO userDAO;
-    private OrganizerDAO organizerDAO;
-
-    @Override
-    public void init() {
-        userDAO = new UserDAO();
-        organizerDAO = new OrganizerDAO();
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Chuyển hướng đến trang đăng nhập
-        try {
-            request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
-        } catch (IOException | ServletException e) {
-            Logger.getLogger(SignInController.class.getName()).log(Level.SEVERE, null, e);
-        }
+        request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String chooseRole = request.getParameter("role");
@@ -57,23 +42,20 @@ public class SignInController extends HttpServlet {
 
         try {
             if ("organizer".equalsIgnoreCase(chooseRole)) {
+                OrganizerDAO organizerDAO = new OrganizerDAO();
                 Organizer organizer = organizerDAO.getOrganizerByEmailAndPassword(email, hashPassword);
 
                 if (organizer != null) {
                     HttpSession session = request.getSession();
                     session.setAttribute("userInfor", organizer);
-
-                    if (organizer.isAdmin()) {
-                        request.getRequestDispatcher("admin.html").forward(request, response);
-                    } else {
-                        request.getRequestDispatcher("club.html").forward(request, response);
-                    }
+                    request.getRequestDispatcher("homepage").forward(request, response);
                 } else {
                     request.setAttribute("error", "Email hoặc mật khẩu không đúng");
                     request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
                 }
             } else {
-                User user = userDAO.getUserByEmailAndPassword(email, hashPassword);
+                StudentDAO userDAO = new StudentDAO();
+                Student user = userDAO.getStudentByEmailAndPassword(email, hashPassword);
 
                 if (user != null) {
                     HttpSession session = request.getSession();
@@ -87,10 +69,5 @@ public class SignInController extends HttpServlet {
         } catch (IOException | ServletException e) {
             Logger.getLogger(SignInController.class.getName()).log(Level.SEVERE, null, e);
         }
-    }
-
-    @Override
-    public void destroy() {
-        userDAO.closeConnection(); // Đóng kết nối khi servlet hủy
     }
 }

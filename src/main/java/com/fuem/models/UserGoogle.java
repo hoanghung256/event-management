@@ -4,10 +4,6 @@
  */
 package com.fuem.models;
 
-
-import com.fuem.models.User;
-
-
 /**
  *
  * @author ADMIN

@@ -4,58 +4,42 @@
  */
 package com.fuem.models;
 
+import com.fuem.enums.Role;
+
 /**
  *
  * @author AnhNQ
  */
 
-public class Organizer {
-    private int id;
+public class Organizer extends User {
+    
     private String acronym;
-    private String fullname;
     private String description;
-    private String email;
-    private String password;
-    private String avatarPath;
-    private boolean isAdmin;
+    private String coverPath;
 
     public Organizer() {
     }
 
     public Organizer(int id, String acronym) {
-        this.id = id;
+        super(id);
         this.acronym = acronym;
+    }
+    
+    public Organizer(int id, String fullname, String avatarPath) {
+        super(id, fullname, avatarPath);
     }
 
     public Organizer(int id, String acronym, String fullname, String description, String email, String password,
-            String avatarPath, boolean isAdmin) {
-        this.id = id;
+            String avatarPath, Role role) {
+        super(id, fullname, email, password, avatarPath, role);
         this.acronym = acronym;
-        this.fullname = fullname;
         this.description = description;
-        this.email = email;
-        this.password = password;
-        this.avatarPath = avatarPath;
-        this.isAdmin = isAdmin;
     }
 
-    public Organizer(int id, String acronym, String fullname, String description, String email, String avatarPath,
-            boolean isAdmin) {
-        this.id = id;
+    public Organizer(int id, String acronym, String fullname, String description, String email, String avatarPath, Role role) {
+        super(id, fullname, email, avatarPath, role);
         this.acronym = acronym;
-        this.fullname = fullname;
         this.description = description;
-        this.email = email;
-        this.avatarPath = avatarPath;
-        this.isAdmin = isAdmin;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getAcronym() {
@@ -66,14 +50,6 @@ public class Organizer {
         this.acronym = acronym;
     }
 
-    public String getFullname() {
-        return fullname;
-    }
-
-    public void setFullname(String fullname) {
-        this.fullname = fullname;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -82,42 +58,16 @@ public class Organizer {
         this.description = description;
     }
 
-    public String getEmail() {
-        return email;
+    public String getCoverPath() {
+        return coverPath;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getAvatarPath() {
-        return avatarPath;
-    }
-
-    public void setAvatarPath(String avatarPath) {
-        this.avatarPath = avatarPath;
-    }
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean isAdmin) {
-        this.isAdmin = isAdmin;
+    public void setCoverPath(String coverPath) {
+        this.coverPath = coverPath;
     }
 
     @Override
     public String toString() {
-        return "Organizer{" + "id=" + id + ", acronym=" + acronym + ", fullname=" + fullname + ", description="
-                + description + ", email=" + email + ", password=" + password + ", avatarPath=" + avatarPath
-                + ", isAdmin=" + isAdmin + '}';
+        return "Organizer{" + super.toString() + "acronym=" + acronym + ", description=" + description + ", coverPath=" + coverPath + '}';
     }
 }

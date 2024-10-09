@@ -8,36 +8,32 @@ package com.fuem.models;
  *
  * @author hoang hung
  */
-public class EventType {
+public class Location {
     
     private int id;
     private String name;
     private String description;
 
-    public EventType() {
+    public Location() {
     }
     
-    public EventType(int id) {
+    public Location(int id) {
         this.id = id;
     }
     
-    public EventType(int id, String name) {
+    public Location(String name) {
+        this.name = name;
+    }
+
+    public Location(int id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public EventType(int id, String name, String description) {
+    public Location(int id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -46,6 +42,14 @@ public class EventType {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDescription() {
@@ -58,6 +62,6 @@ public class EventType {
 
     @Override
     public String toString() {
-        return "EventType{" + "id=" + id + ", name=" + name + ", description=" + description + '}';
+        return "EventLocation{" + "id=" + id + ", description=" + description + '}';
     }
 }

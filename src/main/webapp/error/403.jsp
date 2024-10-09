@@ -1,6 +1,6 @@
 <%-- 
-    Document   : error
-    Created on : Oct 3, 2024, 12:24:22 PM
+    Document   : 403
+    Created on : Oct 7, 2024, 11:24:14 PM
     Author     : hoang hung 
 --%>
 
@@ -12,6 +12,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>error</h1>
+        <h1>403 - Forbidden</h1>
+        <p class="text-danger">We are sorry, but you do not have permission to access this resource!</p>
     </body>
 </html>

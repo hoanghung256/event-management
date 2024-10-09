@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Enum.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.fuem.enums;
 
@@ -8,23 +8,29 @@ package com.fuem.enums;
  *
  * @author hoang hung
  */
-public enum Gender {
-    MALE {
+public enum Status {
+    PENDING {
         @Override
         public String toString() {
-            return "Male";
+            return "Pending";
         }
     },
-    FEMALE {
+    APPROVED {
         @Override
         public String toString() {
-            return "Female";
+            return "Approved";
         }
     },
-    OTHER {
+    REJECTED {
         @Override
         public String toString() {
-            return "Other";
+            return "Rejected";
         }
-    };
+    },
+    ON_GOING {
+        @Override
+        public String toString() {
+            return "On going";
+        }
+    },
 }

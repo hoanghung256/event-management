@@ -4,7 +4,7 @@
  */
 package com.fuem.controllers;
 
-import com.fuem.repositories.UserDAO;
+import com.fuem.repositories.StudentDAO;
 import com.fuem.utils.Gmail;
 import com.fuem.utils.RandomGenerator;
 import jakarta.servlet.ServletException;
@@ -24,8 +24,6 @@ import java.util.logging.Logger;
  */
 @WebServlet(name = "ForgetPasswordController", urlPatterns = {"/forget"})
 public class ForgetPasswordController extends HttpServlet {
-    private final UserDAO dao = new UserDAO();
-    private static final Logger logger = Logger.getLogger(ResetPasswordController.class.getName());
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -34,13 +32,13 @@ public class ForgetPasswordController extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        StudentDAO userDao = new StudentDAO();
         String email = request.getParameter("email");
         String otp = RandomGenerator.generate(RandomGenerator.NUMERIC, 6);
         
         try {
-            if (dao.isEmailInDatabase(email)) {
+            if (userDao.getUserByEmail(email) != null) {
                 Gmail.sendWithOTP(email, otp);
                 HttpSession session = request.getSession();
                 session.setAttribute("otp", otp);
@@ -51,7 +49,7 @@ public class ForgetPasswordController extends HttpServlet {
                 request.getRequestDispatcher("authentication/forget-password.jsp").forward(request, response);
             } 
         } catch (MalformedURLException e) {
-           logger.log(Level.SEVERE, email, e);
+           Logger.getLogger(ForgetPasswordController.class.getName()).log(Level.SEVERE, email, e);
         }
     }
 }

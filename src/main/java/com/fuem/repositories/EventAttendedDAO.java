@@ -25,7 +25,7 @@ public class EventAttendedDAO extends SQLDatabase{
     private static final String SELECT_ATTENDED_EVENTS =    "SELECT \n" +
                                                             "    E.fullname AS eventName,\n" +
                                                             "    O.acronym AS organizerName,\n" +
-                                                            "	 O.avatarPath AS avatarPath,\n" +
+                                                            "	 O.avatarPath AS organizerAvatarPath,\n" +
                                                             "    E.dateOfEvent AS eventDate,\n" +
                                                             "    COUNT (*) OVER() AS 'TotalRow'\n" +
                                                             "FROM \n" +
@@ -35,18 +35,19 @@ public class EventAttendedDAO extends SQLDatabase{
                                                             "JOIN \n" +
                                                             "    [Organizer] O ON E.organizerId = O.id\n" +
                                                             "JOIN \n" +
-                                                            "    [User] U ON EG.studentId = U.id\n" +
+                                                            "    [Student] S ON EG.guestId = S.id\n" +
                                                             "WHERE \n" +
-                                                            "    EG.studentId = ? \n" +
+                                                            "    EG.guestId = ? \n" +
                                                             "    AND E.dateOfEvent < '2025-10-31'\n" +
                                                             "ORDER BY \n" +
                                                             "    E.dateOfEvent DESC\n"+ 
                                                             "OFFSET ? ROWS\n" +
                                                             "FETCH NEXT ? ROWS ONLY";
-     private static final String SELECT_STUDENT_AND_EVENT_ID = 
-            "SELECT U.studentId, E.id AS eventId " +
-            "FROM [User] U " +
-            "JOIN [Event] E ON U.studentId = E.studentId";
+
+    public EventAttendedDAO() {
+        super();
+    } 
+    
     public Page<Event> getAttendedEventsList(PagingCriteria pagingCriteria, int userId){
         ResultSet rs = executeQueryPreparedStatement(SELECT_ATTENDED_EVENTS, userId, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());
         Page<Event> page = new Page<>();
@@ -61,10 +62,15 @@ public class EventAttendedDAO extends SQLDatabase{
                 
                 String eventName = rs.getString("eventName");
                 String organizerAcronym = rs.getNString("organizerName");
-                String avatarPath = rs.getNString("avatarPath");
+                String organizerAvatarPath = rs.getNString("organizerAvatarPath");
                 Date dateOfEvent  = rs.getDate("eventDate");
                 
-                Event event = new Event(eventName, organizerAcronym, avatarPath, dateOfEvent.toLocalDate());
+                Event event = new Event(
+                        eventName, 
+                        organizerAcronym, 
+                        organizerAvatarPath, 
+                        dateOfEvent.toLocalDate()
+                );
                 eventsAttendedList.add(event);
             }
         }catch(SQLException e){

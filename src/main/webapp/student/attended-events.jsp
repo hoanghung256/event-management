@@ -18,7 +18,7 @@
                         <div class="breadcrumb__menu">
                            <nav>
                               <ul>
-                              <li><span><a href="dashboard.html">Home</a></span></li>
+                              <li><span><a href="<c:url value="/home"/>">Home</a></span></li>
                                     <li class="active"><span>Attended Events</span></li>
                               </ul>
                            </nav>
@@ -51,10 +51,10 @@
                                                 <td>
                                                     <div class="attendant__user-item">
                                                         <div class="registration__user-thumb">
-                                                            <img src="${event.avatarPath}" alt="Club Logo">
+                                                            <img src="${event.organizer.avatarPath}" alt="Club Logo">
                                                         </div>
                                                         <div class="attendant__user-title">
-                                                            <span>${event.organizerName}</span>
+                                                            <span>${event.organizer.fullname}</span>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -134,6 +134,7 @@
          </div>
          <!--End content cua page-->
         </div>
+    
 </section>
 
 <%@include file="../include/master-footer.jsp" %>

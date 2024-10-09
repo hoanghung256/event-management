@@ -4,11 +4,8 @@
  */
 package com.fuem.repositories;
 
-import com.fuem.utils.Configuration;
-import java.lang.reflect.InvocationTargetException;
+import com.fuem.utils.DataSourceWrapper;
 import java.sql.Connection;
-import java.sql.Driver;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,33 +22,15 @@ import java.util.logging.Logger;
  */
 public abstract class SQLDatabase {
 
-    private static Connection conn;
-    
-    public static Connection generateConnection() {
+    private Connection conn;
+    private static final Logger logger = Logger.getLogger(SQLDatabase.class.getName());
+
+    public SQLDatabase() {
         try {
-            Class<?> clazz = Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            DriverManager.registerDriver((Driver) clazz.getDeclaredConstructor().newInstance());
-            String url = Configuration.getDatabaseConnectUrl();
-            
-            conn =  DriverManager.getConnection(url);
-        } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | SQLException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            Logger.getLogger(SQLDatabase.class.getName()).log(Level.SEVERE, null, ex);
+            this.conn = DataSourceWrapper.getDataSource().getConnection();
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
         }
-        
-        return null;
-    }
-
-    public Connection getConnection() {
-        return conn;
-    }
-
-    /**
-     * Check if it did connect
-     *
-     * @return
-     */
-    public boolean isConnected() {
-        return conn != null;
     }
 
     public Statement getStatement() {
@@ -156,15 +135,5 @@ public abstract class SQLDatabase {
             Logger.getLogger(SQLDatabase.class.getName()).log(Level.SEVERE, null, e);
         }
         return rs;
-    }
-    
-    public static void closeConnection() {
-        try {
-            if (conn != null) {
-                conn.close();
-            }
-        } catch (SQLException e) {
-            Logger.getLogger(SQLDatabase.class.getName()).log(Level.SEVERE, null, e);
-        }
     }
 }
