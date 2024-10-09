@@ -5,8 +5,8 @@
 package com.fuem.controllers;
 
 import com.fuem.models.Organizer;
-import com.fuem.repositories.UserDAO;
-import com.fuem.models.User;
+import com.fuem.repositories.StudentDAO;
+import com.fuem.models.Student;
 import com.fuem.repositories.OrganizerDAO;
 import com.fuem.utils.Hash;
 import jakarta.servlet.ServletException;
@@ -24,7 +24,6 @@ import java.util.logging.Logger;
  *
  * @author khim
  */
-
 @WebServlet("/sign-in")
 public class SignInController extends HttpServlet {
 
@@ -55,8 +54,8 @@ public class SignInController extends HttpServlet {
                     request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
                 }
             } else {
-                UserDAO userDAO = new UserDAO();
-                User user = userDAO.getUserByEmailAndPassword(email, hashPassword);
+                StudentDAO userDAO = new StudentDAO();
+                Student user = userDAO.getStudentByEmailAndPassword(email, hashPassword);
 
                 if (user != null) {
                     HttpSession session = request.getSession();

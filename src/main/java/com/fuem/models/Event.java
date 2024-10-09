@@ -4,8 +4,7 @@
  */
 package com.fuem.models;
 
-import com.fuem.models.EventLocation;
-import java.time.LocalDateTime;
+import com.fuem.enums.Status;
 import java.time.LocalTime;
 import java.time.LocalDate;
 import java.util.List;
@@ -19,60 +18,82 @@ public class Event {
     private int id;
     private Organizer organizer;
     private String fullname;
+    private Status status;
     private String description;
-    private EventType type;
-    private String status;
-    private EventLocation location;
+    private Category category;
+    private Location location;
     private LocalDate dateOfEvent;
     private LocalTime startTime;
     private LocalTime endTime;
     private int guestRegisterLimit;
+    private LocalDate guestRegisterDeadline;
     private int guestRegisterCount;
-    private LocalDateTime registerDeadline;
     private int collaboratorRegisterLimit;
+    private LocalDate collaboratorRegisterDeadline;
+    private int collaboratorRegisterCount;
     private List<String> images;
 
     public Event() {
     }
-
-    public Event(int id, Organizer organizer, String fullname, String description, EventType type,
-            EventLocation location, LocalDate dateOfEvent, LocalTime startTime, LocalTime endTime,
+    
+    public Event(int id, Organizer organizer, String fullname, String description, Category category,
+            Location location, LocalDate dateOfEvent, LocalTime startTime, LocalTime endTime,
             int guestRegisterLimit,
-            LocalDateTime registerDeadline, int guestAttendedCount, int collaboratorRegisterLimit,
+            LocalDate guestRegisterDeadline, int guestAttendedCount, int collaboratorRegisterLimit,
             List<String> images) {
         this.id = id;
         this.organizer = organizer;
         this.fullname = fullname;
         this.description = description;
-        this.type = type;
+        this.category = category;
         this.location = location;
         this.dateOfEvent = dateOfEvent;
         this.startTime = startTime;
         this.endTime = endTime;
         this.guestRegisterLimit = guestRegisterLimit;
-        this.registerDeadline = registerDeadline;
+        this.guestRegisterDeadline = guestRegisterDeadline;
     }
 
-    public Event(String fullname, String organizerAcronym, String avatarPath, LocalDate dateOfEvent) {
+    public Event(String fullname, String organizerAcronym, String organizerAvatarPath, LocalDate dateOfEvent) {
         this.fullname = fullname;
         this.organizer = new Organizer();
         this.organizer.setAcronym(organizerAcronym);
-        this.organizer.setAvatarPath(avatarPath);
+        this.organizer.setAvatarPath(organizerAvatarPath);
         this.dateOfEvent = dateOfEvent;
     }
 
-    public Event(int id, Organizer organizer, String fullname, String description, EventType type, EventLocation location, LocalDate dateOfEvent, LocalTime startTime, LocalTime endTime, int guestRegisterLimit, LocalDateTime registerDeadline) {
+    public Event(int id, Organizer organizer, String fullname, String description, Category category, Location location, LocalDate dateOfEvent, LocalTime startTime, LocalTime endTime, int guestRegisterLimit, LocalDate guestRegisterDeadline) {
         this.id = id;
         this.organizer = organizer;
         this.fullname = fullname;
         this.description = description;
-        this.type = type;
+        this.category = category;
         this.location = location;
         this.dateOfEvent = dateOfEvent;
         this.startTime = startTime;
         this.endTime = endTime;
         this.guestRegisterLimit = guestRegisterLimit;
-        this.registerDeadline = registerDeadline;
+        this.guestRegisterDeadline = guestRegisterDeadline;
+    }
+    
+    public Event(int id, Organizer organizer, String fullname, Status status, String description, Category category, Location location, LocalDate dateOfEvent, LocalTime startTime, LocalTime endTime, int guestRegisterLimit, LocalDate guestRegisterDeadline, int guestRegisterCount, int collaboratorRegisterLimit, LocalDate collaboratorRegisterDeadline, int collaboratorRegisterCount, List<String> images) {
+        this.id = id;
+        this.organizer = organizer;
+        this.fullname = fullname;
+        this.status = status;
+        this.description = description;
+        this.category = category;
+        this.location = location;
+        this.dateOfEvent = dateOfEvent;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.guestRegisterLimit = guestRegisterLimit;
+        this.guestRegisterDeadline = guestRegisterDeadline;
+        this.guestRegisterCount = guestRegisterCount;
+        this.collaboratorRegisterLimit = collaboratorRegisterLimit;
+        this.collaboratorRegisterDeadline = collaboratorRegisterDeadline;
+        this.collaboratorRegisterCount = collaboratorRegisterCount;
+        this.images = images;
     }
     
     public Event(String fullname, LocalDate dateOfEvent, String locationName, String category){
@@ -153,19 +174,19 @@ public class Event {
         this.description = description;
     }
 
-    public EventType getType() {
-        return type;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setType(EventType type) {
-        this.type = type;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
-    public EventLocation getLocation() {
+    public Location getLocation() {
         return location;
     }
 
-    public void setLocation(EventLocation location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 
@@ -209,20 +230,12 @@ public class Event {
         this.guestRegisterLimit = guestRegisterLimit;
     }
 
-    public int getGuestRegisterCount() {
-        return guestRegisterCount;
+    public LocalDate getRegisterDeadline() {
+        return guestRegisterDeadline;
     }
 
-    public void setGuestRegisterCount(int guestRegisterCount) {
-        this.guestRegisterCount = guestRegisterCount;
-    }
-
-    public LocalDateTime getRegisterDeadline() {
-        return registerDeadline;
-    }
-
-    public void setRegisterDeadline(LocalDateTime registerDeadline) {
-        this.registerDeadline = registerDeadline;
+    public void setRegisterDeadline(LocalDate guestRegisterDeadline) {
+        this.guestRegisterDeadline = guestRegisterDeadline;
     }
 
     public int getCollaboratorRegisterLimit() {
@@ -232,6 +245,46 @@ public class Event {
     public void setCollaboratorRegisterLimit(int collaboratorRegisterLimit) {
         this.collaboratorRegisterLimit = collaboratorRegisterLimit;
     }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public LocalDate getGuestRegisterDeadline() {
+        return guestRegisterDeadline;
+    }
+
+    public void setGuestRegisterDeadline(LocalDate guestRegisterDeadline) {
+        this.guestRegisterDeadline = guestRegisterDeadline;
+    }
+
+    public int getGuestRegisterCount() {
+        return guestRegisterCount;
+    }
+
+    public void setGuestRegisterCount(int guestRegisterCount) {
+        this.guestRegisterCount = guestRegisterCount;
+    }
+
+    public LocalDate getCollaboratorRegisterDeadline() {
+        return collaboratorRegisterDeadline;
+    }
+
+    public void setCollaboratorRegisterDeadline(LocalDate collaboratorRegisterDeadline) {
+        this.collaboratorRegisterDeadline = collaboratorRegisterDeadline;
+    }
+
+    public int getCollaboratorRegisterCount() {
+        return collaboratorRegisterCount;
+    }
+
+    public void setCollaboratorRegisterCount(int collaboratorRegisterCount) {
+        this.collaboratorRegisterCount = collaboratorRegisterCount;
+    } 
 
     public List<String> getImages() {
         return images;
@@ -243,11 +296,6 @@ public class Event {
 
     @Override
     public String toString() {
-        return "Event{" + "id=" + id + ", organizer=" + organizer + ", fullname=" + fullname + ", description="
-                + description + ", type=" + type + ", location=" + location + ", dateOfEvent=" + dateOfEvent
-                + ", startTime=" + startTime + ", endTime=" + endTime + ", guestRegisterLimit=" + guestRegisterLimit
-                + ", registerDeadline=" + registerDeadline + ", collaboratorRegisterLimit=" + collaboratorRegisterLimit
-                + ", images="
-                + images + '}';
+        return "Event{" + "id=" + id + ", organizer=" + organizer + ", fullname=" + fullname + ", status=" + status + ", description=" + description + ", category=" + category + ", location=" + location + ", dateOfEvent=" + dateOfEvent + ", startTime=" + startTime + ", endTime=" + endTime + ", guestRegisterLimit=" + guestRegisterLimit + ", guestRegisterDeadline=" + guestRegisterDeadline + ", guestRegisterCount=" + guestRegisterCount + ", collaboratorRegisterLimit=" + collaboratorRegisterLimit + ", collaboratorRegisterDeadline=" + collaboratorRegisterDeadline + ", collaboratorRegisterCount=" + collaboratorRegisterCount + ", images=" + images + '}';
     }
 }

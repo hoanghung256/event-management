@@ -17,14 +17,14 @@ public class DataSourceWrapper {
     
     static {
         HikariConfig config = new HikariConfig();
-        config.setDriverClassName(Configuration.getProperty("db.driver"));
-        config.setJdbcUrl(Configuration.getProperty("db.url"));
-        config.setUsername(Configuration.getProperty("db.user"));
-        config.setPassword(Configuration.getProperty("db.password"));
+        config.setDriverClassName(ConfigurationGetter.getProperty("db.driver"));
+        config.setJdbcUrl(ConfigurationGetter.getProperty("db.url"));
+        config.setUsername(ConfigurationGetter.getProperty("db.user"));
+        config.setPassword(ConfigurationGetter.getProperty("db.password"));
         config.setConnectionTimeout(20000);
         config.setIdleTimeout(600000);
         config.setMaxLifetime(1800000);
-        config.setMaximumPoolSize(10);
+        config.setMaximumPoolSize(15);
         config.setMinimumIdle(5);
         dataSource = new HikariDataSource(config);
     }

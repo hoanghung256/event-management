@@ -1,7 +1,7 @@
 package com.fuem.controllers;
 
-import com.fuem.repositories.UserDAO;
-import com.fuem.models.User;
+import com.fuem.repositories.StudentDAO;
+import com.fuem.models.Student;
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -27,13 +27,12 @@ import java.util.logging.Logger;
  *
  * @author khim
  */
-
 @WebServlet("/login-google")
 public class LoginGoogleController extends HttpServlet {
 
     private static final String CLIENT_ID = "89142229238-cu1tiul7dl16gs4qigcjsgd0emkk3j0d.apps.googleusercontent.com";
     private static final String CLIENT_SECRET = "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";
-    private static final String REDIRECT_URI = "http://localhost:8080/event-management/LoginGoogleHandler";
+    private static final String REDIRECT_URI = "http://localhost:8080/event-management/login-google";
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -46,11 +45,11 @@ public class LoginGoogleController extends HttpServlet {
                 JsonObject userInfo = getUserInfo(accessToken);
                 if (userInfo != null) {
                     String email = userInfo.getString("email");
-                    UserDAO userDAO = new UserDAO();
+                    StudentDAO userDAO = new StudentDAO();
 
-                    User user = new User();
+                    Student user = new Student();
 
-                    if (userDAO.isEmailInDatabase(email)) {
+                    if (userDAO.getUserByEmail(email) != null) {
                         user = userDAO.getUserByEmail(email);
 
                         HttpSession session = request.getSession();

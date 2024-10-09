@@ -4,7 +4,7 @@
  */
 package com.fuem.controllers;
 
-import com.fuem.repositories.UserDAO;
+import com.fuem.repositories.StudentDAO;
 import com.fuem.utils.Gmail;
 import com.fuem.utils.RandomGenerator;
 import jakarta.servlet.ServletException;
@@ -33,12 +33,12 @@ public class ForgetPasswordController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        UserDAO userDao = new UserDAO();
+        StudentDAO userDao = new StudentDAO();
         String email = request.getParameter("email");
         String otp = RandomGenerator.generate(RandomGenerator.NUMERIC, 6);
         
         try {
-            if (userDao.isEmailInDatabase(email)) {
+            if (userDao.getUserByEmail(email) != null) {
                 Gmail.sendWithOTP(email, otp);
                 HttpSession session = request.getSession();
                 session.setAttribute("otp", otp);

@@ -5,10 +5,10 @@
 package com.fuem.controllers;
 
 import com.fuem.models.Event;
-import com.fuem.models.EventType;
+import com.fuem.models.Category;
 import com.fuem.models.Notification;
 import com.fuem.models.Organizer;
-import com.fuem.models.User;
+import com.fuem.models.Student;
 import com.fuem.repositories.EventDAO;
 import com.fuem.repositories.NotificationDAO;
 import com.fuem.repositories.helpers.EventOrderBy;
@@ -35,19 +35,19 @@ public class HomePageController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         EventDAO eventDAO = new EventDAO();
         NotificationDAO notiDAO = new NotificationDAO();
-        User user = (User) request.getSession().getAttribute("userInfor");
+        Student user = (Student) request.getSession().getAttribute("userInfor");
         
         List<Notification> notiList = notiDAO.getNotificationsForUser(user.getId());
         request.setAttribute("notiList", notiList);
 
-        List<EventType> typeList = eventDAO.getAllEventType();
-        request.setAttribute("eventTypeList", typeList);
+        List<Category> cateList = eventDAO.getAllCategory();
+        request.setAttribute("cateList", cateList);
 
         List<Organizer> organizerList = eventDAO.getAllOrganizer();
         request.setAttribute("organizerList", organizerList);
 
         String name = request.getParameter("name");
-        String typeId = request.getParameter("typeId");
+        String categoryId = request.getParameter("categoryId");
         String organizerId = request.getParameter("organizerId");
         String fromDate = request.getParameter("from");
         String toDate = request.getParameter("to");
@@ -71,12 +71,12 @@ public class HomePageController extends HttpServlet {
         );
 
         // Set attribute for SearchEventCriteria
-        if (name != null || typeId != null || organizerId != null || fromDate != null || toDate != null) {
+        if (name != null || categoryId != null || organizerId != null || fromDate != null || toDate != null) {
             if (!name.isBlank()) {
                 searchEventCriteria.setName(name);
             }
-            if (!typeId.isBlank()) {
-                searchEventCriteria.setTypeId(Integer.valueOf(typeId));
+            if (!categoryId.isBlank()) {
+                searchEventCriteria.setCategoryId(Integer.valueOf(categoryId));
             }
             if (!organizerId.isBlank()) {
                 searchEventCriteria.setOrganizerId(Integer.valueOf(organizerId));
@@ -100,7 +100,6 @@ public class HomePageController extends HttpServlet {
                 user.getId()
         );
         request.setAttribute("page", result);
-        request.getRequestDispatcher("student/homepage.jsp").forward(request, response);
-
+        request.getRequestDispatcher("homepage.jsp").forward(request, response);
     }
 }

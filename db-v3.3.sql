@@ -81,7 +81,7 @@ CREATE TABLE [Student] (
 CREATE TABLE [Category] (
 	[id] INT IDENTITY(1, 1),
 	[categoryName] NVARCHAR(100),
-	[description] NVARCHAR(1000),
+	[categoryDescription] NVARCHAR(1000),
 
 	CONSTRAINT PK_Category PRIMARY KEY ([id])
 );
@@ -89,7 +89,7 @@ CREATE TABLE [Category] (
 CREATE TABLE [Location] (
 	[id] INT IDENTITY(1, 1),
 	[locationName] NVARCHAR(100),
-	[description] NVARCHAR(1000),
+	[locationDescription] NVARCHAR(1000),
 
 	CONSTRAINT PK_Location PRIMARY KEY ([id])
 );
@@ -117,23 +117,25 @@ CREATE TABLE [Event] (
 	[fullname] NVARCHAR(200),
 	[avatarPath] NVARCHAR(MAX),
 	[description] NVARCHAR(MAX),
-	[typeId] INT,
+	[categoryId] INT,
 	[locationId] INT,
 	[dateOfEvent] DATE,
 	[startTime] TIME,
 	[endTime] TIME,
-	[status] NVARCHAR(10), --PENDING / APPROVED / REJECTED
+	[status] NVARCHAR(15), --PENDING / APPROVED / REJECTED
 	[guestRegisterLimit] INT,
 	[collaboratorRegisterLimit] INT,
 	[guestAttendedCount] INT DEFAULT (0),
 	[guestRegisterCount] INT DEFAULT (0),
 	[guestRegisterCancelCount] INT DEFAULT(0),
 	[collaboratorRegisterCount] INT DEFAULT (0),
-	[registerDeadline] DATETIME,
+	[guestRegisterDeadline] DATE,
+	[collaboratorRegisterDeadline] DATE,
+	[guestRegisterCancelCount] INT DEFAULT(0),
 
 	CONSTRAINT PK_Event PRIMARY KEY ([id]),
 	FOREIGN KEY ([organizerId]) REFERENCES [Organizer]([id]),
-	FOREIGN KEY ([typeId]) REFERENCES [Category]([id]),
+	FOREIGN KEY ([categoryId]) REFERENCES [Category]([id]),
 	FOREIGN KEY ([locationId]) REFERENCES [Location]([id])
 );
 
@@ -330,7 +332,7 @@ VALUES
 ('FUFC', 'FPT University Football Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'fufc@gmail.com', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL, 0),
 ('FUV', 'FPT University Volleyball Club', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'fudavolleyball@gmail.com', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', NULL, 0);
 
-INSERT INTO [Category] ([categoryName], [description])
+INSERT INTO [Category] ([categoryName], [categoryDescription])
 VALUES 
 ('WORKSHOP', 'A workshop for learning new skills'),
 ('SEMINAR', 'A seminar hosted by experts'),
@@ -355,7 +357,7 @@ BEGIN
     SET @randomOrganizerId = 1 + FLOOR(RAND() * 5);
 
     INSERT INTO [Event] 
-    ([organizerId], [fullname], [description], [typeId], [locationId], [dateOfEvent], [startTime], [endTime], [guestRegisterLimit], [registerDeadline])
+    ([organizerId], [fullname], [description], [categoryId], [locationId], [dateOfEvent], [startTime], [endTime], [guestRegisterLimit], [guestRegisterDeadline], [colaboratorRegisterDeadline])
     VALUES 
     (
         @randomOrganizerId,
@@ -367,7 +369,8 @@ BEGIN
 		CAST(DATEADD(DAY, 8, GETDATE()) AS TIME),
 		CAST(DATEADD(DAY, 12, GETDATE()) AS TIME),
         100,
-        DATEADD(DAY, @i, GETDATE())
+        DATEADD(DAY, @i, GETDATE()),
+		DATEADD(DAY, @i - 3, GETDATE())
     );
 
     SET @i = @i + 1;

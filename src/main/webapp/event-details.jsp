@@ -1,10 +1,10 @@
 <%-- 
     Document   : event-details
     Created on : Sep 25, 2024, 5:07:43?PM
-    Author     : Administrator
+    Author     : TuDK
 --%>
 
-<%@include file="../include/student-layout-header.jsp"%>
+<%@include file="include/student-layout-header.jsp"%>
 
 <section>
     <div class="app__slide-wrapper">
@@ -18,7 +18,7 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="home">Home</a></span></li>
+                                    <li><span><a href="<c:url value="/home"/>">Home</a></span></li>
                                     <li class="active"><span>Event Details</span></li>
                                 </ul>
                             </nav>
@@ -46,12 +46,14 @@
                                             <div class="review__main-wrapper pt-25">
                                                 <div class="review__meta mb-25"></div>
                                                 <div class="review__author-meta mb-15">
-                                                    <div class="review__author-thumb">
+                                                    <a href="#">
+                                                        <div class="review__author-thumb">
                                                         <img src="${event.organizer.avatarPath}" alt="Organizer Avatar" onerror="this.onerror=null; this.src='assets/img/default-avatar.png';">
-                                                    </div>
-                                                    <div class="review__author-name">
-                                                        <h4>${event.organizer.fullname}</h4> 
-                                                    </div>
+                                                        </div>
+                                                        <div class="review__author-name">
+                                                            <h4>${event.organizer.fullname}</h4> 
+                                                        </div>
+                                                    </a>
                                                 </div>
                                                 <div class="review__tab">
                                                     <nav>
@@ -65,7 +67,7 @@
                                                                 <c:choose>
                                                                     <c:when test="${not empty event.images}">
                                                                         <c:forEach var="image" items="${event.images}">
-                                                                            <img src="${pageContext.request.contextPath}/${imagesS}" alt="Event Image" />
+                                                                            <img src="${image}" alt="Event Image" />
                                                                         </c:forEach>
                                                                     </c:when>
                                                                     <c:otherwise>
@@ -117,12 +119,16 @@
                                                     </li>
                                                     <li>
                                                         <span>Register Deadline: </span>
-                                                        <i id="datetime">${event.registerDeadline}</i>
+                                                        <i id="date">${event.guestRegisterDeadline}</i>
                                                     </li>
                                                     <li>
                                                         <span>Venue: </span>
-                                                        ${event.location.description}
-                                                    </li>                                 
+                                                        ${event.location.name}
+                                                    </li>
+                                                    <li>
+                                                        <span>Registered: </span>
+                                                        ${event.guestRegisterCount} / ${event.guestRegisterLimit}
+                                                    </li>  
                                                 </ul>
                                             </div>
                                         </div>
@@ -138,4 +144,4 @@
     </div>
 </section>
 
-<%@include file="../include/master-footer.jsp" %>
+<%@include file="include/master-footer.jsp" %>
