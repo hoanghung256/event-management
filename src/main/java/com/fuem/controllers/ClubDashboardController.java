@@ -17,7 +17,7 @@ import java.util.ArrayList;
  *
  * @author ThangNM
  */
-@WebServlet(name = "ClubDashboardController", urlPatterns = {"/club-dashboard"})
+@WebServlet(name = "ClubDashboardController", urlPatterns = {"/club/dashboard"})
 public class ClubDashboardController extends HttpServlet {
     private ClubDashboardDAO dao = new ClubDashboardDAO();
     
@@ -40,7 +40,7 @@ public class ClubDashboardController extends HttpServlet {
         request.setAttribute("totalUpcomingEvents", totalUpcomingEvents);
         request.setAttribute("organizedEvent", organizedEvent);
         request.setAttribute("upcomingEvent", upcomingEvent);
-        request.getRequestDispatcher("club/dashboard.jsp").forward(request, response);
+        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
 
     @Override

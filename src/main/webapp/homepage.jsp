@@ -20,9 +20,9 @@
                             <nav>
                                 <ul>
                                     <li class="active"><span>Home</span></li>
-                                    <a href="${pageContext.request.contextPath}/student/attended-events">
+<!--                                    <a href="${pageContext.request.contextPath}/student/attended-events">
                                         Go
-                                    </a>
+                                    </a>-->
                                 </ul>
                             </nav>
                         </div>

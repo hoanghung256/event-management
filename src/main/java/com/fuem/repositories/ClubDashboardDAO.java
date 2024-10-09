@@ -4,6 +4,7 @@
  */
 package com.fuem.repositories;
 
+import com.fuem.enums.Status;
 import com.fuem.models.Event;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -155,7 +156,7 @@ public class ClubDashboardDAO extends SQLDatabase{
                 LocalDate eventDate = rs.getDate("EventDate").toLocalDate();
                 String locationName = rs.getString("LocationName");
                 String category = rs.getString("CategoryName");
-                String status = rs.getString("Status");
+                Status status = Status.valueOf(rs.getString("Status"));
                 int registerLimit = rs.getInt("RegisterLimit");
                 int registerCount = rs.getInt("RegisterCount");
 

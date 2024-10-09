@@ -4,6 +4,7 @@
  */
 package com.fuem.repositories;
 
+import com.fuem.enums.Status;
 import com.fuem.models.Event;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,20 +18,21 @@ import java.util.logging.Logger;
  * @author ThangNM
  */
 public class AdminDashboardDAO extends SQLDatabase {
-    private static final Logger logger = Logger.getLogger(ClubDashboardDAO.class.getName());
-    private static String SELECT_TOTAL_ORGANIZED_EVENT = "SELECT \n"
-                                                        + "    Organizer.fullname AS OrganizerName,\n"
-                                                        + "    COUNT(Event.id) AS TotalEvents\n"
-                                                        + "FROM \n"
-                                                        + "    Organizer \n"
-                                                        + "JOIN \n"
-                                                        + "    Event ON Organizer.id = Event.organizerId\n"
-                                                        + "WHERE \n"
-                                                        + "    Organizer.id = ?\n"
-                                                        + "GROUP BY \n"
-                                                        + "    Organizer.fullname;";
 
-    private static String SELECT_TOTAL_CLUBS = "SELECT \n"
+    private static final Logger logger = Logger.getLogger(AdminDashboardDAO.class.getName());
+    private static String SELECT_TOTAL_ORGANIZED_EVENT = "SELECT\n"
+                                                        + "	Organizer.fullname AS OrganizerName,\n"
+                                                        + "	COUNT(Event.id) AS TotalEvents\n"
+                                                        + "FROM \n"
+                                                        + "	Organizer\n"
+                                                        + "JOIN \n"
+                                                        + "	Event ON Organizer.id = Event.organizerId\n"
+                                                        + "WHERE \n"
+                                                        + "	Organizer.id = ?\n"
+                                                        + "GROUP BY \n"
+                                                        + "	Organizer.fullname";
+
+    private static String SELECT_TOTAL_CLUBS =          "SELECT \n"
                                                         + "    COUNT(Organizer.id) AS TotalClubs\n"
                                                         + "FROM \n"
                                                         + "    Organizer \n"
@@ -47,7 +49,7 @@ public class AdminDashboardDAO extends SQLDatabase {
                                                         + "    dateOfEvent > GETDATE()\n"
                                                         + "	AND Organizer.id = ?";
 
-    private static String SELECT_REGISTRATION_EVENTS = "SELECT\n"
+    private static String SELECT_REGISTRATION_EVENTS =  "SELECT\n"
                                                         + "   Event.id AS EventId,\n"
                                                         + "   Organizer.acronym AS ClubName,\n"
                                                         + "   Organizer.avatarPath AS AvatarPath,\n"
@@ -62,29 +64,29 @@ public class AdminDashboardDAO extends SQLDatabase {
                                                         + "JOIN\n"
                                                         + "   Organizer ON Organizer.id = Event.organizerId\n"
                                                         + "JOIN \n"
-                                                        + "   Category ON Category.id = Event.typeId\n"
+                                                        + "   Category ON Category.id = Event.categoryId\n"
                                                         + "JOIN \n"
                                                         + "   Location ON Location.id = Event.locationId\n"
                                                         + "WHERE \n"
                                                         + "   Organizer.isAdmin = '0'\n"
                                                         + "   AND Event.status = 'PENDING'";
 
-    private static String SELECT_ORGANIZED_EVENTS =     "SELECT \n"
-                                                        + "    E.fullname as EventName,\n"
-                                                        + "    E.dateOfEvent AS EventDate,\n"
-                                                        + "    L.locationName AS LocationName,\n"
-                                                        + "    C.categoryName AS CategoryName\n"
-                                                        + "FROM \n"
-                                                        + "    Event E\n"
-                                                        + "JOIN \n"
-                                                        + "    Location L ON E.locationId = L.id\n"
-                                                        + "JOIN \n"
-                                                        + "    Category C ON E.typeId = C.id\n"
-                                                        + "WHERE \n"
-                                                        + "    E.organizerId = ?  \n"
-                                                        + "    AND E.dateOfEvent < GETDATE();";
+    private static String SELECT_ORGANIZED_EVENTS =     "SELECT\n" 
+                                                        + "    Event.fullname AS EventName,\n"
+                                                        + "    Event.dateOfEvent AS EventDate,\n"
+                                                        + "    Location.locationName AS LocationName,\n"
+                                                        + "    Category.categoryName AS CategoryName\n"
+                                                        + "FROM\n"
+                                                        + "    Event\n"
+                                                        + "JOIN\n"
+                                                        + "    Location ON Event.locationId = Location.id\n"
+                                                        + "JOIN\n"
+                                                        + "    Category ON Event.categoryId = Category.id\n"
+                                                        + "WHERE\n"
+                                                        + "    Event.organizerId = ?\n"
+                                                        + "    AND Event.dateOfEvent < GETDATE();";
 
-    private static String SELECT_UPCOMING_EVENTS = "SELECT \n"
+    private static String SELECT_UPCOMING_EVENTS =      "SELECT \n"
                                                         + "	Event.fullname AS EventName,\n"
                                                         + "	Organizer.acronym AS ClubName,\n"
                                                         + "     Event.dateOfEvent AS EventDate,\n"
@@ -97,7 +99,7 @@ public class AdminDashboardDAO extends SQLDatabase {
                                                         + "JOIN \n"
                                                         + "    Location ON Event.locationId = Location.id\n"
                                                         + "JOIN \n"
-                                                        + "    Category ON Event.typeId = Category.id\n"
+                                                        + "    Category ON Event.categoryId = Category.id\n"
                                                         + "WHERE \n"
                                                         + "	Event.dateOfEvent > GETDATE()\n"
                                                         + "	AND Event.status = 'APPROVE'";
@@ -157,7 +159,7 @@ public class AdminDashboardDAO extends SQLDatabase {
                 LocalDate dateOfEvent = rs.getDate("EventDate").toLocalDate();
                 String category = rs.getString("CategoryName");
                 String location = rs.getString("LocationName");
-                String status = rs.getString("Status");
+                Status status = Status.valueOf(rs.getString("Status"));
 
                 registrationEvent.add(new Event(eventId, clubName, avatarPath, eventName, dateOfEvent, category, location, status));
             }
@@ -185,11 +187,11 @@ public class AdminDashboardDAO extends SQLDatabase {
         }
         return organizedEvent;
     }
-    
-    public ArrayList<Event> getUpcomingEvent(){
+
+    public ArrayList<Event> getUpcomingEvent() {
         ResultSet rs = executeQueryPreparedStatement(SELECT_UPCOMING_EVENTS);
         ArrayList<Event> upcomingEvent = new ArrayList<>();
-        
+
         try {
             while (rs.next()) {
                 String eventName = rs.getString("EventName");
@@ -197,7 +199,7 @@ public class AdminDashboardDAO extends SQLDatabase {
                 LocalDate dateOfEvent = rs.getDate("EventDate").toLocalDate();
                 String location = rs.getString("LocationName");
                 String category = rs.getString("CategoryName");
-                
+
                 upcomingEvent.add(new Event(eventName, clubName, dateOfEvent, location, category));
             }
         } catch (SQLException e) {

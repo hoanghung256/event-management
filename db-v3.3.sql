@@ -131,7 +131,6 @@ CREATE TABLE [Event] (
 	[collaboratorRegisterCount] INT DEFAULT (0),
 	[guestRegisterDeadline] DATE,
 	[collaboratorRegisterDeadline] DATE,
-	[guestRegisterCancelCount] INT DEFAULT(0),
 
 	CONSTRAINT PK_Event PRIMARY KEY ([id]),
 	FOREIGN KEY ([organizerId]) REFERENCES [Organizer]([id]),
@@ -357,7 +356,7 @@ BEGIN
     SET @randomOrganizerId = 1 + FLOOR(RAND() * 5);
 
     INSERT INTO [Event] 
-    ([organizerId], [fullname], [description], [categoryId], [locationId], [dateOfEvent], [startTime], [endTime], [guestRegisterLimit], [guestRegisterDeadline], [colaboratorRegisterDeadline])
+    ([organizerId], [fullname], [description], [categoryId], [locationId], [dateOfEvent], [startTime], [endTime], [guestRegisterLimit], [guestRegisterDeadline], [collaboratorRegisterDeadline])
     VALUES 
     (
         @randomOrganizerId,
@@ -485,3 +484,62 @@ VALUES
 >>>>>>>>>> END: EXAMPLE DATA >>>>>>>>>>
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 */
+
+/*Admin_SELECT TOTAL ORGANIZED EVENT*/
+SELECT
+	Organizer.fullname AS OrganizerName,
+	COUNT(Event.id) AS TotalEvents
+FROM 
+	Organizer
+JOIN 
+	Event ON Organizer.id = Event.organizerId
+WHERE 
+	Organizer.id = 1
+GROUP BY 
+	Organizer.fullname
+
+/* ADMIN-SELECT TOTAL CLUB*/
+SELECT 
+	COUNT(Organizer.id) AS TotalClubs
+FROM
+	Organizer
+WHERE 
+	Organizer.isAdmin = '0'
+
+/*ADMIN-SELECT REGISTRATION EVENTS*/
+SELECT
+    Event.id AS EventId,
+    Organizer.acronym AS ClubName,
+    Organizer.avatarPath AS AvatarPath,
+    Event.fullname AS EventName,
+    Event.dateOfEvent AS EventDate,
+    Category.categoryName AS CategoryName,
+    Location.locationName AS LocationName,
+    Event.status AS Status
+FROM 
+    Event
+JOIN 
+    Organizer ON Organizer.id = Event.organizerId
+JOIN 
+    Category ON Category.id = Event.categoryId
+JOIN 
+    Location ON Location.id = Event.locationId
+WHERE 
+    Organizer.isAdmin = '0'
+    AND Event.status = 'PENDING';
+
+/* ADMIN-SELECT ORGANIZED EVENT*/
+SELECT \n"
++ "    E.fullname as EventName,\n"
++ "    E.dateOfEvent AS EventDate,\n"
++ "    L.locationName AS LocationName,\n"
++ "    C.categoryName AS CategoryName\n"
++ "FROM \n"
++ "    Event E\n"
++ "JOIN \n"
++ "    Location L ON E.locationId = L.id\n"
++ "JOIN \n"
++ "    Category C ON E.typeId = C.id\n"
++ "WHERE \n"
++ "    E.organizerId = ?  \n"
++ "    AND E.dateOfEvent < GETDATE();

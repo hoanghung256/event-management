@@ -18,7 +18,7 @@ import java.util.ArrayList;
  *
  * @author ThangNM
  */
-@WebServlet(name = "AdminDashboardController", urlPatterns = {"/admin-dashboard"})
+@WebServlet(name = "AdminDashboardController", urlPatterns = {"/admin/dashboard"})
 public class AdminDashboardController extends HttpServlet {
     private AdminDashboardDAO dao = new AdminDashboardDAO();
 
@@ -40,7 +40,7 @@ public class AdminDashboardController extends HttpServlet {
         request.setAttribute("registrationList", registrationList);
         request.setAttribute("organizedList", organizedList);
         request.setAttribute("upcomingList", upcomingList);
-        request.getRequestDispatcher("admin/dashboard.jsp").forward(request, response);
+        request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
 
     @Override
