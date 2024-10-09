@@ -73,7 +73,7 @@
                                     <span class="nav-text">Create Event</span>
                                 </a>
                             </li>
-                            <li><a href="#" aria-expanded="false">
+                            <li><a href="<c:url value="/club/event-registration"/>" aria-expanded="false">
                                     <i class="flaticon-success"></i>
                                     <span class="nav-text">Register Event</span>
                                 </a>

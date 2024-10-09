@@ -48,6 +48,9 @@
     .userInfor{
         padding-top: 30px;
     }
+    .profile__about-info{
+        margin-left: 100px;
+    }
 </style>
 
 <section>
