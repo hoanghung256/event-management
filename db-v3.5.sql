@@ -122,7 +122,7 @@ CREATE TABLE [Event] (
 	[dateOfEvent] DATE,
 	[startTime] TIME,
 	[endTime] TIME,
-	[status] NVARCHAR(15), --PENDING / APPROVED / REJECTED
+	[status] NVARCHAR(15) DEFAULT('PENDING'), --PENDING / APPROVED / REJECTED
 	[guestRegisterLimit] INT,
 	[collaboratorRegisterLimit] INT,
 	[guestAttendedCount] INT DEFAULT (0),
