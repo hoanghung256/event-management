@@ -76,13 +76,14 @@ public class Event {
         this.guestRegisterDeadline = guestRegisterDeadline;
     }
     
-    public Event(int id, Organizer organizer, String fullname, Status status, String description, Category category, Location location, LocalDate dateOfEvent, LocalTime startTime, LocalTime endTime, int guestRegisterLimit, LocalDate guestRegisterDeadline, int guestRegisterCount, int collaboratorRegisterLimit, LocalDate collaboratorRegisterDeadline, int collaboratorRegisterCount, List<String> images) {
+    public Event(int id, Organizer organizer, String fullname, Status status, String description, String category, Location location, LocalDate dateOfEvent, LocalTime startTime, LocalTime endTime, int guestRegisterLimit, LocalDate guestRegisterDeadline, int guestRegisterCount, int collaboratorRegisterLimit, LocalDate collaboratorRegisterDeadline, int collaboratorRegisterCount, List<String> images) {
         this.id = id;
         this.organizer = organizer;
         this.fullname = fullname;
         this.status = status;
         this.description = description;
-        this.category = category;
+        this.category = new Category();
+        this.category.setName(category);
         this.location = location;
         this.dateOfEvent = dateOfEvent;
         this.startTime = startTime;
@@ -94,6 +95,52 @@ public class Event {
         this.collaboratorRegisterDeadline = collaboratorRegisterDeadline;
         this.collaboratorRegisterCount = collaboratorRegisterCount;
         this.images = images;
+    }
+    
+    public Event(String fullname, LocalDate dateOfEvent, String locationName, String category){
+        this.fullname = fullname;
+        this.dateOfEvent = dateOfEvent;
+        this.location = new Location();
+        this.location.setDescription(locationName);
+        this.category = new Category();
+        this.category.setName(category);
+    }
+    
+     public Event(int id, String fullname, LocalDate dateOfEvent, String locationName, String category, Status status, int registerLimit, int registerCount){
+        this.fullname = fullname;
+        this.dateOfEvent = dateOfEvent;
+        this.location = new Location();
+        this.location.setDescription(locationName);
+        this.category = new Category();
+        this.category.setName(category);
+        this.status = status;
+        this.guestRegisterLimit = registerLimit;
+        this.guestRegisterCount = registerCount;
+    }
+     
+    public Event(int id, String clubName, String avatarPath, String fullname, LocalDate dateOfEvent, String category, String location, Status status){
+        this.id = id;
+        this.organizer = new Organizer();
+        this.organizer.setFullname(clubName);
+        this.organizer.setAvatarPath(avatarPath);
+        this.fullname = fullname;
+        this.dateOfEvent = dateOfEvent;
+        this.category = new Category();
+        this.category.setName(category);
+        this.location = new Location();
+        this.location.setDescription(location);
+        this.status = status; 
+    }
+    
+    public Event(String eventName, String clubName, LocalDate dateOfEvent, String location, String category){
+        this.fullname = eventName;
+        this.organizer = new Organizer();
+        this.organizer.setAcronym(clubName);
+        this.dateOfEvent = dateOfEvent;
+        this.location = new Location();
+        this.location.setDescription(location);
+        this.category = new Category();
+        this.category.setName(category);
     }
 
     public int getId() {
@@ -168,6 +215,14 @@ public class Event {
         this.endTime = endTime;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     public int getGuestRegisterLimit() {
         return guestRegisterLimit;
     }
@@ -190,14 +245,6 @@ public class Event {
 
     public void setCollaboratorRegisterLimit(int collaboratorRegisterLimit) {
         this.collaboratorRegisterLimit = collaboratorRegisterLimit;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
     }
 
     public LocalDate getGuestRegisterDeadline() {

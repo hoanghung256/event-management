@@ -7,14 +7,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class StudentDAO extends SQLDatabase {
-    
+
     private static final Logger logger = Logger.getLogger(StudentDAO.class.getName());
     private static final String SELECT_STUDENT_BY_EMAIL = "SELECT * FROM [Student] WHERE email = ?";
     private static final String SELECT_STUDENT_BY_EMAIL_AND_PASSWORD = "SELECT id, fullname, studentId, email, avatarPath FROM [Student] WHERE email = ? AND password = ?";
     private static final String SELECT_STUDENT_BY_STUDENT_ID = "SELECT * FROM [Student] WHERE studentId=?";
-    private static final String UPDATE_PASSWORD_BY_EMAIL = "Update [Student] " +
-                                                            "SET password = ? " +
-                                                            "WHERE email = ?";
+    private static final String UPDATE_PASSWORD_BY_EMAIL = "Update [Student] "
+            + "SET password = ? "
+            + "WHERE email = ?";
     private static final String INSERT_STUDENT = "INSERT INTO [Student] (fullname, studentId, email, password) VALUES (?, ?, ?, ?)";
 
     public StudentDAO() {
@@ -67,12 +67,11 @@ public class StudentDAO extends SQLDatabase {
         return user;
     }
 
-
     public boolean addUser(Student user) {
         int result = executeUpdatePreparedStatement(INSERT_STUDENT, user.getFullname(), user.getStudentId(), user.getEmail(), user.getPassword());
-        return result > 0; 
+        return result > 0;
     }
-    
+
     public boolean isStudentIdExist(String studentId) {
         ResultSet rs = executeQueryPreparedStatement(SELECT_STUDENT_BY_STUDENT_ID, studentId);
 

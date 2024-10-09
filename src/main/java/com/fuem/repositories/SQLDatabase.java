@@ -130,7 +130,8 @@ public abstract class SQLDatabase {
         ResultSet rs = null;
         
         try {
-            rs = getPreparedStatement(sql, values).executeQuery();
+            PreparedStatement ps = getPreparedStatement(sql, values);
+            rs = ps.executeQuery();
         } catch (SQLException e) {
             Logger.getLogger(SQLDatabase.class.getName()).log(Level.SEVERE, null, e);
         }
