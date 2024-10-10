@@ -6,6 +6,8 @@ package com.fuem.repositories;
 
 import com.fuem.enums.Status;
 import com.fuem.models.Event;
+import com.fuem.utils.DataSourceWrapper;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -105,10 +107,10 @@ public class AdminDAO extends SQLDatabase {
                                                         + "	AND Event.status = 'APPROVE'";
 
     public int getTotalOrganizedEvents(int adminId) {
-        ResultSet rs = executeQueryPreparedStatement(SELECT_TOTAL_ORGANIZED_EVENT, adminId);
         int totalEvent = 0;
 
-        try {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_TOTAL_ORGANIZED_EVENT, adminId);) {
             while (rs.next()) {
                 totalEvent = rs.getInt("TotalEvents");
             }
@@ -119,10 +121,10 @@ public class AdminDAO extends SQLDatabase {
     }
 
     public int getTotalClub() {
-        ResultSet rs = executeQueryPreparedStatement(SELECT_TOTAL_CLUBS);
         int totalClub = 0;
 
-        try {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_TOTAL_CLUBS);){
             while (rs.next()) {
                 totalClub = rs.getInt("TotalClubs");
             }
@@ -133,10 +135,10 @@ public class AdminDAO extends SQLDatabase {
     }
 
     public int getTotalUpcomingEvents(int adminId) {
-        ResultSet rs = executeQueryPreparedStatement(SELECT_TOTAL_UPCOMING_EVENT, adminId);
         int totalUpcomingEvent = 0;
 
-        try {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_TOTAL_UPCOMING_EVENT, adminId);){
             while (rs.next()) {
                 totalUpcomingEvent = rs.getInt("UpcomingEvents");
             }
@@ -147,10 +149,10 @@ public class AdminDAO extends SQLDatabase {
     }
 
     public ArrayList<Event> getRegistrationEvent() {
-        ResultSet rs = executeQueryPreparedStatement(SELECT_REGISTRATION_EVENTS);
         ArrayList<Event> registrationEvent = new ArrayList<>();
 
-        try {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_REGISTRATION_EVENTS);){
             while (rs.next()) {
                 int eventId = rs.getInt("EventID");
                 String clubName = rs.getString("ClubName");
@@ -170,10 +172,10 @@ public class AdminDAO extends SQLDatabase {
     }
 
     public ArrayList<Event> getOrganizedEvent(int adminId) {
-        ResultSet rs = executeQueryPreparedStatement(SELECT_ORGANIZED_EVENTS, adminId);
         ArrayList<Event> organizedEvent = new ArrayList<>();
 
-        try {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZED_EVENTS, adminId);){
             while (rs.next()) {
                 String eventName = rs.getString("EventName");
                 LocalDate eventDate = rs.getDate("EventDate").toLocalDate();
@@ -189,10 +191,10 @@ public class AdminDAO extends SQLDatabase {
     }
 
     public ArrayList<Event> getUpcomingEvent() {
-        ResultSet rs = executeQueryPreparedStatement(SELECT_UPCOMING_EVENTS);
         ArrayList<Event> upcomingEvent = new ArrayList<>();
 
-        try {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_UPCOMING_EVENTS);){
             while (rs.next()) {
                 String eventName = rs.getString("EventName");
                 String clubName = rs.getString("ClubName");

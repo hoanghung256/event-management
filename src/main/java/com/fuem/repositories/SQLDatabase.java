@@ -22,25 +22,14 @@ import java.util.logging.Logger;
  */
 public abstract class SQLDatabase {
 
-    private Connection conn;
     private static final Logger logger = Logger.getLogger(SQLDatabase.class.getName());
 
     public SQLDatabase() {
-        try {
-            this.conn = DataSourceWrapper.getDataSource().getConnection();
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, null, e);
-        }
-    }
-
-    public Statement getStatement() {
-        Statement statement = null;
-        try {
-            statement = conn.createStatement();
-        } catch (SQLException ex) {
-            Logger.getLogger(SQLDatabase.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return statement;
+//        try {
+//            this.conn = DataSourceWrapper.getDataSource().getConnection();
+//        } catch (SQLException e) {
+//            logger.log(Level.SEVERE, null, e);
+//        }
     }
 
     private boolean checkNString(String des) {
@@ -52,7 +41,7 @@ public abstract class SQLDatabase {
         return false;
     }
 
-    private PreparedStatement getPreparedStatement(String sql, Object... values) {
+    private PreparedStatement getPreparedStatement(Connection conn, String sql, Object... values) {
         if (conn == null) return null;
         
         PreparedStatement statement = null;
@@ -98,9 +87,9 @@ public abstract class SQLDatabase {
         return statement;
     }
 
-    public void executePreparedStatement(String sql, Object... values) {
+    public void executePreparedStatement(Connection conn, String sql, Object... values) {
         try {
-            getPreparedStatement(sql, values).execute();
+            getPreparedStatement(conn, sql, values).execute();
         } catch (SQLException e) {
             Logger.getLogger(SQLDatabase.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -112,10 +101,10 @@ public abstract class SQLDatabase {
      * 
      * @return number of changed records
      */
-    public int executeUpdatePreparedStatement(String sql, Object... values) {
+    public int executeUpdatePreparedStatement(Connection conn, String sql, Object... values) {
         int i = -1;
         try {
-            i = getPreparedStatement(sql, values).executeUpdate();
+            i = getPreparedStatement(conn, sql, values).executeUpdate();
         } catch (SQLException e) {
             Logger.getLogger(SQLDatabase.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -126,11 +115,11 @@ public abstract class SQLDatabase {
     /**
      * Use for SELECT action
      */
-    public ResultSet executeQueryPreparedStatement(String sql, Object... values) {
+    public ResultSet executeQueryPreparedStatement(Connection conn, String sql, Object... values) {
         ResultSet rs = null;
         
         try {
-            PreparedStatement ps = getPreparedStatement(sql, values);
+            PreparedStatement ps = getPreparedStatement(conn, sql, values);
             rs = ps.executeQuery();
         } catch (SQLException e) {
             Logger.getLogger(SQLDatabase.class.getName()).log(Level.SEVERE, null, e);

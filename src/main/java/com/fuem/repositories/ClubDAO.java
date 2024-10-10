@@ -6,6 +6,8 @@ package com.fuem.repositories;
 
 import com.fuem.enums.Status;
 import com.fuem.models.Event;
+import com.fuem.utils.DataSourceWrapper;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -84,10 +86,10 @@ public class ClubDAO extends SQLDatabase{
                                                         "    AND Event.dateOfEvent > GETDATE();";
     
     public int getTotalEventOrganized(int clubId) {
-        ResultSet rs = executeQueryPreparedStatement(SELECT_ALL_EVENT_ORGANIZED, clubId);
         int totalEvent = 0;
         
-        try {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ALL_EVENT_ORGANIZED, clubId);){
             while(rs.next()) {
                totalEvent = rs.getInt("TotalEvents");
             }
@@ -99,10 +101,10 @@ public class ClubDAO extends SQLDatabase{
     
     
     public int getTotalUpcomingEvents(int clubId) {
-        ResultSet rs = executeQueryPreparedStatement(SELECT_ALL_UPCOMING_EVENTS, clubId);
         int totalUpcomingEvents = 0;
         
-        try {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ALL_UPCOMING_EVENTS, clubId);){
             while(rs.next()) {
                 totalUpcomingEvents = rs.getInt("UpcomingEvents");
             }
@@ -113,10 +115,11 @@ public class ClubDAO extends SQLDatabase{
     }
     
     public int getTotalFollowers(int clubId) {
-        ResultSet rs = executeQueryPreparedStatement(SELECT_ALL_FOLLOWERS, clubId);
+        
         int totalFollowers = 0;
         
-        try {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ALL_FOLLOWERS, clubId);){
              while(rs.next()) {
                 totalFollowers = rs.getInt("FollowerCount");
             }
@@ -127,10 +130,11 @@ public class ClubDAO extends SQLDatabase{
     }
     
     public ArrayList<Event> getOrganizedEvent(int clubId) {
-        ResultSet rs = executeQueryPreparedStatement(SELECT_ORGANIZED_EVENTS, clubId);
+        
         ArrayList<Event> organizedEvent = new ArrayList<>();
         
-        try {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZED_EVENTS, clubId);){
             while(rs.next()){
                 String eventName = rs.getString("EventName");
                 LocalDate eventDate = rs.getDate("EventDate").toLocalDate();
@@ -146,10 +150,10 @@ public class ClubDAO extends SQLDatabase{
     }
     
     public ArrayList<Event> getUpcomingEvent(int clubId) {
-        ResultSet rs = executeQueryPreparedStatement(SELECT_UPCOMING_EVENTS, clubId);
         ArrayList<Event> upcomingEvent = new ArrayList<>();
         
-        try {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_UPCOMING_EVENTS, clubId);){
             while(rs.next()){
                 int id = rs.getInt("EventId");
                 String eventName = rs.getString("EventName");
