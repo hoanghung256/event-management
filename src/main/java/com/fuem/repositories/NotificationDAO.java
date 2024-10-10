@@ -10,6 +10,7 @@ package com.fuem.repositories;
  */
 import com.fuem.models.Notification;
 import com.fuem.models.Organizer;
+import com.fuem.utils.DataSourceWrapper;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -31,9 +32,9 @@ public class NotificationDAO extends SQLDatabase {
                 + "JOIN NotificationReceiver nr ON n.id = nr.notificationId "
                 + "JOIN Organizer o ON n.senderId = o.id "
                 + "WHERE nr.receiverId = ?";
-
-        ResultSet resultSet = executeQueryPreparedStatement(sql, userId);
-        try {
+        
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet resultSet = executeQueryPreparedStatement(conn, sql, userId);){
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
 

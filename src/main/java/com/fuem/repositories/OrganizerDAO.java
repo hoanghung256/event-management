@@ -6,7 +6,8 @@ package com.fuem.repositories;
 
 import com.fuem.enums.Role;
 import com.fuem.models.Organizer;
-import java.sql.PreparedStatement;
+import com.fuem.utils.DataSourceWrapper;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -28,9 +29,10 @@ public class OrganizerDAO extends SQLDatabase {
     }
 
     public boolean isEmailAndPasswordExist(String email, String password) {
-        ResultSet rs = executeQueryPreparedStatement(SELECT_ORGANIZER_BY_EMAIL_AND_PASSWORD, email, password);
+        
 
-        try {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZER_BY_EMAIL_AND_PASSWORD, email, password);){
             while (rs.next()) {
                 return true;
             }
@@ -42,9 +44,10 @@ public class OrganizerDAO extends SQLDatabase {
     }
 
     public Organizer getOrganizerByEmailAndPassword(String email, String password) {
-        ResultSet rs = executeQueryPreparedStatement(SELECT_ORGANIZER_BY_EMAIL_AND_PASSWORD, email, password);
+        
 
-        try {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZER_BY_EMAIL_AND_PASSWORD, email, password);){
             while (rs.next()) {
                 Organizer organizer = new Organizer(
                         rs.getInt("id"),

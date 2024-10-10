@@ -56,9 +56,9 @@ GO
 	CLOSE tableCursor
 	DEALLOCATE tableCursor
 /*
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
->>>>>>>>>> END: RESET DATABASE >>>>>>>>>>
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>> END: RESET DATABASE >>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 */
 GO
 /*
@@ -122,7 +122,7 @@ CREATE TABLE [Event] (
 	[dateOfEvent] DATE,
 	[startTime] TIME,
 	[endTime] TIME,
-	[status] NVARCHAR(15), --PENDING / APPROVED / REJECTED
+	[status] NVARCHAR(15) DEFAULT('PENDING'), --PENDING / APPROVED / REJECTED
 	[guestRegisterLimit] INT,
 	[collaboratorRegisterLimit] INT,
 	[guestAttendedCount] INT DEFAULT (0),
@@ -131,7 +131,6 @@ CREATE TABLE [Event] (
 	[collaboratorRegisterCount] INT DEFAULT (0),
 	[guestRegisterDeadline] DATE,
 	[collaboratorRegisterDeadline] DATE,
-	[guestRegisterCancelCount] INT DEFAULT(0),
 
 	CONSTRAINT PK_Event PRIMARY KEY ([id]),
 	FOREIGN KEY ([organizerId]) REFERENCES [Organizer]([id]),
@@ -219,9 +218,9 @@ CREATE TABLE [Follow] (
 	FOREIGN KEY ([organizerId]) REFERENCES [Organizer]([id])
 );
 /*
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
->>>>>>>>>> END: TABLES >>>>>>>>>>
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>> END: TABLES >>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 */
 GO
 /*
@@ -304,9 +303,9 @@ BEGIN
    WHERE id IN (SELECT organizerId FROM deleted);
 END;
 /*
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
->>>>>>>>>> END: TRIGGERS >>>>>>>>>>
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>> END: TRIGGERS >>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 */
 GO
 /*
@@ -357,7 +356,7 @@ BEGIN
     SET @randomOrganizerId = 1 + FLOOR(RAND() * 5);
 
     INSERT INTO [Event] 
-    ([organizerId], [fullname], [description], [categoryId], [locationId], [dateOfEvent], [startTime], [endTime], [guestRegisterLimit], [guestRegisterDeadline], [colaboratorRegisterDeadline])
+    ([organizerId], [fullname], [description], [categoryId], [locationId], [dateOfEvent], [startTime], [endTime], [guestRegisterLimit], [guestRegisterDeadline], [collaboratorRegisterDeadline])
     VALUES 
     (
         @randomOrganizerId,
@@ -481,7 +480,7 @@ VALUES
 (5, 1, 1, 1),
 (6, 3, 1, 0);
 /*
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
->>>>>>>>>> END: EXAMPLE DATA >>>>>>>>>>
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>> END: EXAMPLE DATA >>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 */
