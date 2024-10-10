@@ -94,20 +94,24 @@
                                     <div class="col-xxl-6 col-xl-6">
                                         <div class="event__meta-time">
                                             <ul>
-                                                <li><span>Date : </span>${event.dateOfEvent}</li>
+                                                <li><span>Date : </span><time id="date">${event.dateOfEvent}</time></li>
+                                                <li><span>Time : </span><time id="time">${event.startTime}</time> - <time id="time">${event.endTime}</time></li>
                                                 <li><span>Category : </span>${event.category.name}</li>
                                                 <li><span>Location : </span>${event.location.description}</li>
                                                 <li>
                                                     <span>Status : </span>
                                                     <c:choose>
-                                                        <c:when test="${event.status == 'APPROVE'}">
-                                                            <span style="color: green;">${event.status}</span>
+                                                        <c:when test="${event.status == 'APPROVED'}">
+                                                            <span class="status__tag bg-green">${event.status}</span>
                                                         </c:when>
                                                         <c:when test="${event.status == 'PENDING'}">
-                                                            <span style="color: yellow;">${event.status}</span>
+                                                            <span class="status__tag warning-bg">${event.status}</span>
                                                         </c:when>
                                                         <c:when test="${event.status == 'CANCEL'}">
-                                                            <span style="color: red;">${event.status}</span>
+                                                            <span class="status__tag bg-warn">${event.status}</span>
+                                                        </c:when>
+                                                        <c:when test="${event.status == 'ON_GOING'}">
+                                                            <span class="status__tag teal-bg">ON GOING</span>
                                                         </c:when>
                                                         <c:otherwise>
                                                             <span>${event.status}</span>
@@ -121,7 +125,7 @@
                                     <!-- Chart section -->
                                     <div class="col-xxl-6 col-xl-6" style="display: flex; justify-content: end;">
                                         <div class="chart-section" style="width: 300px; margin-left: 0px;">
-                                            <canvas id="registrationChart${event.fullname}" width="300" height="400"></canvas>
+                                            <canvas id="registrationChart${event.id}" width="300" height="400"></canvas>
                                         </div>
                                     </div>
                                 </div>
@@ -147,8 +151,7 @@
                             </div>
                             <div class="card__header-right">
                                 <div class="card__btn">
-                                    <form action="dashboard" method="POST">
-                                        <input type="hidden" name="event" value="organized-event">
+                                    <form action="<c:url value="/club/organized-event"/>" method="GET">
                                         <button type="submit">View All Event</button>
                                     </form>
                                 </div>
@@ -181,7 +184,7 @@
                                 <div class="news__item">
                                     <div class="news__item-inner">
                                         <div class="news__content">
-                                            <h4 class="news__title"><a href="schedule-list.html">${event.fullname}</a></h4>
+                                            <h4 class="news__title"><a href="#">${event.fullname}</a></h4>
                                             <div class="news__meta">
                                                 <div class="news__meta-status">
                                                     <span><i class="flaticon-user"></i></span>
@@ -212,25 +215,28 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Loop through each event to create a chart
-    <c:forEach var="event" items="${upcomingEvent}">
-    const ctx${event.fullname} = document.getElementById('registrationChart${event.fullname}').getContext('2d');
+    document.addEventListener("DOMContentLoaded", function () {
+        <c:forEach var="event" items="${upcomingEvent}">
+            const ctx${event.id} = document.getElementById('registrationChart${event.id}').getContext('2d');
 
-    const data${event.fullname} = {
-        labels: ['Registered', 'Available Slots'],
-        datasets: [{
-                data: [${event.guestRegisterCount}, ${event.guestRegisterLimit - event.guestRegisterCount}], // Registered vs Available slots
-                backgroundColor: ['#FF6500', '#ECDFCC']
-            }]
-    };
+            const data${event.id} = {
+                labels: ['Registered', 'Available Slots'],
+                datasets: [{
+                        data: [${event.guestRegisterCount}, ${event.guestRegisterLimit - event.guestRegisterCount}],
+                        backgroundColor: ['#FF6500', '#ECDFCC']
+                    }]
+            };
 
-    const config${event.fullname} = {
-        type: 'doughnut',
-        data: data${event.fullname}
-    };
+            const config${event.id} = {
+                type: 'doughnut',
+                data: data${event.id}
+            };
+            
+            console.log(config${event.id})
 
-    const registrationChart${event.fullname} = new Chart(ctx${event.fullname}, config${event.fullname});
-    </c:forEach>
+            const registrationChart${event.id} = new Chart(ctx${event.id}, config${event.id});
+        </c:forEach>
+    });
 </script>
 
 <%@include file="../include/master-footer.jsp" %>
