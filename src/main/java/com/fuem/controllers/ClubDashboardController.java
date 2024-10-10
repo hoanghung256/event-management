@@ -5,12 +5,15 @@
 package com.fuem.controllers;
 
 import com.fuem.models.Event;
-import com.fuem.repositories.ClubDashboardDAO;
+import com.fuem.models.Organizer;
+import com.fuem.repositories.AdminDAO;
+import com.fuem.repositories.ClubDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 /**
@@ -19,21 +22,22 @@ import java.util.ArrayList;
  */
 @WebServlet(name = "ClubDashboardController", urlPatterns = {"/club/dashboard"})
 public class ClubDashboardController extends HttpServlet {
-    private ClubDashboardDAO dao = new ClubDashboardDAO();
     
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //HttpSession session = request.getSession();
-        //session.getAttribute("organizeId", organizeId);
-        int totalEvents = dao.getTotalEventOrganized(3);
-        int totalFollowers = dao.getTotalFollowers(3);
-        int totalUpcomingEvents = dao.getTotalUpcomingEvents(3);
-        ArrayList<Event> organizedEvent = dao.getOrganizedEvent(3);
-        ArrayList<Event> upcomingEvent = dao.getUpcomingEvent(3);
+        ClubDAO dao = new ClubDAO();
+        HttpSession session = request.getSession();
+        Organizer organizer = (Organizer) session.getAttribute("userInfor");
+        int organizerId = organizer.getId();
         
-        System.out.println(upcomingEvent);
+        int totalEvents = dao.getTotalEventOrganized(organizerId);
+        int totalFollowers = dao.getTotalFollowers(organizerId);
+        int totalUpcomingEvents = dao.getTotalUpcomingEvents(organizerId);
+        ArrayList<Event> organizedEvent = dao.getOrganizedEvent(organizerId);
+        ArrayList<Event> upcomingEvent = dao.getUpcomingEvent(organizerId);
+        
         
         request.setAttribute("totalEvents", totalEvents);
         request.setAttribute("totalFollowers", totalFollowers);
@@ -46,11 +50,16 @@ public class ClubDashboardController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-    }
+        String event = request.getParameter("event");
+        ClubDAO dao = new ClubDAO();
+        HttpSession session = request.getSession();
+        Organizer organizer = (Organizer) session.getAttribute("userInfor");
+        int organizerId = organizer.getId();
 
-    @Override
-    public String getServletInfo() {
-        return "Short description";
+        if (event.equalsIgnoreCase("organized-event")) {
+            ArrayList<Event> organizedList = dao.getOrganizedEvent(organizerId);
+            request.setAttribute("organizedList", organizedList);
+            request.getRequestDispatcher("organized-events.jsp").forward(request, response);
+        }
     }
 }

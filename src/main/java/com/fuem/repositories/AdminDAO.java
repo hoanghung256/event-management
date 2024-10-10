@@ -17,9 +17,9 @@ import java.util.logging.Logger;
  *
  * @author ThangNM
  */
-public class AdminDashboardDAO extends SQLDatabase {
+public class AdminDAO extends SQLDatabase {
 
-    private static final Logger logger = Logger.getLogger(AdminDashboardDAO.class.getName());
+    private static final Logger logger = Logger.getLogger(AdminDAO.class.getName());
     private static String SELECT_TOTAL_ORGANIZED_EVENT = "SELECT\n"
                                                         + "	Organizer.fullname AS OrganizerName,\n"
                                                         + "	COUNT(Event.id) AS TotalEvents\n"

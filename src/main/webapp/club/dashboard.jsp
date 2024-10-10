@@ -95,7 +95,7 @@
                                         <div class="event__meta-time">
                                             <ul>
                                                 <li><span>Date : </span>${event.dateOfEvent}</li>
-                                                <li><span>Category : </span>${event.type.name}</li>
+                                                <li><span>Category : </span>${event.category.name}</li>
                                                 <li><span>Location : </span>${event.location.description}</li>
                                                 <li>
                                                     <span>Status : </span>
@@ -145,6 +145,14 @@
                             <div class="card__header-title">
                                 <h4>Organized Events</h4>
                             </div>
+                            <div class="card__header-right">
+                                <div class="card__btn">
+                                    <form action="dashboard" method="POST">
+                                        <input type="hidden" name="event" value="organized-event">
+                                        <button type="submit">View All Event</button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                         <div class="card__header-dropdown">
                             <div class="dropdown">
@@ -162,10 +170,6 @@
                                         fill="white"></path>
                                     </svg>
                                 </button>
-                                <div class="dropdown-list">
-                                    <a class="dropdown__item" href="javascript:void(0)">Edit</a>
-                                    <a class="dropdown__item" href="javascript:void(0)">Delete</a>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -181,7 +185,7 @@
                                             <div class="news__meta">
                                                 <div class="news__meta-status">
                                                     <span><i class="flaticon-user"></i></span>
-                                                    <span>${event.type.name}</span>
+                                                    <span>${event.category.name}</span>
                                                 </div>
                                                 <div class="news__meta-status">
                                                     <span><i class="flaticon-clock"></i></span>
@@ -210,22 +214,22 @@
 <script>
     // Loop through each event to create a chart
     <c:forEach var="event" items="${upcomingEvent}">
-        const ctx${event.fullname} = document.getElementById('registrationChart${event.fullname}').getContext('2d');
+    const ctx${event.fullname} = document.getElementById('registrationChart${event.fullname}').getContext('2d');
 
-        const data${event.fullname} = {
-            labels: ['Registered', 'Available Slots'],
-            datasets: [{
-                    data: [${event.guestRegisterCount}, ${event.guestRegisterLimit - event.guestRegisterCount}], // Registered vs Available slots
-                    backgroundColor: ['#FF6500', '#ECDFCC']
-                }]
-        };
+    const data${event.fullname} = {
+        labels: ['Registered', 'Available Slots'],
+        datasets: [{
+                data: [${event.guestRegisterCount}, ${event.guestRegisterLimit - event.guestRegisterCount}], // Registered vs Available slots
+                backgroundColor: ['#FF6500', '#ECDFCC']
+            }]
+    };
 
-        const config${event.fullname} = {
-            type: 'doughnut',
-            data: data${event.fullname}
-        };
+    const config${event.fullname} = {
+        type: 'doughnut',
+        data: data${event.fullname}
+    };
 
-        const registrationChart${event.fullname} = new Chart(ctx${event.fullname}, config${event.fullname});
+    const registrationChart${event.fullname} = new Chart(ctx${event.fullname}, config${event.fullname});
     </c:forEach>
 </script>
 

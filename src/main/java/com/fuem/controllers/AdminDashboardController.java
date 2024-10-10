@@ -5,12 +5,14 @@
 package com.fuem.controllers;
 
 import com.fuem.models.Event;
-import com.fuem.repositories.AdminDashboardDAO;
+import com.fuem.models.Organizer;
+import com.fuem.repositories.AdminDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -20,20 +22,21 @@ import java.util.ArrayList;
  */
 @WebServlet(name = "AdminDashboardController", urlPatterns = {"/admin/dashboard"})
 public class AdminDashboardController extends HttpServlet {
-    private AdminDashboardDAO dao = new AdminDashboardDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int totalOrganizedEvents = dao.getTotalOrganizedEvents(1);
+        AdminDAO dao = new AdminDAO();
+        HttpSession session = request.getSession();
+        Organizer organizer = (Organizer) session.getAttribute("userInfor");
+        int organizerId = organizer.getId();
+        int totalOrganizedEvents = dao.getTotalOrganizedEvents(organizerId);
         int totalClubs = dao.getTotalClub();
-        int totalUpcomingEvents = dao.getTotalUpcomingEvents(1);
+        int totalUpcomingEvents = dao.getTotalUpcomingEvents(organizerId);
         ArrayList<Event> registrationList = dao.getRegistrationEvent();
-        ArrayList<Event> organizedList = dao.getOrganizedEvent(1);
+        ArrayList<Event> organizedList = dao.getOrganizedEvent(organizerId);
         ArrayList<Event> upcomingList = dao.getUpcomingEvent();
-        
-        System.out.println(organizedList);
-        
+
         request.setAttribute("totalOrganizedEvents", totalOrganizedEvents);
         request.setAttribute("totalClubs", totalClubs);
         request.setAttribute("totalUpcomingEvents", totalUpcomingEvents);
@@ -46,7 +49,17 @@ public class AdminDashboardController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-  
+        String event = request.getParameter("event");
+        AdminDAO dao = new AdminDAO();
+        HttpSession session = request.getSession();
+        Organizer organizer = (Organizer) session.getAttribute("userInfor");
+        int organizerId = organizer.getId();
+
+        if (event.equalsIgnoreCase("organized-event")) {
+            ArrayList<Event> organizedList = dao.getOrganizedEvent(organizerId);
+            request.setAttribute("organizedList", organizedList);
+            request.getRequestDispatcher("organized-events.jsp").forward(request, response);
+        }
     }
 
 }
