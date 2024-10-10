@@ -120,7 +120,6 @@
                         </div>
                         <div class="app__header-right">
                             <div class="nav-item p-relative">
-<<<<<<< Updated upstream
                                     <div id="userportfolio" href="/profile">
                                         <div class="user__portfolio">
                                             <div class="user__portfolio-thumb">
@@ -133,18 +132,6 @@
                                             <div class="user__content">
                                                 <span>${sessionScope.userInfor.fullname != null ? sessionScope.userInfor.fullname : "Guest"}</span>
                                             </div>
-=======
-                                <div id="userportfolio" href="/profile">
-                                    <div class="user__portfolio">
-                                        <div class="user__portfolio-thumb">
-                                            <img
-                                                src="${sessionScope.userInfor.avatarPath != null ? sessionScope.userInfor.avatarPath : "http://localhost:8080/event-management/assets/img/user/default-avatar.jpg"}"
-                                                alt="Image not found"s
-                                                />
-                                        </div>
-                                        <div class="user__content">
-                                            <span>${sessionScope.userInfor.fullname != null ? sessionScope.userInfor.fullname : "Guest"}</span>
->>>>>>> Stashed changes
                                         </div>
                                     </div>
                                 </div>

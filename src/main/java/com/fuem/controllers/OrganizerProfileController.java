@@ -1,5 +1,6 @@
 package com.fuem.controllers;
 
+import com.fuem.enums.Role;
 import com.fuem.models.Event;
 import com.fuem.models.Organizer;
 import com.fuem.models.User;
@@ -15,6 +16,10 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ *
+ * @author TuDK
+ */
 @WebServlet(name = "OrganizerProfileController", urlPatterns = {"/club/OrganizerProfileController"})
 public class OrganizerProfileController extends HttpServlet {
 
@@ -39,11 +44,12 @@ public class OrganizerProfileController extends HttpServlet {
         boolean canEdit = false;
         boolean canFollow = false;
         boolean hasFollowed = false;
-
+        System.out.println("aaaaaaaaaaa");
         // Logic cho Guest
         if (sessionUser == null) { // Nếu không có session user, tức là Guest
             if (organizerIdParam != null) {
                 int organizerId = Integer.parseInt(organizerIdParam);
+                System.out.println("bbbbbbbbbb");
                 organizer = organizerDAO.getOrganizerById(organizerId);
                 canEdit = false; // Guest không có quyền chỉnh sửa
             }
@@ -52,6 +58,7 @@ public class OrganizerProfileController extends HttpServlet {
             if (organizerIdParam != null) {
                 int organizerId = Integer.parseInt(organizerIdParam);
                 organizer = organizerDAO.getOrganizerById(organizerId);
+                System.out.println("ccccccccccc");
                 User user = (User) sessionUser;
                 canEdit = false; // User cũng không có quyền chỉnh sửa
                 canFollow = true;
@@ -59,7 +66,7 @@ public class OrganizerProfileController extends HttpServlet {
             }
         } else if (sessionUser instanceof Organizer) {
             Organizer sessionOrganizer = (Organizer) sessionUser;
-
+            System.out.println("dddddddddd");
             if (organizerIdParam == null) {
                 organizer = organizerDAO.getOrganizerById(sessionOrganizer.getId());
                 canEdit = true;
@@ -67,15 +74,16 @@ public class OrganizerProfileController extends HttpServlet {
                 int organizerId = Integer.parseInt(organizerIdParam);
                 organizer = organizerDAO.getOrganizerById(organizerId);
 
-                if (sessionOrganizer.isAdmin()) {
+                if (sessionOrganizer.getRole() == Role.CLUB) {
                     canEdit = (organizerId == sessionOrganizer.getId());
-                } else if (!sessionOrganizer.isAdmin()) {
+                } else if (sessionOrganizer.getRole() == Role.ADMIN) {
                     canEdit = (organizerId == sessionOrganizer.getId());
                 }
             }
         }
         if (organizer == null) {
             request.setAttribute("errorMessage", "Tổ chức không tồn tại.");
+            System.out.println("eeeeeeeeeeee");
             request.getRequestDispatcher("errorPage.jsp").forward(request, response);
             return;
         }
@@ -89,7 +97,7 @@ public class OrganizerProfileController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.setCharacterEncoding("UTF-8");  // Đảm bảo UTF-8 cho tiếng Việt
+        request.setCharacterEncoding("UTF-8");  
         HttpSession session = request.getSession(false);
         Object sessionUser = (session != null) ? session.getAttribute("userInfor") : null;
         String organizerIdParam = request.getParameter("organizerId");
@@ -149,17 +157,14 @@ public class OrganizerProfileController extends HttpServlet {
     }
 
     private boolean checkUserFollowStatus(User user, int organizerId) {
-        // Gọi DAO để kiểm tra user có đang theo dõi organizer không
         return followDAO.isUserFollowing(user.getId(), organizerId);
     }
 
     private void followOrganizer(User user, int organizerId) {
-        // Gọi DAO để thêm follow
         followDAO.addFollow(user.getId(), organizerId);
     }
 
     private void unfollowOrganizer(User user, int organizerId) {
-        // Gọi DAO để xóa follow
         followDAO.removeFollow(user.getId(), organizerId);
     }
 
@@ -174,8 +179,6 @@ public class OrganizerProfileController extends HttpServlet {
         organizer.setDescription(description);
 
         organizerDAO.updateOrganizer(organizer);
-
-        // Update session with new organizer info
         session.setAttribute("userInfor", organizer);
     }
 

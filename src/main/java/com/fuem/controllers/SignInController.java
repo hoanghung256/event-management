@@ -4,6 +4,7 @@
  */
 package com.fuem.controllers;
 
+import com.fuem.enums.Role;
 import com.fuem.models.Organizer;
 import com.fuem.repositories.StudentDAO;
 import com.fuem.models.Student;
@@ -48,7 +49,12 @@ public class SignInController extends HttpServlet {
                 if (organizer != null) {
                     HttpSession session = request.getSession();
                     session.setAttribute("userInfor", organizer);
-                    request.getRequestDispatcher("homepage").forward(request, response);
+                    if (organizer.getRole() == Role.ADMIN) {
+                        response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+                    } else {
+                        response.sendRedirect(request.getContextPath() + "/index.html");
+                        System.out.println("aaaaaaaaaaa");
+                    }
                 } else {
                     request.setAttribute("error", "Email hoặc mật khẩu không đúng");
                     request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
