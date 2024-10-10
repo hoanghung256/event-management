@@ -45,21 +45,4 @@ public class AdminDashboardController extends HttpServlet {
         request.setAttribute("upcomingList", upcomingList);
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String event = request.getParameter("event");
-        AdminDAO dao = new AdminDAO();
-        HttpSession session = request.getSession();
-        Organizer organizer = (Organizer) session.getAttribute("userInfor");
-        int organizerId = organizer.getId();
-
-        if (event.equalsIgnoreCase("organized-event")) {
-            ArrayList<Event> organizedList = dao.getOrganizedEvent(organizerId);
-            request.setAttribute("organizedList", organizedList);
-            request.getRequestDispatcher("organized-events.jsp").forward(request, response);
-        }
-    }
-
 }

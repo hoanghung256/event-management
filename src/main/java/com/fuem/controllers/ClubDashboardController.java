@@ -6,7 +6,6 @@ package com.fuem.controllers;
 
 import com.fuem.models.Event;
 import com.fuem.models.Organizer;
-import com.fuem.repositories.AdminDAO;
 import com.fuem.repositories.ClubDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -45,21 +44,5 @@ public class ClubDashboardController extends HttpServlet {
         request.setAttribute("organizedEvent", organizedEvent);
         request.setAttribute("upcomingEvent", upcomingEvent);
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String event = request.getParameter("event");
-        ClubDAO dao = new ClubDAO();
-        HttpSession session = request.getSession();
-        Organizer organizer = (Organizer) session.getAttribute("userInfor");
-        int organizerId = organizer.getId();
-
-        if (event.equalsIgnoreCase("organized-event")) {
-            ArrayList<Event> organizedList = dao.getOrganizedEvent(organizerId);
-            request.setAttribute("organizedList", organizedList);
-            request.getRequestDispatcher("organized-events.jsp").forward(request, response);
-        }
     }
 }

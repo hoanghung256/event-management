@@ -237,8 +237,7 @@
                             </div>
                             <div class="card__header-right">
                                 <div class="card__btn">
-                                    <form action="dashboard" method="POST">
-                                        <input type="hidden" name="event" value="organized-event">
+                                    <form action="<c:url value="/club/organized-event"/>" method="GET">
                                         <button type="submit">View All Event</button>
                                     </form>
                                 </div>
@@ -370,4 +369,5 @@
         <!-- Dashboard area end -->
 
 </section>
-<%@include file="../include/master-footer.jsp" %>
+                                        
+<%@include file="../include/master-footer.jsp"%>

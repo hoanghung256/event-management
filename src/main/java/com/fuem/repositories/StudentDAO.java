@@ -1,5 +1,6 @@
 package com.fuem.repositories;
 
+import com.fuem.enums.Role;
 import com.fuem.models.Student;
 import com.fuem.utils.DataSourceWrapper;
 import java.sql.Connection;
@@ -63,7 +64,8 @@ public class StudentDAO extends SQLDatabase {
                         rs.getString("fullname"),
                         rs.getString("studentId"),
                         rs.getString("email"),
-                        rs.getString("avatarPath")
+                        rs.getString("avatarPath"),
+                        Role.STUDENT
                 );
             }
         } catch (SQLException e) {

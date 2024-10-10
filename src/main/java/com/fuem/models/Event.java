@@ -106,7 +106,8 @@ public class Event {
         this.category.setName(category);
     }
     
-     public Event(int id, String fullname, LocalDate dateOfEvent, String locationName, String category, Status status, int registerLimit, int registerCount){
+     public Event(int id, String fullname, LocalDate dateOfEvent, String locationName, String category, Status status, int registerLimit, int registerCount, LocalTime startTime, LocalTime endTime){
+        this.id = id;
         this.fullname = fullname;
         this.dateOfEvent = dateOfEvent;
         this.location = new Location();
@@ -116,6 +117,8 @@ public class Event {
         this.status = status;
         this.guestRegisterLimit = registerLimit;
         this.guestRegisterCount = registerCount;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
      
     public Event(int id, String clubName, String avatarPath, String fullname, LocalDate dateOfEvent, String category, String location, Status status){

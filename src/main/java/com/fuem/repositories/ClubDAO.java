@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -74,7 +75,8 @@ public class ClubDAO extends SQLDatabase{
                                                         "    Category.categoryName AS CategoryName,\n" +
                                                         "    Event.status AS Status,\n" +
                                                         "    Event.guestRegisterLimit AS RegisterLimit,\n" +
-                                                        "    Event.guestRegisterCount AS RegisterCount\n" +
+                                                        "    Event.guestRegisterCount AS RegisterCount, \n" +
+                                                        "    startTime, endTime \n" +
                                                         "FROM \n" +
                                                         "    Event\n" +
                                                         "JOIN \n" +
@@ -115,7 +117,6 @@ public class ClubDAO extends SQLDatabase{
     }
     
     public int getTotalFollowers(int clubId) {
-        
         int totalFollowers = 0;
         
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
@@ -130,7 +131,6 @@ public class ClubDAO extends SQLDatabase{
     }
     
     public ArrayList<Event> getOrganizedEvent(int clubId) {
-        
         ArrayList<Event> organizedEvent = new ArrayList<>();
         
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
@@ -163,8 +163,10 @@ public class ClubDAO extends SQLDatabase{
                 Status status = Status.valueOf(rs.getString("Status"));
                 int registerLimit = rs.getInt("RegisterLimit");
                 int registerCount = rs.getInt("RegisterCount");
+                LocalTime startTime = rs.getTime("startTime").toLocalTime();
+                LocalTime endTime = rs.getTime("endTime").toLocalTime();
 
-                upcomingEvent.add(new Event(id, eventName, eventDate, locationName, category, status, registerLimit, registerCount));
+                upcomingEvent.add(new Event(id, eventName, eventDate, locationName, category, status, registerLimit, registerCount, startTime, endTime));
             }
         } catch (SQLException e){
             logger.log(Level.SEVERE, null, e);
