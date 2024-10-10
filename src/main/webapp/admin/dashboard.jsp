@@ -114,10 +114,6 @@
                                         <path d="M13.25 2C13.25 1.30964 12.6904 0.75 12 0.75C11.3096 0.75 10.75 1.30964 10.75 2C10.75 2.69036 11.3096 3.25 12 3.25C12.6904 3.25 13.25 2.69036 13.25 2Z" fill="white"></path>
                                         </svg>
                                     </button>
-                                    <div class="dropdown-list">
-                                        <a class="dropdown__item" href="javascript:void(0)">Edit</a>
-                                        <a class="dropdown__item" href="javascript:void(0)">Delete</a>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -177,7 +173,7 @@
                                             </td>
                                             <td>
                                                 <div class="category">
-                                                    <span>${event.type.name}</span>
+                                                    <span>${event.category.name}</span>
                                                 </div>
                                             </td>
                                             <td>
@@ -241,29 +237,9 @@
                             </div>
                             <div class="card__header-right">
                                 <div class="card__btn">
-                                    <a href="event-details.html">view all Event</a>
-                                </div>
-                                <div class="card__header-dropdown">
-                                    <div class="dropdown">
-                                        <button>
-                                            <svg class="dropdown__svg" width="14" height="4" viewBox="0 0 14 4" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M2 0.75C2.69036 0.75 3.25 1.30964 3.25 2C3.25 2.69036 2.69036 3.25 2 3.25C1.30964 3.25 0.75 2.69036 0.75 2C0.75 1.30964 1.30964 0.75 2 0.75Z"
-                                                fill="white"></path>
-                                            <path
-                                                d="M7 0.75C7.69036 0.75 8.25 1.30964 8.25 2C8.25 2.69036 7.69036 3.25 7 3.25C6.30964 3.25 5.75 2.69036 5.75 2C5.75 1.30964 6.30964 0.75 7 0.75Z"
-                                                fill="white"></path>
-                                            <path
-                                                d="M13.25 2C13.25 1.30964 12.6904 0.75 12 0.75C11.3096 0.75 10.75 1.30964 10.75 2C10.75 2.69036 11.3096 3.25 12 3.25C12.6904 3.25 13.25 2.69036 13.25 2Z"
-                                                fill="white"></path>
-                                            </svg>
-                                        </button>
-                                        <div class="dropdown-list">
-                                            <a class="dropdown__item" href="javascript:void(0)">Edit</a>
-                                            <a class="dropdown__item" href="javascript:void(0)">Delete</a>
-                                        </div>
-                                    </div>
+                                    <form action="<c:url value="/club/organized-event"/>" method="GET">
+                                        <button type="submit">View All Event</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -393,4 +369,5 @@
         <!-- Dashboard area end -->
 
 </section>
-<%@include file="../include/master-footer.jsp" %>
+                                        
+<%@include file="../include/master-footer.jsp"%>
