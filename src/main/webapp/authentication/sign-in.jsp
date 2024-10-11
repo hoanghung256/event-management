@@ -38,8 +38,8 @@
                     <div class="sign__header">
                         <div class="sign__logo">
                             <a href="dashboard.html">
-                                <img class="logo-black" src="assets/img/logo/color-logo.svg" alt="image not found">
-                                <img class="logo-white" src="assets/img/eventlogo.png" alt="image not found">
+                                <img class="logo-black" src="assets/img/logo/logoFpt.svg.png" alt="image not found">
+                                <img class="logo-white" src="assets/img/logoFpt.svg.png" alt="image not found">
                             </a>
                         </div>
                     </div>
@@ -106,7 +106,7 @@
                     </div>
                 </div>
                 <div class="sign__right">
-                    <div class="sign__input-thumb" data-background="https://cucumber.fsoft.com.vn/wp-content/uploads/sites/14/2023/09/377918209_1818044748665768_1287143424373915875_n-1024x683.jpg">
+                    <div class="sign__input-thumb" data-background="assets/img/sign/signin.jpg">
                     </div>
                 </div>
             </div>
