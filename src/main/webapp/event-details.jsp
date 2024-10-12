@@ -35,7 +35,7 @@
                         <!-- BODY GO HERE -->
                         <div class="event__details-area">
                             <div class="row">
-                                <div class="col-xxl-7 col-xl-6">
+                                <div class="col-md-7 p-1">
                                     <div class="event__details-left">
                                         <div class="body__card-wrapper mb-20">
                                             <div class="card__header-top">
@@ -72,7 +72,7 @@
                                                                 <c:choose>
                                                                     <c:when test="${not empty event.images}">
                                                                         <c:forEach var="image" items="${event.images}">
-                                                                            <img src="${image}" alt="Event Image" />
+                                                                            <img src="http://127.0.0.1:5500/muontheme/codeskdhaka.com/html/expovent-prev/expovent/assets/img/event/event-details-2.jpg" alt="Event Image" />
                                                                         </c:forEach>
                                                                     </c:when>
                                                                     <c:otherwise>
@@ -85,7 +85,7 @@
                                                                 <h4>About This Event</h4>
                                                                 <p>${event.description}</p>
                                                             </div>
-
+                                                            
                                                             <div class="ticket__purchase-wrapper mt-30">
                                                                 <h4 class="ticket__purchase-title">Register Now</h4>
                                                                 <div class="ticket__price-inner">
@@ -108,7 +108,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xxl-5 col-xl-6">
+                                <div class="col-md-5 p-1">
                                     <div class="event__details-right">
                                         <div class="body__card-wrapper mb-20">
                                             <div class="event__meta-time">
