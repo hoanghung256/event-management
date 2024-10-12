@@ -124,7 +124,7 @@ public class Event {
     public Event(int id, String clubName, String avatarPath, String fullname, LocalDate dateOfEvent, String category, String location, Status status){
         this.id = id;
         this.organizer = new Organizer();
-        this.organizer.setFullname(clubName);
+        this.organizer.setAcronym(clubName);
         this.organizer.setAvatarPath(avatarPath);
         this.fullname = fullname;
         this.dateOfEvent = dateOfEvent;
