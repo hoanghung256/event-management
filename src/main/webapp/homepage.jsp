@@ -20,9 +20,6 @@
                             <nav>
                                 <ul>
                                     <li class="active"><span>Home</span></li>
-<!--                                    <a href="${pageContext.request.contextPath}/student/attended-events">
-                                        Go
-                                    </a>-->
                                 </ul>
                             </nav>
                         </div>
@@ -38,6 +35,7 @@
                             <div class="col-md-2 input">
                                 <label for="categoryId" class="form-label">Event Type</label>
                                 <select id="categoryId" name="categoryId" class="form-select">
+                                    <option value="" disabled selected>Select Category</option>
                                     <c:forEach var="category" items="${cateList}">
                                         <option value="${category.id}" ${previousSearchEventCriteria != null && previousSearchEventCriteria.categoryId == category.id ? 'selected' : ''}>
                                             ${category.name}
@@ -49,6 +47,7 @@
                             <div class="col-md-2 input">
                                 <label for="organizerId" class="form-label">Organizer</label>
                                 <select id="organizerId" name="organizerId" class="form-select">
+                                    <option value="" disabled selected>Select Organizer</option>
                                     <c:forEach var="organizer" items="${organizerList}">
                                         <option value="${organizer.id}" ${previousSearchEventCriteria != null && previousSearchEventCriteria.organizerId == organizer.id ? 'selected' : ''}>
                                             ${organizer.fullname}
@@ -190,7 +189,7 @@
                             <c:choose>
                                 <c:when test="${i == 0 && page.currentPage > 0}">
                                     <li>
-                                        <a href="home?page=${page.currentPage - 1}&name=${previousSearchEventCriteria.name}&typeId=${previousSearchEventCriteria.typeId}&organizerId=${previousSearchEventCriteria.organizerId}&from=${previousSearchEventCriteria.from}&to=${previousSearchEventCriteria.to}">
+                                        <a href="home?page=${page.currentPage - 1}&name=${previousSearchEventCriteria.name}&categoryId=${previousSearchEventCriteria.categoryId}&organizerId=${previousSearchEventCriteria.organizerId}&from=${previousSearchEventCriteria.from}&to=${previousSearchEventCriteria.to}">
                                             <i class="fa-regular fa-arrow-left-long"></i>
                                         </a>
                                     </li>
@@ -204,7 +203,7 @@
                                         </c:when>
                                         <c:otherwise>
                                             <li>
-                                                <a href="home?page=${i}&name=${previousSearchEventCriteria.name}&typeId=${previousSearchEventCriteria.typeId}&organizerId=${previousSearchEventCriteria.organizerId}&from=${previousSearchEventCriteria.from}&to=${previousSearchEventCriteria.to}">${i + 1}</a>
+                                                <a href="home?page=${i}&name=${previousSearchEventCriteria.name}&categoryId=${previousSearchEventCriteria.categoryId}&organizerId=${previousSearchEventCriteria.organizerId}&from=${previousSearchEventCriteria.from}&to=${previousSearchEventCriteria.to}">${i + 1}</a>
                                             </li>
                                         </c:otherwise>
                                     </c:choose>
@@ -214,14 +213,14 @@
                                     </c:when>
                                     <c:when test="${i == page.totalPage - 1 && page.currentPage + 5 < page.totalPage - 1}">
                                     <li>
-                                        <a href="home?page=${page.totalPage - 1}&name=${previousSearchEventCriteria.name}&typeId=${previousSearchEventCriteria.typeId}&organizerId=${previousSearchEventCriteria.organizerId}&from=${previousSearchEventCriteria.from}&to=${previousSearchEventCriteria.to}">
+                                        <a href="home?page=${page.totalPage - 1}&name=${previousSearchEventCriteria.name}&categoryId=${previousSearchEventCriteria.categoryId}&organizerId=${previousSearchEventCriteria.organizerId}&from=${previousSearchEventCriteria.from}&to=${previousSearchEventCriteria.to}">
                                             ${page.totalPage}
                                         </a>
                                     </li>
                                 </c:when>
                                 <c:when test="${i == page.totalPage - 1 && page.currentPage < page.totalPage - 1}">
                                     <li>
-                                        <a href="home?page=${page.currentPage + 1}&name=${previousSearchEventCriteria.name}&typeId=${previousSearchEventCriteria.typeId}&organizerId=${previousSearchEventCriteria.organizerId}&from=${previousSearchEventCriteria.from}&to=${previousSearchEventCriteria.to}">
+                                        <a href="home?page=${page.currentPage + 1}&name=${previousSearchEventCriteria.name}&categoryId=${previousSearchEventCriteria.categoryId}&organizerId=${previousSearchEventCriteria.organizerId}&from=${previousSearchEventCriteria.from}&to=${previousSearchEventCriteria.to}">
                                             <i class="fa-regular fa-arrow-right-long"></i>
                                         </a>
                                     </li>
@@ -236,6 +235,6 @@
     </div>
     <!--</div>-->
 </section>
-                             
+
 <%@include file="include/master-footer.jsp" %>
 

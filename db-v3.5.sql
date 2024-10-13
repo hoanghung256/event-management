@@ -1,4 +1,4 @@
-GO
+﻿GO
 /*
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 <<<<<<<<<< BEGIN: CREATE DATABASE <<<<<<<<<<
@@ -171,10 +171,11 @@ CREATE TABLE [Notification] (
 CREATE TABLE [NotificationReceiver] (
 	[notificationId] INT,
 	[receiverId] INT,
+	[isOrganizer] BIT
 
-	CONSTRAINT PK_NotificationReceiver PRIMARY KEY ([notificationId], [receiverId]),
-	FOREIGN KEY ([receiverId]) REFERENCES [Student]([id]),
-	FOREIGN KEY ([notificationId]) REFERENCES [Notification]([id])
+	CONSTRAINT PK_NotificationReceiver PRIMARY KEY ([notificationId], [receiverId], [isOrganizer]),
+	FOREIGN KEY ([notificationId]) REFERENCES [Notification]([id]),
+
 );
 
 CREATE TABLE [EventCollaborator] (
@@ -394,7 +395,7 @@ BEGIN
     BEGIN
         -- Insert a new notification for the organizer
         INSERT INTO [Notification] ([senderId], [title], [content])
-        VALUES (@organizerId, 'This is important notification!', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
+        VALUES (@organizerId, 'This is an important notification!', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
 
         -- Get the ID of the inserted notification
         SET @notificationId = SCOPE_IDENTITY();
@@ -408,8 +409,9 @@ BEGIN
 
         WHILE @@FETCH_STATUS = 0
         BEGIN
-            INSERT INTO [NotificationReceiver] ([notificationId], [receiverId])
-            VALUES (@notificationId, @userId);
+            -- Insert into NotificationReceiver for students (isOrganizer = 0)
+            INSERT INTO [NotificationReceiver] ([notificationId], [receiverId], [isOrganizer])
+            VALUES (@notificationId, @userId, 0);
 
             FETCH NEXT FROM userCursor INTO @userId;
         END;
@@ -426,6 +428,7 @@ END;
 
 CLOSE organizerCursor;
 DEALLOCATE organizerCursor;
+
 
 INSERT INTO [Feedback] ([guestId], [eventId], [content])
 VALUES
@@ -483,4 +486,5 @@ VALUES
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 >>>>>>>>> END: EXAMPLE DATA >>>>>>>>>>
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+<<<<<<< HEAD
 */

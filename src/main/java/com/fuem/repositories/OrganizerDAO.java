@@ -29,8 +29,6 @@ public class OrganizerDAO extends SQLDatabase {
     }
 
     public boolean isEmailAndPasswordExist(String email, String password) {
-        
-
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
                 ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZER_BY_EMAIL_AND_PASSWORD, email, password);){
             while (rs.next()) {
@@ -44,8 +42,6 @@ public class OrganizerDAO extends SQLDatabase {
     }
 
     public Organizer getOrganizerByEmailAndPassword(String email, String password) {
-        
-
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
                 ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZER_BY_EMAIL_AND_PASSWORD, email, password);){
             while (rs.next()) {
