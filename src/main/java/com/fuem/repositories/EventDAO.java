@@ -4,6 +4,7 @@
  */
 package com.fuem.repositories;
 
+import com.fuem.enums.Status;
 import com.fuem.models.Event;
 import com.fuem.models.Location;
 import com.fuem.models.Category;
@@ -105,6 +106,10 @@ public class EventDAO extends SQLDatabase {
             + "JOIN Location l ON e.locationId = l.id "
             + "LEFT JOIN Follow f ON e.organizerId = f.organizerId AND f.studentId = ? ";
     private static final String SELECT_ALL_CATEGORY = "SELECT * FROM [Category]";
+    
+    private static final String UPDATE_EVENTS_REGISTRATION_STATUS = "UPDATE [Event]\n"
+            + "SET status = ?\n"
+            + "WHERE id = ?";
 
     private static final String SELECT_INCOMING_EVENT_BY_ORGANIZER_ID = "SELECT TOP 10 e.*, "
             + "       o.fullname AS organizerName, "
@@ -346,8 +351,8 @@ public class EventDAO extends SQLDatabase {
         ArrayList<Event> events = new ArrayList<>();
         String query = buildSelectQuery(pagingCriteria, searchEventCriteria);
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, query, id);) {
-
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
+                ResultSet rs = executeQueryPreparedStatement(conn, query, id);) {
             while (rs.next()) {
                 if (page.getTotalPage() == null && page.getCurrentPage() == null) {
                     page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
@@ -443,7 +448,8 @@ public class EventDAO extends SQLDatabase {
     public Event getEventDetails(int eventId) {
         Event event = null;
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_EVENT_DETAILS_BY_ID, eventId)) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
+             ResultSet rs = executeQueryPreparedStatement(conn, SELECT_EVENT_DETAILS_BY_ID, eventId)) {
             if (rs != null && rs.next()) {
                 event = new Event();
                 event.setId(rs.getInt("id"));
@@ -474,19 +480,31 @@ public class EventDAO extends SQLDatabase {
         }
         return event;
     }
-
+    
     private List<String> getEventImages(int eventId) {
         List<String> images = new ArrayList<>();
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_IMG_BY_ID, eventId);) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
+             ResultSet rs = executeQueryPreparedStatement(conn, SELECT_IMG_BY_ID, eventId);) {
             while (rs.next()) {
-                String relativePath = rs.getString("path");
-                String fullPath = "assets/img/" + relativePath;
-                images.add(fullPath);
+                images.add(rs.getString("path"));
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
         }
         return images;
+    }
+    
+    /**
+     * Update status to database
+     *
+     * @author ThangNM
+     */
+    public void updateEventRegistrationStatus(int eventId, Status status) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
+            executePreparedStatement(conn, UPDATE_EVENTS_REGISTRATION_STATUS, status, eventId);
+        } catch (SQLException ex) {
+            Logger.getLogger(EventDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

@@ -50,7 +50,7 @@
             <div class="expovent__sidebar">
                 <div class="logo-details">
                     <span>
-                        <a href="dashboard.html">
+                        <a href="<c:url value="/club/dashboard"/>">
                             <img class="logo__white" src="<c:url value="/assets/img/logo/logo-fpt-small.svg"/>" alt="logo not found">
                         </a>
                     </span>
@@ -63,7 +63,7 @@
                 <div class="sidebar__inner simple-bar">
                     <div class="dlabnav">
                         <ul class="metismenu" id="menu">
-                            <li><a href="#" aria-expanded="false">
+                            <li><a href="<c:url value="/club/dashboard"/>" aria-expanded="false">
                                     <i class="flaticon-home"></i>
                                     <span class="nav-text">Dashboard</span>
                                 </a>
@@ -79,7 +79,7 @@
                                 </a>
                             </li>
                             <li><a href="#" aria-expanded="false">
-                                    <i class="flaticon-user-1"></i>
+                                    <i class="flaticon-email"></i>
                                     <span class="nav-text">Send File</span>
                                 </a>
                             </li>

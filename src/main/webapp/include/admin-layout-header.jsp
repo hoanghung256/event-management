@@ -49,7 +49,7 @@
             <div class="expovent__sidebar">
                 <div class="logo-details">
                     <span>
-                        <a href="dashboard.html">
+                        <a href="<c:url value="/admin/dashboard"/>">
                             <img class="logo__white" src="<c:url value="/assets/img/logo/logo-fpt-small.svg"/>" alt="logo not found">
                         </a>
                     </span>
@@ -63,7 +63,7 @@
                     <div class="dlabnav">
                         <ul class="metismenu" id="menu">
                             <li>
-                                <a href="#" aria-expanded="false">
+                                <a href="<c:url value="/admin/dashboard"/>" aria-expanded="false">
                                     <i class="flaticon-home"></i>
                                     <span class="nav-text">Dashboard</span>
                                 </a>
