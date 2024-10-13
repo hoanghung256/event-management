@@ -4,6 +4,8 @@
  */
 package com.fuem.repositories;
 
+import com.fuem.enums.Role;
+import com.fuem.enums.Status;
 import com.fuem.models.Event;
 import com.fuem.models.Location;
 import com.fuem.models.Category;
@@ -14,8 +16,10 @@ import com.fuem.repositories.helpers.PagingCriteria;
 import com.fuem.repositories.helpers.SearchEventCriteria;
 import com.fuem.utils.DataSourceWrapper;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -105,6 +109,23 @@ public class EventDAO extends SQLDatabase {
             + "JOIN Location l ON e.locationId = l.id "
             + "LEFT JOIN Follow f ON e.organizerId = f.organizerId AND f.studentId = ? ";
     private static final String SELECT_ALL_CATEGORY = "SELECT * FROM [Category]";
+    private static final String SELECT_ALL_LOCATIONS = "SELECT id, locationName FROM [Location]";
+    private static final String INSERT_NEW_EVENT = "INSERT INTO [Event] ("
+            + "organizerId, "
+            + "fullname, "
+            + "avatarPath, "
+            + "description, "
+            + "categoryId, "
+            + "locationId, "
+            + "dateOfEvent, "
+            + "startTime, "
+            + "endTime, "
+            + "guestRegisterLimit, "
+            + "collaboratorRegisterLimit, "
+            + "guestRegisterDeadline, "
+            + "collaboratorRegisterDeadline, "
+            + "status)"
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
     public EventDAO() {
         super();
@@ -265,7 +286,7 @@ public class EventDAO extends SQLDatabase {
     public Page<Event> get(PagingCriteria pagingCriteria, SearchEventCriteria searchEventCriteria, int id) {
         Page<Event> page = new Page<>();
         ArrayList<Event> events = new ArrayList<>();
-            String query = buildSelectQuery(pagingCriteria, searchEventCriteria);
+        String query = buildSelectQuery(pagingCriteria, searchEventCriteria);
 
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
                 ResultSet rs = executeQueryPreparedStatement(conn, query, id);){
@@ -278,7 +299,11 @@ public class EventDAO extends SQLDatabase {
                 Organizer organizer = new Organizer();
                 organizer.setId(rs.getInt("organizerId"));
                 organizer.setFullname(rs.getString("organizerName"));
-                events.add(new Event(
+                
+                List<String> images = new ArrayList<>();
+                images.add(rs.getNString("avatarPath"));
+                
+                Event event = new Event(
                         rs.getInt("id"),
                         organizer,
                         rs.getNString("fullname"),
@@ -297,7 +322,10 @@ public class EventDAO extends SQLDatabase {
                         rs.getInt("guestRegisterLimit"),
                         rs.getDate("guestRegisterDeadline").toLocalDate()
                 // rs.getInt("guestAttendedCount")
-                ));
+                );
+                event.setImages(images);
+                
+                events.add(event);
             }
         } catch (SQLException e) {
             Logger.getLogger(EventDAO.class.getName()).log(Level.SEVERE, null, e);
@@ -400,13 +428,77 @@ public class EventDAO extends SQLDatabase {
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
                 ResultSet rs = executeQueryPreparedStatement(conn, SELECT_IMG_BY_ID, eventId);) {
             while (rs.next()) {
-                String relativePath = rs.getString("path");
-                String fullPath = "assets/img/" + relativePath;
-                images.add(fullPath);
+                images.add(rs.getString("path"));
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
         }
         return images;
+    }
+    
+    /**
+     * 
+     * @author HungHV
+     */
+    public List<Location> getAllLocations() {
+        List<Location> locations = new ArrayList<>();
+        
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ALL_LOCATIONS);) {
+            while (rs.next()) {
+                locations.add(
+                        new Location(
+                                rs.getInt("id"),
+                                rs.getNString("locationName")
+                        )
+                );
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        } 
+        
+        return locations;
+    }
+    
+    /**
+     * When club use this for registration, init event status is Status.PENDING
+     * Admin event status is Status.APPROVED by default
+     * 
+     * @author HungHV
+     */
+    public int insertAndGetGenerateKeyOfNewEvent(Event registerEvent) {
+        int generatedId = 0;
+        
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                PreparedStatement pstmt = getPreparedStatement(conn.prepareStatement(INSERT_NEW_EVENT, Statement.RETURN_GENERATED_KEYS), conn, INSERT_NEW_EVENT, 
+                    registerEvent.getOrganizer().getId(),
+                    registerEvent.getFullname(),
+                    registerEvent.getImages().get(0),
+                    registerEvent.getDescription(),
+                    registerEvent.getCategory().getId(),
+                    registerEvent.getLocation().getId(),
+                    registerEvent.getDateOfEvent(),
+                    registerEvent.getStartTime(),
+                    registerEvent.getEndTime(),
+                    registerEvent.getGuestRegisterLimit(),
+                    registerEvent.getCollaboratorRegisterLimit(),
+                    registerEvent.getGuestRegisterDeadline(),
+                    registerEvent.getCollaboratorRegisterDeadline(),
+                    registerEvent.getOrganizer().getRole() == Role.ADMIN ? Status.APPROVED : Status.PENDING)) {
+            int rowChange = pstmt.executeUpdate();
+            
+            
+            if (rowChange > 0) {
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        generatedId = generatedKeys.getInt(1);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        
+        return generatedId;
     }
 }

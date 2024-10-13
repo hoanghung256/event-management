@@ -63,17 +63,12 @@
                 <div class="sidebar__inner simple-bar">
                     <div class="dlabnav">
                         <ul class="metismenu" id="menu">
-                            <li><a href="#" aria-expanded="false">
+                            <li><a href="<c:url value="/club/dashboard"/>" aria-expanded="false">
                                     <i class="flaticon-home"></i>
                                     <span class="nav-text">Dashboard</span>
                                 </a>
                             </li>
-                            <li><a href="#" aria-expanded="false">
-                                    <i class="flaticon-calendar-1"></i>
-                                    <span class="nav-text">Create Event</span>
-                                </a>
-                            </li>
-                            <li><a href="#" aria-expanded="false">
+                            <li><a href="<c:url value="/club/register-event"/>" aria-expanded="false">
                                     <i class="flaticon-success"></i>
                                     <span class="nav-text">Register Event</span>
                                 </a>
@@ -88,7 +83,7 @@
                                     <span class="nav-text">Send Notification</span>
                                 </a>
                             </li>
-                            <li><a href="<c:url value="/admin/organized-event"/>" aria-expanded="false">
+                            <li><a href="<c:url value="/club/organized-event"/>" aria-expanded="false">
                                     <i class="flaticon-user-1"></i>
                                     <span class="nav-text">Organized Events</span>
                                 </a>
