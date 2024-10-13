@@ -52,7 +52,8 @@ public class NotificationDAO extends SQLDatabase {
     public List<Notification> getNotificationsForUser(int userId) {
         List<Notification> notifications = new ArrayList<>();
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet resultSet = executeQueryPreparedStatement(conn, SELECT_NOTIFICATION_FOR_USER, userId);) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
+                ResultSet resultSet = executeQueryPreparedStatement(conn, SELECT_NOTIFICATION_FOR_USER, userId);) {
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
 
@@ -78,7 +79,8 @@ public class NotificationDAO extends SQLDatabase {
      */
     public int insertAndGetIdOfNewNotification(int senderId, String content) {
         int generatedId = -1;
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); PreparedStatement pstmt = conn.prepareStatement(INSERT_NEW_NOTIFICATION, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
+                PreparedStatement pstmt = conn.prepareStatement(INSERT_NEW_NOTIFICATION, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setInt(1, senderId);
             pstmt.setString(2, content);
             int affectedRows = pstmt.executeUpdate();

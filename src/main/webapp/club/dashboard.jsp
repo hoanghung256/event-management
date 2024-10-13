@@ -4,7 +4,7 @@
     Author     : ThangNM
 --%>
 <%@include file="../include/club-layout-header.jsp"%>
-<%@ page import="com.fuem.models.Event" %>
+
 <section>
     <!-- App side area start -->
     <div class="app__slide-wrapper">

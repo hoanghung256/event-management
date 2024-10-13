@@ -75,7 +75,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#" aria-expanded="false">
+                                <a href="ClubProfileController" aria-expanded="false">
                                     <i class="flaticon-success"></i>
                                     <span class="nav-text">Register Events</span>
                                 </a>

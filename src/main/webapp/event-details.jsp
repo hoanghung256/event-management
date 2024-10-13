@@ -35,7 +35,7 @@
                         <!-- BODY GO HERE -->
                         <div class="event__details-area">
                             <div class="row">
-                                <div class="col-xxl-7 col-xl-6">
+                                <div class="col-md-7 p-1">
                                     <div class="event__details-left">
                                         <div class="body__card-wrapper mb-20">
                                             <div class="card__header-top">
@@ -51,9 +51,14 @@
                                                             <img src="<c:url value="${event.organizer.avatarPath}"/>" alt="Organizer Avatar" onerror="this.onerror=null; this.src='assets/img/default-avatar.png';">
                                                         </div>
                                                         <div class="review__author-name">
-                                                            <h4>${event.organizer.fullname}</h4> 
+                                                            <a href="club/OrganizerProfileController?organizerId=${event.organizer.id}"style="text-decoration: none; color: inherit;">
+                                                                <h4 style="color: inherit; transition: color 0.3s ease;"
+                                                                    onmouseover="this.style.color = '#F50963';" 
+                                                                    onmouseout="this.style.color = 'inherit';">
+                                                                    ${event.organizer.fullname}
+                                                                </h4>
+                                                            </a>
                                                         </div>
-                                                    </a>
                                                 </div>
                                                 <div class="review__tab">
                                                     <nav>
@@ -80,7 +85,7 @@
                                                                 <h4>About This Event</h4>
                                                                 <p>${event.description}</p>
                                                             </div>
-
+                                                            
                                                             <div class="ticket__purchase-wrapper mt-30">
                                                                 <h4 class="ticket__purchase-title">Register Now</h4>
                                                                 <div class="ticket__price-inner">
@@ -103,7 +108,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xxl-5 col-xl-6">
+                                <div class="col-md-5 p-1">
                                     <div class="event__details-right">
                                         <div class="body__card-wrapper mb-20">
                                             <div class="event__meta-time">

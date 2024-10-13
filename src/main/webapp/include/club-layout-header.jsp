@@ -129,6 +129,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
                                 <div class="user__dropdown">
                                     <ul>
                                         <li>

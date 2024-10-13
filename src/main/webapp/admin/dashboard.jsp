@@ -416,7 +416,6 @@
         </div>
         <!-- end of organize event -->
         <!-- Dashboard area end -->
-
 </section>
-
+                                        
 <%@include file="../include/master-footer.jsp"%>
