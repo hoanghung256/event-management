@@ -9,22 +9,7 @@ package com.fuem.enums;
  * @author hoang hung
  */
 public enum Role {
-    ADMIN {
-        @Override
-        public String toString() {
-            return "Admin";
-        }
-    },
-    CLUB {
-        @Override
-        public String toString() {
-            return "Club";
-        }
-    },
-    STUDENT {
-        @Override
-        public String toString() {
-            return "Student";
-        }
-    },
+    ADMIN,
+    CLUB,
+    STUDENT;
 }

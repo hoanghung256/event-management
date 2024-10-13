@@ -71,7 +71,7 @@
         </div>
         <!--End of statistic number--> 
 
-        <!<!-- Start of Upcoming Event-->
+        <!-- Start of Upcoming Event-->
         <div>
             <c:if test="${not empty upcomingEvent}">
                 <c:forEach var="event" items="${upcomingEvent}">

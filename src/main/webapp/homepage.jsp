@@ -28,12 +28,12 @@
                         <form action="home" method="GET" class="row filter-form">
                             <!-- Row 1: Event Name, Event Type, Organizer -->
                             <div class="col-md-2 input">
-                                <label for="name" class="form-label">Event Name</label>
+                                <label for="name" class="form-label">Event name</label>
                                 <input type="text" id="name" name="name" value="${previousSearchEventCriteria.name}" class="form-control">
                             </div>
 
                             <div class="col-md-2 input">
-                                <label for="categoryId" class="form-label">Event Type</label>
+                                <label for="categoryId" class="form-label">Event category</label>
                                 <select id="categoryId" name="categoryId" class="form-select">
                                     <option value="" disabled selected>Select Category</option>
                                     <c:forEach var="category" items="${cateList}">
@@ -145,7 +145,7 @@
                                             ${event.dateOfEvent}
                                         </small>
                                     </div>
-                                    <img src="assets/img/event/event-details.jpg" alt="Event Image" style="width: 100%; height: auto;">
+                                    <img src="<c:url value="${event.images[0]}"/>" alt="Event Image" style="width: 100%; height: auto;">
                                 </div>
                                 <!-- Event Image - End -->
 
@@ -237,4 +237,3 @@
 </section>
 
 <%@include file="include/master-footer.jsp" %>
-

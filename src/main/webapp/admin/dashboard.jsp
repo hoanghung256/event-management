@@ -153,7 +153,7 @@
                                             <td>
                                                 <div class="attendant__user-item">
                                                     <div class="registration__user-thumb">
-                                                        <img src="${event.organizer.avatarPath}" alt="image not found">
+                                                        <img src="<c:url value="${event.organizer.avatarPath}"/>" alt="image not found">
                                                     </div>
                                                     <div class="attendant__user-title">
                                                         <span>${event.organizer.fullname}</span>

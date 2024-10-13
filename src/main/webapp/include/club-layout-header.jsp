@@ -68,12 +68,7 @@
                                     <span class="nav-text">Dashboard</span>
                                 </a>
                             </li>
-                            <li><a href="#" aria-expanded="false">
-                                    <i class="flaticon-calendar-1"></i>
-                                    <span class="nav-text">Create Event</span>
-                                </a>
-                            </li>
-                            <li><a href="#" aria-expanded="false">
+                            <li><a href="<c:url value="/club/register-event"/>" aria-expanded="false">
                                     <i class="flaticon-success"></i>
                                     <span class="nav-text">Register Event</span>
                                 </a>

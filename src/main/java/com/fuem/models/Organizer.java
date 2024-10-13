@@ -19,6 +19,10 @@ public class Organizer extends User {
 
     public Organizer() {
     }
+    
+    public Organizer(int id) {
+        super(id);
+    }
 
     public Organizer(int id, String acronym) {
         super(id);
