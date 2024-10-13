@@ -1,4 +1,4 @@
-GO
+﻿GO
 /*
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 <<<<<<<<<< BEGIN: CREATE DATABASE <<<<<<<<<<
@@ -171,10 +171,11 @@ CREATE TABLE [Notification] (
 CREATE TABLE [NotificationReceiver] (
 	[notificationId] INT,
 	[receiverId] INT,
+	[isOrganizer] BIT
 
-	CONSTRAINT PK_NotificationReceiver PRIMARY KEY ([notificationId], [receiverId]),
-	FOREIGN KEY ([receiverId]) REFERENCES [Student]([id]),
-	FOREIGN KEY ([notificationId]) REFERENCES [Notification]([id])
+	CONSTRAINT PK_NotificationReceiver PRIMARY KEY ([notificationId], [receiverId], [isOrganizer]),
+	FOREIGN KEY ([notificationId]) REFERENCES [Notification]([id]),
+
 );
 
 CREATE TABLE [EventCollaborator] (
@@ -394,7 +395,7 @@ BEGIN
     BEGIN
         -- Insert a new notification for the organizer
         INSERT INTO [Notification] ([senderId], [title], [content])
-        VALUES (@organizerId, 'This is important notification!', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
+        VALUES (@organizerId, 'This is an important notification!', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
 
         -- Get the ID of the inserted notification
         SET @notificationId = SCOPE_IDENTITY();
@@ -408,8 +409,9 @@ BEGIN
 
         WHILE @@FETCH_STATUS = 0
         BEGIN
-            INSERT INTO [NotificationReceiver] ([notificationId], [receiverId])
-            VALUES (@notificationId, @userId);
+            -- Insert into NotificationReceiver for students (isOrganizer = 0)
+            INSERT INTO [NotificationReceiver] ([notificationId], [receiverId], [isOrganizer])
+            VALUES (@notificationId, @userId, 0);
 
             FETCH NEXT FROM userCursor INTO @userId;
         END;
@@ -426,6 +428,7 @@ END;
 
 CLOSE organizerCursor;
 DEALLOCATE organizerCursor;
+
 
 INSERT INTO [Feedback] ([guestId], [eventId], [content])
 VALUES
@@ -484,3 +487,66 @@ VALUES
 >>>>>>>>> END: EXAMPLE DATA >>>>>>>>>>
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 */
+
+/*
+INSERT INTO NotificationReceiver (notificationId, receiverId) 
+VALUES (58, SELECT guestId FROM EventGuest 
+WHERE eventId = 100);
+
+INSERT INTO NotificationReceiver (notificationId, receiverId) 
+SELECT 58, guestId 
+FROM EventGuest 
+WHERE eventId = 5;
+
+DECLARE @guestId INT;
+DECLARE @eventId INT;
+
+-- Vòng lặp cho guestId từ 1 đến 6
+SET @guestId = 1;
+WHILE @guestId <= 6
+BEGIN
+    -- Lấy tất cả các eventId từ bảng Event
+    DECLARE event_cursor CURSOR FOR
+    SELECT id FROM Event;
+
+    OPEN event_cursor;
+    
+    FETCH NEXT FROM event_cursor INTO @eventId;
+
+    WHILE @@FETCH_STATUS = 0
+    BEGIN
+        -- Kiểm tra và chèn vào bảng EventGuest chỉ khi không có bản ghi trùng lặp
+        IF NOT EXISTS (SELECT 1 
+                       FROM EventGuest 
+                       WHERE guestId = @guestId AND eventId = @eventId)
+        BEGIN
+            INSERT INTO EventGuest (guestId, eventId, isRegistered)
+            VALUES (@guestId, @eventId, 1);
+        END
+
+        FETCH NEXT FROM event_cursor INTO @eventId;
+    END
+
+    CLOSE event_cursor;
+    DEALLOCATE event_cursor;
+
+    SET @guestId = @guestId + 1; -- Tăng guestId
+END;
+*/
+
+SELECT TOP 10 e.*, 
+       o.fullname AS organizerName, 
+       o.id AS organizerId, 
+       cate.id AS CategoryId, 
+       cate.categoryName, 
+       cate.categoryDescription, 
+       l.id AS locationId, 
+       l.locationDescription AS locationDescription 
+FROM Event e 
+JOIN Organizer o ON e.organizerId = o.id 
+JOIN Category cate ON e.categoryId = cate.id 
+JOIN Location l ON e.locationId = l.id 
+WHERE e.organizerId = 2
+AND e.guestRegisterCount > 0 
+AND e.dateOfEvent > GETDATE()
+ORDER BY e.dateOfEvent DESC;
