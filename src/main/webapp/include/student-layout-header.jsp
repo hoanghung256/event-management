@@ -12,12 +12,12 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Expovent - Event Management Dashboard HTML5 Template</title>
+        <title>FUEM-FPTU Event Management System</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-style-mode" content="1">
         <!-- Place favicon.ico in the root directory -->
-        <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
+        <link rel="shortcut icon" type="image/x-icon" href="assets/img/logo/logo-fpt-small.svg">
         <!-- CSS here -->
         <link rel="stylesheet" href="<c:url value='/assets/app/css/bootstrap.min.css' />">
         <link rel="stylesheet" href="<c:url value='/assets/app/css/meanmenu.min.css' />">
