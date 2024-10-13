@@ -479,6 +479,40 @@ VALUES
 (4, 3, 1, 1),
 (5, 1, 1, 1),
 (6, 3, 1, 0);
+
+ALTER TABLE NotificationReceiver
+ADD CONSTRAINT FK_NotificationReceiver_ReceiverId
+FOREIGN KEY (receiverId) REFERENCES Student(id)
+ON DELETE CASCADE;
+
+ALTER TABLE EventCollaborator
+ADD CONSTRAINT FK_EventCollaborator_StudentId
+FOREIGN KEY (studentId) REFERENCES Student(id)
+ON DELETE CASCADE;
+
+ALTER TABLE EventGuest
+ADD CONSTRAINT FK_EventGuest_GuestId
+FOREIGN KEY (guestId) REFERENCES Student(id)
+ON DELETE CASCADE;
+
+ALTER TABLE Feedback
+ADD CONSTRAINT FK_Feedback_GuestId
+FOREIGN KEY (guestId) REFERENCES Student(id)
+ON DELETE CASCADE;
+
+ALTER TABLE Follow
+ADD CONSTRAINT FK_Follow_StudentId
+FOREIGN KEY (studentId) REFERENCES Student(id)
+ON DELETE CASCADE;
+
+ INSERT INTO [Student] ([fullname], [studentId], [email], [password], [gender])
+VALUES
+('Hoang Van Hung', 'DE180081', 'hunghvde180081@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'FEMALE'),
+('Nguyen Van Anh', 'DE180041', 'anhnqde1800041@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'FEMALE'),
+('Nguyen Van Thang', 'DE180121', 'thangnmde180121@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'FEMALE'),
+('Huynh Van Khiem', 'DE180031', 'khiemhvde180031@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'FEMALE'),
+('Dinh Van Tu', 'DE180061', 'tudkde180061@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'FEMALE'),
+('Trinh Van Hoang An', 'DE180071', 'huytbhde180071@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'FEMALE');
 /*
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 >>>>>>>>> END: EXAMPLE DATA >>>>>>>>>>

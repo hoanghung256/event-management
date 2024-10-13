@@ -111,7 +111,7 @@
                                         <span class="nav-text">User Management</span>
                                     </a>
                                     <ul aria-expanded="false">
-                                        <li><a href="#">Student Accounts</a></li>
+                                        <li><a href="<c:url value="/admin/manage-student"/>">Student Accounts</a></li>
                                         <li><a href="#">Club Accounts</a></li>
                                     </ul>
                                 </li>
