@@ -76,7 +76,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#" aria-expanded="false">
+                                <a href="view-register-list" aria-expanded="false">
                                     <i class="flaticon-upcoming"></i>
                                     <span class="nav-text">Pending Post</span>
                                 </a>
