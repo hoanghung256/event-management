@@ -4,7 +4,7 @@
     Author     : ThangNM
 --%>
 <%@include file="../include/club-layout-header.jsp"%>
-<%@ page import="com.fuem.models.Event" %>
+
 <section>
     <!-- App side area start -->
     <div class="app__slide-wrapper">
@@ -71,7 +71,7 @@
         </div>
         <!--End of statistic number--> 
 
-        <!<!-- Start of Upcoming Event-->
+        <!-- Start of Upcoming Event-->
         <div>
             <c:if test="${not empty upcomingEvent}">
                 <c:forEach var="event" items="${upcomingEvent}">
@@ -107,7 +107,7 @@
                                                         <c:when test="${event.status == 'PENDING'}">
                                                             <span class="status__tag warning-bg">${event.status}</span>
                                                         </c:when>
-                                                        <c:when test="${event.status == 'CANCEL'}">
+                                                        <c:when test="${event.status == 'REJECTED'}">
                                                             <span class="status__tag bg-warn">${event.status}</span>
                                                         </c:when>
                                                         <c:when test="${event.status == 'ON_GOING'}">

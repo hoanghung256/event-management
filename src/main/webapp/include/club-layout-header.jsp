@@ -13,12 +13,12 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Expovent - Event Management Dashboard HTML5 Template</title>
+        <title>FUEM-FPTU Event Management System</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-style-mode" content="1">
         <!-- Place favicon.ico in the root directory -->
-        <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
+        <link rel="shortcut icon" type="image/x-icon" href="assets/img/logo/logo-fpt-small.svg">
         <!-- CSS here -->
         <link rel="stylesheet" href="<c:url value='/assets/app/css/bootstrap.min.css' />">
         <link rel="stylesheet" href="<c:url value='/assets/app/css/meanmenu.min.css' />">
@@ -50,7 +50,7 @@
             <div class="expovent__sidebar">
                 <div class="logo-details">
                     <span>
-                        <a href="dashboard.html">
+                        <a href="<c:url value="/club/dashboard"/>">
                             <img class="logo__white" src="<c:url value="/assets/img/logo/logo-fpt-small.svg"/>" alt="logo not found">
                         </a>
                     </span>
@@ -63,32 +63,27 @@
                 <div class="sidebar__inner simple-bar">
                     <div class="dlabnav">
                         <ul class="metismenu" id="menu">
-                            <li><a href="#" aria-expanded="false">
+                            <li><a href="<c:url value="/club/dashboard"/>" aria-expanded="false">
                                     <i class="flaticon-home"></i>
                                     <span class="nav-text">Dashboard</span>
                                 </a>
                             </li>
-                            <li><a href="#" aria-expanded="false">
-                                    <i class="flaticon-calendar-1"></i>
-                                    <span class="nav-text">Create Event</span>
-                                </a>
-                            </li>
-                            <li><a href="#" aria-expanded="false">
+                            <li><a href="<c:url value="/club/register-event"/>" aria-expanded="false">
                                     <i class="flaticon-success"></i>
                                     <span class="nav-text">Register Event</span>
                                 </a>
                             </li>
                             <li><a href="#" aria-expanded="false">
-                                    <i class="flaticon-user-1"></i>
+                                    <i class="flaticon-email"></i>
                                     <span class="nav-text">Send File</span>
                                 </a>
                             </li>
-                            <li><a href="#" aria-expanded="false">
+                            <li><a href="<c:url value="/club/send-event-notification"/>" aria-expanded="false">
                                     <i class="flaticon-user-1"></i>
                                     <span class="nav-text">Send Notification</span>
                                 </a>
                             </li>
-                            <li><a href="<c:url value="/admin/organized-event"/>" aria-expanded="false">
+                            <li><a href="<c:url value="/club/organized-event"/>" aria-expanded="false">
                                     <i class="flaticon-user-1"></i>
                                     <span class="nav-text">Organized Events</span>
                                 </a>
@@ -134,6 +129,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
                                 <div class="user__dropdown">
                                     <ul>
                                         <li>

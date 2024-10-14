@@ -1,11 +1,11 @@
 <%-- 
-    Document   : event-details
-    Created on : Sep 25, 2024, 5:07:43?PM
-    Author     : TuDK
+    Document   : approve-events
+    Created on : Oct 10, 2024, 10:07:43?AM
+    Author     : ThangNM
 --%>
 
-<%@include file="include/student-layout-header.jsp"%>
-
+<%@include file="../include/admin-layout-header.jsp"%>
+<%@ page import="com.fuem.models.Event" %>
 <section>
     <div class="app__slide-wrapper">
         <div class="breadcrumb__area">
@@ -48,7 +48,7 @@
                                                 <div class="review__author-meta mb-15">
                                                     <a href="#">
                                                         <div class="review__author-thumb">
-                                                            <img src="<c:url value="${event.organizer.avatarPath}"/>" alt="Organizer Avatar" onerror="this.onerror=null; this.src='assets/img/default-avatar.png';">
+                                                            <img src="${event.organizer.avatarPath}" alt="Organizer Avatar" onerror="this.onerror=null; this.src='assets/img/default-avatar.png';">
                                                         </div>
                                                         <div class="review__author-name">
                                                             <a href="club/OrganizerProfileController?organizerId=${event.organizer.id}"style="text-decoration: none; color: inherit;">
@@ -72,7 +72,7 @@
                                                                 <c:choose>
                                                                     <c:when test="${not empty event.images}">
                                                                         <c:forEach var="image" items="${event.images}">
-                                                                            <img src="<c:url value="${image}"/>" alt="Event Image" />
+                                                                            <img src="http://127.0.0.1:5500/muontheme/codeskdhaka.com/html/expovent-prev/expovent/assets/img/event/event-details-2.jpg" alt="Event Image" />
                                                                         </c:forEach>
                                                                     </c:when>
                                                                     <c:otherwise>
@@ -83,21 +83,19 @@
 
                                                             <div class="about__content mt-30">
                                                                 <h4>About This Event</h4>
-                                                                <p>${event.description}</p>
+                                                                <p>Hello World</p>
                                                             </div>
-                                                            
+
                                                             <div class="ticket__purchase-wrapper mt-30">
-                                                                <h4 class="ticket__purchase-title">Register Now</h4>
                                                                 <div class="ticket__price-inner">
                                                                     <div class="ticket__price-item">
-                                                                        <c:if test="${event.collaboratorRegisterLimit != 0}">
-                                                                            <button class="unfield__input-btn" type="submit">Collaborator register</button>
-                                                                        </c:if>
+
                                                                     </div>
                                                                     <div class="ticket__price-item">
-                                                                        <c:if test="${event.guestRegisterLimit != 0}">
-                                                                            <button class="unfield__input-btn" type="submit">Guest register</button>
-                                                                        </c:if>
+                                                                        <form action="<c:url value="/admin/approval-events?eventId=${event.id}"/>" method="POST" onsubmit="return confirmAction(event)">
+                                                                            <button class="element__btn green-bg" type="submit" value="approve" name="action">Approve</button>
+                                                                            <button class="element__btn red-bg" type="submit" value="rejected" name="action">Rejected</button>
+                                                                        </form>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -145,8 +143,29 @@
                 </div>
             </div>
         </div>
-        <!--End content cua page-->
+        <!--End content of page-->
     </div>
 </section>
+<c:if test="${param.success eq 'true'}">
+    <script>
+        window.onload = function () {
+            alert('Action processed successfully!');
+        };
+    </script>
+</c:if>
+<script>
+    function confirmAction(event) {
+        const action = event.submitter.value;
+        let message = 'Are you sure you want to proceed with this action?';
 
-<%@include file="include/master-footer.jsp" %>
+        if (action === 'approve') {
+            message = 'Are you sure you want to approve this event?';
+        } else if (action === 'rejected') {
+            message = 'Are you sure you want to reject this event?';
+        }
+
+        return confirm(message);
+    }
+</script>
+
+<%@include file="../include/master-footer.jsp" %>

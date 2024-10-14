@@ -15,22 +15,24 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author Administrator
+ * @author TuDK
  */
-@WebServlet(name = "EventDetailsController", urlPatterns = { "/event-detail" })
+@WebServlet(name = "EventDetailsController", urlPatterns = {"/event-detail"})
 public class EventDetailsController extends HttpServlet {
 
+    EventDAO eventDAO = new EventDAO();
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int eventId = Integer.parseInt(request.getParameter("eventId"));
-        EventDAO eventDAO = new EventDAO();
 
         Event event = eventDAO.getEventDetails(eventId);
 
         if (event != null) {
             request.setAttribute("event", event);
+            System.out.println("Event found: " + event.getFullname());
         } else {
             request.setAttribute("error", "Get data failed!");
+            System.out.println("No event found for eventId: " + eventId);
         }
         request.getRequestDispatcher("event-details.jsp").forward(request, response);
 
