@@ -26,10 +26,21 @@ public abstract class User {
         this.id = id;
     }
     
+    public User(String fullname, String email ) {
+        this.fullname = fullname;
+        this.email = email;
+    }
+    
     public User(String fullname, String email, String password) {
         this.fullname = fullname;
         this.email = email;
         this.password = password;
+    }
+    
+    public User(String fullname, int id, String email) {
+        this.id = id;
+        this.fullname = fullname;
+        this.email = email;
     }
 
     public User(int id, String fullname, String avatarPath) {
