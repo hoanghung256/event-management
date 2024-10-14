@@ -11,11 +11,11 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Expovent - Event Management Dashboard HTML5 Template</title>
+        <title>FUEM-FPTU Event Management System</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-style-mode" content="1">
-        <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
+        <link rel="shortcut icon" type="image/x-icon" href="assets/img/logo/logo-fpt-small.svg">
         <link rel="stylesheet" href="assets/app/css/bootstrap.min.css">
         <link rel="stylesheet" href="assets/app/css/meanmenu.min.css">
         <link rel="stylesheet" href="assets/app/css/animate.css">
@@ -87,7 +87,7 @@
                                             </g>
                                             <defs>
                                             <clipPath id="clip0_322_540">
-                                                <rect width="20" height="20" fill="white"/>
+                                                <rect width="20" height="20"/>
                                             </clipPath>
                                             </defs>
                                             </svg>

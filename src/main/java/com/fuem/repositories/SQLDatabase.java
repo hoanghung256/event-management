@@ -4,15 +4,19 @@
  */
 package com.fuem.repositories;
 
-import com.fuem.utils.DataSourceWrapper;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.sql.Types;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.sql.Date;
+import java.sql.Statement;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,25 +26,14 @@ import java.util.logging.Logger;
  */
 public abstract class SQLDatabase {
 
-    private Connection conn;
     private static final Logger logger = Logger.getLogger(SQLDatabase.class.getName());
 
     public SQLDatabase() {
-        try {
-            this.conn = DataSourceWrapper.getDataSource().getConnection();
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, null, e);
-        }
-    }
-
-    public Statement getStatement() {
-        Statement statement = null;
-        try {
-            statement = conn.createStatement();
-        } catch (SQLException ex) {
-            Logger.getLogger(SQLDatabase.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return statement;
+//        try {
+//            this.conn = DataSourceWrapper.getDataSource().getConnection();
+//        } catch (SQLException e) {
+//            logger.log(Level.SEVERE, null, e);
+//        }
     }
 
     private boolean checkNString(String des) {
@@ -52,26 +45,24 @@ public abstract class SQLDatabase {
         return false;
     }
 
-    private PreparedStatement getPreparedStatement(String sql, Object... values) {
-        if (conn == null) return null;
-        
-        PreparedStatement statement = null;
+    public PreparedStatement getPreparedStatement(PreparedStatement statement, Connection conn, String sql, Object... values) {
+        if (conn == null) {
+            return null;
+        }
         
         try {
-            statement = conn.prepareStatement(sql);
+            if (statement == null) {
+                statement = conn.prepareStatement(sql);
+            }
 
             if (values.length == 0) {
                 return statement;
             }
 
-            for (int i = 0; i < values.length; i++) {
+            for (int i = 0;i < values.length; i++) {
                 if (values[i] == null) {
-                    if (values[i] instanceof Date) {
-                        statement.setNull(i + 1, Types.DATE);
-                    } else {
-                        statement.setNull(i + 1, Types.NULL);
-                    }
-                } else if (values[i] instanceof Character) {
+                    statement.setNull(i + 1, Types.NULL);
+                }  else if (values[i] instanceof Character) {
                     statement.setString(i + 1, values[i] + "");
                 } else if (values[i] instanceof Integer) {
                     statement.setInt(i + 1, (int) values[i]);
@@ -83,24 +74,30 @@ public abstract class SQLDatabase {
                     } else {
                         statement.setString(i + 1, (String) values[i]);
                     }
-                } else if (values[i] instanceof Date) {
-                    statement.setString(i + 1, new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS").format((Date) values[i]));
+                } else if (values[i] instanceof java.util.Date) {
+                    statement.setTimestamp(i + 1, new Timestamp(((java.util.Date) values[i]).getTime()));
                 } else if (values[i] instanceof java.sql.Date) {
-                    statement.setDate(i + 1, (java.sql.Date) values[i]);
+                    statement.setTimestamp(i + 1, new Timestamp(((java.util.Date) values[i]).getTime()));
+                } else if (values[i] instanceof LocalDate) {
+                    statement.setDate(i + 1, Date.valueOf((LocalDate) values[i]));
+                } else if (values[i] instanceof LocalTime) {
+                    statement.setTime(i + 1, Time.valueOf((LocalTime) values[i]));
+                } else if (values[i] instanceof LocalDateTime) {
+                    statement.setTimestamp(i + 1, Timestamp.valueOf((LocalDateTime) values[i]));
                 } else {
-                    statement.setString(i + 1, values[i].toString());
+                    statement.setObject(i + 1, values[i].toString());
                 }
             }
         } catch (SQLException e) {
             Logger.getLogger(SQLDatabase.class.getName()).log(Level.SEVERE, null, e);
         }
-            
+        
         return statement;
     }
 
-    public void executePreparedStatement(String sql, Object... values) {
+    public void executePreparedStatement(Connection conn, String sql, Object... values) {
         try {
-            getPreparedStatement(sql, values).execute();
+            getPreparedStatement(null, conn, sql, values).execute();
         } catch (SQLException e) {
             Logger.getLogger(SQLDatabase.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -109,13 +106,14 @@ public abstract class SQLDatabase {
 
     /**
      * Use for INSERT, UPDATE, DELETE action
-     * 
+     *
      * @return number of changed records
      */
-    public int executeUpdatePreparedStatement(String sql, Object... values) {
+    public int executeUpdatePreparedStatement(Connection conn, String sql, Object... values) {
         int i = -1;
         try {
-            i = getPreparedStatement(sql, values).executeUpdate();
+            PreparedStatement stm = getPreparedStatement(null, conn, sql, values);
+            i = stm.executeUpdate();
         } catch (SQLException e) {
             Logger.getLogger(SQLDatabase.class.getName()).log(Level.SEVERE, null, e);
         }
@@ -126,11 +124,12 @@ public abstract class SQLDatabase {
     /**
      * Use for SELECT action
      */
-    public ResultSet executeQueryPreparedStatement(String sql, Object... values) {
+    public ResultSet executeQueryPreparedStatement(Connection conn, String sql, Object... values) {
         ResultSet rs = null;
-        
+
         try {
-            rs = getPreparedStatement(sql, values).executeQuery();
+            PreparedStatement ps = getPreparedStatement(null, conn, sql, values);
+            rs = ps.executeQuery();
         } catch (SQLException e) {
             Logger.getLogger(SQLDatabase.class.getName()).log(Level.SEVERE, null, e);
         }

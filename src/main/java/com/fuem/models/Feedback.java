@@ -4,52 +4,18 @@
  */
 package com.fuem.models;
 
+import com.furm.models.Student;
+
 /**
  *
- * @author ADMIN
+ * @author HungHV
  */
-
 public class Feedback {
-    private long guestId; // Cập nhật kiểu dữ liệu
-    private long eventId; // Cập nhật kiểu dữ liệu
+
+    private Student guest;
+    private int eventId;
     private String content;
 
-    public Feedback(long guestId, long eventId, String content) {
-        this.guestId = guestId;
-        this.eventId = eventId;
-        this.content = content;
-    }
-
-    // Các phương thức getter và setter
-
-    public long getGuestId() {
-        return guestId;
-    }
-
-    public void setGuestId(long guestId) {
-        this.guestId = guestId;
-    }
-
-    public long getEventId() {
-        return eventId;
-    }
-
-    public void setEventId(long eventId) {
-        this.eventId = eventId;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    @Override
-    public String toString() {
-        return "Feedback{" + "guestId=" + guestId + ", eventId=" + eventId + ", content=" + content + '}';
+    public Feedback() {
     }
 }
-
-    // Getters and Setters

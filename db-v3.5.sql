@@ -1,4 +1,4 @@
-GO
+﻿GO
 /*
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 <<<<<<<<<< BEGIN: CREATE DATABASE <<<<<<<<<<
@@ -56,9 +56,9 @@ GO
 	CLOSE tableCursor
 	DEALLOCATE tableCursor
 /*
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
->>>>>>>>>> END: RESET DATABASE >>>>>>>>>>
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>> END: RESET DATABASE >>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 */
 GO
 /*
@@ -122,7 +122,7 @@ CREATE TABLE [Event] (
 	[dateOfEvent] DATE,
 	[startTime] TIME,
 	[endTime] TIME,
-	[status] NVARCHAR(15), --PENDING / APPROVED / REJECTED
+	[status] NVARCHAR(15) DEFAULT('PENDING'), --PENDING / APPROVED / REJECTED
 	[guestRegisterLimit] INT,
 	[collaboratorRegisterLimit] INT,
 	[guestAttendedCount] INT DEFAULT (0),
@@ -131,7 +131,6 @@ CREATE TABLE [Event] (
 	[collaboratorRegisterCount] INT DEFAULT (0),
 	[guestRegisterDeadline] DATE,
 	[collaboratorRegisterDeadline] DATE,
-	[guestRegisterCancelCount] INT DEFAULT(0),
 
 	CONSTRAINT PK_Event PRIMARY KEY ([id]),
 	FOREIGN KEY ([organizerId]) REFERENCES [Organizer]([id]),
@@ -172,10 +171,11 @@ CREATE TABLE [Notification] (
 CREATE TABLE [NotificationReceiver] (
 	[notificationId] INT,
 	[receiverId] INT,
+	[isOrganizer] BIT
 
-	CONSTRAINT PK_NotificationReceiver PRIMARY KEY ([notificationId], [receiverId]),
-	FOREIGN KEY ([receiverId]) REFERENCES [Student]([id]),
-	FOREIGN KEY ([notificationId]) REFERENCES [Notification]([id])
+	CONSTRAINT PK_NotificationReceiver PRIMARY KEY ([notificationId], [receiverId], [isOrganizer]),
+	FOREIGN KEY ([notificationId]) REFERENCES [Notification]([id]),
+
 );
 
 CREATE TABLE [EventCollaborator] (
@@ -219,9 +219,9 @@ CREATE TABLE [Follow] (
 	FOREIGN KEY ([organizerId]) REFERENCES [Organizer]([id])
 );
 /*
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
->>>>>>>>>> END: TABLES >>>>>>>>>>
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>> END: TABLES >>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 */
 GO
 /*
@@ -304,9 +304,9 @@ BEGIN
    WHERE id IN (SELECT organizerId FROM deleted);
 END;
 /*
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
->>>>>>>>>> END: TRIGGERS >>>>>>>>>>
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>> END: TRIGGERS >>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 */
 GO
 /*
@@ -357,7 +357,7 @@ BEGIN
     SET @randomOrganizerId = 1 + FLOOR(RAND() * 5);
 
     INSERT INTO [Event] 
-    ([organizerId], [fullname], [description], [categoryId], [locationId], [dateOfEvent], [startTime], [endTime], [guestRegisterLimit], [guestRegisterDeadline], [colaboratorRegisterDeadline])
+    ([organizerId], [fullname], [description], [categoryId], [locationId], [dateOfEvent], [startTime], [endTime], [guestRegisterLimit], [guestRegisterDeadline], [collaboratorRegisterDeadline])
     VALUES 
     (
         @randomOrganizerId,
@@ -395,7 +395,7 @@ BEGIN
     BEGIN
         -- Insert a new notification for the organizer
         INSERT INTO [Notification] ([senderId], [title], [content])
-        VALUES (@organizerId, 'This is important notification!', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
+        VALUES (@organizerId, 'This is an important notification!', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
 
         -- Get the ID of the inserted notification
         SET @notificationId = SCOPE_IDENTITY();
@@ -409,8 +409,9 @@ BEGIN
 
         WHILE @@FETCH_STATUS = 0
         BEGIN
-            INSERT INTO [NotificationReceiver] ([notificationId], [receiverId])
-            VALUES (@notificationId, @userId);
+            -- Insert into NotificationReceiver for students (isOrganizer = 0)
+            INSERT INTO [NotificationReceiver] ([notificationId], [receiverId], [isOrganizer])
+            VALUES (@notificationId, @userId, 0);
 
             FETCH NEXT FROM userCursor INTO @userId;
         END;
@@ -427,6 +428,7 @@ END;
 
 CLOSE organizerCursor;
 DEALLOCATE organizerCursor;
+
 
 INSERT INTO [Feedback] ([guestId], [eventId], [content])
 VALUES
@@ -481,7 +483,8 @@ VALUES
 (5, 1, 1, 1),
 (6, 3, 1, 0);
 /*
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
->>>>>>>>>> END: EXAMPLE DATA >>>>>>>>>>
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+>>>>>>>>> END: EXAMPLE DATA >>>>>>>>>>
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+<<<<<<< HEAD
 */

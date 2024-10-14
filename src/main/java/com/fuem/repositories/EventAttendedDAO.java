@@ -8,6 +8,8 @@ import com.fuem.models.Event;
 import com.fuem.models.EventGuest;
 import com.fuem.repositories.helpers.Page;
 import com.fuem.repositories.helpers.PagingCriteria;
+import com.fuem.utils.DataSourceWrapper;
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -49,11 +51,12 @@ public class EventAttendedDAO extends SQLDatabase{
     } 
     
     public Page<Event> getAttendedEventsList(PagingCriteria pagingCriteria, int userId){
-        ResultSet rs = executeQueryPreparedStatement(SELECT_ATTENDED_EVENTS, userId, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());
+        
         Page<Event> page = new Page<>();
         ArrayList<Event> eventsAttendedList = new ArrayList<>();
         
-        try{
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ATTENDED_EVENTS, userId, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());){
             while(rs.next()){
                 if (page.getTotalPage() == null && page.getCurrentPage() == null) {
                     page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));

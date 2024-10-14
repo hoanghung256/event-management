@@ -10,6 +10,7 @@ package com.fuem.repositories;
  */
 import com.fuem.models.Notification;
 import com.fuem.models.Organizer;
+import com.fuem.utils.DataSourceWrapper;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -23,17 +24,36 @@ public class NotificationDAO extends SQLDatabase {
         super();
     }
 
+    private static String SELECT_NOTIFICATION_FOR_USER = "SELECT TOP 10 n.id, n.senderId, n.content, n.sendingTime, o.acronym AS senderName "
+            + "FROM Notification n "
+            + "JOIN NotificationReceiver nr ON n.id = nr.notificationId "
+            + "JOIN Organizer o ON n.senderId = o.id "
+            + "WHERE nr.receiverId = ? "
+            + "AND nr.isOrganizer = 0 "
+            + "ORDER BY n.sendingTime DESC";
+
+    private static String INSERT_NEW_NOTIFICATION = "INSERT INTO [Notification] (senderId, content) "
+            + "VALUES (?, ?)";
+
+    private static String INSERT_NOTIFICATION_RECEIVER = "INSERT INTO NotificationReceiver (notificationId, receiverId, isOrganizer) "
+            + "SELECT DISTINCT ?, guestId, 0 "
+            + "FROM EventGuest "
+            + "WHERE eventId IN (";
+    
+    private static String INSERT_NOTIFICATION_RECEIVER_AS_ALL_STUDENT = "INSERT INTO NotificationReceiver (notificationId, receiverId, isOrganizer) "
+            + "SELECT ?, id, 0 "
+            + "FROM Student";
+    
+    private static String INSERT_NOTIFICATION_RECEIVER_AS_ALL_CLUB = "INSERT INTO NotificationReceiver (notificationId, receiverId, isOrganizer) "
+            + "SELECT ?, id, 1 "
+            + "FROM Organizer "
+            + "WHERE isAdmin = 0";
+
     public List<Notification> getNotificationsForUser(int userId) {
         List<Notification> notifications = new ArrayList<>();
 
-        String sql = "SELECT n.id, n.senderId, n.content, n.sendingTime, o.acronym AS senderName "
-                + "FROM Notification n "
-                + "JOIN NotificationReceiver nr ON n.id = nr.notificationId "
-                + "JOIN Organizer o ON n.senderId = o.id "
-                + "WHERE nr.receiverId = ?";
-
-        ResultSet resultSet = executeQueryPreparedStatement(sql, userId);
-        try {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
+                ResultSet resultSet = executeQueryPreparedStatement(conn, SELECT_NOTIFICATION_FOR_USER, userId);) {
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
 
@@ -51,5 +71,96 @@ public class NotificationDAO extends SQLDatabase {
         }
 
         return notifications;
+    }
+
+    /**
+     *
+     * @author AnhNQ Insert and return the id of new notification
+     */
+    public int insertAndGetIdOfNewNotification(int senderId, String content) {
+        int generatedId = -1;
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
+                PreparedStatement pstmt = conn.prepareStatement(INSERT_NEW_NOTIFICATION, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setInt(1, senderId);
+            pstmt.setString(2, content);
+            int affectedRows = pstmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        generatedId = generatedKeys.getInt(1); // Lấy ID vừa chèn
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(NotificationDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return generatedId;
+    }
+
+    /**
+     *Insert notiId and receiverId into Notification Receiver table
+     * @author AnhNQ 
+     */
+    public int insertIntoNotificationReceiver(String[] eventIds, int notificationId) throws SQLException {
+        int res = 0;
+        if (notificationId > 0 && eventIds.length != 0) {
+            try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
+                res = executeUpdatePreparedStatement(conn, buildInsertQuery(eventIds), notificationId);
+            } catch (SQLException ex) {
+                Logger.getLogger(NotificationDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return res;
+    }
+
+    /**
+     *
+     * @author AnhNQ 
+     */
+    private String buildInsertQuery(String[] eventIds) {
+        StringBuilder sb = new StringBuilder(INSERT_NOTIFICATION_RECEIVER);
+        for (int i = 0; i < eventIds.length; i++) {
+            sb.append(eventIds[i]);
+            if (i == eventIds.length - 1) {
+                sb.append(");");
+            } else {
+                sb.append(", ");
+            }
+        }
+        System.out.println(sb.toString());
+        return sb.toString();
+    }
+    
+    /**
+     *
+     * @author AnhNQ 
+     */
+    public int insertNotificationReceiverForAllStudent(int notificationId) throws SQLException {
+        int res = 0;
+        if (notificationId > 0) {
+            try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
+                res = executeUpdatePreparedStatement(conn, INSERT_NOTIFICATION_RECEIVER_AS_ALL_STUDENT, notificationId);
+            } catch (SQLException ex) {
+                Logger.getLogger(NotificationDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return res;
+    }
+    
+    /**
+     *
+     * @author AnhNQ 
+     */
+    public int insertNotificationReceiverForAllClub(int notificationId) throws SQLException {
+        int res = 0;
+        if (notificationId > 0) {
+            try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
+                res = executeUpdatePreparedStatement(conn, INSERT_NOTIFICATION_RECEIVER_AS_ALL_CLUB, notificationId);
+            } catch (SQLException ex) {
+                Logger.getLogger(NotificationDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return res;
     }
 }

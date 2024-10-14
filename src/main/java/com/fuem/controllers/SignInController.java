@@ -1,13 +1,16 @@
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.fuem.controllers;
 
+import com.fuem.enums.Role;
 import com.fuem.models.Organizer;
 import com.fuem.repositories.StudentDAO;
 import com.fuem.models.Student;
 import com.fuem.repositories.OrganizerDAO;
+
 import com.fuem.utils.Hash;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -48,7 +51,11 @@ public class SignInController extends HttpServlet {
                 if (organizer != null) {
                     HttpSession session = request.getSession();
                     session.setAttribute("userInfor", organizer);
-                    request.getRequestDispatcher("homepage").forward(request, response);
+                    if (organizer.getRole() == Role.ADMIN) {
+                        response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+                    } else {
+                        response.sendRedirect(request.getContextPath() + "/club/dashboard");
+                    }
                 } else {
                     request.setAttribute("error", "Email hoặc mật khẩu không đúng");
                     request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
