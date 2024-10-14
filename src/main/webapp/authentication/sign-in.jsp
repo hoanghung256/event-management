@@ -38,8 +38,8 @@
                     <div class="sign__header">
                         <div class="sign__logo">
                             <a href="dashboard.html">
-                                <img class="logo-black" src="assets/img/logo/logo-fpt.png" alt="image not found" style="width: 150px;">
-                                <img class="logo-white" src="assets/img/eventlogo.png" alt="image not found">
+                                <img class="logo-black" src="assets/img/logo/logoFpt.svg.png" alt="image not found">
+                                <img class="logo-white" src="assets/img/logoFpt.svg.png" alt="image not found">
                             </a>
                         </div>
                     </div>
@@ -106,7 +106,7 @@
                     </div>
                 </div>
                 <div class="sign__right">
-                    <div class="sign__input-thumb" data-background="assets/img/login_img.jpg">
+                    <div class="sign__input-thumb" data-background="assets/img/sign/signin.jpg">
                     </div>
                 </div>
             </div>

@@ -72,7 +72,6 @@ public class SignInController extends HttpServlet {
                     request.setAttribute("error", "Email hoặc mật khẩu không đúng");
                     request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
                 }
-                return;
             }
         } catch (IOException | ServletException e) {
             Logger.getLogger(SignInController.class.getName()).log(Level.SEVERE, null, e);

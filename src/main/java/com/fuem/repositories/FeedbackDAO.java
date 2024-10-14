@@ -1,3 +1,5 @@
+package com.fuem.repositories;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
@@ -35,7 +37,12 @@ public class FeedbackDAO extends SQLDatabase {
             + "    Student s ON f.guestId = s.id "
             + "WHERE "
             + "    f.eventId = ?;";
+    private static final String INSERT_FEEDBACK = "INSERT INTO Feedback (guestId, eventId, content) VALUES (?, ?, ?)";
 
+    /**
+     *
+     * @author TuDK
+     */ 
     public List<Feedback> getEventFeedbackByEventId(int eventId) throws SQLException {
     List<Feedback> feedbackList = new ArrayList<>();
 
@@ -65,6 +72,25 @@ public class FeedbackDAO extends SQLDatabase {
     }
 
     return feedbackList;
+  }
+  
+  /**
+   *
+   * @author KhiemHV
+   */ 
+  public boolean saveFeedback(Feedback feedback) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); // Lấy kết nối từ phương thức getConnection()
+             PreparedStatement ps = conn.prepareStatement(INSERT_FEEDBACK)) {
+            
+            ps.setInt(1, (int) feedback.getGuestId());  // Thiết lập guestId
+            ps.setInt(2, (int) feedback.getEventId());  // Thiết lập eventId
+            ps.setString(3, feedback.getContent()); // Thiết lập nội dung phản hồi
+            
+            return ps.executeUpdate() > 0; // Trả về true nếu đã lưu thành công
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error saving feedback", e);
+            return false; // Trả về false nếu có lỗi
+        }
+    }
 }
 
-}
