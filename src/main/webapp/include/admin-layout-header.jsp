@@ -8,8 +8,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!doctype html>
 <html class="no-js" lang="zxx">
-
-    <!-- Mirrored from codeskdhaka.com/html/expovent-prev/expovent/event-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 22 Sep 2024 08:44:54 GMT -->
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -54,7 +52,7 @@
                         </a>
                     </span>
                     <span>
-                        <a href="dashboard.html">
+                        <a href="#">
                             <img class="log__smnall" style="margin-left: 1rem;" src="<c:url value="/assets/img/logo/logoFpt.svg.png"/>" width="65%" alt="logo not found">
                         </a>
                     </span>
@@ -240,3 +238,4 @@
                             </div>
                         </div>
                     </div>
+                </div>
