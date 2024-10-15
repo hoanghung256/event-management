@@ -74,8 +74,8 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     --clr-common-placeholder: #CDCDCD;
     --clr-common-heading: #333333;
     --clr-common-body-text: #111111;
-    --clr-theme-1: #F7426F;
-    --clr-theme-2: #ED1616;
+    --clr-theme-1: #ff6f00;
+    --clr-theme-2: #ffb300;
     --clr-theme-3: #FFA300;
     --clr-text-primary: #ffffff;
     --clr-text-secondary: #111111;
@@ -137,7 +137,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     --clr-gradient-7: linear-gradient(91.11deg, #F7426F -2.47%, #F87A58 91.34%);
     --clr-gradient-8: linear-gradient(91.95deg, #F87A58 0%, #F7426F 99.23%);
     --clr-gradient-9: linear-gradient(90deg, #4295F7, #B258F8, #B258F8, #4295F7);
-    --clr-gradient-10: linear-gradient(90deg, #F7C442, #F87A58, #F87A58, #F7C442);
+    --clr-gradient-10: linear-gradient(90deg, #ffa200, #F87A58, #F87A58, #ffa200);
     --clr-gradient-11: linear-gradient(90deg, #F721E2, #DB3A64, #DB3A64, #F721E2);
     --clr-gradient-12: linear-gradient(90deg, #21EAF7, #3A71DB, #3A71DB, #21EAF7);
     --clr-gradient-13: linear-gradient(90deg, #25F721, #099E33, #099E33, #25F721);
@@ -1395,8 +1395,8 @@ input[type=file] {
 }
 
 .element__btn.border-yellow {
-    color: #F7C442;
-    border: 1px solid #F7C442;
+    color: #F87A58;
+    border: 1px solid #F87A58;
 }
 .element__btn.border-yellow:hover {
     color: var(--clr-common-white);
@@ -3774,7 +3774,7 @@ input[type=file] {
     }
 }
 [bd-theme=bd-theme-dark] .expovent__sidebar.collapsed .dlabnav .metismenu li ul li a:hover {
-    background: var(--clr-bg-4);
+    background: red;
     color: var(--clr-common-white);
 }
 .expovent__sidebar.collapsed .sidebar__copyright p {
@@ -4829,25 +4829,6 @@ input[type=file] {
 }
 [bd-theme=bd-theme-dark] .expovent__count-item {
     background: var(--clr-bg-6);
-}
-.expovent__count-item:hover {
-    filter: drop-shadow(0px 4px 35px rgba(247, 66, 111, 0.3));
-}
-.expovent__count-item:hover .expovent__count-number {
-    color: var(--clr-common-white);
-}
-.expovent__count-item:hover .expovent__count-thumb {
-    opacity: 1;
-}
-.expovent__count-item:hover .expovent__count-text {
-    color: var(--clr-common-white);
-}
-.expovent__count-item:hover .expovent__count-icon {
-    background-color: transparent;
-    border-color: var(--clr-common-white);
-}
-.expovent__count-item:hover .expovent__count-icon i {
-    color: var(--clr-common-white);
 }
 .expovent__count-thumb {
     position: absolute;
@@ -9175,7 +9156,7 @@ input[type=file] {
 .truncated-text {
     display: -webkit-box;          /* Thiết lập chế độ hiển thị box */
     -webkit-box-orient: vertical;  /* Hướng của box là dọc */
-    -webkit-line-clamp: 2;        /* Giới hạn số dòng hiển thị là 3 */
+    -webkit-line-clamp: 2;        /* Giới hạn số dòng hiển thị là 2 */
     overflow: hidden;              /* Ẩn nội dung thừa */
     text-overflow: ellipsis;      /* Hiển thị dấu ba chấm (...) nếu có nội dung bị cắt */
 }
