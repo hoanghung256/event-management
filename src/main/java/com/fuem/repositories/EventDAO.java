@@ -658,6 +658,7 @@ public class EventDAO extends SQLDatabase {
         return generatedId;
     }
     
+    /*
      * Update status to database
      *
      * @author ThangNM

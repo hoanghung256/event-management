@@ -12,6 +12,5 @@ public enum Status {
     PENDING,
     APPROVED,
     REJECTED,
-    ON_GOING,
     ON_GOING;
 }

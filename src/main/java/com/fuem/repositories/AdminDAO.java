@@ -80,6 +80,7 @@ public class AdminDAO extends SQLDatabase {
             + "FETCH NEXT ? ROWS ONLY";
 
     private static String SELECT_ORGANIZED_EVENTS = "SELECT\n"
+            + "    Event.id AS EventId, \n"
             + "    Event.fullname AS EventName,\n"
             + "    Event.dateOfEvent AS EventDate,\n"
             + "    Location.locationName AS LocationName,\n"
