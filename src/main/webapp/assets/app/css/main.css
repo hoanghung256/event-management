@@ -233,7 +233,7 @@ p {
     font-size: var(--bd-fs-p);
     font-weight: var(--bd-fw-normal);
     color: var(--clr-text-3);
-    margin-bottom: 5px;
+    margin-bottom: 15px;
     line-height: 26px;
 }
 
@@ -819,7 +819,7 @@ input[type=file] {
 
 .input__btn {
     font-size: 16px;
-    background: var(--clr-gradient-10);
+    background: var(--clr-gradient-14);
     color: var(--clr-text-primary);
     font-weight: var(--bd-fw-medium);
     border: 0;
@@ -846,6 +846,9 @@ input[type=file] {
     background-position: 100% 100%;
     background-size: 300% 100%;
     z-index: 5;
+}
+[bd-theme=bd-theme-dark] .input__btn {
+    color: var(--clr-common-white);
 }
 .input__btn:hover {
     color: var(--clr-common-white);
@@ -4827,6 +4830,25 @@ input[type=file] {
 [bd-theme=bd-theme-dark] .expovent__count-item {
     background: var(--clr-bg-6);
 }
+.expovent__count-item:hover {
+    filter: drop-shadow(0px 4px 35px rgba(247, 66, 111, 0.3));
+}
+.expovent__count-item:hover .expovent__count-number {
+    color: var(--clr-common-white);
+}
+.expovent__count-item:hover .expovent__count-thumb {
+    opacity: 1;
+}
+.expovent__count-item:hover .expovent__count-text {
+    color: var(--clr-common-white);
+}
+.expovent__count-item:hover .expovent__count-icon {
+    background-color: transparent;
+    border-color: var(--clr-common-white);
+}
+.expovent__count-item:hover .expovent__count-icon i {
+    color: var(--clr-common-white);
+}
 .expovent__count-thumb {
     position: absolute;
     top: 0;
@@ -7407,7 +7429,7 @@ input[type=file] {
 }
 
 .review__item-thumb img {
-    width: 40px;
+    width: 50px;
 }
 
 .review__item-inner {
@@ -9153,7 +9175,7 @@ input[type=file] {
 .truncated-text {
     display: -webkit-box;          /* Thiết lập chế độ hiển thị box */
     -webkit-box-orient: vertical;  /* Hướng của box là dọc */
-    -webkit-line-clamp: 2;        /* Giới hạn số dòng hiển thị là 2 */
+    -webkit-line-clamp: 2;        /* Giới hạn số dòng hiển thị là 3 */
     overflow: hidden;              /* Ẩn nội dung thừa */
     text-overflow: ellipsis;      /* Hiển thị dấu ba chấm (...) nếu có nội dung bị cắt */
 }
@@ -9162,12 +9184,6 @@ input[type=file] {
     position: absolute;
     right: 5vw;
     margin-top: 2%;
-}
-
-club-notification{
-    position: absolute;
-    right: 5vw ;
-    margin-bottom: 1%;
 }
 
 .notification__dropdown {
@@ -9231,4 +9247,5 @@ club-notification{
 .suggest-button button:active {
     background-color: #3e8e41; /* Màu của nút sau khi click */
 }
+
 /*# sourceMappingURL=main.css.map */
