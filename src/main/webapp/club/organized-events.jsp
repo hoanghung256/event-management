@@ -103,7 +103,7 @@
                                                                         </button>
                                                                         <div class="dropdown-list">
                                                                             <a class="dropdown__item" href="<c:url value="/club/organized-event-report?eventIdDetail=${event.id}&action=detail"/>">Detail</a>
-                                                                            <a class="dropdown__item" href="#">Feedback</a>
+                                                                            <a class="dropdown__item" href="<c:url value="/club/feedback?eventId=${event.id}" />">Feedbacks</a>
                                                                         </div>
                                                                     </div>
                                                                 </div>

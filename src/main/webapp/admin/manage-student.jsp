@@ -13,8 +13,6 @@
         background-color: #e1e1e1;
     }
 
-
-
     .popup__overlay {
         display: none; /* ?n popup m?c ??nh */
         position: fixed;
@@ -37,8 +35,8 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         position: relative;
         animation: popupFadeIn 0.3s ease;
-
     }
+    
     .search__bar input {
         margin-right: auto;
         padding: 8px;
@@ -127,7 +125,6 @@
         height: fit-content;
     }
 
-    
     .input-row {
         display: flex;
         justify-content: space-between;
@@ -141,8 +138,6 @@
     .input-row .singel__input-field:last-child {
         margin-right: 0;
     }
-
-
 
 </style>
 
@@ -284,7 +279,7 @@
                                 <option value="MALE">MALE</option>
                                 <option value="FEMALE">FEMALE</option>
                                 <option value="OTHER">OTHER</option>
-                                <select/>
+                            </select>
                         </div>
                     </div>
                     <c:if test="${not empty editError}">
@@ -625,12 +620,6 @@
     }
     ;
 </script>
-
-
-
-
-
-
 </section>
 
 <%@include file="../include/master-footer.jsp"%>

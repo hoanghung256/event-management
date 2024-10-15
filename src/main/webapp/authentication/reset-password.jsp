@@ -94,7 +94,7 @@
                </div>
             </div>
             <div class="sign__right">
-               <div class="sign__input-thumb" data-background="assets/img/sign/forgetpassword1.jpg">
+               <div class="sign__input-thumb" data-background="assets/img/sign/forgetpassword1.png">
                </div>
             </div>
          </div>

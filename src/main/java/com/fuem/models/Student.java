@@ -18,6 +18,10 @@ public class Student extends User{
 
     public Student() {
     }
+    
+    public Student(int id) {
+        super(id);
+    }
 
     public Student(String studentId, Gender gender, int id) {
         super(id);
@@ -49,7 +53,6 @@ public class Student extends User{
         super(fullname, email, null); 
         this.studentId = studentId;
     }
-     
 
     public String getStudentId() {
         return studentId;

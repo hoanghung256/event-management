@@ -1,76 +1,81 @@
 package com.fuem.controllers;
 
+import com.fuem.models.Event;
 import com.fuem.models.Feedback;
+import com.fuem.models.Student;
+import com.fuem.repositories.EventDAO;
 import com.fuem.repositories.FeedbackDAO;
-import com.fuem.models.User; // Đảm bảo bạn đã nhập User model
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-@WebServlet(name = "FeedbackController", urlPatterns = {"/FeedbackController"})
+/**
+ *
+ * @author HungHV
+ */
+@WebServlet(name = "FeedbackController", urlPatterns = {"/admin/feedback", "/club/feedback", "/student/feedback"})
 public class FeedbackController extends HttpServlet {
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-    }
-//
-@Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    HttpSession session = request.getSession(false); // Lấy phiên hiện tại
-    if (session == null || session.getAttribute("userInfor") == null) {
-        // Nếu chưa đăng nhập, chuyển hướng đến trang lỗi
-        request.setAttribute("errorMessage", "User not logged in");
-        request.getRequestDispatcher("error.jsp").forward(request, response);
-        return;
-    }
+    /**
+     *
+     * @author TuDK
+     */
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+//        HttpSession session = request.getSession();
+//        Organizer organizer = (Organizer) session.getAttribute("userInfor");
 
-    User user = (User) session.getAttribute("userInfor"); // Lấy thông tin người dùng từ session
-    int guestId = user.getId(); // Lấy userId để sử dụng làm guestId
-    int eventId = 2; // Lấy eventId từ request
-    String content = request.getParameter("feedback");
+        try {
+            int eventId = Integer.parseInt(request.getParameter("eventId")); // Lấy ID sự kiện từ request
+            EventDAO eventDAO = new EventDAO();
+            FeedbackDAO feedbackDAO = new FeedbackDAO();
 
-//    // Đảm bảo eventId không null
-//    try {
-//        eventId = Integer.parseInt(request.getParameter("eventId"));
-//    } catch (NumberFormatException e) {
-//        request.setAttribute("errorMessage", "Invalid Event ID.");
-//        request.getRequestDispatcher("error.jsp").forward(request, response);
-//        return;
-//    }
-//
-    Feedback feedback = new Feedback(guestId, eventId, content); // Tạo đối tượng Feedback
-    FeedbackDAO feedbackDAO = new FeedbackDAO();
-    boolean isSaved = feedbackDAO.saveFeedback(feedback); // Lưu phản hồi
+            Event event = eventDAO.getEventDetails(eventId);// Lấy thông tin sự kiện
+            List<Feedback> feedbackList = feedbackDAO.getEventFeedbackByEventId(eventId); // Lấy danh sách phản hồi
+            request.setAttribute("event", event);
+            request.setAttribute("feedbackList", feedbackList);
 
-    if (isSaved) {
-       
-        request.getRequestDispatcher("index.html").forward(request, response);
-    } else {
-        // Xử lý lỗi, thông báo cho người dùng
-        request.setAttribute("errorMessage", "Unable to save feedback. Please try again.");
-        request.getRequestDispatcher("error.jsp").forward(request, response);
-    }
-     String[] additionalFeedbacks = request.getParameterValues("additionalFeedbacks");
-    if (additionalFeedbacks != null) {
-        for (String additionalFeedback : additionalFeedbacks) {
-            Feedback additionalFeedbackObj = new Feedback(guestId, eventId, additionalFeedback);
-            feedbackDAO.saveFeedback(additionalFeedbackObj);
+//            System.out.println(feedbackList);
+            request.getRequestDispatcher("view-feedback.jsp").forward(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(FeedbackController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    if (isSaved) {
-        response.sendRedirect("success.jsp"); // Chuyển hướng đến trang thành công
-    } else {
-        request.setAttribute("errorMessage", "Unable to save feedback. Please try again.");
-        request.getRequestDispatcher("error.jsp").forward(request, response);
-    }
-}
+    /**
+     *
+     * @author KhiemHV
+     */
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Student user = (Student) request.getSession().getAttribute("userInfor");
+        int guestId = user.getId();
+        int eventId = Integer.parseInt(request.getParameter("eventId"));
+        String content = request.getParameter("content");
 
-    
+        Feedback feedback = new Feedback(
+                new Student(
+                        guestId
+                ),
+                eventId,
+                content
+        );
+        FeedbackDAO dao = new FeedbackDAO();
+        boolean isSaved = dao.saveFeedback(feedback);
+
+        if (isSaved) {
+            request.setAttribute("success", "Sent successfully!");
+        } else {
+            request.setAttribute("error", "Unable to save feedback. Please try again.");
+        }
+        request.setAttribute("method", "get");
+        request.getRequestDispatcher("/student/attended-events").forward(request, response);
+    }
 }

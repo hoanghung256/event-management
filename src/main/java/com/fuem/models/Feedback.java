@@ -4,8 +4,6 @@
  */
 package com.fuem.models;
 
-import com.furm.models.Student;
-
 /**
  *
  * @author HungHV
@@ -17,5 +15,40 @@ public class Feedback {
     private String content;
 
     public Feedback() {
+    }
+    
+    public Feedback(Student guest, String content) {
+        this.guest = guest;
+        this.content = content;
+    }
+
+    public Feedback(Student guest, int eventId, String content) {
+        this.guest = guest;
+        this.eventId = eventId;
+        this.content = content;
+    }
+
+    public Student getGuest() {
+        return guest;
+    }
+
+    public void setGuest(Student guest) {
+        this.guest = guest;
+    }
+
+    public int getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

@@ -22,6 +22,19 @@ import java.io.IOException;
  */
 @WebServlet(name = "AttendedEventController", urlPatterns = {"/student/attended-events"})
 public class AttendedEventController extends HttpServlet {
+    
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String method = (String) request.getAttribute("method");
+        
+        switch (method) {
+            case "get":
+                doGet(request, response);
+                break;
+            default:
+                throw new AssertionError();
+        }
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -53,6 +66,6 @@ public class AttendedEventController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("Go dopost");
+        processRequest(req, resp);
     }
 }
