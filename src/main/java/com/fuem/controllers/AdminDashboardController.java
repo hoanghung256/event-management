@@ -36,6 +36,7 @@ public class AdminDashboardController extends HttpServlet {
         ArrayList<Event> organizedList = dao.getOrganizedEvent(organizerId);
         ArrayList<Event> upcomingList = dao.getUpcomingEvent();
 
+        //paging
         PagingCriteria pagingCriteria = new PagingCriteria();
         String pageNumberStr = request.getParameter("page");
 

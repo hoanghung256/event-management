@@ -88,7 +88,7 @@
                                     <span class="nav-text">Send Notification</span>
                                 </a>
                             </li>
-                            <li><a href="<c:url value="/admin/organized-event"/>" aria-expanded="false">
+                            <li><a href="<c:url value="/club/organized-event"/>" aria-expanded="false">
                                     <i class="flaticon-upcoming"></i>
                                     <span class="nav-text">Organized Events</span>
                                 </a>

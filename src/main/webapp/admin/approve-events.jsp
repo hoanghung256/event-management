@@ -18,7 +18,7 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="<c:url value="/home"/>">Home</a></span></li>
+                                    <li><span><a href="<c:url value="/admin/dashboard"/>">Dashboard</a></span></li>
                                     <li class="active"><span>Event Details</span></li>
                                 </ul>
                             </nav>
