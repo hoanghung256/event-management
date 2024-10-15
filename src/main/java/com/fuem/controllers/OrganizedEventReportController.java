@@ -37,7 +37,6 @@ public class OrganizedEventReportController extends HttpServlet {
         ArrayList<Event> organizedList = adminDAO.getOrganizedEventExceptTheChoosen(organizer.getId(), eventId);
         int[] statisticNumber = eventDAO.getTotalStatisticNumberOfEvent(eventId, organizer.getId());
 
-        System.out.println(statisticNumber[0] + " " + statisticNumber[1] + " " + statisticNumber[2] + " " + statisticNumber[3]);
         totalRegister = statisticNumber[0];
         totalAttended = statisticNumber[1];
         totalCollaborator = statisticNumber[2];

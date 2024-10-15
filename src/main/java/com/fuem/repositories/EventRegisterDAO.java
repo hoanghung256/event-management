@@ -39,8 +39,6 @@ public class EventRegisterDAO extends SQLDatabase {
             + "WHERE "
             + "    eg.isRegistered = 1 "
             + "    AND e.id = 2 "
-            + "ORDER BY "
-            + "    e.id, e.fullname, e.dateOfEvent, o.acronym, s.id, s.fullname "
             + "OFFSET ? ROWS "
             + "FETCH NEXT ? ROWS ONLY";
 
@@ -56,7 +54,7 @@ public class EventRegisterDAO extends SQLDatabase {
 
             while (rs.next()) {
                 String studentId = rs.getString("studentId");
-                String guestName = rs.getString("guestName"); // Đổi từ studentFullName thành fullName
+                String guestName = rs.getString("guestName");
                 int eventId = rs.getInt("eventId");
                 String eventName = rs.getString("eventName");
                 LocalDate dateOfEvent = rs.getDate("dateOfEvent").toLocalDate();

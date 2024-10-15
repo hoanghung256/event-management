@@ -75,10 +75,10 @@ public class HomePageController extends HttpServlet {
             if (!name.isBlank()) {
                 searchEventCriteria.setName(name);
             }
-            if (categoryId != null) {
+            if (!categoryId.isBlank()) {
                 searchEventCriteria.setCategoryId(Integer.valueOf(categoryId));
             }
-            if (organizerId != null) {
+            if (!organizerId.isBlank()) {
                 searchEventCriteria.setOrganizerId(Integer.valueOf(organizerId));
             }
             if (!fromDate.isBlank()) {

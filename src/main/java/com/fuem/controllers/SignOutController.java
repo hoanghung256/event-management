@@ -28,6 +28,6 @@ public class SignOutController extends HttpServlet {
         if (user != null) {
             session.invalidate();
         }
-        response.sendRedirect("authentication/sign-in.jsp");
+        response.sendRedirect(request.getContextPath() + "/authentication/sign-in.jsp");
     }
 }
