@@ -13,12 +13,11 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Expovent - Event Management Dashboard HTML5 Template</title>
-        <meta name="description" content="">
+        <title>FUEM-FPTU Event Management System</title>        <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-style-mode" content="1">
         <!-- Place favicon.ico in the root directory -->
-        <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
+        <link rel="shortcut icon" type="image/x-icon" href="assets/img/logo/logo-fpt-small.svg">
         <!-- CSS here -->
         <link rel="stylesheet" href="<c:url value='/assets/app/css/bootstrap.min.css' />">
         <link rel="stylesheet" href="<c:url value='/assets/app/css/meanmenu.min.css' />">
@@ -50,7 +49,7 @@
             <div class="expovent__sidebar">
                 <div class="logo-details">
                     <span>
-                        <a href="dashboard.html">
+                        <a href="<c:url value="/admin/dashboard"/>">
                             <img class="logo__white" src="<c:url value="/assets/img/logo/logo-fpt-small.svg"/>" alt="logo not found">
                         </a>
                     </span>
@@ -64,13 +63,13 @@
                     <div class="dlabnav">
                         <ul class="metismenu" id="menu">
                             <li>
-                                <a href="#" aria-expanded="false">
+                                <a href="<c:url value="/admin/dashboard"/>" aria-expanded="false">
                                     <i class="flaticon-home"></i>
                                     <span class="nav-text">Dashboard</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#" aria-expanded="false">
+                                <a href="<c:url value="/admin/register-event"/>" aria-expanded="false">
                                     <i class="flaticon-calendar-1"></i>
                                     <span class="nav-text">Create Event</span>
                                 </a>
@@ -82,16 +81,20 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#" aria-expanded="false">
+                                <a href="<c:url value="/admin/organized-event"/>" aria-expanded="false">
                                     <i class="flaticon-success"></i>
                                     <span class="nav-text">Organized Events</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#" aria-expanded="false">
-                                    <i class="flaticon-notification"></i>
+                                <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
+                                    <i class="flaticon-user-1"></i>
                                     <span class="nav-text">Send Notification</span>
                                 </a>
+                                <ul aria-expanded="false">
+                                    <li><a href="<c:url value="/admin/send-general-notification"/>"> General Notification</a></li>
+                                    <li><a href="<c:url value="/admin/send-event-notification"/>">Event Notification</a></li>
+                                </ul>
                             </li>
                             <li>
                                 <a href="#" aria-expanded="false">
@@ -111,7 +114,7 @@
                                     <span class="nav-text">User Management</span>
                                 </a>
                                 <ul aria-expanded="false">
-                                    <li><a href="#">Student Accounts</a></li>
+                                    <li><a href="<c:url value="/admin/manage-student"/>">Student Accounts</a></li>
                                     <li><a href="#">Club Accounts</a></li>
                                 </ul>
                             </li>
@@ -144,20 +147,20 @@
                         </div>
                         <div class="app__header-right">
                             <div class="nav-item p-relative">
-                                    <div id="userportfolio" href="/profile">
-                                        <div class="user__portfolio">
-                                            <div class="user__portfolio-thumb">
-                                                <c:url value="/assets/img/user/default-avatar.jpg" var="defaultAvatar" />
-                                                <img 
-                                                    src="${sessionScope.userInfor.avatarPath != null ? sessionScope.userInfor.avatarPath : defaultAvatar}" 
-                                                    alt="Default Avatar" 
+                                <div id="userportfolio" href="/profile">
+                                    <div class="user__portfolio">
+                                        <div class="user__portfolio-thumb">
+                                            <c:url value="/assets/img/user/default-avatar.jpg" var="defaultAvatar" />
+                                            <img 
+                                                src="${sessionScope.userInfor.avatarPath != null ? sessionScope.userInfor.avatarPath : defaultAvatar}" 
+                                                alt="Default Avatar" 
                                                 />
-                                            </div>
-                                            <div class="user__content">
-                                                <span>${sessionScope.userInfor.fullname != null ? sessionScope.userInfor.fullname : "Guest"}</span>
-                                            </div>
+                                        </div>
+                                        <div class="user__content">
+                                            <span>${sessionScope.userInfor.fullname != null ? sessionScope.userInfor.fullname : "Guest"}</span>
                                         </div>
                                     </div>
+                                </div>
                                 <div class="user__dropdown">
                                     <ul>
                                         <li>
@@ -237,4 +240,3 @@
                             </div>
                         </div>
                     </div>
-                </div>

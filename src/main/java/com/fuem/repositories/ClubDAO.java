@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,20 +20,20 @@ import java.util.logging.Logger;
  *
  * @author ThangNM
  */
-public class ClubDashboardDAO extends SQLDatabase{
-    private static final Logger logger = Logger.getLogger(ClubDashboardDAO.class.getName());
-    private static String SELECT_ALL_EVENT_ORGANIZED =  "SELECT \n" +
-                                                        "    o.fullname AS OrganizerName,\n" +
-                                                        "    COUNT(e.id) AS TotalEvents\n" +
-                                                        "FROM \n" +
-                                                        "    Organizer o\n" +
-                                                        "JOIN \n" +
-                                                        "    Event e ON o.id = e.organizerId\n" +
-                                                        "WHERE \n" +
-                                                        "    o.isAdmin = 0 \n" +
-                                                        "    AND o.id = ? \n" +
-                                                        "GROUP BY \n" +
-                                                        "    o.fullname;";
+public class ClubDAO extends SQLDatabase{
+    private static final Logger logger = Logger.getLogger(ClubDAO.class.getName());
+    private static String SELECT_ALL_EVENT_ORGANIZED =  "SELECT\n"
+                                                        + "	Organizer.fullname AS OrganizerName,\n"
+                                                        + "	COUNT(Event.id) AS TotalEvents\n"
+                                                        + "FROM \n"
+                                                        + "	Organizer\n"
+                                                        + "JOIN \n"
+                                                        + "	Event ON Organizer.id = Event.organizerId\n"
+                                                        + "WHERE \n"
+                                                        + "     Organizer.isAdmin = '0'\n"        
+                                                        + "	AND Organizer.id = ?\n"
+                                                        + "GROUP BY \n"
+                                                        + "	Organizer.fullname";
     
     private static String SELECT_ALL_UPCOMING_EVENTS =  "SELECT \n" +
                                                         "    COUNT(Event.id) AS UpcomingEvents\n" +
@@ -51,39 +52,41 @@ public class ClubDashboardDAO extends SQLDatabase{
                                                         "WHERE \n" +
                                                         "    organizerId = ?";
    
-    private static String SELECT_ORGANIZED_EVENTS =      "SELECT \n" +
-                                                        "    E.fullname as EventName,\n" +
-                                                        "    E.dateOfEvent AS EventDate,\n" +
-                                                        "    L.locationName AS LocationName,\n" +
-                                                        "    C.categoryName AS CategoryName\n" +
-                                                        "FROM \n" +
-                                                        "    Event E\n" +
-                                                        "JOIN \n" +
-                                                        "    Location L ON E.locationId = L.id\n" +
-                                                        "JOIN \n" +
-                                                        "    Category C ON E.typeId = C.id\n" +
-                                                        "WHERE \n" +
-                                                        "    E.organizerId = ?  \n" +
-                                                        "    AND E.dateOfEvent < GETDATE();";
+    private static String SELECT_ORGANIZED_EVENTS =      "SELECT\n" 
+                                                        + "    Event.fullname AS EventName,\n"
+                                                        + "    Event.dateOfEvent AS EventDate,\n"
+                                                        + "    Location.locationName AS LocationName,\n"
+                                                        + "    Category.categoryName AS CategoryName\n"
+                                                        + "FROM\n"
+                                                        + "    Event\n"
+                                                        + "JOIN\n"
+                                                        + "    Location ON Event.locationId = Location.id\n"
+                                                        + "JOIN\n"
+                                                        + "    Category ON Event.categoryId = Category.id\n"
+                                                        + "WHERE\n"
+                                                        + "    Event.organizerId = ?\n"
+                                                        + "    AND Event.dateOfEvent < GETDATE();";
    
    private static String SELECT_UPCOMING_EVENTS =       "SELECT \n" +
-                                                        "       E.id AS EventId,\n" +
-                                                        "       E.fullname as EventName,\n" +
-                                                        "       E.dateOfEvent AS EventDate,\n" +
-                                                        "       L.locationName AS LocationName,\n" +
-                                                        "       C.categoryName AS CategoryName,\n" +
-                                                        "	E.status AS Status,\n" +
-                                                        "	E.guestRegisterLimit as RegisterLimit,\n" +
-                                                        "	E.guestRegisterCount as RegisterCount\n" +
+                                                        "    Event.id AS EventId,\n" +
+                                                        "    Event.fullname AS EventName,\n" +
+                                                        "    Event.dateOfEvent AS EventDate,\n" +
+                                                        "    Location.locationName AS LocationName,\n" +
+                                                        "    Category.categoryName AS CategoryName,\n" +
+                                                        "    Event.status AS Status,\n" +
+                                                        "    Event.guestRegisterLimit AS RegisterLimit,\n" +
+                                                        "    Event.guestRegisterCount AS RegisterCount, \n" +
+                                                        "    startTime, endTime \n" +
                                                         "FROM \n" +
-                                                        "    Event E\n" +
+                                                        "    Event\n" +
                                                         "JOIN \n" +
-                                                        "    Location L ON E.locationId = L.id\n" +
+                                                        "    Location ON Event.locationId = Location.id\n" +
                                                         "JOIN \n" +
-                                                        "    Category C ON E.typeId = C.id\n" +
+                                                        "    Category ON Event.categoryId = Category.id\n" +
                                                         "WHERE \n" +
-                                                        "    E.organizerId = ?\n" +
-                                                        "    AND E.dateOfEvent > GETDATE();";
+                                                        "    Event.organizerId = ?\n" +
+                                                        "    AND Event.dateOfEvent > GETDATE()\n" +
+                                                        "ORDER BY Event.dateOfEvent DESC;";
     
     public int getTotalEventOrganized(int clubId) {
         int totalEvent = 0;
@@ -115,7 +118,6 @@ public class ClubDashboardDAO extends SQLDatabase{
     }
     
     public int getTotalFollowers(int clubId) {
-        
         int totalFollowers = 0;
         
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
@@ -130,7 +132,6 @@ public class ClubDashboardDAO extends SQLDatabase{
     }
     
     public ArrayList<Event> getOrganizedEvent(int clubId) {
-        
         ArrayList<Event> organizedEvent = new ArrayList<>();
         
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
@@ -163,8 +164,10 @@ public class ClubDashboardDAO extends SQLDatabase{
                 Status status = Status.valueOf(rs.getString("Status"));
                 int registerLimit = rs.getInt("RegisterLimit");
                 int registerCount = rs.getInt("RegisterCount");
+                LocalTime startTime = rs.getTime("startTime").toLocalTime();
+                LocalTime endTime = rs.getTime("endTime").toLocalTime();
 
-                upcomingEvent.add(new Event(id, eventName, eventDate, locationName, category, status, registerLimit, registerCount));
+                upcomingEvent.add(new Event(id, eventName, eventDate, locationName, category, status, registerLimit, registerCount, startTime, endTime));
             }
         } catch (SQLException e){
             logger.log(Level.SEVERE, null, e);

@@ -4,7 +4,6 @@
     Author     : ThangNM
 --%>
 <%@include file="../include/admin-layout-header.jsp"%>
-<%@ page import="com.fuem.models.Event" %>
 <style>
     .no-events {
         display: flex;
@@ -114,10 +113,6 @@
                                         <path d="M13.25 2C13.25 1.30964 12.6904 0.75 12 0.75C11.3096 0.75 10.75 1.30964 10.75 2C10.75 2.69036 11.3096 3.25 12 3.25C12.6904 3.25 13.25 2.69036 13.25 2Z" fill="white"></path>
                                         </svg>
                                     </button>
-                                    <div class="dropdown-list">
-                                        <a class="dropdown__item" href="javascript:void(0)">Edit</a>
-                                        <a class="dropdown__item" href="javascript:void(0)">Delete</a>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -125,14 +120,14 @@
 
                     <div class="attendant__wrapper mb-20">
                         <!-- Check if registrationList is empty -->
-                        <c:if test="${empty registrationList}">
+                        <c:if test="${empty page.datas}">
                             <div class="no-events">
                                 <span>No events registered yet</span>
                             </div>
                         </c:if>
 
                         <!-- Display table if there are events -->
-                        <c:if test="${not empty registrationList}">
+                        <c:if test="${not empty page.datas}">
                             <table>
                                 <thead>
                                     <tr>
@@ -148,7 +143,7 @@
                                 </thead>
                                 <tbody>
                                     <!-- Loop through events passed from servlet -->
-                                    <c:forEach var="event" items="${registrationList}">
+                                    <c:forEach var="event" items="${page.datas}">
                                         <tr>
                                             <td>
                                                 <div class="attendant__serial">
@@ -158,7 +153,7 @@
                                             <td>
                                                 <div class="attendant__user-item">
                                                     <div class="registration__user-thumb">
-                                                        <img src="${event.organizer.avatarPath}" alt="image not found">
+                                                        <img src="<c:url value="${event.organizer.avatarPath}"/>" alt="image not found">
                                                     </div>
                                                     <div class="attendant__user-title">
                                                         <span>${event.organizer.fullname}</span>
@@ -177,7 +172,7 @@
                                             </td>
                                             <td>
                                                 <div class="category">
-                                                    <span>${event.type.name}</span>
+                                                    <span>${event.category.name}</span>
                                                 </div>
                                             </td>
                                             <td>
@@ -217,6 +212,56 @@
                             </table>
                         </c:if>
                     </div>
+
+                    <!-- pagination controls -->
+                    <div class="basic__pagination d-flex align-items-center justify-content-end">
+                        <nav>
+                            <ul>
+                                <c:forEach var="i" begin="0" end="${page.totalPage}">
+                                    <c:choose>
+                                        <c:when test="${i == 0 && page.currentPage > 0}">
+                                            <li>
+                                                <a href="<c:url value="/admin/dashboard?page=${page.currentPage - 1}"/>">
+                                                    <i class="fa-regular fa-arrow-left-long"></i>
+                                                </a>
+                                            </li>
+                                        </c:when>
+                                        <c:when test="${i >= page.currentPage && i <= page.currentPage + 4}">
+                                            <c:choose>
+                                                <c:when test="${i == page.currentPage}">
+                                                    <li>
+                                                        <span class="current">${i + 1}</span>
+                                                    </li>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <li>
+                                                        <a href="<c:url value="/admin/dashboard?page=${i}"/>">${i + 1}</a>
+                                                    </li>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:when>
+                                        <c:when test="${i == page.currentPage + 5 && page.currentPage + 5 < page.totalPage - 1}">
+                                            <li> ... </li>
+                                            </c:when>
+                                            <c:when test="${i == page.totalPage - 1 && page.currentPage + 5 < page.totalPage - 1}">
+                                            <li>
+                                                <a href="<c:url value="/admin/dashboard?page=${page.totalPage - 1}"/>">
+                                                    ${page.totalPage}
+                                                </a>
+                                            </li>
+                                        </c:when>
+                                        <c:when test="${i == page.totalPage - 1 && page.currentPage < page.totalPage - 1}">
+                                            <li>
+                                                <a href="<c:url value="/admin/dashboard?page=${page.currentPage + 1}"/>">
+                                                    <i class="fa-regular fa-arrow-right-long"></i>
+                                                </a>
+                                            </li>
+                                        </c:when>
+                                    </c:choose>
+                                </c:forEach>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
             </div>
         </div>
@@ -241,29 +286,9 @@
                             </div>
                             <div class="card__header-right">
                                 <div class="card__btn">
-                                    <a href="event-details.html">view all Event</a>
-                                </div>
-                                <div class="card__header-dropdown">
-                                    <div class="dropdown">
-                                        <button>
-                                            <svg class="dropdown__svg" width="14" height="4" viewBox="0 0 14 4" fill="none"
-                                                 xmlns="http://www.w3.org/2000/svg">
-                                            <path
-                                                d="M2 0.75C2.69036 0.75 3.25 1.30964 3.25 2C3.25 2.69036 2.69036 3.25 2 3.25C1.30964 3.25 0.75 2.69036 0.75 2C0.75 1.30964 1.30964 0.75 2 0.75Z"
-                                                fill="white"></path>
-                                            <path
-                                                d="M7 0.75C7.69036 0.75 8.25 1.30964 8.25 2C8.25 2.69036 7.69036 3.25 7 3.25C6.30964 3.25 5.75 2.69036 5.75 2C5.75 1.30964 6.30964 0.75 7 0.75Z"
-                                                fill="white"></path>
-                                            <path
-                                                d="M13.25 2C13.25 1.30964 12.6904 0.75 12 0.75C11.3096 0.75 10.75 1.30964 10.75 2C10.75 2.69036 11.3096 3.25 12 3.25C12.6904 3.25 13.25 2.69036 13.25 2Z"
-                                                fill="white"></path>
-                                            </svg>
-                                        </button>
-                                        <div class="dropdown-list">
-                                            <a class="dropdown__item" href="javascript:void(0)">Edit</a>
-                                            <a class="dropdown__item" href="javascript:void(0)">Delete</a>
-                                        </div>
-                                    </div>
+                                    <form action="<c:url value="/club/organized-event"/>" method="GET">
+                                        <button type="submit">View All Event</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -373,7 +398,7 @@
                                                         </div>
                                                         <div class="news__meta-status">
                                                             <span><i class="flaticon-placeholder-1"></i></span>
-                                                            <span>${event.type.name}</span>
+                                                            <span>${event.category.name}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -391,6 +416,6 @@
         </div>
         <!-- end of organize event -->
         <!-- Dashboard area end -->
-
 </section>
-<%@include file="../include/master-footer.jsp" %>
+                                        
+<%@include file="../include/master-footer.jsp"%>

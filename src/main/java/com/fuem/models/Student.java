@@ -5,6 +5,7 @@
 package com.fuem.models;
 
 import com.fuem.enums.Gender;
+import com.fuem.enums.Role;
 
 /**
  *
@@ -17,19 +18,39 @@ public class Student extends User{
 
     public Student() {
     }
+    
+    public Student(int id) {
+        super(id);
+    }
+
+    public Student(String studentId, Gender gender, int id) {
+        super(id);
+        this.studentId = studentId;
+        this.gender = gender;
+    }
+
+    public Student(int id, String studentId, Gender gender, String fullname, String email) {
+        super(fullname, id, email);
+        this.studentId = studentId;
+        this.gender = gender;
+    }
 
     public Student(String fullname, String studentId, String email, String password) {
         super(fullname, email, password);
         this.studentId = studentId;
     }
   
-    public Student(int id, String fullname, String studentId, String email, String password, String avatarPath) {
-        super(id, fullname, email, password, avatarPath);
+    public Student(int id, String fullname, String studentId, String email, String avatarPath, Role role ) {
+        super(id, fullname, email, avatarPath, role);
         this.studentId = studentId;
     }
 
     public Student(int id, String fullname, String studentId, String email,  String avatarPath) {
         super(id, fullname, email, avatarPath);
+        this.studentId = studentId;
+    }
+     public Student(String fullname, String studentId, String email) {
+        super(fullname, email, null); 
         this.studentId = studentId;
     }
 

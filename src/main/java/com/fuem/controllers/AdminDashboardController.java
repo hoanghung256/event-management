@@ -5,7 +5,10 @@
 package com.fuem.controllers;
 
 import com.fuem.models.Event;
-import com.fuem.repositories.AdminDashboardDAO;
+import com.fuem.models.Organizer;
+import com.fuem.repositories.AdminDAO;
+import com.fuem.repositories.helpers.Page;
+import com.fuem.repositories.helpers.PagingCriteria;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,33 +23,43 @@ import java.util.ArrayList;
  */
 @WebServlet(name = "AdminDashboardController", urlPatterns = {"/admin/dashboard"})
 public class AdminDashboardController extends HttpServlet {
-    private AdminDashboardDAO dao = new AdminDashboardDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int totalOrganizedEvents = dao.getTotalOrganizedEvents(1);
+        AdminDAO dao = new AdminDAO();
+        Organizer organizer = (Organizer) request.getSession().getAttribute("userInfor");
+        int organizerId = organizer.getId();
+        int totalOrganizedEvents = dao.getTotalOrganizedEvents(organizerId);
         int totalClubs = dao.getTotalClub();
-        int totalUpcomingEvents = dao.getTotalUpcomingEvents(1);
-        ArrayList<Event> registrationList = dao.getRegistrationEvent();
-        ArrayList<Event> organizedList = dao.getOrganizedEvent(1);
+        int totalUpcomingEvents = dao.getTotalUpcomingEvents(organizerId);
+        ArrayList<Event> organizedList = dao.getOrganizedEvent(organizerId);
         ArrayList<Event> upcomingList = dao.getUpcomingEvent();
+
+        PagingCriteria pagingCriteria = new PagingCriteria();
+        String pageNumberStr = request.getParameter("page");
+
+        Integer pageNumber = null;
+
+        if (pageNumberStr == null) {
+            pageNumber = 0;
+        } else {
+            pageNumber = Integer.valueOf(pageNumberStr);
+        }
+
+        pagingCriteria = new PagingCriteria(
+                pageNumber,
+                10
+        );
         
-        System.out.println(organizedList);
-        
+        Page<Event> registrationEvents = dao.getRegistrationEvent(pagingCriteria);
+
         request.setAttribute("totalOrganizedEvents", totalOrganizedEvents);
         request.setAttribute("totalClubs", totalClubs);
         request.setAttribute("totalUpcomingEvents", totalUpcomingEvents);
-        request.setAttribute("registrationList", registrationList);
         request.setAttribute("organizedList", organizedList);
         request.setAttribute("upcomingList", upcomingList);
+        request.setAttribute("page", registrationEvents);
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-  
-    }
-
 }
