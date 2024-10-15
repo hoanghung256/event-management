@@ -4,7 +4,7 @@
     Author     : ThangNM
 --%>
 <%@include file="../include/club-layout-header.jsp"%>
-<%@ page import="com.fuem.models.Event" %>
+
 <section>
     <div class="app__slide-wrapper">
         <div class="breadcrumb__area">
@@ -19,7 +19,7 @@
                                 <ul>
                                     <li><span><a href="<c:url value="/club/dashboard"/>">Dashboard</a></span></li>
                                     <li><span><a href="<c:url value="/club/organized-event"/>">Organized Event</a></span></li>
-                                    <li class="active"><span>Organized Event Details</span></li>
+                                    <li class="active"><span>Details</span></li>
                                 </ul>
                             </nav>
                         </div>
@@ -39,7 +39,7 @@
                                             <div class="body__card-wrapper mb-20">
                                                 <div class="card__header-top">
                                                     <div class="card__title-inner">
-                                                        <h4 class="event__information-title">${event.fullname} Detail</h4>
+                                                        <h4 class="event__information-title">${event.fullname}</h4>
                                                     </div>
                                                 </div>
                                                 <div class="review__main-wrapper pt-25">
@@ -219,54 +219,58 @@
     const totalAttended = ${totalAttended};
     const totalCollaborator = ${totalCollaborator};
     const totalCancel = ${totalCancel};
-
     const ctx = document.getElementById('eventStatisticsChart').getContext('2d');
     const eventStatisticsChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
+    type: 'bar',
+            data: {
             labels: ['Total Registered', 'Total Guest', 'Total Collaborator', 'Total Cancel Guest'], // column label
-            datasets: [{
+                    datasets: [{
                     label: '${event.fullname}',
-                    data: [totalRegister, totalAttended, totalCollaborator, totalCancel], // column value
-                    backgroundColor: [
-                        'rgba(54, 162, 235, 0.5)',
-                        'rgba(54, 162, 235, 0.5)',
-                        'rgba(54, 162, 235, 0.5)',
-                        'rgba(54, 162, 235, 0.5)'
-                    ],
-                    borderColor: [
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(54, 162, 235, 1)'
-                    ],
-                    borderWidth: 1
-                },
-                {
+                            data: [totalRegister, totalAttended, totalCollaborator, totalCancel], // column value
+                            backgroundColor: [
+                                    'rgba(54, 162, 235, 0.5)',
+                                    'rgba(54, 162, 235, 0.5)',
+                                    'rgba(54, 162, 235, 0.5)',
+                                    'rgba(54, 162, 235, 0.5)'
+                            ],
+                            borderColor: [
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(54, 162, 235, 1)'
+                            ],
+                            borderWidth: 1
+                    }
+                <c:if test="${not empty selectedEventName}">
+                    ,
+                    {
                     label: '${selectedEventName}',
-                    data: [${totalSelectedRegister}, ${totalSelectedAttended}, ${totalSelectedCollaborator}, ${totalSelectedCancel}], 
-                    backgroundColor: [
-                        'rgba(255, 159, 64, 0.5)', 
-                        'rgba(255, 159, 64, 0.5)', 
-                        'rgba(255, 159, 64, 0.5)', 
-                        'rgba(255, 159, 64, 0.5)'   
-                    ],
-                    borderColor: [
-                        'rgba(255, 159, 64, 1)', 
-                        'rgba(255, 159, 64, 1)', 
-                        'rgba(255, 159, 64, 1)', 
-                        'rgba(255, 159, 64, 1)'     
-                    ],
-                    borderWidth: 1
-                }]
-        },
-        options: {
+                            data: [${totalSelectedRegister}, ${totalSelectedAttended}, ${totalSelectedCollaborator}, ${totalSelectedCancel}],
+                            backgroundColor: [
+                                    'rgba(255, 159, 64, 0.5)',
+                                    'rgba(255, 159, 64, 0.5)',
+                                    'rgba(255, 159, 64, 0.5)',
+                                    'rgba(255, 159, 64, 0.5)'
+                            ],
+                            borderColor: [
+                                    'rgba(255, 159, 64, 1)',
+                                    'rgba(255, 159, 64, 1)',
+                                    'rgba(255, 159, 64, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                    }
+                </c:if>
+                    ]
+            },
+            options: {
             scales: {
-                y: {
-                    beginAtZero: true
-                }
+            y: {
+            beginAtZero: true
             }
-        }
+            }
+            }
     });
 </script>
+
 <%@include file="../include/master-footer.jsp" %>

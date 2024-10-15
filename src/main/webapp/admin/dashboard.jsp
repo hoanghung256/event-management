@@ -199,8 +199,7 @@
                                                                 </svg>
                                                             </button>
                                                             <div class="dropdown-list">
-                                                                <a class="dropdown__item" href="javascript:void(0)">Edit</a>
-                                                                <a class="dropdown__item" href="javascript:void(0)">Delete</a>
+                                                                <a class="dropdown__item" href="<c:url value="/admin/approval-events?action=detail&eventId=${event.id}" />">Details</a>
                                                             </div>
                                                         </div>
                                                     </div>

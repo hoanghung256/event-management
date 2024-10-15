@@ -62,13 +62,12 @@ public class EventRegisterDAO extends SQLDatabase {
                 LocalDate dateOfEvent = rs.getDate("dateOfEvent").toLocalDate();
 //    String organizerAcronym = rs.getString("organizerAcronym");
 
+                Student student = new Student();
+                student.setStudentId(studentId);
+                student.setFullname(guestName);
                 // Tạo đối tượng EventGuest
                 EventGuest guest = new EventGuest(
-                        new Student(
-                                studentId, 
-                                null, 
-                                eventId
-                        ),
+                        student,
                         new EventBuilder()
                                 .setId(eventId)
                                 .setFullname(eventName)

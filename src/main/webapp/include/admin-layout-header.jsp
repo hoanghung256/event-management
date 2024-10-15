@@ -97,7 +97,7 @@
                                 </ul>
                             </li>
                             <li>
-                                <a href="#" aria-expanded="false">
+                                <a href="<c:url value="/admin/approval-events?action=show" />" aria-expanded="false">
                                     <i class="flaticon-clock"></i>
                                     <span class="nav-text">Pending Events Approval</span>
                                 </a>
