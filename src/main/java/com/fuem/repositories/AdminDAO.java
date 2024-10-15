@@ -80,7 +80,7 @@ public class AdminDAO extends SQLDatabase {
             + "FETCH NEXT ? ROWS ONLY";
 
     private static String SELECT_ORGANIZED_EVENTS = "SELECT\n"
-            + "    Event.id AS EventId, \n"
+            + "    Event.id AS EventId,\n"
             + "    Event.fullname AS EventName,\n"
             + "    Event.dateOfEvent AS EventDate,\n"
             + "    Location.locationName AS LocationName,\n"
@@ -93,7 +93,49 @@ public class AdminDAO extends SQLDatabase {
             + "    Category ON Event.categoryId = Category.id\n"
             + "WHERE\n"
             + "    Event.organizerId = ?\n"
-            + "    AND Event.dateOfEvent < GETDATE();";
+            + "    AND Event.dateOfEvent < GETDATE()"
+            + "ORDER BY\n"
+            + "	Event.dateOfEvent DESC\n";
+
+    private static String SELECT_ORGANIZED_EVENTS_EXCEPT_CHOOSEN = "SELECT TOP 3\n"
+            + "    Event.id AS EventId,\n"
+            + "    Event.fullname AS EventName,\n"
+            + "    Event.dateOfEvent AS EventDate,\n"
+            + "    Location.locationName AS LocationName,\n"
+            + "    Category.categoryName AS CategoryName\n"
+            + "FROM\n"
+            + "    Event\n"
+            + "JOIN\n"
+            + "    Location ON Event.locationId = Location.id\n"
+            + "JOIN\n"
+            + "    Category ON Event.categoryId = Category.id\n"
+            + "WHERE\n"
+            + "    Event.organizerId = ?\n"
+            + "    AND Event.dateOfEvent < GETDATE()\n"
+            + "    AND Event.id <> ?\n"
+            + "ORDER BY\n"
+            + "	Event.dateOfEvent DESC\n";
+
+    private static String SELECT_ORGANIZED_EVENTS_WITH_PAGING = "SELECT\n"
+            + "    Event.id AS EventId,\n"
+            + "    Event.fullname AS EventName,\n"
+            + "    Event.dateOfEvent AS EventDate,\n"
+            + "    Location.locationName AS LocationName,\n"
+            + "    Category.categoryName AS CategoryName,\n"
+            + "    COUNT(*) OVER() AS TotalRow\n"
+            + "FROM\n"
+            + "    Event\n"
+            + "JOIN\n"
+            + "    Location ON Event.locationId = Location.id\n"
+            + "JOIN\n"
+            + "    Category ON Event.categoryId = Category.id\n"
+            + "WHERE\n"
+            + "    Event.organizerId = ?\n"
+            + "    AND Event.dateOfEvent < GETDATE()"
+            + "ORDER BY\n"
+            + "	Event.dateOfEvent DESC\n"
+            + "OFFSET ? ROWS\n"
+            + "FETCH NEXT ? ROWS ONLY";
 
     private static String SELECT_UPCOMING_EVENTS = "SELECT \n"
             + "	Event.fullname AS EventName,\n"
@@ -185,11 +227,30 @@ public class AdminDAO extends SQLDatabase {
         return page;
     }
 
-    public ArrayList<Event> getOrganizedEvent(int adminId) {
+    public ArrayList<Event> getOrganizedEvent(int organizerId) {
         ArrayList<Event> organizedEvent = new ArrayList<>();
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
-                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZED_EVENTS, adminId);){
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZED_EVENTS, organizerId);) {
+            while (rs.next()) {
+
+                int eventId = rs.getInt("EventId");
+                String eventName = rs.getString("EventName");
+                LocalDate eventDate = rs.getDate("EventDate").toLocalDate();
+                String locationName = rs.getString("LocationName");
+                String category = rs.getString("CategoryName");
+
+                organizedEvent.add(new Event(eventId, eventName, eventDate, locationName, category));
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        return organizedEvent;
+    }
+    public ArrayList<Event> getOrganizedEventExceptTheChoosen(int organizerId, int id) {
+        ArrayList<Event> organizedEvent = new ArrayList<>();
+      
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
+             ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZED_EVENTS_EXCEPT_CHOOSEN, organizerId, id);) {
             while (rs.next()) {
                 int eventId = rs.getInt("EventId");
                 String eventName = rs.getString("EventName");
@@ -203,6 +264,33 @@ public class AdminDAO extends SQLDatabase {
             logger.log(Level.SEVERE, null, e);
         }
         return organizedEvent;
+    }
+
+    public Page<Event> getOrganizedEventWithPaging(PagingCriteria pagingCriteria, int organizerId) {
+        Page<Event> page = new Page<>();
+        ArrayList<Event> organizedEvent = new ArrayList<>();
+
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZED_EVENTS_WITH_PAGING, organizerId, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
+            while (rs.next()) {
+                if (page.getTotalPage() == null && page.getCurrentPage() == null) {
+                    page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
+                    page.setCurrentPage(pagingCriteria.getOffset() / pagingCriteria.getFetchNext());
+                }
+
+                int eventId = rs.getInt("EventId");
+                String eventName = rs.getString("EventName");
+                LocalDate eventDate = rs.getDate("EventDate").toLocalDate();
+                String locationName = rs.getString("LocationName");
+                String category = rs.getString("CategoryName");
+
+                organizedEvent.add(new Event(eventId, eventName, eventDate, locationName, category));
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        page.setDatas(organizedEvent);
+
+        return page;
     }
 
     public ArrayList<Event> getUpcomingEvent() {

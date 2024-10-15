@@ -51,12 +51,12 @@
                             <div class="body__card-wrapper">
                                 <div class="attendant__wrapper mb-35">
                                     <!-- Check if organized list is empty -->
-                                    <c:if test="${empty organizedList}">
+                                    <c:if test="${empty page.datas}">
                                         <div class="no-events">
                                             <span>No events registered yet</span>
                                         </div>
                                     </c:if>
-                                    <c:if test="${not empty organizedList}">
+                                    <c:if test="${not empty page.datas}">
                                         <table>
                                             <thead>
                                                 <tr>
@@ -68,7 +68,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <c:forEach var="event" items="${organizedList}">
+                                                <c:forEach var="event" items="${page.datas}">
                                                     <tr>
                                                         <td>
                                                             <div class="attendant__seminar">
@@ -102,7 +102,7 @@
                                                                             </svg>
                                                                         </button>
                                                                         <div class="dropdown-list">
-                                                                            <a class="dropdown__item" href="#">Details</a>
+                                                                            <a class="dropdown__item" href="<c:url value="/club/organized-event-report?eventIdDetail=${event.id}&action=detail"/>">Detail</a>
                                                                             <a class="dropdown__item" href="<c:url value="/club/feedback?eventId=${event.id}" />">Feedbacks</a>
                                                                         </div>
                                                                     </div>
@@ -114,6 +114,55 @@
                                             </tbody>
                                         </table>
                                     </c:if>
+                                </div>
+                                <!-- pagination controls -->
+                                <div class="basic__pagination d-flex align-items-center justify-content-end">
+                                    <nav>
+                                        <ul>
+                                            <c:forEach var="i" begin="0" end="${page.totalPage}">
+                                                <c:choose>
+                                                    <c:when test="${i == 0 && page.currentPage > 0}">
+                                                        <li>
+                                                            <a href="<c:url value="/club/organized-event?action=show&page=${page.currentPage - 1}"/>">
+                                                                <i class="fa-regular fa-arrow-left-long"></i>
+                                                            </a>
+                                                        </li>
+                                                    </c:when>
+                                                    <c:when test="${i >= page.currentPage && i <= page.currentPage + 4}">
+                                                        <c:choose>
+                                                            <c:when test="${i == page.currentPage}">
+                                                                <li>
+                                                                    <span class="current">${i + 1}</span>
+                                                                </li>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <li>
+                                                                    <a href="<c:url value="/club/organized-event?action=show&page=${i}"/>">${i + 1}</a>
+                                                                </li>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </c:when>
+                                                    <c:when test="${i == page.currentPage + 5 && page.currentPage + 5 < page.totalPage - 1}">
+                                                        <li> ... </li>
+                                                        </c:when>
+                                                        <c:when test="${i == page.totalPage - 1 && page.currentPage + 5 < page.totalPage - 1}">
+                                                        <li>
+                                                            <a href="<c:url value="/club/organized-event?action=show&page=${page.totalPage - 1}"/>">
+                                                                ${page.totalPage}
+                                                            </a>
+                                                        </li>
+                                                    </c:when>
+                                                    <c:when test="${i == page.totalPage - 1 && page.currentPage < page.totalPage - 1}">
+                                                        <li>
+                                                            <a href="<c:url value="/club/organized-event?action=show&page=${page.currentPage + 1}"/>">
+                                                                <i class="fa-regular fa-arrow-right-long"></i>
+                                                            </a>
+                                                        </li>
+                                                    </c:when>
+                                                </c:choose>
+                                            </c:forEach>
+                                        </ul>
+                                    </nav>
                                 </div>
                             </div>
                         </div>

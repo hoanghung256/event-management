@@ -132,6 +132,17 @@ public class EventDAO extends SQLDatabase {
             + "JOIN Location l ON e.locationId = l.id "
             + "LEFT JOIN Follow f ON e.organizerId = f.organizerId AND f.studentId = ? ";
     private static final String SELECT_ALL_CATEGORY = "SELECT * FROM [Category]";
+    private static final String UPDATE_EVENTS_REGISTRATION_STATUS = "UPDATE [Event]\n"
+            + "SET status = ?\n"
+            + "WHERE id = ?";
+    private static final String SELECT_STATISTIC_NUMBER_OF_EVENT = "SELECT	"
+            + " guestRegisterCount AS TotalRegister,\n"
+            + "	guestAttendedCount AS TotalAttended,\n"
+            + "	collaboratorRegisterCount AS TotalCollaborator,\n"
+            + "	guestRegisterCancelCount AS TotalCancel\n"
+            + "FROM Event\n"
+            + "WHERE id = ?\n"
+            + "  AND organizerId = ?;";
     private static final String SELECT_ALL_LOCATIONS = "SELECT id, locationName FROM [Location]";
     private static final String INSERT_NEW_EVENT = "INSERT INTO [Event] ("
             + "organizerId, "
@@ -547,7 +558,7 @@ public class EventDAO extends SQLDatabase {
         }
         return images;
     }
-
+  
     /**
      *
      * @author TuDK
@@ -615,7 +626,7 @@ public class EventDAO extends SQLDatabase {
         
         return locations;
     }
-    
+
     /**
      * When club use this for registration, init event status is Status.PENDING
      * Admin event status is Status.APPROVED by default
@@ -669,5 +680,22 @@ public class EventDAO extends SQLDatabase {
         } catch (SQLException ex) {
             Logger.getLogger(EventDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public int[] getTotalStatisticNumberOfEvent(int eventId, int organizerId) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();  ResultSet rs = executeQueryPreparedStatement(conn, SELECT_STATISTIC_NUMBER_OF_EVENT, eventId, organizerId)) { 
+            while (rs.next()) {
+                int totalRegister = rs.getInt("TotalRegister");
+                int totalAttended = rs.getInt("TotalAttended");
+                int totalCollaborator = rs.getInt("TotalCollaborator");
+                int totalCancel = rs.getInt("TotalCancel");
+                
+                int[] statisticNumber = {totalRegister, totalAttended, totalCollaborator, totalCancel};
+                return statisticNumber;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(EventDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 }

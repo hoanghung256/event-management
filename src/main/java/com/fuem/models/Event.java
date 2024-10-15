@@ -108,7 +108,8 @@ public class Event {
         this.images = images;
     }
     
-    public Event(String fullname, LocalDate dateOfEvent, String locationName, String category){
+    public Event(int eventId, String fullname, LocalDate dateOfEvent, String locationName, String category){
+        this.id = eventId;
         this.fullname = fullname;
         this.dateOfEvent = dateOfEvent;
         this.location = new Location();
