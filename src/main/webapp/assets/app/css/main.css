@@ -819,7 +819,7 @@ input[type=file] {
 
 .input__btn {
     font-size: 16px;
-    background: var(--clr-gradient-14);
+    background: var(--clr-gradient-10);
     color: var(--clr-text-primary);
     font-weight: var(--bd-fw-medium);
     border: 0;
@@ -846,9 +846,6 @@ input[type=file] {
     background-position: 100% 100%;
     background-size: 300% 100%;
     z-index: 5;
-}
-[bd-theme=bd-theme-dark] .input__btn {
-    color: var(--clr-common-white);
 }
 .input__btn:hover {
     color: var(--clr-common-white);
