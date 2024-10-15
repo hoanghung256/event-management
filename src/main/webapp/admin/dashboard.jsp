@@ -4,7 +4,6 @@
     Author     : ThangNM
 --%>
 <%@include file="../include/admin-layout-header.jsp"%>
-<%@ page import="com.fuem.models.Event" %>
 <style>
     .no-events {
         display: flex;
@@ -154,7 +153,7 @@
                                             <td>
                                                 <div class="attendant__user-item">
                                                     <div class="registration__user-thumb">
-                                                        <img src="${event.organizer.avatarPath}" alt="image not found">
+                                                        <img src="<c:url value="${event.organizer.avatarPath}"/>" alt="image not found">
                                                     </div>
                                                     <div class="attendant__user-title">
                                                         <span>${event.organizer.fullname}</span>
@@ -417,7 +416,6 @@
         </div>
         <!-- end of organize event -->
         <!-- Dashboard area end -->
-
 </section>
-
+                                        
 <%@include file="../include/master-footer.jsp"%>

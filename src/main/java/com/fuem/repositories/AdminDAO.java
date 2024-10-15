@@ -158,7 +158,8 @@ public class AdminDAO extends SQLDatabase {
     public int getTotalOrganizedEvents(int adminId) {
         int totalEvent = 0;
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_TOTAL_ORGANIZED_EVENT, adminId);) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_TOTAL_ORGANIZED_EVENT, adminId);) {
             while (rs.next()) {
                 totalEvent = rs.getInt("TotalEvents");
             }
@@ -171,7 +172,8 @@ public class AdminDAO extends SQLDatabase {
     public int getTotalClub() {
         int totalClub = 0;
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_TOTAL_CLUBS);) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_TOTAL_CLUBS);){
             while (rs.next()) {
                 totalClub = rs.getInt("TotalClubs");
             }
@@ -184,7 +186,8 @@ public class AdminDAO extends SQLDatabase {
     public int getTotalUpcomingEvents(int adminId) {
         int totalUpcomingEvent = 0;
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_TOTAL_UPCOMING_EVENT, adminId);) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_TOTAL_UPCOMING_EVENT, adminId);){
             while (rs.next()) {
                 totalUpcomingEvent = rs.getInt("UpcomingEvents");
             }
@@ -198,7 +201,8 @@ public class AdminDAO extends SQLDatabase {
         Page<Event> page = new Page<>();
         ArrayList<Event> registrationEvent = new ArrayList<>();
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_REGISTRATION_EVENTS, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_REGISTRATION_EVENTS, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
             while (rs.next()) {
                 if (page.getTotalPage() == null && page.getCurrentPage() == null) {
                     page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
@@ -244,10 +248,10 @@ public class AdminDAO extends SQLDatabase {
     }
     public ArrayList<Event> getOrganizedEventExceptTheChoosen(int organizerId, int id) {
         ArrayList<Event> organizedEvent = new ArrayList<>();
-
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZED_EVENTS_EXCEPT_CHOOSEN, organizerId, id);) {
+      
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
+             ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZED_EVENTS_EXCEPT_CHOOSEN, organizerId, id);) {
             while (rs.next()) {
-
                 int eventId = rs.getInt("EventId");
                 String eventName = rs.getString("EventName");
                 LocalDate eventDate = rs.getDate("EventDate").toLocalDate();
@@ -292,7 +296,8 @@ public class AdminDAO extends SQLDatabase {
     public ArrayList<Event> getUpcomingEvent() {
         ArrayList<Event> upcomingEvent = new ArrayList<>();
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_UPCOMING_EVENTS);) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_UPCOMING_EVENTS);){
             while (rs.next()) {
                 String eventName = rs.getString("EventName");
                 String clubName = rs.getString("ClubName");

@@ -10,6 +10,7 @@ import com.fuem.models.Organizer;
 import com.fuem.repositories.StudentDAO;
 import com.fuem.models.Student;
 import com.fuem.repositories.OrganizerDAO;
+
 import com.fuem.utils.Hash;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -71,7 +72,6 @@ public class SignInController extends HttpServlet {
                     request.setAttribute("error", "Email hoặc mật khẩu không đúng");
                     request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
                 }
-                return;
             }
         } catch (IOException | ServletException e) {
             Logger.getLogger(SignInController.class.getName()).log(Level.SEVERE, null, e);

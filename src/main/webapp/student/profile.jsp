@@ -29,20 +29,20 @@
         text-align: left;
     }
     .change-password-section {
-        text-align: right; 
-        max-width: 200px; 
-        margin-left: auto; 
+        text-align: right;
+        max-width: 200px;
+        margin-left: auto;
     }
 
     .ticket__price-inner {
-        font-size: 13px; 
+        font-size: 13px;
     }
 
     .unfield__input-btn {
-        padding: 5px 10px; 
-        width: 100%; 
+        padding: 5px 10px;
+        width: 100%;
         height: 60%;
-        box-sizing: border-box; 
+        box-sizing: border-box;
     }
 
     .userInfor{
@@ -139,11 +139,7 @@
                                         </div>
                                     </div>
                                 </div>
-
-
-
                             </div>
-
                         </div>
                     </div>
                 </div>

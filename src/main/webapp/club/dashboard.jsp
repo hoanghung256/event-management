@@ -4,7 +4,7 @@
     Author     : ThangNM
 --%>
 <%@include file="../include/club-layout-header.jsp"%>
-<%@ page import="com.fuem.models.Event" %>
+
 <section>
     <!-- App side area start -->
     <div class="app__slide-wrapper">
@@ -71,7 +71,7 @@
         </div>
         <!--End of statistic number--> 
 
-        <!<!-- Start of Upcoming Event-->
+        <!-- Start of Upcoming Event-->
         <div>
             <c:if test="${not empty upcomingEvent}">
                 <c:forEach var="event" items="${upcomingEvent}">

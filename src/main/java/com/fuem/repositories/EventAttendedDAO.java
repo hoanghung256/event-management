@@ -5,6 +5,7 @@
 package com.fuem.repositories;
 
 import com.fuem.models.Event;
+import com.fuem.models.EventGuest;
 import com.fuem.repositories.helpers.Page;
 import com.fuem.repositories.helpers.PagingCriteria;
 import com.fuem.utils.DataSourceWrapper;
@@ -13,6 +14,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -80,6 +82,24 @@ public class EventAttendedDAO extends SQLDatabase{
         page.setDatas(eventsAttendedList);
         
         return page;
+    }
+      public List<EventGuest> getStudentAndEventIds() {
+        List<EventGuest> eventGuests = new ArrayList<>();
+        ResultSet rs = executeQueryPreparedStatement(SELECT_STUDENT_AND_EVENT_ID);
+
+        try {
+            while (rs.next()) {
+                int studentId = rs.getInt("studentId");
+                int eventId = rs.getInt("eventId");
+
+                EventGuest eventGuest = new EventGuest(studentId, eventId);
+                eventGuests.add(eventGuest);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+
+        return eventGuests;
     }
 }
 

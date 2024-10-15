@@ -5,7 +5,7 @@
 --%>
 
 <%@include file="../include/admin-layout-header.jsp"%>
-<%@ page import="com.fuem.models.Event" %>
+
 <section>
     <div class="app__slide-wrapper">
         <div class="breadcrumb__area">
@@ -173,4 +173,5 @@
             <!--End content cua page-->
         </div>
 </section>
+
 <%@include file="../include/master-footer.jsp" %>

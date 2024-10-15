@@ -1,4 +1,4 @@
-GO
+﻿GO
 /*
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 <<<<<<<<<< BEGIN: CREATE DATABASE <<<<<<<<<<
@@ -171,10 +171,11 @@ CREATE TABLE [Notification] (
 CREATE TABLE [NotificationReceiver] (
 	[notificationId] INT,
 	[receiverId] INT,
+	[isOrganizer] BIT
 
-	CONSTRAINT PK_NotificationReceiver PRIMARY KEY ([notificationId], [receiverId]),
-	FOREIGN KEY ([receiverId]) REFERENCES [Student]([id]),
-	FOREIGN KEY ([notificationId]) REFERENCES [Notification]([id])
+	CONSTRAINT PK_NotificationReceiver PRIMARY KEY ([notificationId], [receiverId], [isOrganizer]),
+	FOREIGN KEY ([notificationId]) REFERENCES [Notification]([id]),
+
 );
 
 CREATE TABLE [EventCollaborator] (
@@ -394,7 +395,7 @@ BEGIN
     BEGIN
         -- Insert a new notification for the organizer
         INSERT INTO [Notification] ([senderId], [title], [content])
-        VALUES (@organizerId, 'This is important notification!', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
+        VALUES (@organizerId, 'This is an important notification!', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.');
 
         -- Get the ID of the inserted notification
         SET @notificationId = SCOPE_IDENTITY();
@@ -408,8 +409,9 @@ BEGIN
 
         WHILE @@FETCH_STATUS = 0
         BEGIN
-            INSERT INTO [NotificationReceiver] ([notificationId], [receiverId])
-            VALUES (@notificationId, @userId);
+            -- Insert into NotificationReceiver for students (isOrganizer = 0)
+            INSERT INTO [NotificationReceiver] ([notificationId], [receiverId], [isOrganizer])
+            VALUES (@notificationId, @userId, 0);
 
             FETCH NEXT FROM userCursor INTO @userId;
         END;
@@ -426,6 +428,7 @@ END;
 
 CLOSE organizerCursor;
 DEALLOCATE organizerCursor;
+
 
 INSERT INTO [Feedback] ([guestId], [eventId], [content])
 VALUES
@@ -479,8 +482,43 @@ VALUES
 (4, 3, 1, 1),
 (5, 1, 1, 1),
 (6, 3, 1, 0);
+
+ALTER TABLE NotificationReceiver
+ADD CONSTRAINT FK_NotificationReceiver_ReceiverId
+FOREIGN KEY (receiverId) REFERENCES Student(id)
+ON DELETE CASCADE;
+
+ALTER TABLE EventCollaborator
+ADD CONSTRAINT FK_EventCollaborator_StudentId
+FOREIGN KEY (studentId) REFERENCES Student(id)
+ON DELETE CASCADE;
+
+ALTER TABLE EventGuest
+ADD CONSTRAINT FK_EventGuest_GuestId
+FOREIGN KEY (guestId) REFERENCES Student(id)
+ON DELETE CASCADE;
+
+ALTER TABLE Feedback
+ADD CONSTRAINT FK_Feedback_GuestId
+FOREIGN KEY (guestId) REFERENCES Student(id)
+ON DELETE CASCADE;
+
+ALTER TABLE Follow
+ADD CONSTRAINT FK_Follow_StudentId
+FOREIGN KEY (studentId) REFERENCES Student(id)
+ON DELETE CASCADE;
+
+ INSERT INTO [Student] ([fullname], [studentId], [email], [password], [gender])
+VALUES
+('Hoang Van Hung', 'DE180081', 'hunghvde180081@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'FEMALE'),
+('Nguyen Van Anh', 'DE180041', 'anhnqde1800041@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'FEMALE'),
+('Nguyen Van Thang', 'DE180121', 'thangnmde180121@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'FEMALE'),
+('Huynh Van Khiem', 'DE180031', 'khiemhvde180031@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'FEMALE'),
+('Dinh Van Tu', 'DE180061', 'tudkde180061@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'FEMALE'),
+('Trinh Van Hoang An', 'DE180071', 'huytbhde180071@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'FEMALE');
 /*
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 >>>>>>>>> END: EXAMPLE DATA >>>>>>>>>>
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+<<<<<<< HEAD
 */

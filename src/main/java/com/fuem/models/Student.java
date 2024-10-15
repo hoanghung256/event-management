@@ -19,6 +19,18 @@ public class Student extends User{
     public Student() {
     }
 
+    public Student(String studentId, Gender gender, int id) {
+        super(id);
+        this.studentId = studentId;
+        this.gender = gender;
+    }
+
+    public Student(int id, String studentId, Gender gender, String fullname, String email) {
+        super(fullname, id, email);
+        this.studentId = studentId;
+        this.gender = gender;
+    }
+
     public Student(String fullname, String studentId, String email, String password) {
         super(fullname, email, password);
         this.studentId = studentId;
@@ -33,6 +45,11 @@ public class Student extends User{
         super(id, fullname, email, avatarPath);
         this.studentId = studentId;
     }
+     public Student(String fullname, String studentId, String email) {
+        super(fullname, email, null); 
+        this.studentId = studentId;
+    }
+     
 
     public String getStudentId() {
         return studentId;
