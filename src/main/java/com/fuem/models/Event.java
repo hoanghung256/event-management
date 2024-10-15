@@ -187,15 +187,14 @@ public class Event {
         this.guestAttendedCount = guestAttendedCount;
     }
 
-    public Event(int eventId, String eventName, LocalDate eventDate, String locationName, String category) {
-       this.id = eventId;
-        this.fullname = eventName;
-        this.dateOfEvent = eventDate;
-        this.location = new Location(locationName);
-        this.category = new Category();
-        this.category.setName(category);
-    }
-
+//    public Event(int eventId, String eventName, LocalDate eventDate, String locationName, String category) {
+//       this.id = eventId;
+//        this.fullname = eventName;
+//        this.dateOfEvent = eventDate;
+//        this.location = new Location(locationName);
+//        this.category = new Category();
+//        this.category.setName(category);
+//    }
     
     public int getId() {
         return id;

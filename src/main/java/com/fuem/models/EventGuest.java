@@ -9,19 +9,19 @@ package com.fuem.models;
  * @author ADMIN
  */
 public class EventGuest {
-    private int studentId;
-    private int eventId;
+    private Student student;
+    private Event event;
 
-    public EventGuest(int studentId, int eventId) {
-        this.studentId = studentId;
-        this.eventId = eventId;
+    public EventGuest(Student student, Event event) {
+        this.student = student;
+        this.event = event;
     }
 
-    public int getStudentId() {
-        return studentId;
+    public Student getStudent() {
+        return student;
     }
 
-    public int getEventId() {
-        return eventId;
+    public Event getEvent() {
+        return event;
     }
 }

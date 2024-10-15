@@ -161,9 +161,6 @@ public class EventDAO extends SQLDatabase {
             + "status)"
             + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
     
-    private static final String UPDATE_EVENTS_REGISTRATION_STATUS = "UPDATE [Event]\n"
-            + "SET status = ?\n"
-            + "WHERE id = ?";
     private static final String SELECT_INCOMING_EVENT_BY_ORGANIZER_ID = "SELECT TOP 10 e.*, "
             + "       o.fullname AS organizerName, "
             + "       o.id AS organizerId, "

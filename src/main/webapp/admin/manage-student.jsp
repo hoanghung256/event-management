@@ -168,7 +168,7 @@
                                     <input type="text" id="searchValue" name="searchValue" placeholder="Search by..." aria-label="Search students" />
 
                                 </div>
-                                <div class="col-md-1 input d-flex "  style="padding-bottom: 18px; margin-left: 20px;" >
+                                <div class="col-md-1 input d-flex "  style="padding-bottom: 18px; margin-left: 5px;" >
                                     <button type="submit" " class="btn element__btn border-yellow find-button" >Find</button>
                                 </div>
                                 <div class="breadcrum__button">
