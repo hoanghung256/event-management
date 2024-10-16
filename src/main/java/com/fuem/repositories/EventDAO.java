@@ -524,6 +524,7 @@ public class EventDAO extends SQLDatabase {
                 event.setGuestAttendedCount(rs.getInt("guestAttendedCount"));
                 event.setCategory(category);
                 Location location = new Location(rs.getString("locationName"));
+
                 event.setLocation(location);
                 event.setDateOfEvent(rs.getDate("dateOfEvent").toLocalDate());
                 event.setStartTime(rs.getTimestamp("startTime").toLocalDateTime().toLocalTime());

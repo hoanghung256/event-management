@@ -33,6 +33,7 @@ public class Event {
     private int collaboratorRegisterCount;
     private List<String> images;
     private int guestAttendedCount;
+    private String role;
 
     public Event() {
     }
@@ -164,6 +165,14 @@ public class Event {
         this.location.setDescription(location);
         this.status = status; 
     }
+
+    public Event(int id, Organizer organizer, String fullname, LocalDate dateOfEvent, String role) {
+        this.id = id;
+        this.organizer = organizer;
+        this.fullname = fullname;
+        this.dateOfEvent = dateOfEvent;
+        this.role = role;
+    }
     
     public Event(String eventName, String clubName, LocalDate dateOfEvent, String location, String category){
         this.fullname = eventName;
@@ -198,6 +207,14 @@ public class Event {
     
     public int getId() {
         return id;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     public void setId(int id) {
