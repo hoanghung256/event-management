@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 public class StudentDAO extends SQLDatabase {
 
     private static final Logger logger = Logger.getLogger(StudentDAO.class.getName());
@@ -42,18 +43,42 @@ public class StudentDAO extends SQLDatabase {
             + "FETCH NEXT ? ROWS ONLY";
     private static final String DELETE_STUDENT_BY_ID = "DELETE FROM [Student] WHERE studentId = ?";
     private static final String UPDATE_STUDENT_BY_ID = "UPDATE Student SET fullname = ?, email = ?, studentId = ?, gender= ? WHERE  id = ?";
+    private static final String CHECK_PASSWORD_QUERY = "SELECT * FROM Student WHERE email = ? AND password = ?";
 
     public StudentDAO() {
         super();
     }
 
-    public void updatePassword(String email, String newPassword) {
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
-            executeUpdatePreparedStatement(conn, UPDATE_PASSWORD_BY_EMAIL, newPassword, email);
+    public boolean checkCurrentPassword(String email, String currentPasswordHash) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(CHECK_PASSWORD_QUERY)) {
+             
+            pstmt.setString(1, email);
+            pstmt.setString(2, currentPasswordHash);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return rs.next(); 
+            }
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, null, e);
+            Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, e);
         }
+        return false;
     }
+
+public void updatePassword(String email, String newPassword) {
+   
+    String hashedPassword = Hash.doHash(newPassword);
+
+    try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(UPDATE_PASSWORD_BY_EMAIL)) {
+         
+        pstmt.setString(1, hashedPassword);
+        pstmt.setString(2, email);
+        pstmt.executeUpdate();
+    } catch (SQLException e) {
+        Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, e);
+    }
+}
+
 
     public Student getUserByEmail(String email) {
         Student student = null;
