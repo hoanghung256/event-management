@@ -35,7 +35,7 @@
                         <!-- BODY GO HERE -->
                         <div class="event__details-area">
                             <div class="row">
-                                <div class="col-xxl-7 col-xl-6">
+                                <div class="col-md-7 p-1">
                                     <div class="event__details-left">
                                         <div class="body__card-wrapper mb-20">
                                             <div class="card__header-top">
@@ -48,7 +48,7 @@
                                                 <div class="review__author-meta mb-15">
                                                     <a href="#">
                                                         <div class="review__author-thumb">
-                                                            <img src="${event.organizer.avatarPath}" alt="Organizer Avatar" onerror="this.onerror=null; this.src='assets/img/default-avatar.png';">
+                                                            <img src="<c:url value="${event.organizer.avatarPath}"/>" alt="Organizer Avatar" onerror="this.onerror=null; this.src='assets/img/default-avatar.png';">
                                                         </div>
                                                         <div class="review__author-name">
                                                             <a href="club/OrganizerProfileController?organizerId=${event.organizer.id}"style="text-decoration: none; color: inherit;">
@@ -72,7 +72,7 @@
                                                                 <c:choose>
                                                                     <c:when test="${not empty event.images}">
                                                                         <c:forEach var="image" items="${event.images}">
-                                                                            <img src="${image}" alt="Event Image" />
+                                                                            <img src="<c:url value="${image}"/>" alt="Event Image" />
                                                                         </c:forEach>
                                                                     </c:when>
                                                                     <c:otherwise>
@@ -85,7 +85,7 @@
                                                                 <h4>About This Event</h4>
                                                                 <p>${event.description}</p>
                                                             </div>
-
+                                                            
                                                             <div class="ticket__purchase-wrapper mt-30">
                                                                 <h4 class="ticket__purchase-title">Register Now</h4>
                                                                 <div class="ticket__price-inner">
@@ -108,7 +108,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-xxl-5 col-xl-6">
+                                <div class="col-md-5 p-1">
                                     <div class="event__details-right">
                                         <div class="body__card-wrapper mb-20">
                                             <div class="event__meta-time">

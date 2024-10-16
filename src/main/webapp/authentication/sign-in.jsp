@@ -11,11 +11,11 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Expovent - Event Management Dashboard HTML5 Template</title>
+        <title>FUEM-FPTU Event Management System</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-style-mode" content="1">
-        <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
+        <link rel="shortcut icon" type="image/x-icon" href="assets/img/logo/logo-fpt-small.svg">
         <link rel="stylesheet" href="assets/app/css/bootstrap.min.css">
         <link rel="stylesheet" href="assets/app/css/meanmenu.min.css">
         <link rel="stylesheet" href="assets/app/css/animate.css">
@@ -29,6 +29,14 @@
         <link rel="stylesheet" href="assets/app/css/spacing.css">
         <link rel="stylesheet" href="assets/app/css/main.css">
     </head>
+    <style>.sign__input-thumb {
+    background-image: url('assets/img/sign/signin.jpg');
+    background-size: cover; /* Để hình ảnh phủ kín */
+    background-position: center; /* Căn giữa hình ảnh */
+    width: 100%; /* Chiều rộng 100% */
+    height: 100%; /* Chiều cao có thể tùy chỉnh */
+}
+</style>
 
     <body class="body-area">
         <!-- signin area start -->
@@ -38,9 +46,10 @@
                     <div class="sign__header">
                         <div class="sign__logo">
                             <a href="dashboard.html">
-                                <img class="logo-black" src="assets/img/logo/color-logo.svg" alt="image not found">
-                                <img class="logo-white" src="assets/img/eventlogo.png" alt="image not found">
+                                <img class="logo-black" src="assets/img/logo/logoFpt.svg.png" alt="image not found" style="width: 150px; height: auto;">
+                                <img class="logo-white" src="assets/img/logo/logoFpt.svg.png" alt="image not found" style="width: 150px; height: auto;">
                             </a>
+
                         </div>
                     </div>
                     <div class="sign__center-wrapper text-center mt-90">
@@ -87,7 +96,7 @@
                                             </g>
                                             <defs>
                                             <clipPath id="clip0_322_540">
-                                                <rect width="20" height="20" fill="white"/>
+                                                <rect width="20" height="20"/>
                                             </clipPath>
                                             </defs>
                                             </svg>
@@ -100,15 +109,15 @@
                             </form>
 
                             <div class="if__account mt-85">
-                                <p>Don't Have An Account?<a href="sign-up">Sign up now</a></p>
+                                <p>Don't Have An Account? <a href="sign-up">Sign up now</a></p>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="sign__right">
-                    <div class="sign__input-thumb" data-background="https://cucumber.fsoft.com.vn/wp-content/uploads/sites/14/2023/09/377918209_1818044748665768_1287143424373915875_n-1024x683.jpg">
-                    </div>
-                </div>
+               <div class="sign__right">
+    <div class="sign__input-thumb">
+    </div>
+</div>
             </div>
         </section>
         <!-- signin area end -->

@@ -53,6 +53,7 @@ public class ClubDAO extends SQLDatabase{
                                                         "    organizerId = ?";
    
     private static String SELECT_ORGANIZED_EVENTS =      "SELECT\n" 
+                                                        + "    Event.id AS EventId,\n"
                                                         + "    Event.fullname AS EventName,\n"
                                                         + "    Event.dateOfEvent AS EventDate,\n"
                                                         + "    Location.locationName AS LocationName,\n"
@@ -85,7 +86,8 @@ public class ClubDAO extends SQLDatabase{
                                                         "    Category ON Event.categoryId = Category.id\n" +
                                                         "WHERE \n" +
                                                         "    Event.organizerId = ?\n" +
-                                                        "    AND Event.dateOfEvent > GETDATE();";
+                                                        "    AND Event.dateOfEvent > GETDATE()\n" +
+                                                        "ORDER BY Event.dateOfEvent DESC;";
     
     public int getTotalEventOrganized(int clubId) {
         int totalEvent = 0;
@@ -136,12 +138,13 @@ public class ClubDAO extends SQLDatabase{
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
                 ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZED_EVENTS, clubId);){
             while(rs.next()){
+                int eventId = rs.getInt("EventId");
                 String eventName = rs.getString("EventName");
                 LocalDate eventDate = rs.getDate("EventDate").toLocalDate();
                 String locationName = rs.getString("LocationName");
                 String category = rs.getString("CategoryName");
                 
-                organizedEvent.add(new Event(eventName, eventDate, locationName, category));
+                organizedEvent.add(new Event(eventId, eventName, eventDate, locationName, category));
             }
         } catch (SQLException e){
             logger.log(Level.SEVERE, null, e);

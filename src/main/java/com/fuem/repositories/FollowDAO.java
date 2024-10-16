@@ -5,6 +5,8 @@
 package com.fuem.repositories;
 
 import com.fuem.models.Follow;
+import com.fuem.utils.DataSourceWrapper;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,8 +28,8 @@ public class FollowDAO extends SQLDatabase {
 
     // Kiểm tra xem người dùng đã theo dõi tổ chức hay chưa
     public boolean isUserFollowing(int followerId, int followedId) {
-        ResultSet rs = executeQueryPreparedStatement(SELECT_FOLLOW_BY_FOLLOWER_AND_FOLLOWED, followerId, followedId);
-        try {
+       try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+        ResultSet rs = executeQueryPreparedStatement(conn,SELECT_FOLLOW_BY_FOLLOWER_AND_FOLLOWED, followerId, followedId);) {
             if (rs.next()) {
                 return rs.getInt(1) > 0;
             }

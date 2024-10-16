@@ -9,28 +9,8 @@ package com.fuem.enums;
  * @author hoang hung
  */
 public enum Status {
-    PENDING {
-        @Override
-        public String toString() {
-            return "Pending";
-        }
-    },
-    APPROVED {
-        @Override
-        public String toString() {
-            return "Approved";
-        }
-    },
-    REJECTED {
-        @Override
-        public String toString() {
-            return "Rejected";
-        }
-    },
-    ON_GOING {
-        @Override
-        public String toString() {
-            return "On going";
-        }
-    },
+    PENDING,
+    APPROVED,
+    REJECTED,
+    ON_GOING;
 }

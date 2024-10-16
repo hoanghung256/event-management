@@ -29,8 +29,6 @@ public class OrganizerDAO extends SQLDatabase {
     }
 
     public boolean isEmailAndPasswordExist(String email, String password) {
-        
-
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
                 ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZER_BY_EMAIL_AND_PASSWORD, email, password);){
             while (rs.next()) {
@@ -44,8 +42,6 @@ public class OrganizerDAO extends SQLDatabase {
     }
 
     public Organizer getOrganizerByEmailAndPassword(String email, String password) {
-        
-
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
                 ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZER_BY_EMAIL_AND_PASSWORD, email, password);){
             while (rs.next()) {
@@ -72,6 +68,10 @@ public class OrganizerDAO extends SQLDatabase {
      */
     public boolean updateOrganizer(Organizer organizer) {
         boolean isUpdated = false;
+       try(Connection conn = DataSourceWrapper.getDataSource().getConnection();)
+               
+               {
+           
         Object[] values = {
                 organizer.getFullname(),
                 organizer.getAcronym(),
@@ -79,20 +79,25 @@ public class OrganizerDAO extends SQLDatabase {
                 organizer.getDescription(),
                 organizer.getId()
         };
-        int rowsAffected = executeUpdatePreparedStatement(UPDATE_ORGANIZER, values);
+        int rowsAffected = executeUpdatePreparedStatement(conn,UPDATE_ORGANIZER, values);
         isUpdated = rowsAffected > 0;
-
-        return isUpdated;
+         return isUpdated;
+       } catch(SQLException e){
+           logger.log(Level.SEVERE, null, e);
+       }
+       return false;
     }
 
     /**
      * @author TuDK
      */
     public Organizer getOrganizerById(int organizerId) {
-        ResultSet rs = executeQueryPreparedStatement(SELECT_ORGANIZER_BY_ID, organizerId);
+        
         Organizer organizer = null;
 
-        try {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn,SELECT_ORGANIZER_BY_ID, organizerId);) {
+            
             if (rs.next()) {
                 organizer = new Organizer(
                         rs.getInt("id"),
