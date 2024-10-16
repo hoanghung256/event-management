@@ -13,6 +13,8 @@
         background-color: #e1e1e1;
     }
 
+
+
     .popup__overlay {
         display: none; /* ?n popup m?c ??nh */
         position: fixed;
@@ -35,8 +37,8 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         position: relative;
         animation: popupFadeIn 0.3s ease;
+
     }
-    
     .search__bar input {
         margin-right: auto;
         padding: 8px;
@@ -125,6 +127,7 @@
         height: fit-content;
     }
 
+
     .input-row {
         display: flex;
         justify-content: space-between;
@@ -138,6 +141,8 @@
     .input-row .singel__input-field:last-child {
         margin-right: 0;
     }
+
+
 
 </style>
 
@@ -158,8 +163,6 @@
                                 </ul>
                             </nav>
                         </div>
-
-
                     </div>
                     <div class="search_add d-flex justify-content-between align-items-center">
                         <form method="get" action="${pageContext.request.contextPath}/admin/manage-student">
@@ -176,14 +179,10 @@
                                 </div>
                             </div>
                         </form>
-
                     </div>
-
-
                 </div>
             </div>
         </div>
-
 
         <!-- Popup for Delete Confirmation -->
         <div class="popup__overlay" id="deleteConfirmationPopup">
@@ -279,7 +278,7 @@
                                 <option value="MALE">MALE</option>
                                 <option value="FEMALE">FEMALE</option>
                                 <option value="OTHER">OTHER</option>
-                            </select>
+                                <select/>
                         </div>
                     </div>
                     <c:if test="${not empty editError}">
@@ -351,58 +350,6 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                            <!--List result find-->
-                            <tbody>
-                                <c:forEach var="student" items="${students}">
-                                    <tr data-student-id="${student.studentId}">
-                                        <td>
-                                            <div class="attendant__user-item">
-                                                <div class="attendant__user-title">
-                                                    <span id="fullname-${student.id}">${student.fullname}</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="attendant__user-id">
-                                                <span id="studentId-${student.id}">${student.studentId}</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="attendant__user-gender">
-                                                <span id="gender-${student.id}">${student.gender}</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="attendant__email">
-                                                <span id="email-${student.id}">${student.email}</span>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="attendant__action">
-                                                <div class="card__header-dropdown">
-                                                    <div class="dropdown">
-                                                        <button>
-                                                            <svg class="attendant__dot" width="14" height="4" viewBox="0 0 14 4" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path d="M2 0.75C2.69036 0.75 3.25 1.30964 3.25 2C3.25 2.69036 2.69036 3.25 2 3.25C1.30964 3.25 0.75 2.69036 0.75 2C0.75 1.30964 1.30964 0.75 2 0.75Z" fill="white"></path>
-                                                            <path d="M7 0.75C7.69036 0.75 8.25 1.30964 8.25 2C8.25 2.69036 7.69036 3.25 7 3.25C6.30964 3.25 5.75 2.69036 5.75 2C5.75 1.30964 6.30964 0.75 7 0.75Z" fill="white"></path>
-                                                            <path d="M13.25 2C13.25 1.30964 12.6904 0.75 12 0.75C11.3096 0.75 10.75 1.30964 10.75 2C10.75 2.69036 11.3096 3.25 12 3.25C12.6904 3.25 13.25 2.69036 13.25 2Z" fill="white"></path>
-                                                            </svg>
-                                                        </button>
-                                                        <div class="dropdown-list">
-                                                            <a class="dropdown__item" onclick="editStudentById('${student.id}')">Edit</a>
-                                                            <form action="${pageContext.request.contextPath}/manage-student" method="post" style="display: inline;">
-                                                                <input type="hidden" name="studentId" value="${student.studentId}" />
-                                                                <input type="hidden" name="action" value="delete" />
-                                                                <a class="dropdown__item" href="javascript:void(0)" onclick="showDeleteConfirmation('${student.studentId}')">Delete</a>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
-                            </tbody>
 
                             <tbody>
                                 <c:forEach var="student" items="${page.datas}">
@@ -456,6 +403,7 @@
                                 </c:forEach>
                             </tbody>
                         </table>
+
                         <!<!-- pagination controls -->
                         <div class="basic__pagination d-flex align-items-center justify-content-end">
                             <nav>
@@ -464,7 +412,7 @@
                                         <c:choose>
                                             <c:when test="${i == 0 && page.currentPage > 0}">
                                                 <li>
-                                                    <a href="manage-student?page=${page.currentPage - 1}">
+                                                    <a href="manage-student?page=${page.currentPage - 1}&searchValue=${previousSearchValue}">
                                                         <i class="fa-regular fa-arrow-left-long"></i>
                                                     </a>
                                                 </li>
@@ -478,7 +426,7 @@
                                                     </c:when>
                                                     <c:otherwise>
                                                         <li>
-                                                            <a href="manage-student?page=${i}">${i + 1}</a>
+                                                            <a href="manage-student?page=${i}&searchValue=${previousSearchValue}">${i + 1}</a>
                                                         </li>
                                                     </c:otherwise>
                                                 </c:choose>
@@ -488,14 +436,14 @@
                                                 </c:when>
                                                 <c:when test="${i == page.totalPage - 1 && page.currentPage + 5 < page.totalPage - 1}">
                                                 <li>
-                                                    <a href="manage-student?page=${page.totalPage - 1}">
+                                                    <a href="manage-student?page=${page.totalPage - 1}&searchValue=${previousSearchValue}">
                                                         ${page.totalPage}
                                                     </a>
                                                 </li>
                                             </c:when>
                                             <c:when test="${i == page.totalPage - 1 && page.currentPage < page.totalPage - 1}">
                                                 <li>
-                                                    <a href="manage-student?page=${page.currentPage + 1}">
+                                                    <a href="manage-student?page=${page.currentPage + 1}&searchValue=${previousSearchValue}">
                                                         <i class="fa-regular fa-arrow-right-long"></i>
                                                     </a>
                                                 </li>
@@ -512,6 +460,7 @@
     </div>
 </div>
 </div>
+
 <script>
     // Open popup ?? thêm sinh viên
     document.querySelector('.breadcrum__btn').addEventListener('click', function (event) {
@@ -620,6 +569,12 @@
     }
     ;
 </script>
+
+
+
+
+
+
 </section>
 
 <%@include file="../include/master-footer.jsp"%>

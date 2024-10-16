@@ -1,7 +1,6 @@
 package com.fuem.controllers;
 
 import com.fuem.enums.Gender;
-import com.fuem.models.Event;
 import com.fuem.models.Student;
 import com.fuem.repositories.StudentDAO;
 import com.fuem.repositories.helpers.Page;
@@ -12,7 +11,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,21 +28,15 @@ public class ManageStudentController extends HttpServlet {
         String searchValue = request.getParameter("searchValue");
         List<Student> listStudents;
 
-        if (searchValue != null && !searchValue.trim().isEmpty()) {
-            listStudents = dao.searchStudents(searchValue);
-            if (listStudents.isEmpty()) {
-                request.setAttribute("searchError", "No student found with the given criteria.");
-            }
-        } else {
-            // Nếu không tìm kiếm, lấy danh sách sinh viên theo phân trang
-            String pageNumberStr = request.getParameter("page");
-            Integer pageNumber = (pageNumberStr == null) ? 0 : Integer.valueOf(pageNumberStr);
-            PagingCriteria pagingCriteria = new PagingCriteria(pageNumber, 10);
+        String pageNumberStr = request.getParameter("page");
+        Integer pageNumber = (pageNumberStr == null) ? 0 : Integer.valueOf(pageNumberStr);
+        PagingCriteria pagingCriteria = new PagingCriteria(pageNumber, 10);
 
-            Page<Student> pageStudents = dao.getStudents(pagingCriteria);
-            listStudents = pageStudents.getDatas();
-            request.setAttribute("page", pageStudents);
-        }
+        Page<Student> pageStudents = dao.getStudents(pagingCriteria, searchValue);
+        listStudents = pageStudents.getDatas();
+
+        request.setAttribute("previousSearchValue", searchValue);
+        request.setAttribute("page", pageStudents);
 
         request.setAttribute("students", listStudents); // Luôn thiết lập thuộc tính students
         request.getRequestDispatcher("manage-student.jsp").forward(request, response); // Chuyển hướng đến trang JSP
@@ -83,7 +75,6 @@ public class ManageStudentController extends HttpServlet {
                 return; // Thoát khỏi phương thức nếu mật khẩu không khớp
             }
 
-            // Kiểm tra giới tính
             Gender gender = Gender.valueOf(genderStr.toUpperCase());
 
             // Tạo đối tượng Student mới

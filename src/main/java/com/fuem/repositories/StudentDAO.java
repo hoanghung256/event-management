@@ -2,19 +2,16 @@ package com.fuem.repositories;
 
 import com.fuem.enums.Gender;
 import com.fuem.enums.Role;
-import com.fuem.models.Event;
 import com.fuem.models.Student;
 import com.fuem.repositories.helpers.Page;
 import com.fuem.repositories.helpers.PagingCriteria;
 import com.fuem.utils.DataSourceWrapper;
 import com.fuem.utils.Hash;
-import static java.lang.String.valueOf;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,7 +21,6 @@ public class StudentDAO extends SQLDatabase {
     private static final String SELECT_STUDENT_BY_EMAIL = "SELECT * FROM [Student] WHERE email = ?";
     private static final String SELECT_STUDENT_BY_EMAIL_AND_PASSWORD = "SELECT id, fullname, studentId, email, avatarPath FROM [Student] WHERE email = ? AND password = ?";
     private static final String SELECT_STUDENT_BY_STUDENT_ID = "SELECT * FROM [Student] WHERE studentId=?";
-    private static final String FIND_STUDENT = "SELECT * FROM Student WHERE studentId = ? OR fullname LIKE ?";
     private static final String UPDATE_PASSWORD_BY_EMAIL = "Update [Student] "
             + "SET password = ? "
             + "WHERE email = ?";
@@ -37,6 +33,7 @@ public class StudentDAO extends SQLDatabase {
             + "gender, "
             + "COUNT (*) OVER() AS 'TotalRow' "
             + "FROM [Student] "
+            + "WHERE  COALESCE(studentId, '') LIKE '%' + COALESCE(?, '') + '%' OR  COALESCE(fullname, '') LIKE '%' + COALESCE(?, '') + '%'\n"
             + "ORDER BY id ASC\n"
             + "OFFSET ? ROWS\n"
             + "FETCH NEXT ? ROWS ONLY";
@@ -119,13 +116,13 @@ public class StudentDAO extends SQLDatabase {
     }
 
     /**
-     * @author; TrinhHuy
+     * @author TrinhHuy
      */
-    public Page<Student> getStudents(PagingCriteria pagingCriteria) {
+    public Page<Student> getStudents(PagingCriteria pagingCriteria, String searchKeyword) {
         Page<Student> page = new Page<>();
         ArrayList<Student> students = new ArrayList<>();
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_STUDENTS, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_STUDENTS, searchKeyword, searchKeyword, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
 
             while (rs.next()) {
                 if (page.getTotalPage() == null && page.getCurrentPage() == null) {
@@ -135,7 +132,7 @@ public class StudentDAO extends SQLDatabase {
                 Student student = new Student(
                         rs.getInt("id"),
                         rs.getString("studentId"),
-                        rs.getString("gender") == null ? null : Gender.valueOf(rs.getString("gender")),
+                        Gender.valueOf(rs.getString("gender")),
                         rs.getString("fullname"),
                         rs.getString("email")
                 );
@@ -204,7 +201,7 @@ public class StudentDAO extends SQLDatabase {
     }
 
     /**
-     * @author; TrinhHuy
+     * @author TrinhHuy
      */
     public boolean updateStudent(Student student) {
 
@@ -219,38 +216,4 @@ public class StudentDAO extends SQLDatabase {
 
         return result > 0; // Trả về true nếu có ít nhất một dòng được cập nhật
     }
-
-    /**
-     * @author; TrinhHuy
-     */
-    public List<Student> searchStudents(String searchValue) {
-        List<Student> students = new ArrayList<>();
-
-        // Sử dụng try-with-resources để đảm bảo tự động đóng kết nối
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); PreparedStatement pstmt = conn.prepareStatement(FIND_STUDENT)) {
-
-            pstmt.setString(1, searchValue); // Gán giá trị cho studentId
-            pstmt.setString(2, "%" + searchValue + "%"); // Gán giá trị cho fullname với ký tự đại diện
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    // Tạo đối tượng Student từ ResultSet
-                    Student student = new Student(
-                            rs.getInt("id"),
-                            rs.getString("studentId"),
-                            rs.getString("gender") == null ? null : Gender.valueOf(rs.getString("gender")),
-                            rs.getString("fullname"),
-                            rs.getString("email")
-                    );
-                    students.add(student);
-                }
-            }
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, "Error searching students", e);
-            throw new RuntimeException("Error searching students", e); // Ném ngoại lệ để xử lý ở cấp cao hơn nếu cần
-        }
-
-        return students; // Trả về danh sách sinh viên tìm thấy
-    }
-
 }
