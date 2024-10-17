@@ -72,7 +72,25 @@ public class SignUpController extends HttpServlet {
             request.getRequestDispatcher("authentication/sign-up.jsp").forward(request, response);
             return;
         }
-
+        if ((fullname == null || fullname.isEmpty())
+                && (password == null || password.isEmpty())
+                && (email == null || email.isEmpty())
+                && (studentId == null || studentId.isEmpty())
+                && (confirmPassword == null || confirmPassword.isEmpty())) {
+            request.setAttribute("error", "Please fill all blanks needed.");
+            request.getRequestDispatcher("authentication/sign-up.jsp").forward(request, response);
+            return;
+        }
+        if(!Validator.isFullNameValid(fullname)) {
+            request.setAttribute("error", "Full name can not contains special characters.");
+            request.getRequestDispatcher("authentication/sign-up.jsp").forward(request, response);
+            return;
+        }
+        if((!Validator.isStudentIdMatch(email, studentId))) {
+            request.setAttribute("error", "Student ID is not valid or not match with your email.");
+            request.getRequestDispatcher("authentication/sign-up.jsp").forward(request, response);
+            return;
+        }
         if (!Validator.isEmailBelongFPT(email)) {
             request.setAttribute("error", "Email not allow, must be FPT Education email");
             request.getRequestDispatcher("authentication/sign-up.jsp").forward(request, response);

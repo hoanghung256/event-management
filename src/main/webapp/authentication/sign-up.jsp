@@ -12,12 +12,12 @@
 <head>
       <meta charset="utf-8">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
-      <title>Expovent - Event Management Dashboard HTML5 Template</title>
+      <title>FPTU Event Management</title>
       <meta name="description" content="">
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="theme-style-mode" content="1">
       <!-- Place favicon.ico in the root directory -->
-      <link rel="shortcut icon" type="image/x-icon" href="assets/img//logo/logofpt.png">
+       <link rel="shortcut icon" type="image/x-icon" href="assets/img/logo/logo-fpt-small.svg">
       <!-- CSS here -->
    <link rel="stylesheet" href="assets/app/css/bootstrap.min.css">
    <link rel="stylesheet" href="assets/app/css/meanmenu.min.css">
@@ -82,27 +82,28 @@
                   </div>
                   <div class="sign__input-form text-center">
                      <form action="sign-up"method="POST"> 
-                        <div class="sign__input">
-                            <input type="text" placeholder="Full Name" name="fullname">
-                           <span><i class="flaticon-user-2"></i></span>
-                        </div>
-                          <div class="sign__input">
-                           <input type="text" placeholder="Student ID" name="studentId">
-                           <span><i class="flaticon-user-2"></i></span>
-                        </div>
-                        <div class="sign__input">
-                           <input type="email" placeholder="Email Address" name="email" value="${email}">
-                           <span><i class="flaticon-user-2"></i></span>
-                        </div>
-                        <div class="sign__input">
-                           <input type="password" placeholder="Enter Password" name="password">
-                           <span><i class="flaticon-password"></i></span>
-                        </div>
-                        <div class="sign__input">
-                           <input type="password" placeholder="Confirm Password" name="confirmPassword">
-                           <span><i class="flaticon-password"></i></span>
-                        </div>
-                        <div class="sing__button mb-20">
+                         <div class="sign__input">
+                             <input type="text" placeholder="Full Name" name="fullname" required>
+                             <span><i class="flaticon-user-2"></i></span>
+                         </div>
+                         <div class="sign__input">
+                             <input type="text" placeholder="Student ID" name="studentId" required>
+                             <span><i class="flaticon-user-2"></i></span>
+                         </div>
+                         <div class="sign__input">
+                             <input type="email" placeholder="Email Address" name="email" value="${email}" required>
+                             <span><i class="flaticon-user-2"></i></span>
+                         </div>
+                         <div class="sign__input">
+                             <input type="password" placeholder="Enter Password" name="password" required>
+                             <span><i class="flaticon-password"></i></span>
+                         </div>
+                         <div class="sign__input">
+                             <input type="password" placeholder="Confirm Password" name="confirmPassword" required>
+                             <span><i class="flaticon-password"></i></span>
+                         </div>
+
+                         <div class="sing__button mb-20">
                             <c:if test="${not empty error}">
                                 <p class="text-danger">${error}</p>
                             </c:if>
@@ -110,7 +111,7 @@
                                 <p class="text-info">${message}</p>
                             </c:if>
                            <button class="input__btn w-100 mb-20" type="submit">Sign up</button>
-                           <button class="gamil__sign-btn w-100" type="submit"><span><svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<!--                          // xóa nút sign up bằng gg-->
                               <g clip-path="url(#clip0_322_540)">
                               <path d="M4.43242 12.0863L3.73625 14.6852L1.19176 14.739C0.431328 13.3286 0 11.7149 0 10C0 8.34179 0.403281 6.77804 1.11812 5.40112H1.11867L3.38398 5.81644L4.37633 8.06815C4.16863 8.67366 4.05543 9.32366 4.05543 10C4.05551 10.7341 4.18848 11.4374 4.43242 12.0863Z" fill="#FBBB00"/>
                               <path d="M19.8252 8.13184C19.94 8.73676 19.9999 9.36148 19.9999 9.99996C19.9999 10.7159 19.9246 11.4143 19.7812 12.0879C19.2944 14.3802 18.0224 16.3818 16.2604 17.7983L16.2598 17.7978L13.4065 17.6522L13.0027 15.1313C14.1719 14.4456 15.0857 13.3725 15.567 12.0879H10.2197V8.13184H15.645H19.8252Z" fill="#518EF8"/>
