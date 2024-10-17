@@ -5,7 +5,35 @@
 --%>
 
 <%@include file="include/student-layout-header.jsp"%>
+<style>
+    .carousel-item img {
+        width: 100%;
+        height: auto;
+        max-height: 500px;
+        object-fit: contain;
+    }
+    .carousel-control-prev,
+    .carousel-control-next {
+        width: 40px;
+        height: 40px;
 
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        top: 50%;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        width: 30px;
+        height: 30px;
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 50%;
+    }
+
+
+</style>
 <section>
     <div class="app__slide-wrapper">
         <div class="breadcrumb__area">
@@ -35,7 +63,7 @@
                         <!-- BODY GO HERE -->
                         <div class="event__details-area">
                             <div class="row">
-                                <div class="body__card-wrapper mb-20 pt-3 pb-2">
+                                <div class="body__card-wrapper mb-1 pt-3 pb-2">
                                     <div class="card__header-top">
                                         <div class="card__title-inner">
                                             <h2 style="font-size: 28px;" class="event__information-title">${event.fullname}</h2>
@@ -73,24 +101,34 @@
                                                 <div class="tab-content" id="nav-tabContent">
                                                     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
                                                         <div class="about__event-thumb w-img mt-40">
-                                                            <c:choose>
-                                                                <c:when test="${not empty event.images}">
-                                                                    <c:forEach var="image" items="${event.images}">
-                                                                        <img src="<c:url value="${image}"/>" alt="Event Image" />
-                                                                    </c:forEach>
-                                                                </c:when>
-                                                                <c:otherwise>
-                                                                    <img src="${pageContext.request.contextPath}/assets/img/event/default-image.jpg" alt="Default Image" />
-                                                                </c:otherwise>
-                                                            </c:choose>
-                                                        </div>
+                                                            <div id="eventImageCarousel" class="carousel slide" data-ride="carousel" data-interval="2000">
 
+                                                                <ol class="carousel-indicators">
+                                                                    <c:forEach var="image" items="${event.images}" varStatus="status">
+                                                                        <li data-target="#eventImageCarousel" data-slide-to="${status.index}" class="${status.first ? 'active' : ''}"></li>
+                                                                        </c:forEach>
+                                                                </ol>
+                                                                <div class="carousel-inner">
+                                                                    <c:forEach var="image" items="${event.images}" varStatus="status">
+                                                                        <div class="carousel-item ${status.first ? 'active' : ''}">
+                                                                            <img class="d-block w-100" src="<c:url value='${image}'/>" alt="Event Image ${status.index + 1}">
+                                                                        </div>
+                                                                    </c:forEach>
+                                                                </div>
+                                                                <a class="carousel-control-prev" href="#eventImageCarousel" role="button" data-slide="prev">
+                                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                                    <span class="sr-only">Previous</span>
+                                                                </a>
+                                                                <a class="carousel-control-next" href="#eventImageCarousel" role="button" data-slide="next">
+                                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                                    <span class="sr-only">Next</span>
+                                                                </a>
+                                                            </div>
+                                                        </div>
                                                         <div class="about__content mt-30">
                                                             <h4>About This Event</h4>
                                                             <p>${event.description}</p>
-                                                            </div>
-
-
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -198,5 +236,6 @@
         <!--End content cua page-->
     </div>
 </section>
-
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <%@include file="include/master-footer.jsp" %>
