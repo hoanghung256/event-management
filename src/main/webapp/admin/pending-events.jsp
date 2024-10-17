@@ -68,7 +68,7 @@
                                                     <tr>
                                                         <td>
                                                             <div class="attendant__seminar">
-                                                                <span><a href="">${event.organizer.acronym}</a></span>
+                                                                <span><a href="">${event.organizer.fullname}</a></span>
                                                             </div>
                                                         </td>
                                                         <td>
@@ -88,7 +88,7 @@
                                                         </td>
                                                         <td>
                                                             <div>
-                                                                <span>${event.location.description}</span>
+                                                                <span>${event.location.name}</span>
                                                             </div>
                                                         </td>
                                                         <td>

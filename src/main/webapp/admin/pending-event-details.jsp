@@ -52,9 +52,7 @@
                                                         </div>
                                                         <div class="review__author-name">
                                                             <h4>
-                                                                <a href="<c:url value="/profile?role=organizer&id=${event.organizer.id}" />" >
-                                                                    ${event.organizer.fullname}
-                                                                </a>
+                                                                <a href="<c:url value="/profile?role=organizer&id=${event.organizer.id}"/>">${event.organizer.fullname}</a>
                                                             </h4>
                                                         </div>
                                                 </div>
