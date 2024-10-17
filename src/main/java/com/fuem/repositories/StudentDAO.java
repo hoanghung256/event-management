@@ -43,8 +43,9 @@ public class StudentDAO extends SQLDatabase {
             + "FETCH NEXT ? ROWS ONLY";
     private static final String DELETE_STUDENT_BY_ID = "DELETE FROM [Student] WHERE studentId = ?";
     private static final String UPDATE_STUDENT_BY_ID = "UPDATE Student SET fullname = ?, email = ?, studentId = ?, gender= ? WHERE  id = ?";
+    private static final String SELECT_STUDENT_BY_ID = "SELECT fullname, studentId, email, gender, avatarPath FROM [Student] WHERE id=?";
     private static final String CHECK_PASSWORD_QUERY = "SELECT * FROM Student WHERE email = ? AND password = ?";
-
+  
     public StudentDAO() {
         super();
     }
@@ -278,4 +279,28 @@ public void updatePassword(String email, String newPassword) {
         return students; // Trả về danh sách sinh viên tìm thấy
     }
 
+    /**
+     * 
+     * @author HungHV 
+     */
+    public Student getStudentById(int id) {
+        Student s = null;
+        
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_STUDENT_BY_ID, id)) {
+            if (rs.next()) {
+                s = new Student(
+                        id,
+                        rs.getNString("fullname"), 
+                        rs.getString("studentId"), 
+                        rs.getNString("email"), 
+                        rs.getNString("avatarPath")
+                );
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        
+        return s;
+    }
 }

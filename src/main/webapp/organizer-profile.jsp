@@ -1,13 +1,22 @@
 <%-- 
-    Document   : profile
+    Document   : organier-profile
     Created on : Oct 3, 2024, 10:19:13?PM
-    Author     : Administrator
+    Author     : TuDK
 --%>
-<!doctype html>
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@include file="../include/club-layout-header.jsp"%>
+
+<c:choose>
+    <c:when test="${sessionScope.userInfor.role == 'STUDENT'}">
+        <%@include file="include/student-layout-header.jsp"%>
+    </c:when>
+    <c:when test="${sessionScope.userInfor.role == 'ADMIN'}">
+        <%@include file="include/admin-layout-header.jsp"%>
+    </c:when>
+    <c:otherwise>
+        <%@include file="include/club-layout-header.jsp"%>
+    </c:otherwise>
+</c:choose>
 
 <section>
     <div class="app__slide-wrapper">
@@ -21,7 +30,17 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="<c:url value="/club/dashboard" />">Dashboard</a></span></li>
+                                    <c:choose>
+                                        <c:when test="${sessionScope.userInfor.role == 'STUDENT'}">
+                                            <li><span><a href="<c:url value="/home" />">Home</a></span></li>
+                                        </c:when>
+                                        <c:when test="${sessionScope.userInfor.role == 'ADMIN'}">
+                                            <li><span><a href="<c:url value="/admin/dashboard" />">Dashboard</a></span></li>
+                                        </c:when>
+                                        <c:when test="${sessionScope.userInfor.role == 'CLUB'}">
+                                            <li><span><a href="<c:url value="/club/dashboard" />">Dashboard</a></span></li>
+                                        </c:when>
+                                    </c:choose>
                                     <li class="active"><span>Profile</span></li>
                                 </ul>
                             </nav>
@@ -45,31 +64,20 @@
                         <div class="">
                             <div class="card__title-inner">
                                 <h4 class="event__information-title">Profile Information</h4>
-                                <c:choose>
+                                <form action="<c:url value="/student/follow" />" method="POST">
+                                    <input type="hidden" name="organizerId" value="${organizer.id}">
+                                    <c:choose>
+                                        <c:when test="${isFollowing == true}">
+                                            <input type="hidden" name="action" value="unfollow">
+                                            <button type="submit" class="btn btn-danger">Unfollow</button>
+                                        </c:when>
 
-                                    <c:when test="${canFollow}">
-                                        <c:choose>
-                                           
-                                            <c:when test="${hasFollowed}">
-                                                
-                                                <form action="${pageContext.request.contextPath}/OrganizerProfileController" method="post">
-                                                    <input type="hidden" name="organizerId" value="${org.id}">
-                                                    <input type="hidden" name="action" value="unfollow">
-                                                    <button type="submit" class="btn btn-danger">Followed</button>
-                                                </form>
-                                            </c:when>
-                                           
-                                            <c:otherwise>
-                                              
-                                                <form action="${pageContext.request.contextPath}/OrganizerProfileController" method="post">
-                                                    <input type="hidden" name="organizerId" value="${org.id}">
-                                                    <input type="hidden" name="action" value="follow">
-                                                    <button type="submit" class="btn btn-primary">Follow</button>
-                                                </form>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </c:when>
-                                </c:choose>
+                                        <c:when test="${isFollowing == false}">
+                                            <input type="hidden" name="action" value="follow">
+                                            <button type="submit" class="btn btn-primary">Follow</button>
+                                        </c:when>
+                                    </c:choose>
+                                </form>
                             </div>
                         </div>
                         <div class="review__tab">
@@ -91,11 +99,6 @@
                                                         <div class="profile__thumb mb-45">
                                                             <img src="assets/img/speaker/list/04.jpg" alt="image not found"> 
                                                         </div>
-                                                        <% if ((Boolean) request.getAttribute("canEdit")) { %>
-                                                        <div class="profile__edit" data-bs-toggle="modal" data-bs-target="#editProfileModal">
-                                                            <i class="flaticon-edit"></i>
-                                                        </div>
-                                                        <% } %>
                                                         <div class="profile__user">
                                                             <ul>
                                                                 <li>
@@ -104,7 +107,7 @@
                                                                             <span>Club Name:</span>
                                                                         </div>
                                                                         <div class="profile__user-info">
-                                                                            <span>${org.fullname}</span>
+                                                                            <span>${organizer.fullname}</span>
                                                                         </div>
                                                                     </div>
                                                                 </li>
@@ -115,7 +118,7 @@
                                                                             <span>Club Acronym:</span>
                                                                         </div>
                                                                         <div class="profile__user-info">
-                                                                            <span>${org.acronym}</span> 
+                                                                            <span>${organizer.acronym}</span> 
                                                                         </div>
                                                                     </div>
                                                                 </li>
@@ -125,7 +128,7 @@
                                                                             <span>Email Address:</span>
                                                                         </div>
                                                                         <div class="profile__user-info">
-                                                                            <span>${org.email}</span>
+                                                                            <span>${organizer.email}</span>
                                                                         </div>
                                                                     </div>
                                                                 </li>
@@ -139,7 +142,7 @@
                                                     <div class="profile__about-info">
                                                         <span class="profile__title">About Us</span>
                                                         <div class="profile__text">
-                                                            <p class="profile-description mb-25">${org.description}</p> 
+                                                            <p class="profile-description mb-25">${organizer.description}</p> 
                                                         </div>
                                                     </div>
                                                 </div>
@@ -173,7 +176,7 @@
                                                     </p>
                                                     <div class="event-info-list" style="display: flex; justify-content: space-between;">
                                                         <div style="margin-bottom: 10px;">
-                                                            <span class="event-type"><i class="fa-solid fa-list"></i> ${event.type.name}</span>
+                                                            <span class="event-type"><i class="fa-solid fa-list"></i> ${event.category.name}</span>
                                                         </div>
                                                         <div>
                                                             <p class="location"><i class="fas fa-location-dot"></i> ${event.location.description}</p>
@@ -214,19 +217,19 @@
                     <input type="hidden" name="organizerId" value="${org.id}">
                     <div class="mb-3">
                         <label for="clubName" class="form-label">Club Name</label>
-                        <input type="text" class="form-control" id="clubName" name="fullname" value="${org.fullname}">
+                        <input type="text" class="form-control" id="clubName" name="fullname" value="${organizer.fullname}">
                     </div>
                     <div class="mb-3">
                         <label for="clubAcronym" class="form-label">Club Acronym</label>
-                        <input type="text" class="form-control" id="clubAcronym" name="acronym" value="${org.acronym}">
+                        <input type="text" class="form-control" id="clubAcronym" name="acronym" value="${organizer.acronym}">
                     </div>
                     <div class="mb-3">
                         <label for="clubEmail" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="clubEmail" name="email" value="${org.email}">
+                        <input type="email" class="form-control" id="clubEmail" name="email" value="${organizer.email}">
                     </div>
                     <div class="mb-3">
                         <label for="clubDescription" class="form-label">Description</label>
-                        <textarea class="form-control" id="clubDescription" name="description">${org.description}</textarea>
+                        <textarea class="form-control" id="clubDescription" name="description">${organizer.description}</textarea>
                     </div>
                 </form>
             </div>
@@ -247,11 +250,10 @@
     document.getElementById('editProfileModal').addEventListener('hidden.bs.modal', function () {
         document.body.style.overflow = '';
     });
+
+    fucntion toLowerCase(text) {
+
+    }
 </script>
-
-
-
-
-
 
 <%@include file="../include/master-footer.jsp" %>

@@ -1,4 +1,11 @@
+<%-- 
+    Document   : profile
+    Created on : Sep 26, 2024, 3:50:35?PM
+    Author     : TRINHHUY
+--%>
+
 <%@include file="../include/student-layout-header.jsp"%>
+
 <style>
     /* C?n ch?nh v? b? c?c */
     .profile__main-wrapper {
@@ -116,6 +123,27 @@
 <!-- HTML layout -->
 <section>
     <div class="app__slide-wrapper">
+        <div class="breadcrumb__area">
+            <div class="breadcrumb__wrapper mb-35">
+                <div class="breadcrumb__main">
+                    <div class="breadcrumb__inner">
+                        <div class="breadcrumb__icon">
+                            <i class="flaticon-home"></i>
+                        </div>
+                        <div class="breadcrumb__menu">
+                            <nav>
+                                <ul>
+                                    <li><span><a href="<c:url value="/home" />">Home</a></span></li>
+                                    <li class="active"><span>Profile</span></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+      
+        <!--Bat dau content cua page o day-->
         <div class="userInfor">
             <div class="profile__main-wrapper mt-35">
                 <div class="profile__thumb">

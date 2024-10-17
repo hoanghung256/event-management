@@ -5,7 +5,11 @@
 package com.fuem.repositories;
 
 import com.fuem.enums.Status;
+import com.fuem.models.Category;
 import com.fuem.models.Event;
+import com.fuem.models.Location;
+import com.fuem.models.Organizer;
+import com.fuem.models.builders.EventBuilder;
 import com.fuem.repositories.helpers.Page;
 import com.fuem.repositories.helpers.PagingCriteria;
 import com.fuem.utils.DataSourceWrapper;
@@ -13,6 +17,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,15 +59,16 @@ public class AdminDAO extends SQLDatabase {
             + "	AND Organizer.id = ?";
 
     private static String SELECT_REGISTRATION_EVENTS = "SELECT\n"
-            + "    Event.id AS EventId,\n"
+            + "    Event.id AS EventId, \n"
+            + "    Organizer.id AS OrganizerId, \n"
             + "    Organizer.acronym AS ClubName,\n"
-            + "    Organizer.avatarPath AS AvatarPath,\n"
+            + "    Organizer.avatarPath AS OrganizerAvatarPath,\n"
             + "    Event.fullname AS EventName,\n"
             + "    Event.dateOfEvent AS EventDate,\n"
             + "    Category.categoryName AS CategoryName,\n"
             + "    Location.locationName AS LocationName,\n"
             + "    Event.status AS Status,\n"
-            + "    COUNT(*) OVER() AS TotalRow\n"
+            + "    COUNT(*) OVER() AS TotalRow \n"
             + "FROM \n"
             + "    Event\n"
             + "JOIN\n"
@@ -138,8 +144,9 @@ public class AdminDAO extends SQLDatabase {
             + "FETCH NEXT ? ROWS ONLY";
 
     private static String SELECT_UPCOMING_EVENTS = "SELECT \n"
-            + "	Event.fullname AS EventName,\n"
-            + "	Organizer.acronym AS ClubName,\n"
+            + "     Event.organizerId AS OrganizerId, \n"
+            + "     Event.fullname AS EventName,\n"
+            + "     Organizer.acronym AS OrganizerAcronym,\n"
             + "     Event.dateOfEvent AS EventDate,\n"
             + "     Location.locationName AS LocationName,\n"
             + "     Category.categoryName AS CategoryName \n"
@@ -208,17 +215,25 @@ public class AdminDAO extends SQLDatabase {
                     page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
                     page.setCurrentPage(pagingCriteria.getOffset() / pagingCriteria.getFetchNext());
                 }
+                
+                Event e = new EventBuilder()
+                    .setId(rs.getInt("EventID"))
+                    .setFullname(rs.getString("EventName"))
+                    .setDateOfEvent(rs.getDate("EventDate").toLocalDate())
+                    .setCategory(new Category(rs.getString("CategoryName")))
+                    .setLocation(new Location(rs.getString("LocationName")))
+                    .setStatus(Status.valueOf(rs.getString("Status")))
+                    .setOrganizer(
+                            new Organizer(
+                                    rs.getInt("OrganizerId"), 
+                                    rs.getString("ClubName"), 
+                                    rs.getNString("OrganizerAvatarPath")
+                            )
+                    )
+                    .setStatus(Status.valueOf(rs.getString("Status")))
+                    .build();
 
-                int eventId = rs.getInt("EventID");
-                String clubName = rs.getString("ClubName");
-                String avatarPath = rs.getString("AvatarPath");
-                String eventName = rs.getString("EventName");
-                LocalDate dateOfEvent = rs.getDate("EventDate").toLocalDate();
-                String category = rs.getString("CategoryName");
-                String location = rs.getString("LocationName");
-                Status status = Status.valueOf(rs.getString("Status"));
-
-                registrationEvent.add(new Event(eventId, clubName, avatarPath, eventName, dateOfEvent, category, location, status));
+                registrationEvent.add(e);
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
@@ -299,13 +314,28 @@ public class AdminDAO extends SQLDatabase {
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
                 ResultSet rs = executeQueryPreparedStatement(conn, SELECT_UPCOMING_EVENTS);){
             while (rs.next()) {
-                String eventName = rs.getString("EventName");
-                String clubName = rs.getString("ClubName");
-                LocalDate dateOfEvent = rs.getDate("EventDate").toLocalDate();
-                String location = rs.getString("LocationName");
-                String category = rs.getString("CategoryName");
-
-                upcomingEvent.add(new Event(eventName, clubName, dateOfEvent, location, category));
+                upcomingEvent.add(
+                        new EventBuilder()
+                            .setFullname(rs.getNString("EventName"))
+                            .setDateOfEvent(rs.getDate("EventDate").toLocalDate())
+                            .setCategory(
+                                    new Category(
+                                            rs.getString("CategoryName")
+                                    )
+                            )
+                            .setLocation(
+                                    new Location(
+                                            rs.getString("LocationName")
+                                    )
+                            )
+                            .setOrganizer(
+                                    new Organizer(
+                                            rs.getInt("OrganizerId"), 
+                                            rs.getString("OrganizerAcronym")
+                                    )
+                            )
+                            .build()
+                );
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);

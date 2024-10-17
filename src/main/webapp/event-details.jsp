@@ -51,7 +51,7 @@
                                                             <img src="<c:url value="${event.organizer.avatarPath}"/>" alt="Organizer Avatar" onerror="this.onerror=null; this.src='assets/img/default-avatar.png';">
                                                         </div>
                                                         <div class="review__author-name">
-                                                            <a href="club/OrganizerProfileController?organizerId=${event.organizer.id}"style="text-decoration: none; color: inherit;">
+                                                            <a href="<c:url value="/profile?role=club&id=${event.organizer.id}" />">
                                                                 <h4 style="color: inherit; transition: color 0.3s ease;"
                                                                     onmouseover="this.style.color = '#F50963';" 
                                                                     onmouseout="this.style.color = 'inherit';">

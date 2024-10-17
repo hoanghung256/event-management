@@ -1,5 +1,5 @@
 <%-- 
-    Document   : club-dashboard
+    Document   : admin-dashboard
     Created on : Oct 1, 2024, 11:25:51?AM
     Author     : ThangNM
 --%>
@@ -90,7 +90,7 @@
         </div>
         <!--End of statistic number--> 
 
-        <!<!-- Start of Registration Event List-->
+        <!-- Start of Registration Event List-->
         <div class="row">
             <div class="col-xxl-12">
                 <div class="card__wrapper">
@@ -156,7 +156,11 @@
                                                         <img src="<c:url value="${event.organizer.avatarPath}"/>" alt="image not found">
                                                     </div>
                                                     <div class="attendant__user-title">
-                                                        <span>${event.organizer.fullname}</span>
+                                                        <span>
+                                                            <a href="<c:url value="/profile?role=club&id=${event.organizer.id}" />">
+                                                                ${event.organizer.fullname}
+                                                            </a>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </td>
@@ -307,7 +311,7 @@
                                             <div class="news__item-inner">
                                                 <div class="news__content">
                                                     <h4 class="news__title">
-                                                        <a href="event-details.html">${event.fullname}</a>
+                                                        <a href="<c:url value="/admin/organized-event-report?action=detail&eventIdDetail=${event.id}" />">${event.fullname}</a>
                                                     </h4>
                                                     <div class="news__meta">
                                                         <div class="news__meta-status">
