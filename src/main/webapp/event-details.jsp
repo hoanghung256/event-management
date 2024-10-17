@@ -101,7 +101,7 @@
                                 <div class="col-md-4 p-1">
                                     <div class="event__details-right">
                                         <div class="body__card-wrapper mb-20">
-                                            <div class="event__meta-time" ">
+                                            <div class="event__meta-time">
                                                 <ul>
                                                     <li style="display:flex;">
                                                         <div style="margin-right: 10px;">
