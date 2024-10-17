@@ -1,10 +1,22 @@
 <%-- 
-    Document   : profile
+    Document   : test-profile
     Created on : Sep 26, 2024, 3:50:35?PM
     Author     : TRINHHUY
 --%>
 
-<%@include file="../include/student-layout-header.jsp"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<c:choose>
+    <c:when test="${sessionScope.userInfor.role == 'STUDENT'}">
+        <%@include file="include/student-layout-header.jsp"%>
+    </c:when>
+    <c:when test="${sessionScope.userInfor.role == 'ADMIN'}">
+        <%@include file="include/admin-layout-header.jsp"%>
+    </c:when>
+    <c:otherwise>
+        <%@include file="include/club-layout-header.jsp"%>
+    </c:otherwise>
+</c:choose>
 
 <style>
     .profile__left{
@@ -62,7 +74,17 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="<c:url value="/home" />">Home</a></span></li>
+                                    <c:choose>
+                                        <c:when test="${sessionScope.userInfor.role == 'STUDENT'}">
+                                            <li><span><a href="<c:url value="/home" />">Home</a></span></li>
+                                        </c:when>
+                                        <c:when test="${sessionScope.userInfor.role == 'ADMIN'}">
+                                            <li><span><a href="<c:url value="/admin/dashboard" />">Dashboard</a></span></li>
+                                        </c:when>
+                                        <c:when test="${sessionScope.userInfor.role == 'CLUB'}">
+                                            <li><span><a href="<c:url value="/club/dashboard" />">Dashboard</a></span></li>
+                                        </c:when>
+                                    </c:choose>
                                     <li class="active"><span>Profile</span></li>
                                 </ul>
                             </nav>
@@ -104,7 +126,7 @@
                                                 <span>Full Name:</span>
                                             </div>
                                             <div class="profile__user-info">
-                                                <span>${sessionScope.userInfor.fullname}</span>
+                                                <span>${student.fullname}</span>
                                             </div>
                                         </div>
                                     </li>
@@ -114,7 +136,7 @@
                                                 <span>Email:</span>
                                             </div>
                                             <div class="profile__user-info">
-                                                <span>${sessionScope.userInfor.email}</span>
+                                                <span>${student.email}</span>
                                             </div>
                                         </div>
                                     </li>
@@ -124,13 +146,13 @@
                                                 <span>Student ID:</span>
                                             </div>
                                             <div class="profile__user-info">
-                                                <span>${sessionScope.userInfor.studentId}</span>
+                                                <span>${student.studentId}</span>
                                             </div>
                                         </div>
                                     </li>
                                 </ul>
                                 <!--changepass--> 
-                                <div class="change-password-section">
+<!--                                <div class="change-password-section">
                                     <div class="ticket__price-inner">
                                         <div class="ticket__price-item">
                                             <button class="unfield__input-btn" type="button">
@@ -138,7 +160,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                     </div>

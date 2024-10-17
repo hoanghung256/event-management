@@ -40,7 +40,11 @@
                                             <img style="width: 40px;" src="../assets/img/user/default-avatar.jpg" alt="image not found">
                                         </div>
                                         <div class="review__item-content">
-                                            <h5>${feedback.guest.fullname}</h5> 
+                                            <h5>
+                                                <a href="<c:url value="/profile?role=student&id=${feedback.guest.id}" />">
+                                                    ${feedback.guest.fullname}
+                                                </a>
+                                            </h5> 
                                         </div>
                                     </div>
                                     <p class="mt-2">${feedback.content}</p> 

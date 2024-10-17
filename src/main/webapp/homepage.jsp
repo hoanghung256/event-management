@@ -154,7 +154,7 @@
                                     <h3 class="event-title" style="margin-bottom: 10px; font-size: 24px;">
                                         ${event.fullname}
                                     </h3>
-                                    <p><strong>Organizer: </strong><span>${event.organizer.fullname}</span></p>
+                                        <p><strong>Organizer: </strong><span><a href="<c:url value="/profile?role=organizer&id=${event.organizer.id}" />">${event.organizer.fullname}</a></span></p>
                                     <p><strong>Register Deadline: </strong><span id="datetime">${event.guestRegisterDeadline}</span></p>
                                     <p class="description-text truncated-text">
                                         ${event.description}
