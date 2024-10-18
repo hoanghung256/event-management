@@ -35,7 +35,7 @@ public class EventApprovalController extends HttpServlet {
                 int eventId = Integer.parseInt(request.getParameter("eventId"));
                 Event registrationEvent = eventDao.getEventDetails(eventId);
                 request.setAttribute("event", registrationEvent);
-                request.getRequestDispatcher("approve-events.jsp").forward(request, response);
+                request.getRequestDispatcher("pending-event-details.jsp").forward(request, response);
                 break;
             case "show":
                 AdminDAO dao = new AdminDAO();
@@ -55,9 +55,9 @@ public class EventApprovalController extends HttpServlet {
                         10
                 );
 
-                Page<Event> registrationEvents = dao.getRegistrationEvent(pagingCriteria);
-                request.setAttribute("page", registrationEvents);
-                request.getRequestDispatcher("registration-events.jsp").forward(request, response);
+                Page<Event> registrationEventWithPaging = dao.getRegistrationEventWithPaging(pagingCriteria);
+                request.setAttribute("page", registrationEventWithPaging);
+                request.getRequestDispatcher("pending-events.jsp").forward(request, response);
                 break;
         }
 

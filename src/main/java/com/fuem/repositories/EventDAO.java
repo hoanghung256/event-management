@@ -65,18 +65,18 @@ public class EventDAO extends SQLDatabase {
             + "       e.startTime, "
             + "       e.endTime, "
             + "       e.guestRegisterLimit, "
-            + "       e.registerDeadline, "
+            + "       e.guestRegisterDeadline, "
             + "       o.fullname AS organizerName, "
             + "       o.id AS organizerId, "
-            + "       t.id AS typeId, "
-            + "       t.typeName AS typeName, "
-            + "       t.description AS typeDescription, "
+            + "       c.id AS categoryId, "
+            + "       c.categoryName, "
+            + "       c.categoryDescription, "
             + "       l.id AS locationId, "
-            + "       l.locationDescription AS locationDescription "
+            + "       l.locationName "
             + "FROM Event e "
             + "JOIN Organizer o ON e.organizerId = o.id "
-            + "JOIN EventType t ON e.typeId = t.id "
-            + "JOIN EventLocation l ON e.locationId = l.id "
+            + "JOIN Category c ON e.categoryId = c.id "
+            + "JOIN Location l ON e.locationId = l.id "
             + "WHERE e.organizerId = ? "
             + "ORDER BY e.dateOfEvent DESC;";
 
@@ -418,6 +418,7 @@ public class EventDAO extends SQLDatabase {
                 event.setGuestAttendedCount(rs.getInt("guestAttendedCount"));
                 event.setCategory(category);
                 Location location = new Location(rs.getString("locationName"));
+
                 event.setLocation(location);
                 event.setDateOfEvent(rs.getDate("dateOfEvent").toLocalDate());
                 event.setStartTime(rs.getTimestamp("startTime").toLocalDateTime().toLocalTime());
@@ -468,21 +469,21 @@ public class EventDAO extends SQLDatabase {
                 event.setStartTime(rs.getTimestamp("startTime").toLocalDateTime().toLocalTime());
                 event.setEndTime(rs.getTimestamp("endTime").toLocalDateTime().toLocalTime());
                 event.setGuestRegisterLimit(rs.getInt("guestRegisterLimit"));
-                event.setRegisterDeadline(rs.getTimestamp("registerDeadline").toLocalDateTime().toLocalDate());
+                event.setRegisterDeadline(rs.getTimestamp("guestRegisterDeadline").toLocalDateTime().toLocalDate());
                 Organizer organizer = new Organizer();
                 organizer.setId(rs.getInt("organizerId"));
                 organizer.setFullname(rs.getString("organizerName"));
                 event.setOrganizer(organizer);
 
                 Category category = new Category();
-                category.setId(rs.getInt("typeId"));
-                category.setName(rs.getString("typeName"));
-                category.setDescription(rs.getString("typeDescription"));
+                category.setId(rs.getInt("categoryId"));
+                category.setName(rs.getString("categoryName"));
+                category.setDescription(rs.getString("categoryDescription"));
                 event.setCategory(category);
 
                 Location location = new Location();
                 location.setId(rs.getInt("locationId"));
-                location.setDescription(rs.getString("locationDescription"));
+                location.setName(rs.getString("locationName"));
                 event.setLocation(location);
 
                 events.add(event);

@@ -96,7 +96,6 @@
                 </form>
             </div>
         </div>                     
-                    <div>${success}</div>
         <!--Bat dau content cua page o day-->
         <div class="pb-20">
             <div class="">
@@ -109,7 +108,7 @@
                                 <table>
                                     <thead>
                                         <tr>
-                                            <th>Club Name</th>
+                                            <th>Club</th>
                                             <th>Event</th>
                                             <th>Date</th>
                                             <th>Action</th>
@@ -121,10 +120,10 @@
                                                 <td>
                                                     <div class="attendant__user-item">
                                                         <div class="registration__user-thumb">
-                                                            <img src="${event.organizer.avatarPath}" alt="Club Logo">
+                                                            <img src="<c:url value="${event.organizer.avatarPath}" />" alt="Club Logo">
                                                         </div>
                                                         <div class="attendant__user-title">
-                                                            <span>${event.organizer.fullname}</span>
+                                                            <span>${event.organizer.acronym}</span>
                                                         </div>
                                                     </div>
                                                 </td>

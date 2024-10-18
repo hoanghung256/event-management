@@ -6,7 +6,8 @@
 
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!doctype html>
+
+<!DOCTYPE HTML>
 <html class="no-js">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -16,7 +17,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-style-mode" content="1">
         <!-- Place favicon.ico in the root directory -->
-        <link rel="shortcut icon" type="image/x-icon" href="assets/img/logo/logo-fpt-small.svg">
+        <link rel="shortcut icon" type="image/x-icon" href="<c:url value="/assets/img/logo/logo-fpt-small.svg" />">
         <!-- CSS here -->
         <link rel="stylesheet" href="<c:url value='/assets/app/css/bootstrap.min.css' />">
         <link rel="stylesheet" href="<c:url value='/assets/app/css/meanmenu.min.css' />">
@@ -74,7 +75,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="ClubProfileController" aria-expanded="false">
+                                <a href="student/registered-event" aria-expanded="false">
                                     <i class="flaticon-success"></i>
                                     <span class="nav-text">Register Events</span>
                                 </a>
@@ -86,7 +87,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="<c:url value="/#"/>" aria-expanded="false">
+                                <a href="<c:url value="/sign-out"/>" aria-expanded="false">
                                     <i class="flaticon-log-out-3"></i>
                                     <span class="nav-text">Log out</span>
                                 </a>
@@ -147,7 +148,7 @@
                                                 Profile</a>
                                         </li>
                                         <li>
-                                            <a href="<c:url value="/sign-in" />"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                            <a href="<c:url value="/sign-out" />"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                                                        xmlns="http://www.w3.org/2000/svg">
                                                 <g clip-path="url(#clip0_643_343)">
                                                 <path

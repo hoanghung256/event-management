@@ -33,7 +33,7 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="<c:url value="/home"/>">Home</a></span></li>
+                                    <li><span><a href="<c:url value="/admin/dashboard"/>">Dashboard</a></span></li>
                                     <li class="active"><span>Registerd Event List</span></li>
                                 </ul>
                             </nav>
@@ -44,7 +44,7 @@
         </div>
 
        
-        <header>    Registered Event List </header>
+        <header>Registered Event List</header>
         <div class="pb-20">
             <div class="">
                 <div class="" id="myTabContent">
@@ -58,7 +58,6 @@
                                             <th>Guest Name</th>
                                             <th>Student ID </th>
                                             <th>Event ID</th>
-
                                             <th>Event Name</th>
                                             <th>Event Date</th>
 
@@ -66,7 +65,6 @@
                                     </thead>
                                     <tbody>
                                         <c:set var="i" value="${1}" />
-
 
                                         <c:forEach var="guest" items="${registeredGuestsList.datas}">
                                             <tr>
@@ -78,28 +76,28 @@
                                                 </td>
                                                 <td>
                                                     <div class="attendant__user-title">
-                                                        <span>${guest.guestName}</span> <!-- Tên ??y ?? c?a sinh viên -->
+                                                        <span>${guest.student.fullname}</span> <!-- Tên ??y ?? c?a sinh viên -->
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="attendant__user-item">
-                                                        <span>${guest.studentId}</span> <!-- ID c?a sinh viên -->
+                                                        <span>${guest.student.studentId}</span> <!-- ID c?a sinh viên -->
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="attendant__seminar">
-                                                        <span>${guest.eventId}</span> <!-- ID c?a s? ki?n -->
+                                                        <span>${guest.event.id}</span> <!-- ID c?a s? ki?n -->
                                                     </div>
                                                 </td>
 
                                                 <td>
                                                     <div class="attendant__seminar">
-                                                        <span>${guest.eventName}</span> <!-- Tên s? ki?n -->
+                                                        <span>${guest.event.fullname}</span> <!-- Tên s? ki?n -->
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="attendant__date">
-                                                        <span>${guest.dateOfEvent}</span> <!-- Ngày di?n ra s? ki?n -->
+                                                        <span>${guest.event.dateOfEvent}</span> <!-- Ngày di?n ra s? ki?n -->
                                                     </div>
                                                 </td>
 
@@ -123,7 +121,7 @@
                         <c:choose>
                             <c:when test="${i == 0 && page.currentPage > 0}">
                                 <li>
-                                    <a href="attended?page=${page.currentPage - 1}">
+                                    <a href="view-register-list?page=${page.currentPage - 1}">
                                         <i class="fa-regular fa-arrow-left-long"></i>
                                     </a>
                                 </li>
@@ -137,7 +135,7 @@
                                     </c:when>
                                     <c:otherwise>
                                         <li>
-                                            <a href="attended?page=${i}">${i + 1}</a>
+                                            <a href="view-register-list?page=${i}">${i + 1}</a>
                                         </li>
                                     </c:otherwise>
                                 </c:choose>
@@ -147,14 +145,14 @@
                                 </c:when>
                                 <c:when test="${i == page.totalPage - 1 && page.currentPage + 5 < page.totalPage - 1}">
                                 <li>
-                                    <a href="attended?page=${page.totalPage - 1}">
+                                    <a href="view-register-list?page=${page.totalPage - 1}">
                                         ${page.totalPage}
                                     </a>
                                 </li>
                             </c:when>
                             <c:when test="${i == page.totalPage - 1 && page.currentPage < page.totalPage - 1}">
                                 <li>
-                                    <a href="attended?page=${page.currentPage + 1}">
+                                    <a href="view-register-list?page=${page.currentPage + 1}">
                                         <i class="fa-regular fa-arrow-right-long"></i>
                                     </a>
                                 </li>

@@ -12,6 +12,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
+/**
+ * 
+ * @author KhiemHV 
+ */
 @WebServlet(name = "ViewRegisterList", urlPatterns = {"/admin/view-register-list"})
 public class ViewRegisterListController extends HttpServlet {
 
@@ -37,7 +41,7 @@ public class ViewRegisterListController extends HttpServlet {
         request.setAttribute("pageNumber", pageNumber);  // Truyền số trang hiện tại cho JSP
 
         // Chuyển hướng đến trang JSP để hiển thị danh sách
-        request.getRequestDispatcher("/admin/view-register-list.jsp").forward(request, response);
+        request.getRequestDispatcher("view-register-list.jsp").forward(request, response);
     }
 
     @Override

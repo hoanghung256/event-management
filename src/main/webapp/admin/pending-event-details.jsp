@@ -5,7 +5,7 @@
 --%>
 
 <%@include file="../include/admin-layout-header.jsp"%>
-<%@ page import="com.fuem.models.Event" %>
+
 <section>
     <div class="app__slide-wrapper">
         <div class="breadcrumb__area">
@@ -51,13 +51,9 @@
                                                             <img src="${event.organizer.avatarPath}" alt="Organizer Avatar" onerror="this.onerror=null; this.src='assets/img/default-avatar.png';">
                                                         </div>
                                                         <div class="review__author-name">
-                                                            <a href="club/OrganizerProfileController?organizerId=${event.organizer.id}"style="text-decoration: none; color: inherit;">
-                                                                <h4 style="color: inherit; transition: color 0.3s ease;"
-                                                                    onmouseover="this.style.color = '#F50963';" 
-                                                                    onmouseout="this.style.color = 'inherit';">
-                                                                    ${event.organizer.fullname}
-                                                                </h4>
-                                                            </a>
+                                                            <h4>
+                                                                <a href="<c:url value="/profile?role=organizer&id=${event.organizer.id}"/>">${event.organizer.fullname}</a>
+                                                            </h4>
                                                         </div>
                                                 </div>
                                                 <div class="review__tab">
