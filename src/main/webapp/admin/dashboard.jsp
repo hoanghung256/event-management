@@ -299,7 +299,7 @@
                                     <i class="flaticon-calendar-3"></i>
                                 </div>
                                 <div class="card__header-title">
-                                    <h4>Organized Events</h4>
+                                    <h4>Organized Events This Month</h4>
                                 </div>
                             </div>
                             <div class="card__header-right">
@@ -347,7 +347,6 @@
                                         </div>
                                     </c:forEach>
                                 </c:if>
-
                             </div>
                         </div>
                     </div>
