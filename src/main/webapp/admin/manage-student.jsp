@@ -28,7 +28,7 @@
         z-index: 9999;
     }
 
-    /* Popup content: khung chính c?a popup */
+    /* Popup content: khung chÃ­nh c?a popup */
     .popup__content {
         background-color: white;
         padding: 20px;
@@ -78,7 +78,7 @@
     }
 
 
-    /* ??nh d?ng các input */
+    /* ??nh d?ng cÃ¡c input */
     .singel__input-field {
         margin-bottom: 15px;
     }
@@ -92,7 +92,7 @@
         font-size: 20px;
     }
 
-    /* ??nh d?ng nút submit */
+    /* ??nh d?ng nÃºt submit */
     .input__btn {
         background-color: #28a745;
         color: white;
@@ -165,7 +165,7 @@
                         </div>
                     </div>
                     <div class="search_add d-flex justify-content-between align-items-center">
-                        <form method="get" action="${pageContext.request.contextPath}/admin/manage-student">
+                        <form method="get" action="<c:url value="/admin/manage-student" />>
                             <div class="search_add d-flex justify-content-between align-items-center">
                                 <div class="search__bar d-flex">
                                     <input type="text" id="searchValue" name="searchValue" placeholder="Search by..." aria-label="Search students" />
@@ -463,18 +463,18 @@
 </div>
 
 <script>
-    // Open popup ?? thêm sinh viên
+    // Open popup ?? thÃªm sinh viÃªn
     document.querySelector('.breadcrum__btn').addEventListener('click', function (event) {
         event.preventDefault();
         document.getElementById('addUserPopup').style.display = 'flex';
     });
 
-    // Close popup thêm sinh viên
+    // Close popup thÃªm sinh viÃªn
     document.getElementById('closePopup').addEventListener('click', function () {
         document.getElementById('addUserPopup').style.display = 'none';
     });
 
-    // Close popup khi nh?p bên ngoài n?i dung
+    // Close popup khi nh?p bÃªn ngoÃ i n?i dung
     window.addEventListener('click', function (event) {
         const addPopup = document.getElementById('addUserPopup');
         const editPopup = document.getElementById('editStudent'); // Popup ch?nh s?a
@@ -488,13 +488,13 @@
 
     let studentIdToDelete;
 
-    // M? popup xác nh?n xóa
+    // M? popup xÃ¡c nh?n xÃ³a
     function showDeleteConfirmation(id) {
         studentIdToDelete = id;
         document.getElementById('deleteConfirmationPopup').style.display = 'flex';
     }
 
-    // X? lý xác nh?n xóa
+    // X? lÃ½ xÃ¡c nh?n xÃ³a
     document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
         if (studentIdToDelete) {
             const form = document.createElement('form');
@@ -518,12 +518,12 @@
         }
     });
 
-    // ?óng popup xác nh?n xóa
+    // ?Ã³ng popup xÃ¡c nh?n xÃ³a
     document.getElementById('closeDeletePopup').addEventListener('click', function () {
         document.getElementById('deleteConfirmationPopup').style.display = 'none';
     });
 
-    // ?óng popup khi nh?n vào nút "Cancel"
+    // ?Ã³ng popup khi nh?n vÃ o nÃºt "Cancel"
     document.getElementById('cancelDeleteBtn').addEventListener('click', function () {
         document.getElementById('deleteConfirmationPopup').style.display = 'none';
     });
@@ -537,14 +537,14 @@
 
 
     function editStudentById(id) {
-        // L?y thông tin c?a sinh viên t? server (b?n có th? ?i?u ch?nh ?? l?y thông tin phù h?p)
+        // L?y thÃ´ng tin c?a sinh viÃªn t? server (b?n cÃ³ th? ?i?u ch?nh ?? l?y thÃ´ng tin phÃ¹ h?p)
         const fullname = document.getElementById('fullname-' + id).innerHTML;
         const email = document.getElementById('email-' + id).innerHTML;
         const studentId = document.getElementById('studentId-' + id).innerHTML;
         const gender = document.getElementById('gender-' + id).innerHTML;
         console.log(gender);
 
-//            // ?i?n thông tin vào modal
+//            // ?i?n thÃ´ng tin vÃ o modal
         document.getElementById("edit-fullname").value = fullname;
         document.getElementById("edit-email").value = email;
         document.getElementById("edit-studentId").value = studentId;
