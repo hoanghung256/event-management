@@ -66,9 +66,6 @@ public class StudentDAO extends SQLDatabase {
     }
 
 public void updatePassword(String email, String newPassword) {
-   
-    String hashedPassword = Hash.doHash(newPassword);
-
     try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
          PreparedStatement pstmt = conn.prepareStatement(UPDATE_PASSWORD_BY_EMAIL)) {
          
