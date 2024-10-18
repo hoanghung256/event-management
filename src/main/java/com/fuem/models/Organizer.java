@@ -10,16 +10,15 @@ import com.fuem.enums.Role;
  *
  * @author AnhNQ
  */
-
 public class Organizer extends User {
-    
+
     private String acronym;
     private String description;
     private String coverPath;
 
     public Organizer() {
     }
-    
+
     public Organizer(int id) {
         super(id);
     }
@@ -28,7 +27,17 @@ public class Organizer extends User {
         super(id);
         this.acronym = acronym;
     }
-    
+
+    public Organizer(String acronym, int id) {
+        super(id);
+        this.acronym = acronym;
+    }
+
+    public Organizer(int id, String fullname, String acronym, String email) {
+        super(fullname, id, email); 
+        this.acronym = acronym;
+    }
+
     public Organizer(int id, String fullname, String avatarPath) {
         super(id, fullname, avatarPath);
     }

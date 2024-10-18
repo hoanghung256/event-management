@@ -28,7 +28,7 @@
         z-index: 9999;
     }
 
-    /* Popup content: khung chÃ­nh c?a popup */
+    /* Popup content: khung chính c?a popup */
     .popup__content {
         background-color: white;
         padding: 20px;
@@ -78,7 +78,7 @@
     }
 
 
-    /* ??nh d?ng cÃ¡c input */
+    /* ??nh d?ng các input */
     .singel__input-field {
         margin-bottom: 15px;
     }
@@ -92,7 +92,7 @@
         font-size: 20px;
     }
 
-    /* ??nh d?ng nÃºt submit */
+    /* ??nh d?ng nút submit */
     .input__btn {
         background-color: #28a745;
         color: white;
@@ -159,13 +159,13 @@
                             <nav>
                                 <ul>
                                     <li><span><a href="<c:url value='/home'/>">Home</a></span></li>
-                                    <li class="active"><span>Manage Student</span></li>
+                                    <li class="active"><span>Manage Clubs</span></li>
                                 </ul>
                             </nav>
                         </div>
                     </div>
                     <div class="search_add d-flex justify-content-between align-items-center">
-                        <form method="get" action="<c:url value="/admin/manage-student" />>
+                        <form method="get" action="${pageContext.request.contextPath}/admin/manage-clubs">
                             <div class="search_add d-flex justify-content-between align-items-center">
                                 <div class="search__bar d-flex">
                                     <input type="text" id="searchValue" name="searchValue" placeholder="Search by..." aria-label="Search students" />
@@ -175,7 +175,7 @@
                                     <button type="submit" " class="btn element__btn border-yellow find-button" >Find</button>
                                 </div>
                                 <div class="breadcrum__button">
-                                    <a class="breadcrum__btn event__popup-active" style="width: 160px;">Add student<i class="fa-regular fa-plus"></i></a>
+                                    <a class="breadcrum__btn event__popup-active" style="width: 160px;">Add Club<i class="fa-regular fa-plus"></i></a>
                                 </div>
                             </div>
                         </form>
@@ -188,7 +188,7 @@
         <div class="popup__overlay" id="deleteConfirmationPopup">
             <div class="popup__content">
                 <span class="popup__close" id="closeDeletePopup"></span>
-                <h3>Are you sure you want to delete this student?</h3>
+                <h3>Are you sure you want to delete?</h3>
                 <c:if test="${not empty deleteError}">
                     <div class="error-message" style="color: red; margin-bottom: 15px;">${deleteError}</div>
                     <script>
@@ -202,34 +202,24 @@
             </div>
         </div>
 
-        <!-- Popup for Add New User -->
-        <div class="popup__overlay" id="addUserPopup">
+        <!--Popup for Add New Clubs -->
+        <div class="popup__overlay" id="addClubsPopup">
             <div class="popup__content">
                 <span class="popup__close" id="closePopup"></span>
-                <h3>Add New Student</h3>
-                <form action="${pageContext.request.contextPath}/admin/manage-student" method="post">
+                <h3>Add New Club</h3>
+                <form action="${pageContext.request.contextPath}/admin/manage-clubs" method="post">
                     <input type="hidden" name="action" value="add" />
                     <div class="singel__input-field mb-15 ">
                         <label class="input__field-text">Full Name</label>
                         <input type="text" name="fullname" required>
                     </div>
                     <div class="singel__input-field mb-15">
+                        <label class="input__field-text"> Acronym </label>
+                        <input type="text" name="acronym" required>
+                    </div>
+                    <div class="singel__input-field mb-15">
                         <label class="input__field-text">Email</label>
                         <input type="email" name="email" required>
-                    </div>
-                    <div class="input-row mb-15">
-                        <div class="singel__input-field">
-                            <label class="input__field-text">Student ID</label>
-                            <input type="text" name="studentId" required>
-                        </div>
-                        <div class="singel__input-field">
-                            <label class="input__field-text">Gender</label>
-                            <select name="gender" style="height: 60%;" required>
-                                <option value="MALE">Male</option>
-                                <option value="FEMALE">Female</option>
-                                <option value="OTHER">Other</option>
-                            </select>
-                        </div>
                     </div>
                     <div class="singel__input-field mb-15">
                         <label class="input__field-text">Password</label>
@@ -242,45 +232,34 @@
                     <c:if test="${not empty addError}">
                         <div class="error-message" style="color: red; margin-bottom: 15px;">${addError}</div>
                         <script>
-                            document.getElementById('addUserPopup').style.display = 'flex';
+                            document.getElementById('addClubsPopup').style.display = 'flex';
                         </script>
                     </c:if>
-
                     <button class="input__btn w-100" type="submit">Submit</button>
                 </form>
             </div>
         </div>
 
-        <!-- Popup for Edit -->
-        <div class="popup__overlay" id="editStudent">
+        <!--Popup for Edit -->
+        <div class="popup__overlay" id="editClub">
             <div class="popup__content">
                 <span class="popup__close" id="closePopup"></span>
-                <h3>Edit Student</h3>
-                <form action="${pageContext.request.contextPath}/admin/manage-student" method="post">
+                <h3>Edit Club</h3>
+                <form action="${pageContext.request.contextPath}/admin/manage-clubs" method="post">
                     <input type="hidden" name="action" value="edit" />
                     <input type="hidden" name="id" id="edit-id" />
                     <div class="singel__input-field mb-15 ">
                         <label class="input__field-text">Full Name</label>
                         <input type="text" name="fullname" required id="edit-fullname">
                     </div>
+                    <div class="singel__input-field mb-15 ">
+                        <label class="input__field-text">Acronym</label>
+                        <input type="text" name="acronym" required id="edit-acronym">
+                    </div>
                     <div class="singel__input-field mb-15">
                         <label class="input__field-text">Email</label>
                         <input type="email" name="email" id="edit-email" required>
                     </div>   
-                    <div class="input-row mb-15">
-                        <div class="singel__input-field">
-                            <label class="input__field-text">Student ID</label>
-                            <input type="text" name="studentId" id="edit-studentId" required>
-                        </div>
-                        <div  class="singel__input-field"  >
-                            <label class="input__field-text">Gender</label>
-                            <select name="gender" id="edit-gender" style="height: 60%;">
-                                <option value="MALE">MALE</option>
-                                <option value="FEMALE">FEMALE</option>
-                                <option value="OTHER">OTHER</option>
-                                <select/>
-                        </div>
-                    </div>
 
                     <button class="input__btn w-100" type="submit">Save</button>
                 </form>
@@ -319,13 +298,17 @@
                             ${deleteError}
                         </div>
                     </c:if>
-
                     <c:if test="${not empty editError}">
                         <div class="alert alert-danger" role="alert">
                             ${editError}
                         </div>
                     </c:if>
-
+                    <!--                    /*<c:if test="${not empty editError}">
+                                            <div class="error-message" style="color: red; margin-bottom: 15px;">${editError}</div>
+                                            <script>
+                                                document.getElementById('editClub').style.display = 'flex';
+                                            </script>
+                    </c:if>*//-->
                 </div>
                 <div class="body__card-wrapper">
                     <div class="attendant__wrapper mb-35">
@@ -335,37 +318,32 @@
                                     <thead>
                                         <tr>
                                             <th>Name</th>
-                                            <th>Student ID</th>
-                                            <th>Gender </th>
+                                            <th>Acronym</th>
                                             <th>Email</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
 
                                     <tbody>
-                                        <c:forEach var="student" items="${page.datas}">
-                                            <tr data-student-id="${student.studentId}">
+                                        <c:forEach var="organizer" items="${page.datas}">
+                                            <tr data-organizer-id="${organizer.id}">
                                                 <td>
                                                     <div class="attendant__user-item">
                                                         <div class="attendant__user-title">
-                                                            <span id="fullname-${student.id}">${student.fullname}</span>
+                                                            <span id="fullname-${organizer.id}">${organizer.fullname}</span>
+                                                            <span style="display: none;" id="id-${organizer.id}">${organizer.id}</span>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="attendant__user-id">
-                                                        <span id="studentId-${student.id}">${student.studentId}</span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="attendant__user-gender">
-                                                        <span id="gender-${student.id}">${student.gender}</span>
+                                                        <span id="acronym-${organizer.id}">${organizer.acronym}</span>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <div class="attendant__email">
-                                                        <span id="email-${student.id}">${student.email}</span>
-                                                    </div>
+                                                        <span id="email-${organizer.id}">${organizer.email != null ? organizer.email : 'N/A'}</span>
+                                                    </div>  
                                                 </td>
                                                 <td>
                                                     <div class="attendant__action">
@@ -379,11 +357,11 @@
                                                                     </svg>
                                                                 </button>
                                                                 <div class="dropdown-list">
-                                                                    <a class="dropdown__item" onclick="editStudentById('${student.id}')">Edit</a>
-                                                                    <form action="${pageContext.request.contextPath}/manage-student" method="post" style="display: inline;">
-                                                                        <input type="hidden" name="studentId" value="${student.studentId}" />
+                                                                    <a class="dropdown__item" onclick="editOrganizerById('${organizer.id}')">Edit</a>
+                                                                    <form action="${pageContext.request.contextPath}/manage-clubs" method="post" style="display: inline;">
+                                                                        <input type="hidden" name="organizerId" value="${organizer.id}" />
                                                                         <input type="hidden" name="action" value="delete" />
-                                                                        <a class="dropdown__item" href="javascript:void(0)" onclick="showDeleteConfirmation('${student.studentId}')">Delete</a>
+                                                                        <a class="dropdown__item" href="javascript:void(0)" onclick="showDeleteConfirmation('${organizer.id}')">Delete</a>
                                                                     </form>
                                                                 </div>
                                                             </div>
@@ -398,12 +376,13 @@
                             <c:otherwise>
                                 <div>
                                     <div class="alert alert-danger" role="alert" >
-                                         No student to show...
+                                        No club to show......
                                     </div>
 
                                 </div>
                             </c:otherwise>
                         </c:choose>
+
 
                         <!<!-- pagination controls -->
                         <div class="basic__pagination d-flex align-items-center justify-content-end">
@@ -413,7 +392,7 @@
                                         <c:choose>
                                             <c:when test="${i == 0 && page.currentPage > 0}">
                                                 <li>
-                                                    <a href="manage-student?page=${page.currentPage - 1}&searchValue=${previousSearchValue}">
+                                                    <a href="manage-clubs?page=${page.currentPage - 1}&searchValue=${previousSearchValue}">
                                                         <i class="fa-regular fa-arrow-left-long"></i>
                                                     </a>
                                                 </li>
@@ -427,7 +406,7 @@
                                                     </c:when>
                                                     <c:otherwise>
                                                         <li>
-                                                            <a href="manage-student?page=${i}&searchValue=${previousSearchValue}">${i + 1}</a>
+                                                            <a href="manage-clubs?page=${i}&searchValue=${previousSearchValue}">${i + 1}</a>
                                                         </li>
                                                     </c:otherwise>
                                                 </c:choose>
@@ -437,14 +416,14 @@
                                                 </c:when>
                                                 <c:when test="${i == page.totalPage - 1 && page.currentPage + 5 < page.totalPage - 1}">
                                                 <li>
-                                                    <a href="manage-student?page=${page.totalPage - 1}&searchValue=${previousSearchValue}">
+                                                    <a href="manage-clubs?page=${page.totalPage - 1}&searchValue=${previousSearchValue}">
                                                         ${page.totalPage}
                                                     </a>
                                                 </li>
                                             </c:when>
                                             <c:when test="${i == page.totalPage - 1 && page.currentPage < page.totalPage - 1}">
                                                 <li>
-                                                    <a href="manage-student?page=${page.currentPage + 1}&searchValue=${previousSearchValue}">
+                                                    <a href="manage-clubs?page=${page.currentPage + 1}&searchValue=${previousSearchValue}">
                                                         <i class="fa-regular fa-arrow-right-long"></i>
                                                     </a>
                                                 </li>
@@ -463,21 +442,21 @@
 </div>
 
 <script>
-    // Open popup ?? thÃªm sinh viÃªn
+    // Open popup ?? thêm clubs
     document.querySelector('.breadcrum__btn').addEventListener('click', function (event) {
         event.preventDefault();
-        document.getElementById('addUserPopup').style.display = 'flex';
+        document.getElementById('addClubsPopup').style.display = 'flex';
     });
 
-    // Close popup thÃªm sinh viÃªn
+    // Close popup thêm clubs
     document.getElementById('closePopup').addEventListener('click', function () {
-        document.getElementById('addUserPopup').style.display = 'none';
+        document.getElementById('addClubsPopup').style.display = 'none';
     });
 
-    // Close popup khi nh?p bÃªn ngoÃ i n?i dung
+    // Close popup khi nh?p bên ngoài n?i dung
     window.addEventListener('click', function (event) {
-        const addPopup = document.getElementById('addUserPopup');
-        const editPopup = document.getElementById('editStudent'); // Popup ch?nh s?a
+        const addPopup = document.getElementById('addClubsPopup');
+        const editPopup = document.getElementById('editClub'); // Popup ch?nh s?a
         if (event.target === addPopup) {
             addPopup.style.display = 'none';
         }
@@ -486,25 +465,25 @@
         }
     });
 
-    let studentIdToDelete;
+    let idToDelete;
 
-    // M? popup xÃ¡c nh?n xÃ³a
+// M? popup xác nh?n xóa
     function showDeleteConfirmation(id) {
-        studentIdToDelete = id;
+        idToDelete = id;
         document.getElementById('deleteConfirmationPopup').style.display = 'flex';
     }
 
-    // X? lÃ½ xÃ¡c nh?n xÃ³a
+// X? lý xác nh?n xóa
     document.getElementById('confirmDeleteBtn').addEventListener('click', function () {
-        if (studentIdToDelete) {
+        if (idToDelete) {
             const form = document.createElement('form');
             form.method = 'post';
-            form.action = `${pageContext.request.contextPath}/admin/manage-student`;
+            form.action = `${pageContext.request.contextPath}/admin/manage-clubs`;
 
             const inputId = document.createElement('input');
             inputId.type = 'hidden';
-            inputId.name = 'studentId';
-            inputId.value = studentIdToDelete;
+            inputId.name = 'organizerId';
+            inputId.value = idToDelete;
 
             const inputAction = document.createElement('input');
             inputAction.type = 'hidden';
@@ -518,59 +497,51 @@
         }
     });
 
-    // ?Ã³ng popup xÃ¡c nh?n xÃ³a
-    document.getElementById('closeDeletePopup').addEventListener('click', function () {
-        document.getElementById('deleteConfirmationPopup').style.display = 'none';
-    });
-
-    // ?Ã³ng popup khi nh?n vÃ o nÃºt "Cancel"
+// ?óng popup khi nh?n vào nút "No"
     document.getElementById('cancelDeleteBtn').addEventListener('click', function () {
         document.getElementById('deleteConfirmationPopup').style.display = 'none';
     });
 
+// ?óng popup khi nh?n bên ngoài n?i dung popup
     window.addEventListener('click', function (event) {
         const deletePopup = document.getElementById('deleteConfirmationPopup');
         if (event.target === deletePopup) {
             deletePopup.style.display = 'none';
         }
+
+        // X? lý ?óng các popup khác n?u c?n
+        const addPopup = document.getElementById('addClubsPopup');
+        const editPopup = document.getElementById('edidClub'); // Popup ch?nh s?a
+        if (event.target === addPopup) {
+            addPopup.style.display = 'none';
+        }
+        if (event.target === editPopup) {
+            editPopup.style.display = 'none';
+        }
     });
 
-
-    function editStudentById(id) {
-        // L?y thÃ´ng tin c?a sinh viÃªn t? server (b?n cÃ³ th? ?i?u ch?nh ?? l?y thÃ´ng tin phÃ¹ h?p)
+    function editOrganizerById(id) {
         const fullname = document.getElementById('fullname-' + id).innerHTML;
+        const acronym = document.getElementById('acronym-' + id).innerHTML;
         const email = document.getElementById('email-' + id).innerHTML;
-        const studentId = document.getElementById('studentId-' + id).innerHTML;
-        const gender = document.getElementById('gender-' + id).innerHTML;
-        console.log(gender);
 
-//            // ?i?n thÃ´ng tin vÃ o modal
+        // ?i?n thông tin vào modal
         document.getElementById("edit-fullname").value = fullname;
+        document.getElementById("edit-acronym").value = acronym;
         document.getElementById("edit-email").value = email;
-        document.getElementById("edit-studentId").value = studentId;
         document.getElementById("edit-id").value = id;
 
-        let selectTag = document.getElementById("edit-gender");
-        let options = selectTag.querySelectorAll('option');
 
-        for (let i = 0; i < 2; i++) {
-            if (options[i].value === gender) {
-                console.log(options[i]);
-                options[i].selected = true;
-            }
-        }
 
         // M? modal
-        document.getElementById('editStudent').style.display = 'flex';
+        document.getElementById('editClub').style.display = 'flex';
     }
-    ;
+
+// ?óng popup khi nh?n vào nút ?óng
+    document.getElementById('closePopup').addEventListener('click', function () {
+        document.getElementById('editClub').style.display = 'none';
+    });
+
 </script>
-
-
-
-
-
-
 </section>
-
 <%@include file="../include/master-footer.jsp"%>

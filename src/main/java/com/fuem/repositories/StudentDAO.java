@@ -2,19 +2,16 @@ package com.fuem.repositories;
 
 import com.fuem.enums.Gender;
 import com.fuem.enums.Role;
-import com.fuem.models.Event;
 import com.fuem.models.Student;
 import com.fuem.repositories.helpers.Page;
 import com.fuem.repositories.helpers.PagingCriteria;
 import com.fuem.utils.DataSourceWrapper;
 import com.fuem.utils.Hash;
-import static java.lang.String.valueOf;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -25,7 +22,6 @@ public class StudentDAO extends SQLDatabase {
     private static final String SELECT_STUDENT_BY_EMAIL = "SELECT * FROM [Student] WHERE email = ?";
     private static final String SELECT_STUDENT_BY_EMAIL_AND_PASSWORD = "SELECT id, fullname, studentId, email, avatarPath FROM [Student] WHERE email = ? AND password = ?";
     private static final String SELECT_STUDENT_BY_STUDENT_ID = "SELECT * FROM [Student] WHERE studentId=?";
-    private static final String FIND_STUDENT = "SELECT * FROM Student WHERE studentId = ? OR fullname LIKE ?";
     private static final String UPDATE_PASSWORD_BY_EMAIL = "Update [Student] "
             + "SET password = ? "
             + "WHERE email = ?";
@@ -38,6 +34,7 @@ public class StudentDAO extends SQLDatabase {
             + "gender, "
             + "COUNT (*) OVER() AS 'TotalRow' "
             + "FROM [Student] "
+            + "WHERE  COALESCE(studentId, '') LIKE '%' + COALESCE(?, '') + '%' OR  COALESCE(fullname, '') LIKE '%' + COALESCE(?, '') + '%'\n"
             + "ORDER BY id ASC\n"
             + "OFFSET ? ROWS\n"
             + "FETCH NEXT ? ROWS ONLY";
@@ -142,13 +139,13 @@ public void updatePassword(String email, String newPassword) {
     }
 
     /**
-     * @author; TrinhHuy
+     * @author TrinhHuy
      */
-    public Page<Student> getStudents(PagingCriteria pagingCriteria) {
+    public Page<Student> getStudents(PagingCriteria pagingCriteria, String searchKeyword) {
         Page<Student> page = new Page<>();
         ArrayList<Student> students = new ArrayList<>();
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_STUDENTS, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_STUDENTS, searchKeyword, searchKeyword, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
 
             while (rs.next()) {
                 if (page.getTotalPage() == null && page.getCurrentPage() == null) {
@@ -158,7 +155,7 @@ public void updatePassword(String email, String newPassword) {
                 Student student = new Student(
                         rs.getInt("id"),
                         rs.getString("studentId"),
-                        rs.getString("gender") == null ? null : Gender.valueOf(rs.getString("gender")),
+                        rs.getString("gender") != null ? Gender.valueOf(rs.getString("gender")) : null,
                         rs.getString("fullname"),
                         rs.getString("email")
                 );
@@ -227,7 +224,7 @@ public void updatePassword(String email, String newPassword) {
     }
 
     /**
-     * @author; TrinhHuy
+     * @author TrinhHuy
      */
     public boolean updateStudent(Student student) {
 
