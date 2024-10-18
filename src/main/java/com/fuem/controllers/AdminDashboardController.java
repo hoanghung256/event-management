@@ -35,6 +35,7 @@ public class AdminDashboardController extends HttpServlet {
         int totalUpcomingEvents = dao.getTotalUpcomingEvents(organizerId);
         ArrayList<Event> organizedList = dao.getOrganizedEvent(organizerId);
         ArrayList<Event> upcomingList = dao.getUpcomingEvent();
+        ArrayList<Event> registrationList = dao.getRegistrationEvent();
 
         //paging
         PagingCriteria pagingCriteria = new PagingCriteria();
@@ -52,15 +53,16 @@ public class AdminDashboardController extends HttpServlet {
                 pageNumber,
                 10
         );
-        
-        Page<Event> registrationEvents = dao.getRegistrationEvent(pagingCriteria);
+
+        Page<Event> registrationEventWithPaging = dao.getRegistrationEventWithPaging(pagingCriteria);
 
         request.setAttribute("totalOrganizedEvents", totalOrganizedEvents);
         request.setAttribute("totalClubs", totalClubs);
         request.setAttribute("totalUpcomingEvents", totalUpcomingEvents);
         request.setAttribute("organizedList", organizedList);
         request.setAttribute("upcomingList", upcomingList);
-        request.setAttribute("page", registrationEvents);
+        request.setAttribute("registrationList", registrationList);
+        request.setAttribute("registrationListPaging", registrationEventWithPaging);
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
 }

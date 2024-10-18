@@ -55,8 +55,8 @@ public class EventApprovalController extends HttpServlet {
                         10
                 );
 
-                Page<Event> registrationEvents = dao.getRegistrationEvent(pagingCriteria);
-                request.setAttribute("page", registrationEvents);
+                Page<Event> registrationEventWithPaging = dao.getRegistrationEventWithPaging(pagingCriteria);
+                request.setAttribute("page", registrationEventWithPaging);
                 request.getRequestDispatcher("pending-events.jsp").forward(request, response);
                 break;
         }

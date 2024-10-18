@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
 public class StudentDAO extends SQLDatabase {
 
     private static final Logger logger = Logger.getLogger(StudentDAO.class.getName());
@@ -39,18 +40,40 @@ public class StudentDAO extends SQLDatabase {
             + "FETCH NEXT ? ROWS ONLY";
     private static final String DELETE_STUDENT_BY_ID = "DELETE FROM [Student] WHERE studentId = ?";
     private static final String UPDATE_STUDENT_BY_ID = "UPDATE Student SET fullname = ?, email = ?, studentId = ?, gender= ? WHERE  id = ?";
-
+    private static final String SELECT_STUDENT_BY_ID = "SELECT fullname, studentId, email, gender, avatarPath FROM [Student] WHERE id=?";
+    private static final String CHECK_PASSWORD_QUERY = "SELECT * FROM Student WHERE email = ? AND password = ?";
+  
     public StudentDAO() {
         super();
     }
 
-    public void updatePassword(String email, String newPassword) {
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
-            executeUpdatePreparedStatement(conn, UPDATE_PASSWORD_BY_EMAIL, newPassword, email);
+    public boolean checkCurrentPassword(String email, String currentPasswordHash) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(CHECK_PASSWORD_QUERY)) {
+             
+            pstmt.setString(1, email);
+            pstmt.setString(2, currentPasswordHash);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return rs.next(); 
+            }
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, null, e);
+            Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, e);
         }
+        return false;
     }
+
+public void updatePassword(String email, String newPassword) {
+    try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(UPDATE_PASSWORD_BY_EMAIL)) {
+         
+        pstmt.setString(1, hashedPassword);
+        pstmt.setString(2, email);
+        pstmt.executeUpdate();
+    } catch (SQLException e) {
+        Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, e);
+    }
+}
+
 
     public Student getUserByEmail(String email) {
         Student student = null;
@@ -215,5 +238,63 @@ public class StudentDAO extends SQLDatabase {
         }
 
         return result > 0; // Trả về true nếu có ít nhất một dòng được cập nhật
+    }
+
+    /**
+     * @author; TrinhHuy
+     */
+    public List<Student> searchStudents(String searchValue) {
+        List<Student> students = new ArrayList<>();
+
+        // Sử dụng try-with-resources để đảm bảo tự động đóng kết nối
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); PreparedStatement pstmt = conn.prepareStatement(FIND_STUDENT)) {
+
+            pstmt.setString(1, searchValue); // Gán giá trị cho studentId
+            pstmt.setString(2, "%" + searchValue + "%"); // Gán giá trị cho fullname với ký tự đại diện
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    // Tạo đối tượng Student từ ResultSet
+                    Student student = new Student(
+                            rs.getInt("id"),
+                            rs.getString("studentId"),
+                            rs.getString("gender") == null ? null : Gender.valueOf(rs.getString("gender")),
+                            rs.getString("fullname"),
+                            rs.getString("email")
+                    );
+                    students.add(student);
+                }
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error searching students", e);
+            throw new RuntimeException("Error searching students", e); // Ném ngoại lệ để xử lý ở cấp cao hơn nếu cần
+        }
+
+        return students; // Trả về danh sách sinh viên tìm thấy
+    }
+
+    /**
+     * 
+     * @author HungHV 
+     */
+    public Student getStudentById(int id) {
+        Student s = null;
+        
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_STUDENT_BY_ID, id)) {
+            if (rs.next()) {
+                s = new Student(
+                        id,
+                        rs.getNString("fullname"), 
+                        rs.getString("studentId"), 
+                        rs.getNString("email"), 
+                        rs.getNString("avatarPath")
+                );
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        
+        return s;
     }
 }

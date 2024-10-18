@@ -4,7 +4,7 @@
     Author     : TRINHHUY
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE HTML>
@@ -84,6 +84,7 @@
                             </li>
                             <li><a href="<c:url value="/club/organized-event"/>" aria-expanded="false">
                                     <i class="flaticon-upcoming"></i>
+                                    <span class="nav-text">Organized Events</span>
                                     <span class="nav-text">Organized Events</span>
                                 </a>
                             </li>

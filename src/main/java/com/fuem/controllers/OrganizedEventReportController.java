@@ -23,6 +23,13 @@ import java.util.ArrayList;
 @WebServlet(name = "OrganizedEventReportController", urlPatterns = {"/admin/organized-event-report", "/club/organized-event-report"})
 public class OrganizedEventReportController extends HttpServlet {
 
+    /**
+     * 
+     * @queryParameter action "detail" or "compared"
+     * @queryParameter eventIdDetail for identity event getting report
+     * @queryParameter eventIdSelected for identity event getting compared when action is "compared"
+     * @author ThangNM
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -73,15 +80,6 @@ public class OrganizedEventReportController extends HttpServlet {
                 request.setAttribute("selectedEventName", selectedEventName);
                 request.getRequestDispatcher("organized-event-report.jsp").forward(request, response);
                 break;
-
         }
-
     }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-    }
-
 }

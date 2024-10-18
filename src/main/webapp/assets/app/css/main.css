@@ -4830,25 +4830,8 @@ input[type=file] {
 [bd-theme=bd-theme-dark] .expovent__count-item {
     background: var(--clr-bg-6);
 }
-.expovent__count-item:hover {
-    filter: drop-shadow(0px 4px 35px rgba(247, 66, 111, 0.3));
-}
-.expovent__count-item:hover .expovent__count-number {
-    color: var(--clr-common-white);
-}
-.expovent__count-item:hover .expovent__count-thumb {
-    opacity: 1;
-}
-.expovent__count-item:hover .expovent__count-text {
-    color: var(--clr-common-white);
-}
-.expovent__count-item:hover .expovent__count-icon {
-    background-color: transparent;
-    border-color: var(--clr-common-white);
-}
-.expovent__count-item:hover .expovent__count-icon i {
-    color: var(--clr-common-white);
-}
+
+
 .expovent__count-thumb {
     position: absolute;
     top: 0;
@@ -6324,6 +6307,9 @@ input[type=file] {
 }
 .attendant__action {
     padding-inline-start: 15px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
 }
 .attendant__serial span {
     color: var(--clr-text-secondary);
@@ -6342,6 +6328,12 @@ input[type=file] {
     color: var(--clr-text-11);
 }
 [bd-theme=bd-theme-dark] .attendant__time {
+    color: var(--clr-common-white);
+}
+.attendant__role {
+    color: var(--clr-text-11);
+}
+[bd-theme=bd-theme-dark] .attendant__role {
     color: var(--clr-common-white);
 }
 .attendant__date span {

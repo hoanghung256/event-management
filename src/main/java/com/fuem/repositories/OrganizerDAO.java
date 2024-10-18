@@ -121,7 +121,8 @@ public class OrganizerDAO extends SQLDatabase {
                         rs.getString("description"),
                         rs.getString("email"),
                         rs.getString("avatarPath"),
-                        Role.valueOf(rs.getString("role")));
+                        rs.getBoolean("isAdmin") == true ? Role.ADMIN : Role.CLUB
+                );
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error retrieving organizer by ID: ", e);

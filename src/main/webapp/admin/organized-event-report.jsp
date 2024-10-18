@@ -39,7 +39,9 @@
                                             <div class="body__card-wrapper mb-20">
                                                 <div class="card__header-top">
                                                     <div class="card__title-inner">
-                                                        <h4 class="event__information-title">${event.fullname}</h4>
+                                                        <h4 class="event__information-title">
+                                                            ${event.fullname}
+                                                        </h4>
                                                     </div>
                                                 </div>
                                                 <div class="review__main-wrapper pt-25">
