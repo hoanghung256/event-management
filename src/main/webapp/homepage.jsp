@@ -35,7 +35,7 @@
                             <div class="col-md-2 input">
                                 <label for="categoryId" class="form-label">Event category</label>
                                 <select id="categoryId" name="categoryId" class="form-select">
-                                    <option value="" disabled selected>Select Category</option>
+                                    <option disabled selected>Select Category</option>
                                     <c:forEach var="category" items="${cateList}">
                                         <option value="${category.id}" ${previousSearchEventCriteria != null && previousSearchEventCriteria.categoryId == category.id ? 'selected' : ''}>
                                             ${category.name}
@@ -47,7 +47,7 @@
                             <div class="col-md-2 input">
                                 <label for="organizerId" class="form-label">Organizer</label>
                                 <select id="organizerId" name="organizerId" class="form-select">
-                                    <option value="" disabled selected>Select Organizer</option>
+                                    <option disabled selected>Select Organizer</option>
                                     <c:forEach var="organizer" items="${organizerList}">
                                         <option value="${organizer.id}" ${previousSearchEventCriteria != null && previousSearchEventCriteria.organizerId == organizer.id ? 'selected' : ''}>
                                             ${organizer.fullname}
@@ -154,7 +154,7 @@
                                     <h3 class="event-title" style="margin-bottom: 10px; font-size: 24px;">
                                         ${event.fullname}
                                     </h3>
-                                    <p><strong>Organizer: </strong><span>${event.organizer.fullname}</span></p>
+                                        <p><strong>Organizer: </strong><span><a href="<c:url value="/profile?role=organizer&id=${event.organizer.id}" />">${event.organizer.fullname}</a></span></p>
                                     <p><strong>Register Deadline: </strong><span id="datetime">${event.guestRegisterDeadline}</span></p>
                                     <p class="description-text truncated-text">
                                         ${event.description}

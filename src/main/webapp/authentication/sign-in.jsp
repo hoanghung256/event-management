@@ -11,7 +11,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>FUEM-FPTU Event Management System</title>
+        <title>FPTU Event Management </title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="theme-style-mode" content="1">
@@ -28,15 +28,21 @@
         <link rel="stylesheet" href="assets/app/css/fontawesome-pro.css">
         <link rel="stylesheet" href="assets/app/css/spacing.css">
         <link rel="stylesheet" href="assets/app/css/main.css">
+        <link href="https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap" rel="stylesheet">
+        <style>
+            .sign__input-thumb {
+                background-image: url('assets/img/sign/signin.jpg');
+                background-size: cover; /* Để hình ảnh phủ kín */
+                background-position: center; /* Căn giữa hình ảnh */
+                width: 100%; /* Chiều rộng 100% */
+                height: 100%; /* Chiều cao có thể tùy chỉnh */
+            }
+            .sign__title {
+                font-size: 40px;
+                font-family: 'Patrick Hand', cursive;
+            }
+        </style>
     </head>
-    <style>.sign__input-thumb {
-    background-image: url('assets/img/sign/signin.jpg');
-    background-size: cover; /* Để hình ảnh phủ kín */
-    background-position: center; /* Căn giữa hình ảnh */
-    width: 100%; /* Chiều rộng 100% */
-    height: 100%; /* Chiều cao có thể tùy chỉnh */
-}
-</style>
 
     <body class="body-area">
         <!-- signin area start -->
@@ -55,7 +61,7 @@
                     <div class="sign__center-wrapper text-center mt-90">
                         <div class="sign__title-wrapper mb-40">
                             <h3 class="sign__title">FPT EVENT MANAGEMENT </h3>
-                            <p>The faster you fill up, the faster you register events.</p>
+                            <p>Experience to success.</p>
                         </div>
                         <div class="sign__input-form text-center">
                             <form action="sign-in" method="POST">
@@ -114,10 +120,9 @@
                         </div>
                     </div>
                 </div>
-               <div class="sign__right">
-    <div class="sign__input-thumb">
-    </div>
-</div>
+                <div class="sign__right">
+                    <div class="sign__input-thumb"></div>
+                </div>
             </div>
         </section>
         <!-- signin area end -->
@@ -133,6 +138,6 @@
         <script src="assets/app/js/slick.min.js"></script>
         <script src="assets/app/js/magnific-popup.min.js"></script>
         <script src="assets/app/js/main.js"></script>
+        <audio id="background-audio" src="<%= request.getContextPath() %>/assets/music/nhacfpt.mp3" autoplay loop></audio>
     </body>
-
 </html>

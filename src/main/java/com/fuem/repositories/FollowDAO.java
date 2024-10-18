@@ -21,12 +21,14 @@ public class FollowDAO extends SQLDatabase {
 
     private static final Logger logger = Logger.getLogger(FollowDAO.class.getName());
 
-    // Các câu truy vấn SQL
-    private static final String SELECT_FOLLOW_BY_FOLLOWER_AND_FOLLOWED = "SELECT COUNT(*) FROM [Follow] WHERE [followerId] = ? AND [followedId] = ?";
-    private static final String INSERT_FOLLOW = "INSERT INTO [Follow] ([followerId], [followedId]) VALUES (?, ?)";
-    private static final String DELETE_FOLLOW = "DELETE FROM [Follow] WHERE [followerId] = ? AND [followedId] = ?";
+    private static final String SELECT_FOLLOW_BY_FOLLOWER_AND_FOLLOWED = "SELECT COUNT(*) FROM [Follow] WHERE [studentId] = ? AND [organizerId] = ?";
+    private static final String INSERT_FOLLOW = "INSERT INTO [Follow] ([studentId], [organizerId]) VALUES (?, ?)";
+    private static final String DELETE_FOLLOW = "DELETE FROM [Follow] WHERE [studentId] = ? AND [organizerId] = ?";
 
-    // Kiểm tra xem người dùng đã theo dõi tổ chức hay chưa
+    /**
+     * 
+     * @author TuDK 
+     */
     public boolean isUserFollowing(int followerId, int followedId) {
        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
         ResultSet rs = executeQueryPreparedStatement(conn,SELECT_FOLLOW_BY_FOLLOWER_AND_FOLLOWED, followerId, followedId);) {
@@ -39,32 +41,35 @@ public class FollowDAO extends SQLDatabase {
         return false;
     }
 
-    public void addFollow(int userId, int organizerId) {
-        try (PreparedStatement statement = getPreparedStatement(INSERT_FOLLOW, userId, organizerId)) {
-            if (statement != null) {
-                statement.executeUpdate();
-            } else {
-                logger.log(Level.SEVERE, "PreparedStatement is null, cannot execute addFollow.");
-            }
+    /**
+     * 
+     * @author TuDK 
+     */
+    public boolean addFollow(int userId, int organizerId) {
+        int rowChange = 0;
+        
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
+            rowChange = executeUpdatePreparedStatement(conn, INSERT_FOLLOW, userId, organizerId);
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error adding follow: ", e);
         }
+        
+        return (rowChange == 1);
     }
 
-    // Xóa theo dõi
-    public void removeFollow(int userId, int organizerId) {
-        try (PreparedStatement statement = getPreparedStatement(DELETE_FOLLOW, userId, organizerId)) {
-            if (statement != null) {
-                statement.executeUpdate();
-            } else {
-                logger.log(Level.SEVERE, "PreparedStatement is null, cannot execute removeFollow.");
-            }
+    /**
+     * 
+     * @author TuDK 
+     */
+    public boolean removeFollow(int userId, int organizerId) {
+        int rowChange = 0;
+        
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
+            rowChange = executeUpdatePreparedStatement(conn, DELETE_FOLLOW, userId, organizerId);
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error removing follow: ", e);
         }
-    }
-
-    private PreparedStatement getPreparedStatement(String INSERT_FOLLOW, int userId, int organizerId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        
+        return (rowChange == 1);
     }
 }

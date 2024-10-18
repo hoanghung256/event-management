@@ -5,7 +5,11 @@
 package com.fuem.repositories;
 
 import com.fuem.enums.Status;
+import com.fuem.models.Category;
 import com.fuem.models.Event;
+import com.fuem.models.Location;
+import com.fuem.models.Organizer;
+import com.fuem.models.builders.EventBuilder;
 import com.fuem.repositories.helpers.Page;
 import com.fuem.repositories.helpers.PagingCriteria;
 import com.fuem.utils.DataSourceWrapper;
@@ -13,6 +17,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,15 +59,16 @@ public class AdminDAO extends SQLDatabase {
             + "	AND Organizer.id = ?";
 
     private static String SELECT_REGISTRATION_EVENTS = "SELECT\n"
-            + "    Event.id AS EventId,\n"
+            + "    Event.id AS EventId, \n"
+            + "    Organizer.id AS OrganizerId, \n"
             + "    Organizer.acronym AS ClubName,\n"
-            + "    Organizer.avatarPath AS AvatarPath,\n"
+            + "    Organizer.avatarPath AS OrganizerAvatarPath,\n"
             + "    Event.fullname AS EventName,\n"
             + "    Event.dateOfEvent AS EventDate,\n"
             + "    Category.categoryName AS CategoryName,\n"
             + "    Location.locationName AS LocationName,\n"
             + "    Event.status AS Status,\n"
-            + "    COUNT(*) OVER() AS TotalRow\n"
+            + "    COUNT(*) OVER() AS TotalRow \n"
             + "FROM \n"
             + "    Event\n"
             + "JOIN\n"
@@ -73,11 +79,7 @@ public class AdminDAO extends SQLDatabase {
             + "    Location ON Location.id = Event.locationId\n"
             + "WHERE \n"
             + "    Organizer.isAdmin = '0'\n"
-            + "    AND Event.status = 'PENDING'\n"
-            + "ORDER BY\n"
-            + "	Event.dateOfEvent DESC\n"
-            + "OFFSET ? ROWS\n"
-            + "FETCH NEXT ? ROWS ONLY";
+            + "    AND Event.status = 'PENDING'\n";
 
     private static String SELECT_ORGANIZED_EVENTS = "SELECT\n"
             + "    Event.id AS EventId,\n"
@@ -117,29 +119,36 @@ public class AdminDAO extends SQLDatabase {
             + "	Event.dateOfEvent DESC\n";
 
     private static String SELECT_ORGANIZED_EVENTS_WITH_PAGING = "SELECT\n"
-            + "    Event.id AS EventId,\n"
+            + "    Event.id AS EventId, \n"
+            + "    Organizer.id AS OrganizerId, \n"
+            + "    Organizer.acronym AS ClubName,\n"
+            + "    Organizer.avatarPath AS OrganizerAvatarPath,\n"
             + "    Event.fullname AS EventName,\n"
             + "    Event.dateOfEvent AS EventDate,\n"
-            + "    Location.locationName AS LocationName,\n"
             + "    Category.categoryName AS CategoryName,\n"
-            + "    COUNT(*) OVER() AS TotalRow\n"
-            + "FROM\n"
+            + "    Location.locationName AS LocationName,\n"
+            + "    Event.status AS Status,\n"
+            + "    COUNT(*) OVER() AS TotalRow \n"
+            + "FROM \n"
             + "    Event\n"
             + "JOIN\n"
-            + "    Location ON Event.locationId = Location.id\n"
-            + "JOIN\n"
-            + "    Category ON Event.categoryId = Category.id\n"
+            + "    Organizer ON Organizer.id = Event.organizerId\n"
+            + "JOIN \n"
+            + "    Category ON Category.id = Event.categoryId\n"
+            + "JOIN \n"
+            + "    Location ON Location.id = Event.locationId\n"
             + "WHERE\n"
             + "    Event.organizerId = ?\n"
             + "    AND Event.dateOfEvent < GETDATE()"
             + "ORDER BY\n"
-            + "	Event.dateOfEvent DESC\n"
+            + "     Event.dateOfEvent DESC\n"
             + "OFFSET ? ROWS\n"
             + "FETCH NEXT ? ROWS ONLY";
 
     private static String SELECT_UPCOMING_EVENTS = "SELECT \n"
-            + "	Event.fullname AS EventName,\n"
-            + "	Organizer.acronym AS ClubName,\n"
+            + "     Event.organizerId AS OrganizerId, \n"
+            + "     Event.fullname AS EventName,\n"
+            + "     Organizer.acronym AS OrganizerAcronym,\n"
             + "     Event.dateOfEvent AS EventDate,\n"
             + "     Location.locationName AS LocationName,\n"
             + "     Category.categoryName AS CategoryName \n"
@@ -155,11 +164,37 @@ public class AdminDAO extends SQLDatabase {
             + "	Event.dateOfEvent > GETDATE()\n"
             + "	AND Event.status = 'APPROVED'";
 
+    private static String SELECT_REGISTRATION_EVENTS_WITH_PAGING = "SELECT\n"
+            + "    Event.id AS EventId, \n"
+            + "    Organizer.id AS OrganizerId, \n"
+            + "    Organizer.acronym AS ClubName,\n"
+            + "    Organizer.avatarPath AS OrganizerAvatarPath,\n"
+            + "    Event.fullname AS EventName,\n"
+            + "    Event.dateOfEvent AS EventDate,\n"
+            + "    Category.categoryName AS CategoryName,\n"
+            + "    Location.locationName AS LocationName,\n"
+            + "    Event.status AS Status,\n"
+            + "    COUNT(*) OVER() AS TotalRow \n"
+            + "FROM \n"
+            + "    Event\n"
+            + "JOIN\n"
+            + "    Organizer ON Organizer.id = Event.organizerId\n"
+            + "JOIN \n"
+            + "    Category ON Category.id = Event.categoryId\n"
+            + "JOIN \n"
+            + "    Location ON Location.id = Event.locationId\n"
+            + "WHERE \n"
+            + "    Organizer.isAdmin = '0'\n"
+            + "    AND Event.status = 'PENDING'\n"
+            + "ORDER BY\n"
+            + "	Event.dateOfEvent DESC\n"
+            + "OFFSET ? ROWS\n"
+            + "FETCH NEXT ? ROWS ONLY";
+
     public int getTotalOrganizedEvents(int adminId) {
         int totalEvent = 0;
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
-                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_TOTAL_ORGANIZED_EVENT, adminId);) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_TOTAL_ORGANIZED_EVENT, adminId);) {
             while (rs.next()) {
                 totalEvent = rs.getInt("TotalEvents");
             }
@@ -172,8 +207,7 @@ public class AdminDAO extends SQLDatabase {
     public int getTotalClub() {
         int totalClub = 0;
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
-                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_TOTAL_CLUBS);){
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_TOTAL_CLUBS);) {
             while (rs.next()) {
                 totalClub = rs.getInt("TotalClubs");
             }
@@ -186,8 +220,7 @@ public class AdminDAO extends SQLDatabase {
     public int getTotalUpcomingEvents(int adminId) {
         int totalUpcomingEvent = 0;
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
-                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_TOTAL_UPCOMING_EVENT, adminId);){
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_TOTAL_UPCOMING_EVENT, adminId);) {
             while (rs.next()) {
                 totalUpcomingEvent = rs.getInt("UpcomingEvents");
             }
@@ -197,34 +230,35 @@ public class AdminDAO extends SQLDatabase {
         return totalUpcomingEvent;
     }
 
-    public Page<Event> getRegistrationEvent(PagingCriteria pagingCriteria) {
-        Page<Event> page = new Page<>();
+    public ArrayList<Event> getRegistrationEvent() {
         ArrayList<Event> registrationEvent = new ArrayList<>();
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
-                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_REGISTRATION_EVENTS, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_REGISTRATION_EVENTS)) {
             while (rs.next()) {
-                if (page.getTotalPage() == null && page.getCurrentPage() == null) {
-                    page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
-                    page.setCurrentPage(pagingCriteria.getOffset() / pagingCriteria.getFetchNext());
-                }
+                Event e = new EventBuilder()
+                        .setId(rs.getInt("EventID"))
+                        .setFullname(rs.getString("EventName"))
+                        .setDateOfEvent(rs.getDate("EventDate").toLocalDate())
+                        .setCategory(new Category(rs.getString("CategoryName")))
+                        .setLocation(new Location(rs.getString("LocationName")))
+                        .setStatus(Status.valueOf(rs.getString("Status")))
+                        .setOrganizer(
+                                new Organizer(
+                                        rs.getInt("OrganizerId"),
+                                        rs.getString("ClubName"),
+                                        rs.getNString("OrganizerAvatarPath")
+                                )
+                        )
+                        .setStatus(Status.valueOf(rs.getString("Status")))
+                        .build();
 
-                int eventId = rs.getInt("EventID");
-                String clubName = rs.getString("ClubName");
-                String avatarPath = rs.getString("AvatarPath");
-                String eventName = rs.getString("EventName");
-                LocalDate dateOfEvent = rs.getDate("EventDate").toLocalDate();
-                String category = rs.getString("CategoryName");
-                String location = rs.getString("LocationName");
-                Status status = Status.valueOf(rs.getString("Status"));
-
-                registrationEvent.add(new Event(eventId, clubName, avatarPath, eventName, dateOfEvent, category, location, status));
+                registrationEvent.add(e);
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
         }
-        page.setDatas(registrationEvent);
-        return page;
+
+        return registrationEvent;
     }
 
     public ArrayList<Event> getOrganizedEvent(int organizerId) {
@@ -246,11 +280,11 @@ public class AdminDAO extends SQLDatabase {
         }
         return organizedEvent;
     }
+
     public ArrayList<Event> getOrganizedEventExceptTheChoosen(int organizerId, int id) {
         ArrayList<Event> organizedEvent = new ArrayList<>();
-      
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
-             ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZED_EVENTS_EXCEPT_CHOOSEN, organizerId, id);) {
+
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZED_EVENTS_EXCEPT_CHOOSEN, organizerId, id);) {
             while (rs.next()) {
                 int eventId = rs.getInt("EventId");
                 String eventName = rs.getString("EventName");
@@ -296,20 +330,71 @@ public class AdminDAO extends SQLDatabase {
     public ArrayList<Event> getUpcomingEvent() {
         ArrayList<Event> upcomingEvent = new ArrayList<>();
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
-                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_UPCOMING_EVENTS);){
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_UPCOMING_EVENTS);) {
             while (rs.next()) {
-                String eventName = rs.getString("EventName");
-                String clubName = rs.getString("ClubName");
-                LocalDate dateOfEvent = rs.getDate("EventDate").toLocalDate();
-                String location = rs.getString("LocationName");
-                String category = rs.getString("CategoryName");
-
-                upcomingEvent.add(new Event(eventName, clubName, dateOfEvent, location, category));
+                upcomingEvent.add(
+                        new EventBuilder()
+                                .setFullname(rs.getNString("EventName"))
+                                .setDateOfEvent(rs.getDate("EventDate").toLocalDate())
+                                .setCategory(
+                                        new Category(
+                                                rs.getString("CategoryName")
+                                        )
+                                )
+                                .setLocation(
+                                        new Location(
+                                                rs.getString("LocationName")
+                                        )
+                                )
+                                .setOrganizer(
+                                        new Organizer(
+                                                rs.getInt("OrganizerId"),
+                                                rs.getString("OrganizerAcronym")
+                                        )
+                                )
+                                .build()
+                );
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
         }
         return upcomingEvent;
+    }
+
+    public Page<Event> getRegistrationEventWithPaging(PagingCriteria pagingCriteria) {
+        Page<Event> page = new Page<>();
+        ArrayList<Event> registrationEvent = new ArrayList<>();
+
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_REGISTRATION_EVENTS_WITH_PAGING, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
+            while (rs.next()) {
+                if (page.getTotalPage() == null && page.getCurrentPage() == null) {
+                    page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
+                    page.setCurrentPage(pagingCriteria.getOffset() / pagingCriteria.getFetchNext());
+                }
+
+                Event e = new EventBuilder()
+                        .setId(rs.getInt("EventID"))
+                        .setFullname(rs.getString("EventName"))
+                        .setDateOfEvent(rs.getDate("EventDate").toLocalDate())
+                        .setCategory(new Category(rs.getString("CategoryName")))
+                        .setLocation(new Location(rs.getString("LocationName")))
+                        .setStatus(Status.valueOf(rs.getString("Status")))
+                        .setOrganizer(
+                                new Organizer(
+                                        rs.getInt("OrganizerId"),
+                                        rs.getString("ClubName"),
+                                        rs.getNString("OrganizerAvatarPath")
+                                )
+                        )
+                        .setStatus(Status.valueOf(rs.getString("Status")))
+                        .build();
+
+                registrationEvent.add(e);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        page.setDatas(registrationEvent);
+        return page;
     }
 }

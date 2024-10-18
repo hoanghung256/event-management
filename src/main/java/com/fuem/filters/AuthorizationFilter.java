@@ -39,9 +39,11 @@ public class AuthorizationFilter implements Filter {
 //        String url = request.getRequestURI(); (in deployment environment)
         String url = request.getRequestURI().substring(17); // (in development environment)
         
-        if (user == null) {
+        if (url.startsWith("/gmail-template")) {
+            filterChain.doFilter(servletRequest, servletResponse);
+        } else if (user == null) {
             response.sendRedirect(request.getContextPath() + "/sign-in");
-        } else if ((url.startsWith("/club") && user.getRole() != Role.CLUB) 
+        }  else if ((url.startsWith("/club") && user.getRole() != Role.CLUB) 
                 || (url.startsWith("/admin") && user.getRole() != Role.ADMIN)
                 || (url.startsWith("/student") && user.getRole() != Role.STUDENT)
                 || (url.endsWith(".jsp") && !url.startsWith("/error")) ) {

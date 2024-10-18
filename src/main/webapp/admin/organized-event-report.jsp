@@ -19,7 +19,7 @@
                                 <ul>
                                     <li><span><a href="<c:url value="/admin/dashboard"/>">Dashboard</a></span></li>
                                     <li><span><a href="<c:url value="/admin/organized-event"/>">Organized Event</a></span></li>
-                                    <li class="active"><span>Organized Event Details</span></li>
+                                    <li class="active"><span>Details</span></li>
                                 </ul>
                             </nav>
                         </div>
@@ -39,7 +39,9 @@
                                             <div class="body__card-wrapper mb-20">
                                                 <div class="card__header-top">
                                                     <div class="card__title-inner">
-                                                        <h4 class="event__information-title">${event.fullname} Detail</h4>
+                                                        <h4 class="event__information-title">
+                                                            ${event.fullname}
+                                                        </h4>
                                                     </div>
                                                 </div>
                                                 <div class="review__main-wrapper pt-25">
@@ -239,24 +241,27 @@
                         'rgba(64,81,137,1)'
                     ],
                     borderWidth: 1
-                },
+                }
+            <c:if test="${not empty selectedEventName}">
+                ,
                 {
-                    label: '${selectedEventName}',
-                    data: [${totalSelectedRegister}, ${totalSelectedAttended}, ${totalSelectedCollaborator}, ${totalSelectedCancel}], // column value for selected event, will be updated on selection
-                    backgroundColor: [
-                        'rgba(240,101,72,0.5)', 
-                        'rgba(240,101,72,0.5)', 
-                        'rgba(240,101,72,0.5)', 
-                        'rgba(240,101,72,0.5)'   
-                    ],
-                    borderColor: [
-                        'rgba(240,101,72,1)', 
-                        'rgba(240,101,72,1)', 
-                        'rgba(240,101,72,1)', 
-                        'rgba(240,101,72,1)'     
-                    ],
-                    borderWidth: 1
-                }]
+                label: '${selectedEventName}',
+                        data: [${totalSelectedRegister}, ${totalSelectedAttended}, ${totalSelectedCollaborator}, ${totalSelectedCancel}],
+                        backgroundColor: [
+                                'rgba(255, 159, 64, 0.5)',
+                                'rgba(255, 159, 64, 0.5)',
+                                'rgba(255, 159, 64, 0.5)',
+                                'rgba(255, 159, 64, 0.5)'
+                        ],
+                        borderColor: [
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                }
+            </c:if>]
         },
         options: {
             scales: {

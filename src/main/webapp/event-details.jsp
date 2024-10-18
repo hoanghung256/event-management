@@ -76,14 +76,23 @@
                                                 <div class="review__author-thumb">
                                                     <img class="rounded-circle" style="height: 40px; width: 40px;" src="https://scontent.xx.fbcdn.net/v/t1.15752-9/454960482_989030249643168_4313190723573478073_n.jpg?stp=dst-jpg_s206x206&_nc_cat=102&ccb=1-7&_nc_sid=0024fc&_nc_ohc=MtvFlhdFJ1IQ7kNvgH7lh6P&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.xx&_nc_gid=AbI6Jx2D9mje_lezs6PEixF&oh=03_Q7cD1QGqJ5U0_jHfWBOrm0G9nyMP1QRbgIr6FGoZXDWogfOLvA&oe=67359E30" alt="Organizer Avatar" onerror="this.onerror=null; this.src='assets/img/default-avatar.png';">
                                                 </div>
-                                                <div class="review__author-name">
-                                                    <a href="club/OrganizerProfileController?organizerId=${event.organizer.id}"style="text-decoration: none; color: inherit;">
-                                                        <h4 style="color: inherit; transition: color 0.3s ease;"
-                                                            onmouseover="this.style.color = '#F50963';" 
-                                                            onmouseout="this.style.color = 'inherit';">
-                                                            ${event.organizer.fullname}
-                                                        </h4>
-                                                    </a>
+                                            </div>
+                                            <div class="review__main-wrapper pt-25">
+                                                <div class="review__meta mb-25"></div>
+                                                <div class="review__author-meta mb-15">
+                                                    <a href="#">
+                                                        <div class="review__author-thumb">
+                                                            <img src="<c:url value="${event.organizer.avatarPath}"/>" alt="Organizer Avatar" onerror="this.onerror=null; this.src='assets/img/default-avatar.png';">
+                                                        </div>
+                                                        <div class="review__author-name">
+                                                            <a href="<c:url value="/profile?role=club&id=${event.organizer.id}" />">
+                                                                <h4 style="color: inherit; transition: color 0.3s ease;"
+                                                                    onmouseover="this.style.color = '#F50963';" 
+                                                                    onmouseout="this.style.color = 'inherit';">
+                                                                    ${event.organizer.fullname}
+                                                                </h4>
+                                                            </a>
+                                                        </div>
                                                 </div>
                                         </div>
                                     </div>
@@ -217,12 +226,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
-
-
-
                                             </div>
-
                                         </div>
                                     </div>
                                 </div>

@@ -6,7 +6,7 @@
 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@include file="../include/club-layout-header.jsp"%>
+<%@include file="../include/admin-layout-header.jsp"%>
 
 <section>
     <div class="app__slide-wrapper">
