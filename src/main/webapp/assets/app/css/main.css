@@ -6324,6 +6324,9 @@ input[type=file] {
 }
 .attendant__action {
     padding-inline-start: 15px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
 }
 .attendant__serial span {
     color: var(--clr-text-secondary);
@@ -6342,6 +6345,12 @@ input[type=file] {
     color: var(--clr-text-11);
 }
 [bd-theme=bd-theme-dark] .attendant__time {
+    color: var(--clr-common-white);
+}
+.attendant__role {
+    color: var(--clr-text-11);
+}
+[bd-theme=bd-theme-dark] .attendant__role {
     color: var(--clr-common-white);
 }
 .attendant__date span {
