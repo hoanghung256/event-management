@@ -132,7 +132,7 @@ public class StudentDAO extends SQLDatabase {
                 Student student = new Student(
                         rs.getInt("id"),
                         rs.getString("studentId"),
-                        Gender.valueOf(rs.getString("gender")),
+                        rs.getString("gender") != null ? Gender.valueOf(rs.getString("gender")) : null,
                         rs.getString("fullname"),
                         rs.getString("email")
                 );

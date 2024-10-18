@@ -5,13 +5,13 @@ import com.fuem.models.Student;
 import com.fuem.repositories.StudentDAO;
 import com.fuem.repositories.helpers.Page;
 import com.fuem.repositories.helpers.PagingCriteria;
+import com.fuem.utils.Validator;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  *
@@ -26,19 +26,16 @@ public class ManageStudentController extends HttpServlet {
         StudentDAO dao = new StudentDAO();
 
         String searchValue = request.getParameter("searchValue");
-        List<Student> listStudents;
 
         String pageNumberStr = request.getParameter("page");
         Integer pageNumber = (pageNumberStr == null) ? 0 : Integer.valueOf(pageNumberStr);
         PagingCriteria pagingCriteria = new PagingCriteria(pageNumber, 10);
 
         Page<Student> pageStudents = dao.getStudents(pagingCriteria, searchValue);
-        listStudents = pageStudents.getDatas();
 
         request.setAttribute("previousSearchValue", searchValue);
         request.setAttribute("page", pageStudents);
 
-        request.setAttribute("students", listStudents); // Luôn thiết lập thuộc tính students
         request.getRequestDispatcher("manage-student.jsp").forward(request, response); // Chuyển hướng đến trang JSP
     }
 
@@ -73,6 +70,19 @@ public class ManageStudentController extends HttpServlet {
                 request.setAttribute("addError", "Passwords do not match.");
                 doGet(request, response);
                 return; // Thoát khỏi phương thức nếu mật khẩu không khớp
+            } else if (!Validator.isEmailBelongFPT(email)) {
+                request.setAttribute("addError", "Email not allow, must be FPT Education email");
+                doGet(request, response);
+                return;
+            }
+            else if (!Validator.isFullNameValid(fullname)) {
+                request.setAttribute("addError", "Special characters are not allowed ");
+                doGet(request, response);
+                return;
+            } else if (!Validator.isStudentIdMatch(email, studentId)) {
+                request.setAttribute("addError", "Email invalid with StudentID ");
+                doGet(request, response);
+                return;
             }
 
             Gender gender = Gender.valueOf(genderStr.toUpperCase());
@@ -102,6 +112,22 @@ public class ManageStudentController extends HttpServlet {
             String fullname = request.getParameter("fullname");
             String email = request.getParameter("email");
             String genderStr = request.getParameter("gender");
+            
+            
+             if (!Validator.isEmailBelongFPT(email)) {
+                request.setAttribute("editError", "Email not allow, must be FPT Education email");
+                doGet(request, response);
+                return;
+            }
+            else if (!Validator.isFullNameValid(fullname)) {
+                request.setAttribute("editError", "Special characters are not allowed ");
+                doGet(request, response);
+                return;
+            } else if (!Validator.isStudentIdMatch(email, studentId)) {
+                request.setAttribute("editError", "Email invalid with StudentID.");
+                doGet(request, response);
+                return;
+            }
 
             // Kiểm tra giới tính
             Gender gender;
