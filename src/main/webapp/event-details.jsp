@@ -101,8 +101,7 @@
                                                 <div class="tab-content" id="nav-tabContent">
                                                     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
                                                         <div class="about__event-thumb w-img mt-40">
-                                                            <div id="eventImageCarousel" class="carousel slide" data-ride="carousel" data-interval="2000">
-
+                                                           <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="3000">
                                                                 <ol class="carousel-indicators">
                                                                     <c:forEach var="image" items="${event.images}" varStatus="status">
                                                                         <li data-target="#eventImageCarousel" data-slide-to="${status.index}" class="${status.first ? 'active' : ''}"></li>
@@ -115,12 +114,12 @@
                                                                         </div>
                                                                     </c:forEach>
                                                                 </div>
-                                                                <a class="carousel-control-prev" href="#eventImageCarousel" role="button" data-slide="prev">
-                                                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                                <a class="carousel-control-prev" href="#myCarousel" data-slide="prev">
+                                                                    <span class="carousel-control-prev-icon"></span>
                                                                     <span class="sr-only">Previous</span>
                                                                 </a>
-                                                                <a class="carousel-control-next" href="#eventImageCarousel" role="button" data-slide="next">
-                                                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                                <a class="carousel-control-next" href="#myCarousel" data-slide="next">
+                                                                    <span class="carousel-control-next-icon"></span>
                                                                     <span class="sr-only">Next</span>
                                                                 </a>
                                                             </div>

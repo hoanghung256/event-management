@@ -31,7 +31,6 @@
         <link rel="stylesheet" href="<c:url value='/assets/app/css/fontawesome-pro.css' />">
         <link rel="stylesheet" href="<c:url value='/assets/app/css/spacing.css' />">
         <link rel="stylesheet" href="<c:url value='/assets/app/css/main.css' />">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     </head> 
     <body class="body-area">
         <!-- Preloder start -->
