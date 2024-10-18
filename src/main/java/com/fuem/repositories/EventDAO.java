@@ -32,14 +32,7 @@ import java.util.logging.Logger;
 public class EventDAO extends SQLDatabase {
 
     private static final Logger logger = Logger.getLogger(EventDAO.class.getName());
-    private static final String SELECT_FOR_FILTER = "SELECT e.*, COUNT(*) OVER() AS 'TotalRow', "
-            + "c.id as categoryId, t.categoryName, "
-            + "l.locationDescription, "
-            + "o.fullname AS organizerName "
-            + "FROM [Event] e "
-            + "JOIN Category c ON e.categoryId = c.id "
-            + "JOIN Location l ON e.locationId = l.id "
-            + "JOIN Organizer o ON e.organizerId = o.id ";
+
     private static final String SELECT_IMG_BY_ID = "SELECT path FROM EventImage WHERE eventId = ?";
     private static final String SELECT_EVENT_DETAILS_BY_ID = "SELECT e.id, "
             + "o.fullname AS organizerName, "
@@ -108,18 +101,6 @@ public class EventDAO extends SQLDatabase {
             + "WHERE f.followerId = ? "
             + "AND e.dateOfEvent > GETDATE() "
             + "ORDER BY e.dateOfEvent DESC";
-    private static final String SELECT_EVENTS_NOT_FOLLOWED = "SELECT e.*, "
-            + "o.fullname AS organizerName, o.id AS organizerId, "
-            + "t.id AS categoryId, c.categoryName, c.categoryDescription, "
-            + "l.id AS locationId, l.locationDescription "
-            + "FROM Event e "
-            + "JOIN Organizer o ON e.organizerId = o.id "
-            + "JOIN Category c ON e.categoryId = c.id "
-            + "JOIN Location l ON e.locationId = l.id "
-            + "LEFT JOIN Follow f ON e.organizerId = f.followedId AND f.followerId = ? "
-            + "WHERE f.followedId IS NULL "
-            + "AND e.dateOfEvent > GETDATE() "
-            + "ORDER BY e.dateOfEvent DESC";
     private static final String SELECT_EVENTS_FOLLOWED_AND_NOT_FOLLOWED = "SELECT e.*, "
             + "COUNT(*) OVER() AS 'TotalRow', "
             + "o.fullname AS organizerName, o.id AS organizerId, "
@@ -181,51 +162,6 @@ public class EventDAO extends SQLDatabase {
     public EventDAO() {
         super();
     }
-
-    /**
-     *
-     * @author AnhNQ
-     */
-    public List<Event> getAllEvents() {
-        List<Event> events = new ArrayList<>();
-
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
-                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ALL_EVENT)) {
-            while (rs.next()) {
-                Event event = new Event();
-                event.setId(rs.getInt("id"));
-                event.setFullname(rs.getString("fullname"));
-                event.setDescription(rs.getString("description"));
-                event.setDateOfEvent(rs.getDate("dateOfEvent").toLocalDate());
-                event.setStartTime(rs.getTimestamp("startTime").toLocalDateTime().toLocalTime());
-                event.setEndTime(rs.getTimestamp("endTime").toLocalDateTime().toLocalTime());
-                event.setGuestRegisterLimit(rs.getInt("guestRegisterLimit"));
-                event.setRegisterDeadline(rs.getDate("guestRegisterDeadline").toLocalDate());
-
-                Organizer organizer = new Organizer();
-                organizer.setId(rs.getInt("organizerId"));
-                organizer.setFullname(rs.getString("organizerName"));
-                event.setOrganizer(organizer);
-
-                Category category = new Category();
-                category.setId(rs.getInt("categoryId"));
-                category.setName(rs.getString("categoryName"));
-                category.setDescription(rs.getString("categoryDescription"));
-                event.setCategory(category);
-
-                Location location = new Location();
-                location.setId(rs.getInt("locationId"));
-                location.setDescription(rs.getString("locationDescription"));
-                event.setLocation(location);
-
-                events.add(event);
-            }
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, null, e);
-        }
-        return events;
-    }
-
     /**
      *
      * @author AnhNQ
@@ -269,50 +205,6 @@ public class EventDAO extends SQLDatabase {
         }
         return events;
     }
-
-    /**
-     *
-     * @author AnhNQ
-     */
-    public List<Event> getEventsNotFollowing(int userId) {
-        List<Event> events = new ArrayList<>();
-
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_EVENTS_FOLLOWED, userId);) {
-            while (rs.next()) {
-                Event event = new Event();
-                event.setId(rs.getInt("id"));
-                event.setFullname(rs.getString("fullname"));
-                event.setDescription(rs.getString("description"));
-                event.setDateOfEvent(rs.getDate("dateOfEvent").toLocalDate());
-                event.setStartTime(rs.getTimestamp("startTime").toLocalDateTime().toLocalTime());
-                event.setEndTime(rs.getTimestamp("endTime").toLocalDateTime().toLocalTime());
-                event.setGuestRegisterLimit(rs.getInt("guestRegisterLimit"));
-                event.setRegisterDeadline(rs.getDate("guestRegisterDeadline").toLocalDate());
-                // event.setGuestAttendedCount(rs.getInt("guestAttendedCount"));
-
-                Organizer organizer = new Organizer();
-                organizer.setId(rs.getInt("organizerId"));
-                organizer.setFullname(rs.getString("organizerName"));
-                event.setOrganizer(organizer);
-                Category category = new Category();
-                category.setId(rs.getInt("categoryId"));
-                category.setName(rs.getString("categoryName"));
-                category.setDescription(rs.getString("categoryDescription"));
-                event.setCategory(category);
-
-                Location eventLocation = new Location();
-                eventLocation.setId(rs.getInt("locationId"));
-                eventLocation.setDescription(rs.getString("locationDescription"));
-                event.setLocation(eventLocation);
-
-                events.add(event);
-            }
-        } catch (SQLException e) {
-            logger.log(Level.SEVERE, null, e);
-        }
-        return events;
-    }
-
     /**
      *
      * @author AnhNQ
@@ -404,6 +296,8 @@ public class EventDAO extends SQLDatabase {
         Page<Event> page = new Page<>();
         ArrayList<Event> events = new ArrayList<>();
         String query = buildSelectQuery(pagingCriteria, searchEventCriteria);
+        
+        System.out.println(query);
 
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
                 ResultSet rs = executeQueryPreparedStatement(conn, query, id);) {
@@ -460,12 +354,12 @@ public class EventDAO extends SQLDatabase {
             query.append("\n WHERE");
 
             if (searchEventCriteria.getName() != null && !searchEventCriteria.getName().isBlank()) {
-                query.append(" LOWER(e.fullname) LIKE LOWER('");
+                query.append(" LOWER(e.fullname) LIKE LOWER('%");
                 query.append(searchEventCriteria.getName());
-                query.append("%')\n AND");
+                query.append("%')\n ");
             }
             if (searchEventCriteria.getCategoryId() != null) {
-                query.append(" e.categoryId=");
+                query.append("AND e.categoryId=");
                 query.append(searchEventCriteria.getCategoryId());
             }
             if (searchEventCriteria.getOrganizerId() != null) {

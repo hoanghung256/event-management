@@ -35,7 +35,7 @@
                             <div class="col-md-2 input">
                                 <label for="categoryId" class="form-label">Event category</label>
                                 <select id="categoryId" name="categoryId" class="form-select">
-                                    <option disabled selected>Select Category</option>
+                                    <option value="" selected>Select Category</option>
                                     <c:forEach var="category" items="${cateList}">
                                         <option value="${category.id}" ${previousSearchEventCriteria != null && previousSearchEventCriteria.categoryId == category.id ? 'selected' : ''}>
                                             ${category.name}
@@ -47,7 +47,7 @@
                             <div class="col-md-2 input">
                                 <label for="organizerId" class="form-label">Organizer</label>
                                 <select id="organizerId" name="organizerId" class="form-select">
-                                    <option disabled selected>Select Organizer</option>
+                                    <option value=""selected>Select Organizer</option>
                                     <c:forEach var="organizer" items="${organizerList}">
                                         <option value="${organizer.id}" ${previousSearchEventCriteria != null && previousSearchEventCriteria.organizerId == organizer.id ? 'selected' : ''}>
                                             ${organizer.fullname}

@@ -46,7 +46,7 @@
         <!-- App sidebar area end -->
         <div class="page__full-wrapper">
             <!-- App sidebar area start -->
-            <div class="expovent__sidebar">
+            <div class="expovent__sidebar collapsed">
                 <div class="logo-details">
                     <span>
                         <a href="<c:url value="/home"/>">
