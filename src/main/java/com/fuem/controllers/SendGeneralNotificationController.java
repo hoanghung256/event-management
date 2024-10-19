@@ -7,7 +7,6 @@ package com.fuem.controllers;
 import static com.fuem.controllers.SendNotificationController.notiDAO;
 import com.fuem.models.Organizer;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -57,10 +56,4 @@ public class SendGeneralNotificationController extends HttpServlet {
         request.setAttribute("numberOfReceivers", numberOfReceivers);
         request.getRequestDispatcher("send-general-notification.jsp").forward(request, response);
     }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }

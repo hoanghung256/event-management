@@ -4,10 +4,8 @@
  */
 package com.fuem.repositories;
 
-import com.fuem.models.Follow;
 import com.fuem.utils.DataSourceWrapper;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;

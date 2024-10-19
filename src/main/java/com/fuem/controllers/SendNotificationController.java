@@ -7,26 +7,22 @@ package com.fuem.controllers;
 
 import com.fuem.models.Event;
 import com.fuem.models.Organizer;
-import com.fuem.models.Student;
-import com.fuem.models.User;
 import com.fuem.repositories.EventDAO;
 import com.fuem.repositories.NotificationDAO;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
  *
- * @author This PC
+ * @author AnhNQ
  */
 @WebServlet(name="SendNotificationController", urlPatterns={"/club/send-event-notification", "/admin/send-event-notification"})
 public class SendNotificationController extends HttpServlet {
@@ -65,10 +61,4 @@ public class SendNotificationController extends HttpServlet {
         request.setAttribute("upcomingEvents", upcomingEvents);
         request.getRequestDispatcher("send-event-notification.jsp").forward(request, response);
     }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }

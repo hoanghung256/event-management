@@ -4,7 +4,6 @@
  */
 package com.fuem.controllers;
 
-import com.fuem.models.Event;
 import com.fuem.models.Student;
 import com.fuem.repositories.EventAttendedDAO;
 import com.fuem.repositories.helpers.Page;

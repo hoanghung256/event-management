@@ -79,16 +79,6 @@ public class EventDAO extends SQLDatabase {
             + "JOIN Location l ON e.locationId = l.id "
             + "WHERE e.organizerId = ? "
             + "ORDER BY e.dateOfEvent DESC;";
-
-    private static final String SELECT_ALL_EVENT = "SELECT e.*, o.fullname AS organizerName, o.id AS organizerId, "
-            + "c.id AS categoryId, c.categoryName, c.categoryDescription, "
-            + "l.id AS locationId, l.locationDescription "
-            + "FROM Event e "
-            + "JOIN Organizer o ON e.organizerId = o.id "
-            + "JOIN Category c ON e.categoryId = c.id "
-            + "JOIN EventLocation l ON e.locationId = l.id "
-            + "WHERE e.dateOfEvent > GETDATE() "
-            + "ORDER BY e.dateOfEvent DESC";
     private static final String SELECT_EVENTS_FOLLOWED = "SELECT e.*, "
             + "o.fullname AS organizerName, o.id AS organizerId, "
             + "c.id AS categoryId, c.categoryName, c.categoryDescription, "

@@ -19,7 +19,7 @@ public class Page<T> {
     public Page() {
     }
     
-    public Page(ArrayList<T> data, Integer currentPage, Integer totalPage) {
+    public Page(ArrayList<T> datas, Integer currentPage, Integer totalPage) {
         this.datas = datas;
         this.currentPage = currentPage;
         this.totalPage = totalPage;

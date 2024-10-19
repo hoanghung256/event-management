@@ -82,6 +82,7 @@ CREATE TABLE [Category] (
 	[id] INT IDENTITY(1, 1),
 	[categoryName] NVARCHAR(100),
 	[categoryDescription] NVARCHAR(1000),
+	[isDeleted] BIT DEFAULT(0),
 
 	CONSTRAINT PK_Category PRIMARY KEY ([id])
 );
@@ -90,6 +91,7 @@ CREATE TABLE [Location] (
 	[id] INT IDENTITY(1, 1),
 	[locationName] NVARCHAR(100),
 	[locationDescription] NVARCHAR(1000),
+	[isDeleted] BIT DEFAULT(0),
 
 	CONSTRAINT PK_Location PRIMARY KEY ([id])
 );
@@ -108,7 +110,7 @@ CREATE TABLE [Organizer] (
 	[isAdmin] BIT DEFAULT(0),
 
 	CONSTRAINT PK_Organizer PRIMARY KEY ([id]),
-	FOREIGN KEY ([categoryId]) REFERENCES [Category]([id]),
+	CONSTRAINT FK_Organizer_Category FOREIGN KEY ([categoryId]) REFERENCES [Category]([id]) ON DELETE CASCADE
 );
 
 CREATE TABLE [Event] (
@@ -122,7 +124,7 @@ CREATE TABLE [Event] (
 	[dateOfEvent] DATE,
 	[startTime] TIME,
 	[endTime] TIME,
-	[status] NVARCHAR(15) DEFAULT('PENDING'), --PENDING / APPROVED / REJECTED
+	[status] NVARCHAR(15) DEFAULT('PENDING'), --PENDING / APPROVED / REJECTED / ON_GOING / ENDED
 	[guestRegisterLimit] INT,
 	[collaboratorRegisterLimit] INT,
 	[guestAttendedCount] INT DEFAULT (0),
@@ -133,9 +135,9 @@ CREATE TABLE [Event] (
 	[collaboratorRegisterDeadline] DATE,
 
 	CONSTRAINT PK_Event PRIMARY KEY ([id]),
-	FOREIGN KEY ([organizerId]) REFERENCES [Organizer]([id]),
-	FOREIGN KEY ([categoryId]) REFERENCES [Category]([id]),
-	FOREIGN KEY ([locationId]) REFERENCES [Location]([id])
+	CONSTRAINT FK_Event_Organizer FOREIGN KEY ([organizerId]) REFERENCES [Organizer]([id]) ON DELETE CASCADE,
+	CONSTRAINT FK_Event_Category FOREIGN KEY ([categoryId]) REFERENCES [Category]([id]), 
+	CONSTRAINT FK_Event_Location FOREIGN KEY ([locationId]) REFERENCES [Location]([id])
 );
 
 CREATE TABLE [EventImage] (
@@ -144,7 +146,7 @@ CREATE TABLE [EventImage] (
 	[path] NVARCHAR(MAX),
 
 	CONSTRAINT PK_EventImage PRIMARY KEY ([id]),
-	FOREIGN KEY ([eventId]) REFERENCES [Event]([id])
+	CONSTRAINT FK_EventImage_Event FOREIGN KEY ([eventId]) REFERENCES [Event]([id]) ON DELETE CASCADE
 );
 
 CREATE TABLE [File] (
@@ -154,7 +156,7 @@ CREATE TABLE [File] (
 	[path] NVARCHAR(MAX),
 
 	CONSTRAINT PK_File PRIMARY KEY ([id]),
-	FOREIGN KEY ([submitterId]) REFERENCES [Organizer]([id])
+	CONSTRAINT FK_File_Organizer FOREIGN KEY ([submitterId]) REFERENCES [Organizer]([id]) ON DELETE CASCADE
 );
 
 CREATE TABLE [Notification] (
@@ -165,7 +167,7 @@ CREATE TABLE [Notification] (
 	[sendingTime] DATETIME DEFAULT GETDATE(),
 
 	CONSTRAINT PK_Notification PRIMARY KEY ([id]),
-	FOREIGN KEY ([senderId]) REFERENCES [Organizer]([id])
+	CONSTRAINT FK_Notification_Organizer FOREIGN KEY ([senderId]) REFERENCES [Organizer]([id]) ON DELETE CASCADE
 );
 
 CREATE TABLE [NotificationReceiver] (
@@ -174,8 +176,7 @@ CREATE TABLE [NotificationReceiver] (
 	[isOrganizer] BIT
 
 	CONSTRAINT PK_NotificationReceiver PRIMARY KEY ([notificationId], [receiverId], [isOrganizer]),
-	FOREIGN KEY ([notificationId]) REFERENCES [Notification]([id]),
-
+	CONSTRAINT FK_NotificationReceiver_Notification FOREIGN KEY ([notificationId]) REFERENCES [Notification]([id]) ON DELETE CASCADE,
 );
 
 CREATE TABLE [EventCollaborator] (
@@ -184,8 +185,8 @@ CREATE TABLE [EventCollaborator] (
 	[isCancel] INT DEFAULT(0)
 
 	CONSTRAINT PK_EventCollaborator PRIMARY KEY ([studentId], [eventId]),
-	FOREIGN KEY ([studentId]) REFERENCES [Student]([id]),
-	FOREIGN KEY ([eventId]) REFERENCES [Event]([id])
+	CONSTRAINT FK_EventCollaborator_Student FOREIGN KEY ([studentId]) REFERENCES [Student]([id]) ON DELETE CASCADE,
+	CONSTRAINT FK_EventCollaborator_Event FOREIGN KEY ([eventId]) REFERENCES [Event]([id]) ON DELETE CASCADE
 );
 
 CREATE TABLE [EventGuest] (
@@ -196,8 +197,8 @@ CREATE TABLE [EventGuest] (
 	[isCancelRegister] BIT DEFAULT(0),
 
 	CONSTRAINT PK_EventGuest PRIMARY KEY ([guestId], [eventId]),
-	FOREIGN KEY ([guestId]) REFERENCES [Student]([id]),
-	FOREIGN KEY ([eventId]) REFERENCES [Event]([id])
+	CONSTRAINT FK_EventGuest_Student FOREIGN KEY ([guestId]) REFERENCES [Student]([id]) ON DELETE CASCADE, 
+	CONSTRAINT FK_EventGuest_Event FOREIGN KEY ([eventId]) REFERENCES [Event]([id]) ON DELETE CASCADE
 );
 
 CREATE TABLE [Feedback] (
@@ -206,8 +207,8 @@ CREATE TABLE [Feedback] (
 	[content] NVARCHAR(1000),
 
 	CONSTRAINT PK_Feedback PRIMARY KEY ([guestId], [eventId]),
-	FOREIGN KEY ([guestId]) REFERENCES [Student]([id]),
-	FOREIGN KEY ([eventId]) REFERENCES [Event]([id])
+	CONSTRAINT FK_Feedback_Student FOREIGN KEY ([guestId]) REFERENCES [Student]([id]) ON DELETE CASCADE,
+	CONSTRAINT FK_Feedback_Event FOREIGN KEY ([eventId]) REFERENCES [Event]([id]) ON DELETE CASCADE
 );
 
 CREATE TABLE [Follow] (
@@ -215,8 +216,8 @@ CREATE TABLE [Follow] (
 	[organizerId] INT,
 
 	CONSTRAINT PK_Follow PRIMARY KEY ([studentId], [organizerId]),
-	FOREIGN KEY ([studentId]) REFERENCES [Student]([id]),
-	FOREIGN KEY ([organizerId]) REFERENCES [Organizer]([id])
+	CONSTRAINT FK_Follow_Student FOREIGN KEY ([studentId]) REFERENCES [Student]([id]) ON DELETE CASCADE,
+	CONSTRAINT FK_Follow_Organizer FOREIGN KEY ([organizerId]) REFERENCES [Organizer]([id]) ON DELETE CASCADE
 );
 /*
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -229,22 +230,47 @@ GO
 <<<<<<<<<< BEGIN:TRIGGER <<<<<<<<<<
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 */
--- Auto increase guestAttendedCount at Event table when guest check-in event that registered before
-CREATE TRIGGER trg_IncreaseGuestCounts
+-- Auto update guestAttendedCount and guestRegisterCount at Event table when guest check-in event that registered before
+CREATE TRIGGER trg_updateGuest_GuestRegisCounts
 ON [EventGuest]
 AFTER UPDATE
 AS
 BEGIN
-    UPDATE Event
-    SET 
-        guestAttendedCount = guestAttendedCount + (SELECT COUNT(*) FROM inserted WHERE isAttended = 1)
-    WHERE id = (SELECT eventId FROM inserted WHERE isAttended = 1);
+    UPDATE e
+    SET guestAttendedCount = guestAttendedCount + (
+        SELECT COUNT(*) 
+        FROM inserted i
+        WHERE i.eventId = e.id AND i.isAttended = 1
+    )
+    FROM Event e
+    WHERE EXISTS (
+        SELECT 1 
+        FROM inserted i
+        WHERE i.eventId = e.id AND i.isAttended = 1
+    );
+
+    UPDATE e
+    SET guestRegisterCount = guestRegisterCount + (
+        SELECT COUNT(*) 
+        FROM inserted i
+        WHERE i.eventId = e.id AND i.isRegistered = 1
+    ) - (
+        SELECT COUNT(*)
+        FROM inserted i
+        WHERE i.eventId = e.id AND i.isRegistered = 0
+    )
+    FROM Event e
+    WHERE EXISTS (
+        SELECT 1 
+        FROM inserted i
+        WHERE i.eventId = e.id
+    );
 END;
 GO
 
 -- Auto increase guestRegisterCount at [Event] when guest register an event
 -- Auto increase guestAttendedCount at [Event] when guest check-in an event that did not registered before
-CREATE TRIGGER trg_UpdateGuestCounts
+CREATE TRIGGER trg_GuestCounts_GuestRegisterCount
 ON [EventGuest]
 AFTER INSERT
 AS
@@ -483,31 +509,6 @@ VALUES
 (5, 1, 1, 1),
 (6, 3, 1, 0);
 
-ALTER TABLE NotificationReceiver
-ADD CONSTRAINT FK_NotificationReceiver_ReceiverId
-FOREIGN KEY (receiverId) REFERENCES Student(id)
-ON DELETE CASCADE;
-
-ALTER TABLE EventCollaborator
-ADD CONSTRAINT FK_EventCollaborator_StudentId
-FOREIGN KEY (studentId) REFERENCES Student(id)
-ON DELETE CASCADE;
-
-ALTER TABLE EventGuest
-ADD CONSTRAINT FK_EventGuest_GuestId
-FOREIGN KEY (guestId) REFERENCES Student(id)
-ON DELETE CASCADE;
-
-ALTER TABLE Feedback
-ADD CONSTRAINT FK_Feedback_GuestId
-FOREIGN KEY (guestId) REFERENCES Student(id)
-ON DELETE CASCADE;
-
-ALTER TABLE Follow
-ADD CONSTRAINT FK_Follow_StudentId
-FOREIGN KEY (studentId) REFERENCES Student(id)
-ON DELETE CASCADE;
-
  INSERT INTO [Student] ([fullname], [studentId], [email], [password], [gender])
 VALUES
 ('Hoang Van Hung', 'DE180081', 'hunghvde180081@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'FEMALE'),
@@ -520,5 +521,4 @@ VALUES
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 >>>>>>>>> END: EXAMPLE DATA >>>>>>>>>>
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-<<<<<<< HEAD
 */
