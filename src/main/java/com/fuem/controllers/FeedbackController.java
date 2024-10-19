@@ -33,12 +33,12 @@ public class FeedbackController extends HttpServlet {
 //        Organizer organizer = (Organizer) session.getAttribute("userInfor");
 
         try {
-            int eventId = Integer.parseInt(request.getParameter("eventId")); // Lấy ID sự kiện từ request
+            int eventId = Integer.parseInt(request.getParameter("eventId"));
             EventDAO eventDAO = new EventDAO();
             FeedbackDAO feedbackDAO = new FeedbackDAO();
-
-            Event event = eventDAO.getEventDetails(eventId);// Lấy thông tin sự kiện
-            List<Feedback> feedbackList = feedbackDAO.getEventFeedbackByEventId(eventId); // Lấy danh sách phản hồi
+            
+            Event event = eventDAO.getEventDetails(eventId);
+            List<Feedback> feedbackList = feedbackDAO.getEventFeedbackByEventId(eventId); 
             request.setAttribute("event", event);
             request.setAttribute("feedbackList", feedbackList);
 

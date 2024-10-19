@@ -323,7 +323,7 @@
                                         <div class="news__item">
                                             <div class="news__item-inner">
                                                 <div class="news__content">
-                                                    <h4 class="news__title"><a href="<c:url value="/admin/organized-event-report?eventIdDetail=${event.id}&action=detail"/>">${event.fullname}</a></h4>
+                                                    <h4 class="news__title"><a href="<c:url value="/admin/organized-event-report?eventIdDetail=${event.id}&action=detail&organizerId=${event.organizer.id}"/>">${event.fullname}</a></h4>
                                                     <div class="news__meta">
                                                         <div class="news__meta-status">
                                                             <span><i class="flaticon-user"></i></span>

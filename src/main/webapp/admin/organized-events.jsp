@@ -60,6 +60,7 @@
                                         <table>
                                             <thead>
                                                 <tr>
+                                                    <th>Club Name</th>
                                                     <th>Event Name</th>
                                                     <th>Date</th>
                                                     <th>Category</th>
@@ -70,6 +71,11 @@
                                             <tbody>
                                                 <c:forEach var="event" items="${page.datas}">
                                                     <tr>
+                                                        <td>
+                                                            <div class="attendant__seminar">
+                                                                <span><a href="">${event.organizer.acronym}</a></span>
+                                                            </div>
+                                                        </td>
                                                         <td>
                                                             <div class="attendant__seminar">
                                                                 <span><a href="">${event.fullname}</a></span>
@@ -102,8 +108,8 @@
                                                                             </svg>
                                                                         </button>
                                                                         <div class="dropdown-list">
-                                                                            <a class="dropdown__item" href="<c:url value="/admin/organized-event-report?eventIdDetail=${event.id}&action=detail" />">Detail</a>
-                                                                            <a class="dropdown__item" href="<c:url value="/admin/feedback?eventId=${event.id}" />">Feedbacks</a>
+                                                                            <a class="dropdown__item" href="<c:url value="/admin/organized-event-report?eventIdDetail=${event.id}&organizerId=${event.organizer.id}&action=detail" />">Detail</a>
+                                                                            <a class="dropdown__item" href="<c:url value="/admin/feedback?eventId=${event.id}" />">Feedback</a>
                                                                         </div>
                                                                     </div>
                                                                 </div>

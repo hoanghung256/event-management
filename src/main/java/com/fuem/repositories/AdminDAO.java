@@ -17,7 +17,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -83,8 +82,10 @@ public class AdminDAO extends SQLDatabase {
 
     private static String SELECT_ORGANIZED_EVENTS = "SELECT\n"
             + "    Event.id AS EventId,\n"
+            + "    Organizer.id AS OrganizerId, \n"
             + "    Event.fullname AS EventName,\n"
             + "    Event.dateOfEvent AS EventDate,\n"
+            + "    Organizer.acronym AS ClubName,\n"
             + "    Location.locationName AS LocationName,\n"
             + "    Category.categoryName AS CategoryName\n"
             + "FROM\n"
@@ -93,16 +94,20 @@ public class AdminDAO extends SQLDatabase {
             + "    Location ON Event.locationId = Location.id\n"
             + "JOIN\n"
             + "    Category ON Event.categoryId = Category.id\n"
+            + "JOIN\n"
+            + "    Organizer ON Organizer.id = Event.organizerId\n"
             + "WHERE\n"
-            + "    Event.organizerId = ?\n"
-            + "    AND Event.dateOfEvent < GETDATE()"
+            + "    MONTH(Event.dateOfEvent) = MONTH(GETDATE())\n"
+            + "    AND YEAR(Event.dateOfEvent) = YEAR(GETDATE())\n"
             + "ORDER BY\n"
-            + "	Event.dateOfEvent DESC\n";
+            + "    Event.dateOfEvent DESC;";
 
     private static String SELECT_ORGANIZED_EVENTS_EXCEPT_CHOOSEN = "SELECT TOP 3\n"
             + "    Event.id AS EventId,\n"
+            + "    Organizer.id AS OrganizerId,\n"
             + "    Event.fullname AS EventName,\n"
             + "    Event.dateOfEvent AS EventDate,\n"
+            + "    Organizer.acronym AS ClubName,\n"
             + "    Location.locationName AS LocationName,\n"
             + "    Category.categoryName AS CategoryName\n"
             + "FROM\n"
@@ -111,6 +116,8 @@ public class AdminDAO extends SQLDatabase {
             + "    Location ON Event.locationId = Location.id\n"
             + "JOIN\n"
             + "    Category ON Event.categoryId = Category.id\n"
+            + "JOIN\n"
+            + "    Organizer ON Organizer.id = Event.organizerId\n"
             + "WHERE\n"
             + "    Event.organizerId = ?\n"
             + "    AND Event.dateOfEvent < GETDATE()\n"
@@ -138,8 +145,7 @@ public class AdminDAO extends SQLDatabase {
             + "JOIN \n"
             + "    Location ON Location.id = Event.locationId\n"
             + "WHERE\n"
-            + "    Event.organizerId = ?\n"
-            + "    AND Event.dateOfEvent < GETDATE()"
+            + "     Event.dateOfEvent < GETDATE()"
             + "ORDER BY\n"
             + "     Event.dateOfEvent DESC\n"
             + "OFFSET ? ROWS\n"
@@ -261,19 +267,29 @@ public class AdminDAO extends SQLDatabase {
         return registrationEvent;
     }
 
-    public ArrayList<Event> getOrganizedEvent(int organizerId) {
+    public ArrayList<Event> getOrganizedEvent() {
         ArrayList<Event> organizedEvent = new ArrayList<>();
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZED_EVENTS, organizerId);) {
-            while (rs.next()) {
-
-                int eventId = rs.getInt("EventId");
-                String eventName = rs.getString("EventName");
-                LocalDate eventDate = rs.getDate("EventDate").toLocalDate();
-                String locationName = rs.getString("LocationName");
-                String category = rs.getString("CategoryName");
-
-                organizedEvent.add(new Event(eventId, eventName, eventDate, locationName, category));
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZED_EVENTS);) {
+            while(rs.next()) {
+                organizedEvent.add(
+                        new EventBuilder()
+                        .setId(rs.getInt("EventId"))
+                        .setFullname(rs.getString("EventName"))
+                        .setDateOfEvent(rs.getDate("EventDate").toLocalDate())
+                        .setLocation(
+                                new Location(
+                                        rs.getString("LocationName")
+                                )
+                        )
+                        .setCategory(
+                                new Category(
+                                        rs.getString("CategoryName")
+                                )
+                        )
+                        .setOrganizer(new Organizer(rs.getInt("OrganizerId"), rs.getString("ClubName")))
+                        .build()
+                );
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
@@ -289,10 +305,11 @@ public class AdminDAO extends SQLDatabase {
                 int eventId = rs.getInt("EventId");
                 String eventName = rs.getString("EventName");
                 LocalDate eventDate = rs.getDate("EventDate").toLocalDate();
+                String acronym = rs.getString("ClubName");
                 String locationName = rs.getString("LocationName");
                 String category = rs.getString("CategoryName");
 
-                organizedEvent.add(new Event(eventId, eventName, eventDate, locationName, category));
+                organizedEvent.add(new Event(eventId, eventName, eventDate, acronym, locationName, category));
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
@@ -300,24 +317,35 @@ public class AdminDAO extends SQLDatabase {
         return organizedEvent;
     }
 
-    public Page<Event> getOrganizedEventWithPaging(PagingCriteria pagingCriteria, int organizerId) {
+    public Page<Event> getOrganizedEventWithPaging(PagingCriteria pagingCriteria) {
         Page<Event> page = new Page<>();
         ArrayList<Event> organizedEvent = new ArrayList<>();
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZED_EVENTS_WITH_PAGING, organizerId, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
-            while (rs.next()) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZED_EVENTS_WITH_PAGING,pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
+            while(rs.next()) {
                 if (page.getTotalPage() == null && page.getCurrentPage() == null) {
                     page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
                     page.setCurrentPage(pagingCriteria.getOffset() / pagingCriteria.getFetchNext());
                 }
-
-                int eventId = rs.getInt("EventId");
-                String eventName = rs.getString("EventName");
-                LocalDate eventDate = rs.getDate("EventDate").toLocalDate();
-                String locationName = rs.getString("LocationName");
-                String category = rs.getString("CategoryName");
-
-                organizedEvent.add(new Event(eventId, eventName, eventDate, locationName, category));
+                
+                organizedEvent.add(
+                        new EventBuilder()
+                        .setId(rs.getInt("EventId"))
+                        .setFullname(rs.getString("EventName"))
+                        .setDateOfEvent(rs.getDate("EventDate").toLocalDate())
+                        .setLocation(
+                                new Location(
+                                        rs.getString("LocationName")
+                                )
+                        )
+                        .setCategory(
+                                new Category(
+                                        rs.getString("CategoryName")
+                                )
+                        )
+                        .setOrganizer(new Organizer(rs.getInt("OrganizerId"), rs.getString("ClubName")))
+                        .build()
+                );
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
