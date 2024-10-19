@@ -11,7 +11,6 @@ import com.fuem.repositories.helpers.Page;
 import com.fuem.repositories.helpers.PagingCriteria;
 import com.fuem.utils.DataSourceWrapper;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -96,27 +95,4 @@ public class EventAttendedDAO extends SQLDatabase {
 
         return page;
     }
-
-    /**
-     *
-     * @author ??? have no author, never used
-     */
-//    public List<EventGuest> getStudentAndEventIds() {
-//        List<EventGuest> eventGuests = new ArrayList<>();
-//
-//        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
-//                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_STUDENT_AND_EVENT_ID)) {
-//            while (rs.next()) {
-//                int studentId = rs.getInt("studentId");
-//                int eventId = rs.getInt("eventId");
-//
-//                EventGuest eventGuest = new EventGuest(studentId, eventId);
-//                eventGuests.add(eventGuest);
-//            }
-//        } catch (SQLException e) {
-//            logger.log(Level.SEVERE, null, e);
-//        }
-//
-//        return eventGuests;
-//    }
 }

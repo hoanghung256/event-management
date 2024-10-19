@@ -4,9 +4,7 @@
  */
 package com.fuem.repositories;
 
-import com.fuem.models.Category;
 import com.fuem.models.Event;
-import com.fuem.models.Location;
 import com.fuem.models.Organizer;
 import com.fuem.utils.DataSourceWrapper;
 import java.sql.Connection;
@@ -48,48 +46,32 @@ public class EventRegisteredDAO extends SQLDatabase {
             + "   OR (ec.studentId IS NOT NULL AND ec.isCancel = 0);    ";
 
     private static final String REGISTER_COLLABORATOR_EVENT
-            = "MERGE INTO [EventCollaborator] AS target\n"
-            + "USING (SELECT (SELECT id FROM [Student] WHERE studentId = ?) AS studentId, ? AS eventId) AS source\n"
-            + "ON target.studentId = source.studentId AND target.eventId = source.eventId\n"
-            + "WHEN MATCHED THEN\n"
-            + "    UPDATE SET isCancel = 0\n"
-            + "WHEN NOT MATCHED THEN\n"
-            + "    INSERT (studentId, eventId, isCancel) \n"
-            + "    VALUES (source.studentId, source.eventId, 0);";
+            = "INSERT INTO [EventCollaborator](studentId, eventId) VALUES(?, ?)";
 
     private static final String CANCEL_COLLABORATOR_EVENT
-            = "UPDATE[EventCollaborator] SET isCancel = 1 WHERE studentId = (SELECT id FROM [Student] WHERE studentId = ?) AND eventId = ?";
+            = "DELETE FROM [EventCollaborator] WHERE studentId = ? AND eventId = ?";
 
     private static final String REGISTER_GUEST_EVENT
             = "MERGE INTO [EventGuest] AS target\n"
-            + "USING (SELECT (SELECT id FROM [Student] WHERE studentId = ?) AS studentId, ? AS eventId) AS source\n"
-            + "ON target.guestId = source.studentId AND target.eventId = source.eventId\n"
+            + "USING (SELECT ? AS guestId, ? AS eventId) AS source\n"
+            + "ON target.guestId = source.guestId AND target.eventId = source.eventId\n"
             + "WHEN MATCHED THEN\n"
-            + "    UPDATE SET isCancelRegister = 0\n"
+            + "    UPDATE SET isRegistered = 1\n"
             + "WHEN NOT MATCHED THEN\n"
-            + "    INSERT (guestId, eventId, isRegistered, isCancelRegister) \n"
-            + "    VALUES (source.studentId, source.eventId, 1, 0);";
+            + "    INSERT (guestId, eventId, isRegistered)\n"
+            + "    VALUES (source.guestId, source.eventId, 1);";
 
     private static final String CANCEL_GUEST_EVENT
-            = "UPDATE [EventGuest] SET isCancelRegister = 1 WHERE guestId = (SELECT id FROM [Student] WHERE studentId = ?) AND eventId = ?";
+            = "UPDATE [EventGuest] SET isRegistered = 0 WHERE guestId = ? AND eventId = ?";
 
-    private static final String CHECK_STUDENT_ROLE_QUERY
-            = "SELECT "
-            + "    CASE "
-            + "        WHEN eg.isRegistered = 1 THEN 'GUEST' "
-            + "        WHEN ec.studentId IS NOT NULL THEN 'COLLABORATOR' "
-            + "        ELSE NULL "
-            + "    END AS Role "
-            + "FROM "
-            + "    [Student] s "
-            + "LEFT JOIN "
-            + "    [EventGuest] eg ON eg.guestId = s.id AND eg.eventId = ?"
-            + "    AND eg.isCancelRegister = 0 "
-            + "LEFT JOIN "
-            + "    [EventCollaborator] ec ON ec.studentId = s.id AND ec.eventId = ? "
-            + "AND ec.isCancel = 0"
-            + "WHERE "
-            + "    s.studentId = ?";
+    private static final String IS_STUDENT_REGIS_AS_GUEST = "SELECT \n"
+            + "COUNT (1) AS 'isGuestRegis' \n"
+            + "FROM [EventGuest] "
+            + "WHERE isRegistered = 1 AND guestId = ? AND eventId = ?;";
+    private static final String IS_STUDENT_REGIS_AS_COLLAB = "SELECT "
+            + "COUNT (1) AS 'isCollabRegis' "
+            + "FROM [EventCollaborator] "
+            + "WHERE studentId = ? AND eventId = ?;";
 
     public List<Event> getRegisteredEventListByStudentId(String studentId) {
         List<Event> registeredEvents = new ArrayList<>();
@@ -116,9 +98,9 @@ public class EventRegisteredDAO extends SQLDatabase {
         return registeredEvents;
     }
 
-    public boolean registerCollaborator(String studentId, int eventId) {
+    public boolean registerCollaborator(int collabId, int eventId) {
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection()) {
-            int affectedRows = executeUpdatePreparedStatement(conn, REGISTER_COLLABORATOR_EVENT, studentId, eventId);
+            int affectedRows = executeUpdatePreparedStatement(conn, REGISTER_COLLABORATOR_EVENT, collabId, eventId);
             return affectedRows > 0; // Trả về true nếu đăng ký thành công
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
@@ -126,9 +108,9 @@ public class EventRegisteredDAO extends SQLDatabase {
         }
     }
 
-    public boolean cancelCollaboratorRegistration(String studentId, int eventId) {
+    public boolean cancelCollaboratorRegistration(int collabId, int eventId) {
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection()) {
-            int affectedRows = executeUpdatePreparedStatement(conn, CANCEL_COLLABORATOR_EVENT, studentId, eventId);
+            int affectedRows = executeUpdatePreparedStatement(conn, CANCEL_COLLABORATOR_EVENT, collabId, eventId);
             return affectedRows > 0; // Trả về true nếu hủy đăng ký thành công
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
@@ -136,9 +118,9 @@ public class EventRegisteredDAO extends SQLDatabase {
         }
     }
 
-    public boolean registerGuest(String studentId, int eventId) {
+    public boolean registerGuest(int guestId, int eventId) {
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection()) {
-            int affectedRows = executeUpdatePreparedStatement(conn, REGISTER_GUEST_EVENT, studentId, eventId);
+            int affectedRows = executeUpdatePreparedStatement(conn, REGISTER_GUEST_EVENT, guestId, eventId);
             return affectedRows > 0; // Trả về true nếu đăng ký thành công
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
@@ -146,9 +128,9 @@ public class EventRegisteredDAO extends SQLDatabase {
         }
     }
 
-    public boolean cancelGuestRegistration(String studentId, int eventId) {
+    public boolean cancelGuestRegistration(int guestId, int eventId) {
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection()) {
-            int affectedRows = executeUpdatePreparedStatement(conn, CANCEL_GUEST_EVENT, studentId, eventId);
+            int affectedRows = executeUpdatePreparedStatement(conn, CANCEL_GUEST_EVENT, guestId, eventId);
             return affectedRows > 0; // Trả về true nếu hủy đăng ký thành công
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
@@ -156,19 +138,32 @@ public class EventRegisteredDAO extends SQLDatabase {
         }
     }
 
-    public String checkStudentRole(String studentId, int eventId) {
-        String role = null;
+    /**
+     * @return a 2 length boolean array with index 0 present isGuestRegis, index
+     * 1 present isCollabRegis
+     * @author HungHV
+     */
+    public boolean[] isStudentRegistered(int userId, int eventId) {
+        boolean isGuestRegis = false;
+        boolean isCollabRegis = false;
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, CHECK_STUDENT_ROLE_QUERY, eventId, eventId, studentId)) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
+            try (ResultSet rs = executeQueryPreparedStatement(conn, IS_STUDENT_REGIS_AS_GUEST, userId, eventId);) {
+                if (rs.next()) {
+                    isGuestRegis = rs.getBoolean("isGuestRegis");
+                    System.out.println("is guest in db " + rs.getInt("isGuestRegis"));
+                }
+            }
 
-            if (rs.next()) {
-                role = rs.getString("Role");
+            try (ResultSet rs = executeQueryPreparedStatement(conn, IS_STUDENT_REGIS_AS_COLLAB, userId, eventId);) {
+                if (rs.next()) {
+                    isCollabRegis = rs.getBoolean("isCollabRegis");
+                    System.out.println("is guest in db " + rs.getBoolean("isCollabRegis"));
+                }
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
         }
-
-        return role; // Trả về vai trò, hoặc null nếu không tìm thấy
+        return new boolean[]{isGuestRegis, isCollabRegis};
     }
-
 }

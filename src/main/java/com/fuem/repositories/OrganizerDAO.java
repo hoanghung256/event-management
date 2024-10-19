@@ -6,7 +6,6 @@ package com.fuem.repositories;
 
 import com.fuem.enums.Role;
 import com.fuem.models.Organizer;
-import com.fuem.models.Student;
 import com.fuem.repositories.helpers.Page;
 import com.fuem.repositories.helpers.PagingCriteria;
 import com.fuem.utils.DataSourceWrapper;

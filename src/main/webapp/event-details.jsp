@@ -184,42 +184,41 @@
                                                             ${event.collaboratorRegisterCount} / ${event.collaboratorRegisterLimit}
                                                         </li>
                                                     </c:if>
-
                                                 </ul>
                                                 <div class="ticket__purchase-wrapper mt-30">
                                                     <div class="ticket__price-inner">
                                                         <div class="ticket__price-item">
-                                                            <c:if test="${event.collaboratorRegisterLimit != 0}">
-                                                                <c:if test="${studentRole == 'COLLABORATOR'}">
-                                                                    <form action="event-detail" method="post">
+                                                            <c:if test="${event.collaboratorRegisterLimit > 0}">
+                                                                <c:if test="${isCollabRegis == true and isGuestRegis == false}">
+                                                                    <form action="<c:url value="/event-detail" />" method="POST">
                                                                         <input type="hidden" name="action" value="cancelCollaborator">
                                                                         <input type="hidden" name="eventId" value="${event.id}">
-                                                                        <button style="height: 45px; padding: 0 10px;" class="element__btn red-bg" type="submit">Cancel Collab</button>
+                                                                        <button style="height: 45px; padding: 0 10px;" class="element__btn red-bg" type="submit">Cancel Collaborator</button>
                                                                     </form>
                                                                 </c:if>
-                                                                <c:if test="${studentRole == null}">
-                                                                    <form action="event-detail" method="post">
+                                                                <c:if test="${isCollabRegis == false and isGuestRegis == false}">
+                                                                    <form action="<c:url value="/event-detail" />" method="POST">
                                                                         <input type="hidden" name="action" value="registerCollaborator">
                                                                         <input type="hidden" name="eventId" value="${event.id}">
-                                                                        <button style="height: 45px; padding: 0 10px;" class="element__btn border-yellow" type="submit">Collab Regist</button>
+                                                                        <button style="height: 45px; padding: 0 10px;" class="element__btn border-yellow" type="submit">Collaborator Register</button>
                                                                     </form>
                                                                 </c:if>
                                                             </c:if>
                                                         </div>
                                                         <div class="ticket__price-item">
-                                                            <c:if test="${event.guestRegisterLimit != 0}">
-                                                                <c:if test="${studentRole == 'GUEST'}">
-                                                                    <form action="event-detail" method="post">
+                                                            <c:if test="${event.guestRegisterLimit > 0}">
+                                                                <c:if test="${isGuestRegis == true and isCollabRegis == false}">
+                                                                    <form action="<c:url value="/event-detail" />" method="POST">
                                                                         <input type="hidden" name="action" value="cancelGuest">
                                                                         <input type="hidden" name="eventId" value="${event.id}">
-                                                                        <button style="height: 45px; padding: 0 10px;" class="element__btn red-bg" type="submit">Cancel GuestRegist</button>
+                                                                        <button style="height: 45px; padding: 0 10px;" class="element__btn red-bg" type="submit">Cancel Guest Register</button>
                                                                     </form>
                                                                 </c:if>
-                                                                <c:if test="${studentRole == null}">
-                                                                    <form action="event-detail" method="post">
+                                                                <c:if test="${isGuestRegis == false and isCollabRegis == false}">
+                                                                    <form action="<c:url value="/event-detail" />" method="POST">
                                                                         <input type="hidden" name="action" value="registerGuest">
                                                                         <input type="hidden" name="eventId" value="${event.id}">
-                                                                        <button style="height: 45px; padding: 0 10px;" class="element__btn border-yellow" type="submit">Guest Regist</button>
+                                                                        <button style="height: 45px; padding: 0 10px;" class="element__btn border-yellow" type="submit">Guest Register</button>
                                                                     </form>
                                                                 </c:if>
                                                             </c:if>

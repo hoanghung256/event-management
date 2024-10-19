@@ -7,7 +7,6 @@ package com.fuem.controllers;
 import com.fuem.models.Event;
 import com.fuem.models.Student;
 import com.fuem.repositories.EventDAO;
-import com.fuem.repositories.EventRegisterDAO;
 import com.fuem.repositories.EventRegisteredDAO;
 import jakarta.servlet.ServletException;
 import java.io.IOException;
@@ -26,30 +25,26 @@ public class EventDetailsController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Student student =  (Student) request.getSession().getAttribute("userInfor");
         int eventId = Integer.parseInt(request.getParameter("eventId"));
         EventDAO eventDAO = new EventDAO();
         EventRegisteredDAO eventRegisteredDAO = new EventRegisteredDAO();
 
-        // Giả sử studentId được lấy từ session, bạn có thể thay đổi cách lấy tùy theo ứng dụng của bạn
-        HttpSession session = request.getSession();
-        Student student = (Student) session.getAttribute("userInfor");
         Event event = eventDAO.getEventDetails(eventId);
 
-        // Kiểm tra sự kiện và vai trò của sinh viên
         if (event != null) {
             request.setAttribute("event", event);
-
-            if (student != null) { // Kiểm tra nếu studentId không null
-                String role = eventRegisteredDAO.checkStudentRole(student.getStudentId(), eventId);
-                request.setAttribute("studentRole", role); // Thêm vai trò vào request attribute
-            } else {
-                request.setAttribute("studentRole", null); // Nếu không có studentId, đặt vai trò là null
-            }
+            
+            boolean[] isRegis = eventRegisteredDAO.isStudentRegistered(student.getId(), eventId);
+            request.setAttribute("isGuestRegis", isRegis[0]);
+            request.setAttribute("isCollabRegis", isRegis[1]);
+            
+            System.out.println("geust " + isRegis[0]);
+            System.out.println("collab " + isRegis[1]);
         } else {
             request.setAttribute("error", "Get data failed!");
         }
 
-        // Chuyển tiếp đến JSP
         request.getRequestDispatcher("event-details.jsp").forward(request, response);
     }
 
@@ -74,7 +69,7 @@ public class EventDetailsController extends HttpServlet {
             switch (action) {
                 case "registerCollaborator":
                     // Đăng ký như một collaborator
-                    result = eventRegisteredDAO.registerCollaborator(student.getStudentId(), eventId);
+                    result = eventRegisteredDAO.registerCollaborator(student.getId(), eventId);
                     if (result) {
                         request.setAttribute("message", "Successfully registered as a collaborator.");
                     } else {
@@ -84,7 +79,7 @@ public class EventDetailsController extends HttpServlet {
 
                 case "cancelCollaborator":
                     // Hủy đăng ký collaborator
-                    result = eventRegisteredDAO.cancelCollaboratorRegistration(student.getStudentId(), eventId);
+                    result = eventRegisteredDAO.cancelCollaboratorRegistration(student.getId(), eventId);
                     if (result) {
                         request.setAttribute("message", "Successfully canceled collaborator registration.");
                     } else {
@@ -94,7 +89,7 @@ public class EventDetailsController extends HttpServlet {
 
                 case "registerGuest":
                     // Đăng ký như một guest
-                    result = eventRegisteredDAO.registerGuest(student.getStudentId(), eventId);
+                    result = eventRegisteredDAO.registerGuest(student.getId(), eventId);
                     if (result) {
                         request.setAttribute("message", "Successfully registered as a guest.");
                     } else {
@@ -104,7 +99,7 @@ public class EventDetailsController extends HttpServlet {
 
                 case "cancelGuest":
                     // Hủy đăng ký guest
-                    result = eventRegisteredDAO.cancelGuestRegistration(student.getStudentId(), eventId);
+                    result = eventRegisteredDAO.cancelGuestRegistration(student.getId(), eventId);
                     if (result) {
                         request.setAttribute("message", "Successfully canceled guest registration.");
                     } else {
@@ -120,6 +115,6 @@ public class EventDetailsController extends HttpServlet {
             request.setAttribute("error", "Invalid event ID.");
         }
       
-        response.sendRedirect(request.getContextPath() + "/event-detail?eventId="+eventId);
+        doGet(request, response);
     }
 }

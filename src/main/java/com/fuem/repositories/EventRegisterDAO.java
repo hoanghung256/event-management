@@ -1,7 +1,5 @@
 package com.fuem.repositories;
 
-import com.fuem.enums.Gender;
-import com.fuem.models.Event;
 import com.fuem.models.EventGuest;
 import com.fuem.models.Student;
 import com.fuem.models.builders.EventBuilder;
