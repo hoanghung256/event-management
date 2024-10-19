@@ -85,7 +85,6 @@
                             <li><a href="<c:url value="/club/organized-event"/>" aria-expanded="false">
                                     <i class="flaticon-upcoming"></i>
                                     <span class="nav-text">Organized Events</span>
-                                    <span class="nav-text">Organized Events</span>
                                 </a>
                             </li>
                             <li><a href="<c:url value="/sign-out" />" aria-expanded="false">
