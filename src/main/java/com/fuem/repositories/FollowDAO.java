@@ -45,11 +45,11 @@ public class FollowDAO extends SQLDatabase {
      * 
      * @author TuDK 
      */
-    public boolean addFollow(int userId, int organizerId) {
+    public boolean doFollow(int studentId, int organizerId) {
         int rowChange = 0;
         
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
-            rowChange = executeUpdatePreparedStatement(conn, INSERT_FOLLOW, userId, organizerId);
+            rowChange = executeUpdatePreparedStatement(conn, INSERT_FOLLOW, studentId, organizerId);
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error adding follow: ", e);
         }
@@ -61,11 +61,11 @@ public class FollowDAO extends SQLDatabase {
      * 
      * @author TuDK 
      */
-    public boolean removeFollow(int userId, int organizerId) {
+    public boolean doUnfollow(int studentId, int organizerId) {
         int rowChange = 0;
         
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
-            rowChange = executeUpdatePreparedStatement(conn, DELETE_FOLLOW, userId, organizerId);
+            rowChange = executeUpdatePreparedStatement(conn, DELETE_FOLLOW, studentId, organizerId);
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error removing follow: ", e);
         }

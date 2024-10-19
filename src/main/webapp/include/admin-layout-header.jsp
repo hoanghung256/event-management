@@ -179,7 +179,7 @@
                                                 Profile</a>
                                         </li>
                                         <li>
-                                            <a href="<c:url value="sign-out" />"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                            <a href="<c:url value="/sign-out" />"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                                                        xmlns="http://www.w3.org/2000/svg">
                                                 <g clip-path="url(#clip0_643_343)">
                                                 <path
