@@ -75,7 +75,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="student/registered-event" aria-expanded="false">
+                                <a href="<c:url value="/student/registered-event" />" aria-expanded="false">
                                     <i class="flaticon-success"></i>
                                     <span class="nav-text">Register Events</span>
                                 </a>
