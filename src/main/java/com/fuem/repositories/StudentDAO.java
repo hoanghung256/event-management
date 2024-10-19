@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,6 +43,7 @@ public class StudentDAO extends SQLDatabase {
     private static final String UPDATE_STUDENT_BY_ID = "UPDATE Student SET fullname = ?, email = ?, studentId = ?, gender= ? WHERE  id = ?";
     private static final String SELECT_STUDENT_BY_ID = "SELECT fullname, studentId, email, gender, avatarPath FROM [Student] WHERE id=?";
     private static final String CHECK_PASSWORD_QUERY = "SELECT * FROM Student WHERE email = ? AND password = ?";
+    private static final String FIND_STUDENT_BY_STUDENT_ID_OR_FULL_NAME = "SELECT * FROM Student WHERE studentId LIKE '%?%' OR fullname LIKE '%?%'";
   
     public StudentDAO() {
         super();
@@ -49,24 +51,20 @@ public class StudentDAO extends SQLDatabase {
 
     public boolean checkCurrentPassword(String email, String currentPasswordHash) {
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(CHECK_PASSWORD_QUERY)) {
+             ResultSet rs = executeQueryPreparedStatement(conn, CHECK_PASSWORD_QUERY)) {
              
-            pstmt.setString(1, email);
-            pstmt.setString(2, currentPasswordHash);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                return rs.next(); 
-            }
+            return rs.next(); 
         } catch (SQLException e) {
             Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, e);
         }
         return false;
     }
 
-public void updatePassword(String email, String newPassword) {
+public void updatePassword(String email, String password) {
     try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
          PreparedStatement pstmt = conn.prepareStatement(UPDATE_PASSWORD_BY_EMAIL)) {
          
-        pstmt.setString(1, hashedPassword);
+        pstmt.setString(1, password);
         pstmt.setString(2, email);
         pstmt.executeUpdate();
     } catch (SQLException e) {
@@ -247,27 +245,22 @@ public void updatePassword(String email, String newPassword) {
         List<Student> students = new ArrayList<>();
 
         // Sử dụng try-with-resources để đảm bảo tự động đóng kết nối
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); PreparedStatement pstmt = conn.prepareStatement(FIND_STUDENT)) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
+                ResultSet rs = executeQueryPreparedStatement(conn, FIND_STUDENT_BY_STUDENT_ID_OR_FULL_NAME)) {
 
-            pstmt.setString(1, searchValue); // Gán giá trị cho studentId
-            pstmt.setString(2, "%" + searchValue + "%"); // Gán giá trị cho fullname với ký tự đại diện
-
-            try (ResultSet rs = pstmt.executeQuery()) {
-                while (rs.next()) {
-                    // Tạo đối tượng Student từ ResultSet
-                    Student student = new Student(
-                            rs.getInt("id"),
-                            rs.getString("studentId"),
-                            rs.getString("gender") == null ? null : Gender.valueOf(rs.getString("gender")),
-                            rs.getString("fullname"),
-                            rs.getString("email")
-                    );
-                    students.add(student);
-                }
+            while (rs.next()) {
+                // Tạo đối tượng Student từ ResultSet
+                Student student = new Student(
+                        rs.getInt("id"),
+                        rs.getString("studentId"),
+                        rs.getString("gender") == null ? null : Gender.valueOf(rs.getString("gender")),
+                        rs.getString("fullname"),
+                        rs.getString("email")
+                );
+                students.add(student);
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error searching students", e);
-            throw new RuntimeException("Error searching students", e); // Ném ngoại lệ để xử lý ở cấp cao hơn nếu cần
         }
 
         return students; // Trả về danh sách sinh viên tìm thấy

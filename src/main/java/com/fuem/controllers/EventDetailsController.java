@@ -68,7 +68,6 @@ public class EventDetailsController extends HttpServlet {
 
         String action = request.getParameter("action");
         int eventId = Integer.parseInt(request.getParameter("eventId"));
-        EventRegisteredDAO eventRegisteredDAO = new EventRegisteredDAO();
         boolean result;
 
         try {
