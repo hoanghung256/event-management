@@ -122,8 +122,7 @@ public class EventDAO extends SQLDatabase {
             + "	collaboratorRegisterCount AS TotalCollaborator,\n"
             + "	guestRegisterCancelCount AS TotalCancel\n"
             + "FROM Event\n"
-            + "WHERE id = ?\n"
-            + "  AND organizerId = ?;";
+            + "WHERE id = ?\n";
     private static final String SELECT_ALL_LOCATIONS = "SELECT id, locationName FROM [Location]";
     private static final String INSERT_NEW_EVENT = "INSERT INTO [Event] ("
             + "organizerId, "
@@ -574,8 +573,8 @@ public class EventDAO extends SQLDatabase {
         }
     }
     
-    public int[] getTotalStatisticNumberOfEvent(int eventId, int organizerId) {
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();  ResultSet rs = executeQueryPreparedStatement(conn, SELECT_STATISTIC_NUMBER_OF_EVENT, eventId, organizerId)) { 
+    public int[] getTotalStatisticNumberOfEvent(int eventId) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();  ResultSet rs = executeQueryPreparedStatement(conn, SELECT_STATISTIC_NUMBER_OF_EVENT, eventId)) { 
             while (rs.next()) {
                 int totalRegister = rs.getInt("TotalRegister");
                 int totalAttended = rs.getInt("TotalAttended");

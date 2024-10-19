@@ -36,13 +36,13 @@ public class OrganizedEventReportController extends HttpServlet {
         String action = request.getParameter("action");
         EventDAO eventDAO = new EventDAO();
         AdminDAO adminDAO = new AdminDAO();
-        Organizer organizer = (Organizer) request.getSession().getAttribute("userInfor");
         int eventId = Integer.parseInt(request.getParameter("eventIdDetail"));
+        int organizerId = Integer.parseInt(request.getParameter("organizerId"));
         int totalRegister, totalAttended, totalCollaborator, totalCancel;
 
         Event event = eventDAO.getEventDetails(eventId);
-        ArrayList<Event> organizedList = adminDAO.getOrganizedEventExceptTheChoosen(organizer.getId(), eventId);
-        int[] statisticNumber = eventDAO.getTotalStatisticNumberOfEvent(eventId, organizer.getId());
+        ArrayList<Event> organizedList = adminDAO.getOrganizedEventExceptTheChoosen(organizerId, eventId);
+        int[] statisticNumber = eventDAO.getTotalStatisticNumberOfEvent(eventId);
 
         totalRegister = statisticNumber[0];
         totalAttended = statisticNumber[1];
@@ -64,7 +64,7 @@ public class OrganizedEventReportController extends HttpServlet {
             case "compared":
                 int totalSelectedRegister, totalSelectedAttended, totalSelectedCollaborator, totalSelectedCancel;
                 int eventIdSelected = Integer.parseInt(request.getParameter("eventIdSelected"));
-                int[] statisticSelectedNumber = eventDAO.getTotalStatisticNumberOfEvent(eventIdSelected, organizer.getId());
+                int[] statisticSelectedNumber = eventDAO.getTotalStatisticNumberOfEvent(eventIdSelected);
                 Event selectedEvent = eventDAO.getEventDetails(eventIdSelected);
                 
                 String selectedEventName = selectedEvent.getFullname();

@@ -115,34 +115,44 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <c:forEach var="event" items="${page.datas}">
-                                            <tr>
-                                                <td>
-                                                    <div class="attendant__user-item">
-                                                        <div class="registration__user-thumb">
-                                                            <img src="<c:url value="${event.organizer.avatarPath}" />" alt="Club Logo">
+                                        <c:forEach var="eventData" items="${page.datas}">
+                                            <c:set var="event" value="${eventData[0]}"/>
+                                            <c:set var="isFeedback" value="${eventData[1]}"/>
+                                                <tr>
+                                                    <td>
+                                                        <div class="attendant__user-item">
+                                                            <div class="registration__user-thumb">
+                                                                <img src="<c:url value="${event.organizer.avatarPath}" />" alt="Club Logo">
+                                                            </div>
+                                                            <div class="attendant__user-title">
+                                                                <span>${event.organizer.acronym}</span>
+                                                            </div>
                                                         </div>
-                                                        <div class="attendant__user-title">
-                                                            <span>${event.organizer.acronym}</span>
+                                                    </td>
+                                                    <td>
+                                                        <div class="attendant__seminar">
+                                                            <span id="event-fullname-${event.id}">${event.fullname}</span>
                                                         </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="attendant__seminar">
-                                                        <span id="event-fullname-${event.id}">${event.fullname}</span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="attendant__date">
-                                                        <span id="date">${event.dateOfEvent}</span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="attendant__action">
-                                                        <button class="input__btn" onclick="sendFeedback(${event.id})">Feedback</button>
-                                                    </div>
-                                                </td>
-                                            </tr>
+                                                    </td>
+                                                    <td>
+                                                        <div class="attendant__date">
+                                                            <span id="date">${event.dateOfEvent}</span>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="attendant__action">
+                                                            <c:choose>
+                                                                <c:when test="${isFeedback == true}">
+                                                                    <span class="status__tag bg-green">Feedback Sent</span>
+                                                                </c:when>
+                                                                <c:otherwise>
+                                                                    <button class="input__btn h-75" onclick="sendFeedback(${event.id})">Feedback</button> 
+                                                                </c:otherwise>    
+                                                            </c:choose>
+                                                                
+                                                        </div>
+                                                    </td>
+                                                </tr>
                                         </c:forEach>
                                     </tbody>
                                 </table>
@@ -211,15 +221,17 @@
                 popup.style.display = 'none';
             }
         });
-        
+
+
         function sendFeedback(id) {
             const fullname = document.getElementById('event-fullname-' + id).innerHTML;
-            
+
             document.getElementById("feedback-event-fullname").textContent = fullname;
             document.getElementById("feedback-event-id").value = id;
 
             document.getElementById('feedback-form').style.display = 'flex';
-        };
+        }
+        ;
     </script>
 </section>
 

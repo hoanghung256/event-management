@@ -119,6 +119,18 @@ public class Event {
         this.category.setName(category);
     }
     
+    public Event(int eventId, String fullname, LocalDate dateOfEvent, String clubName, String locationName, String category){
+        this.id = eventId;
+        this.fullname = fullname;
+        this.dateOfEvent = dateOfEvent;
+        this.organizer = new Organizer();
+        this.organizer.setAcronym(clubName);
+        this.location = new Location();
+        this.location.setDescription(locationName);
+        this.category = new Category();
+        this.category.setName(category);
+    }
+    
     public Event(int id, String fullname, LocalDate dateOfEvent, String locationName, String category, Status status, int registerLimit, int registerCount, LocalTime startTime, LocalTime endTime){
         this.id = id;
         this.fullname = fullname;

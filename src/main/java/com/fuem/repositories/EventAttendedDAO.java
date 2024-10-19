@@ -25,53 +25,58 @@ import java.util.logging.Logger;
 public class EventAttendedDAO extends SQLDatabase {
 
     private static final Logger logger = Logger.getLogger(EventAttendedDAO.class.getName());
-    private static final String SELECT_ATTENDED_EVENTS = "SELECT \n"
-            + "    E.id, "
-            + "    E.fullname AS eventName,\n"
-            + "    O.acronym AS organizerName,\n"
-            + "    O.avatarPath AS organizerAvatarPath,\n"
-            + "    E.dateOfEvent AS eventDate,\n"
-            + "    COUNT (*) OVER() AS 'TotalRow'\n"
+    private static final String SELECT_ATTENDED_EVENTS = "SELECT DISTINCT\n"
+            + "    Event.id, \n"
+            + "    Event.fullname AS eventName,\n"
+            + "    Organizer.acronym AS organizerName,\n"
+            + "    Organizer.avatarPath AS organizerAvatarPath,\n"
+            + "    Event.dateOfEvent AS eventDate,\n"
+            + "    COUNT(*) OVER() AS TotalRow,\n"
+            + "    (SELECT COUNT(*) \n"
+            + "     FROM [Feedback] \n"
+            + "     WHERE Feedback.eventId = Event.id \n"
+            + "       AND Feedback.guestId = EventGuest.guestId) AS isFeedback\n"
             + "FROM \n"
-            + "    [EventGuest] EG\n"
+            + "    [EventGuest] EventGuest\n"
             + "JOIN \n"
-            + "    [Event] E ON EG.eventId = E.id\n"
+            + "    [Event] Event ON EventGuest.eventId = Event.id\n"
             + "JOIN \n"
-            + "    [Organizer] O ON E.organizerId = O.id\n"
+            + "    [Organizer] Organizer ON Event.organizerId = Organizer.id\n"
             + "JOIN \n"
-            + "    [Student] S ON EG.guestId = S.id\n"
+            + "    [Student] Student ON EventGuest.guestId = Student.id\n"
             + "WHERE \n"
-            + "    EG.guestId = ? \n"
-            + "AND E.dateOfEvent < '2025-10-31'\n"
+            + "    EventGuest.guestId = ?  -- GuestId filter\n"
+            + "AND \n"
+            + "    Event.dateOfEvent < '2025-10-31'\n"
             + "ORDER BY \n"
-            + "    E.dateOfEvent DESC\n"
+            + "    Event.dateOfEvent DESC\n"
             + "OFFSET ? ROWS\n"
-            + "FETCH NEXT ? ROWS ONLY";
+            + "FETCH NEXT ? ROWS ONLY;";
 
     public EventAttendedDAO() {
         super();
     }
 
     /**
-     * 
-     * @author ThangNM 
+     *
+     * @author ThangNM
      */
-    public Page<Event> getAttendedEventsList(PagingCriteria pagingCriteria, int userId) {
-        Page<Event> page = new Page<>();
-        ArrayList<Event> eventsAttendedList = new ArrayList<>();
+    public Page<Object[]> getAttendedEventsList(PagingCriteria pagingCriteria, int userId) {
+        Page<Object[]> page = new Page<>();
+        ArrayList<Object[]> eventsAttendedList = new ArrayList<>();
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
-                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ATTENDED_EVENTS, userId, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ATTENDED_EVENTS, userId, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
             while (rs.next()) {
                 if (page.getTotalPage() == null && page.getCurrentPage() == null) {
                     page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
                     page.setCurrentPage(pagingCriteria.getOffset() / pagingCriteria.getFetchNext());
                 }
-                
+
                 Organizer organizer = new Organizer();
                 organizer.setAcronym(rs.getNString("organizerName"));
                 organizer.setAvatarPath(rs.getNString("organizerAvatarPath"));
-                
+                boolean isFeedback = rs.getBoolean("isFeedback");
+
                 Event event = new EventBuilder()
                         .setId(rs.getInt("id"))
                         .setFullname(rs.getString("eventName"))
@@ -79,7 +84,10 @@ public class EventAttendedDAO extends SQLDatabase {
                         .setDateOfEvent(rs.getDate("eventDate").toLocalDate())
                         .build();
                 
-                eventsAttendedList.add(event);
+                Object[] eventsWithFeedback = new Object[2];
+                eventsWithFeedback[0] = event;
+                eventsWithFeedback[1] = isFeedback;
+                eventsAttendedList.add(eventsWithFeedback);
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
@@ -90,7 +98,7 @@ public class EventAttendedDAO extends SQLDatabase {
     }
 
     /**
-     * 
+     *
      * @author ??? have no author, never used
      */
 //    public List<EventGuest> getStudentAndEventIds() {

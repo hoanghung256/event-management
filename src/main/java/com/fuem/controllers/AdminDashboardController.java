@@ -33,7 +33,7 @@ public class AdminDashboardController extends HttpServlet {
         int totalOrganizedEvents = dao.getTotalOrganizedEvents(organizerId);
         int totalClubs = dao.getTotalClub();
         int totalUpcomingEvents = dao.getTotalUpcomingEvents(organizerId);
-        ArrayList<Event> organizedList = dao.getOrganizedEvent(organizerId);
+        ArrayList<Event> organizedList = dao.getOrganizedEvent();
         ArrayList<Event> upcomingList = dao.getUpcomingEvent();
         ArrayList<Event> registrationList = dao.getRegistrationEvent();
 

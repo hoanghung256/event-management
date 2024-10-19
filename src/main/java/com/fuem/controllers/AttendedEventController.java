@@ -58,7 +58,7 @@ public class AttendedEventController extends HttpServlet {
                 10
         );
         
-        Page<Event> attendedEvents = eventAttendedDAO.getAttendedEventsList(pagingCriteria, user.getId());
+        Page<Object[]> attendedEvents = eventAttendedDAO.getAttendedEventsList(pagingCriteria, user.getId());
         
         request.setAttribute("page", attendedEvents);
         request.getRequestDispatcher("attended-events.jsp").forward(request, response);

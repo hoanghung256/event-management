@@ -5,7 +5,6 @@
 package com.fuem.controllers;
 
 import com.fuem.models.Event;
-import com.fuem.models.Organizer;
 import com.fuem.repositories.AdminDAO;
 import com.fuem.repositories.helpers.Page;
 import com.fuem.repositories.helpers.PagingCriteria;
@@ -15,7 +14,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -27,9 +25,6 @@ public class OrganizedEventController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         AdminDAO dao = new AdminDAO();
-        HttpSession session = request.getSession();
-        Organizer organizer = (Organizer) session.getAttribute("userInfor");
-        int organizerId = organizer.getId();
 
         //paging
         PagingCriteria pagingCriteria = new PagingCriteria();
@@ -48,7 +43,7 @@ public class OrganizedEventController extends HttpServlet {
                 10
         );
 
-        Page<Event> organizedList = dao.getOrganizedEventWithPaging(pagingCriteria, organizerId);
+        Page<Event> organizedList = dao.getOrganizedEventWithPaging(pagingCriteria);
         request.setAttribute("page", organizedList);
         request.getRequestDispatcher("organized-events.jsp").forward(request, response);
     }
