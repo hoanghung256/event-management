@@ -48,7 +48,7 @@ public class Validator {
         }
 
         // So sánh MSSV lấy được với studentId người dùng nhập
-        return studentIdFromEmail.equals(studentIdInput);
+        return studentIdInput.equalsIgnoreCase(studentIdFromEmail);
     }
 
 }

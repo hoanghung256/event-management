@@ -142,14 +142,12 @@
         margin-right: 0;
     }
 
-
-
 </style>
 
 <section>
     <div class="app__slide-wrapper">
         <div class="breadcrumb__area">
-            <div class="breadcrumb__wrapper mb-35">
+            <div class="breadcrumb__wrapper mb-35" style="padding: 0px;">
                 <div class="breadcrumb__main">
                     <div class="breadcrumb__inner">
                         <div class="breadcrumb__icon">
@@ -158,21 +156,21 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="<c:url value='/home'/>">Home</a></span></li>
+                                    <li><span><a href="<c:url value='/admin/dashboard'/>">Dashboard</a></span></li>
                                     <li class="active"><span>Manage Student</span></li>
                                 </ul>
                             </nav>
                         </div>
                     </div>
                     <div class="search_add d-flex justify-content-between align-items-center">
-                        <form method="get" action="<c:url value="/admin/manage-student" />>
+                        <form method="get" action="<c:url value="/admin/manage-student"/>">
                             <div class="search_add d-flex justify-content-between align-items-center">
                                 <div class="search__bar d-flex">
                                     <input type="text" id="searchValue" name="searchValue" placeholder="Search by..." aria-label="Search students" />
 
                                 </div>
                                 <div class="col-md-1 input d-flex "  style="padding-bottom: 18px; margin-left: 5px;" >
-                                    <button type="submit" " class="btn element__btn border-yellow find-button" >Find</button>
+                                    <button type="submit" " class="btn element__btn border-yellow find-button manage-student-find-button mt-10" >Find</button>
                                 </div>
                                 <div class="breadcrum__button">
                                     <a class="breadcrum__btn event__popup-active" style="width: 160px;">Add student<i class="fa-regular fa-plus"></i></a>
@@ -327,8 +325,8 @@
                     </c:if>
 
                 </div>
-                <div class="body__card-wrapper">
-                    <div class="attendant__wrapper mb-35">
+                <div class="body__card-wrapper student-manage-body">
+                    <div class="attendant__wrapper">
                         <c:choose>
                             <c:when test="${not empty page.datas}">
                                 <table>

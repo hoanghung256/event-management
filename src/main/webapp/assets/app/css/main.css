@@ -9240,4 +9240,10 @@ input[type=file] {
     background-color: #3e8e41; /* Màu của nút sau khi click */
 }
 
+.send-noti-body{
+    --bs-gutter-x: -4%;
+}
+.student-manage-body{
+    --bs-gutter-x: -4%;
+}
 /*# sourceMappingURL=main.css.map */
