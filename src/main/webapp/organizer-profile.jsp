@@ -33,14 +33,14 @@
                                     <c:choose>
                                         <c:when test="${sessionScope.userInfor.role == 'STUDENT'}">
                                             <li><span><a href="<c:url value="/home" />">Home</a></span></li>
-                                        </c:when>
-                                        <c:when test="${sessionScope.userInfor.role == 'ADMIN'}">
+                                                    </c:when>
+                                                    <c:when test="${sessionScope.userInfor.role == 'ADMIN'}">
                                             <li><span><a href="<c:url value="/admin/dashboard" />">Dashboard</a></span></li>
-                                        </c:when>
-                                        <c:when test="${sessionScope.userInfor.role == 'CLUB'}">
+                                                    </c:when>
+                                                    <c:when test="${sessionScope.userInfor.role == 'CLUB'}">
                                             <li><span><a href="<c:url value="/club/dashboard" />">Dashboard</a></span></li>
-                                        </c:when>
-                                    </c:choose>
+                                                    </c:when>
+                                                </c:choose>
                                     <li class="active"><span>Profile</span></li>
                                 </ul>
                             </nav>
@@ -62,22 +62,24 @@
                 <div class="profile__area">
                     <div class="body__card-wrapper mb-20">
                         <div class="">
-                            <div class="card__title-inner">
+                            <div class="card__title-inner d-flex justify-content-between">
                                 <h4 class="event__information-title">Profile Information</h4>
-                                <form action="<c:url value="/student/follow" />" method="POST">
-                                    <input type="hidden" name="organizerId" value="${organizer.id}">
-                                    <c:choose>
-                                        <c:when test="${isFollowing == true}">
-                                            <input type="hidden" name="action" value="unfollow">
-                                            <button type="submit" class="btn btn-danger">Unfollow</button>
-                                        </c:when>
+                                <div>
+                                    <form action="<c:url value="/student/follow" />" method="POST">
+                                        <input type="hidden" name="organizerId" value="${organizer.id}">
+                                        <c:choose>
+                                            <c:when test="${isFollowing == true}">
+                                                <input type="hidden" name="action" value="unfollow">
+                                                <button type="submit" class="btn btn-danger">Unfollow</button>
+                                            </c:when>
 
-                                        <c:when test="${isFollowing == false}">
-                                            <input type="hidden" name="action" value="follow">
-                                            <button type="submit" class="btn btn-primary">Follow</button>
-                                        </c:when>
-                                    </c:choose>
-                                </form>
+                                            <c:when test="${isFollowing == false}">
+                                                <input type="hidden" name="action" value="follow">
+                                                <button type="submit" class="btn btn-primary">Follow</button>
+                                            </c:when>
+                                        </c:choose>
+                                    </form>
+                                </div>
                             </div>
                         </div>
                         <div class="review__tab">
