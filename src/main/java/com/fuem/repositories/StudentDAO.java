@@ -26,7 +26,7 @@ public class StudentDAO extends SQLDatabase {
     private static final String UPDATE_PASSWORD_BY_EMAIL = "Update [Student] "
             + "SET password = ? "
             + "WHERE email = ?";
-    private static final String INSERT_STUDENT = "INSERT INTO [Student] (fullname, studentId, email, password) VALUES (?, ?, ?, ?)";
+    private static final String INSERT_STUDENT = "INSERT INTO [Student] (fullname, studentId, email, password, gender) VALUES (?, ?, ?, ?, ?)";
     private static final String SELECT_STUDENTS = "SELECT "
             + "id, "
             + "fullname, "
@@ -51,7 +51,7 @@ public class StudentDAO extends SQLDatabase {
 
     public boolean checkCurrentPassword(String email, String currentPasswordHash) {
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
-             ResultSet rs = executeQueryPreparedStatement(conn, CHECK_PASSWORD_QUERY)) {
+             ResultSet rs = executeQueryPreparedStatement(conn, CHECK_PASSWORD_QUERY, email, currentPasswordHash)) {
              
             return rs.next(); 
         } catch (SQLException e) {
@@ -117,7 +117,7 @@ public void updatePassword(String email, String password) {
     public boolean addUser(Student user) {
         int result = 0;
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
-            result = executeUpdatePreparedStatement(conn, INSERT_STUDENT, user.getFullname(), user.getStudentId(), user.getEmail(), user.getPassword());
+            result = executeUpdatePreparedStatement(conn, INSERT_STUDENT, user.getFullname(), user.getStudentId(), user.getEmail(), user.getPassword(), user.getGender());
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
         }
