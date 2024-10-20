@@ -1,5 +1,6 @@
 package com.fuem.controllers;
 
+import com.fuem.enums.Gender;
 import com.fuem.models.Student;
 import com.fuem.repositories.StudentDAO;
 import com.fuem.utils.Gmail;
@@ -36,6 +37,7 @@ public class SignUpController extends HttpServlet {
         String email = request.getParameter("email");
         String confirmPassword = request.getParameter("confirmPassword");
         String inputOTP = request.getParameter("inputOTP");
+        Gender gender = Gender.valueOf(request.getParameter("gender"));
 
         // Verify email case
         if (inputOTP != null) {
@@ -47,11 +49,12 @@ public class SignUpController extends HttpServlet {
                 return;
             }
             Student u = new Student(
-                    fullname, 
-                    studentId, 
-                    email, 
+                    fullname,
+                    studentId,
+                    email,
                     Hash.doHash(password)
             );
+            u.setGender(gender);
 
             boolean isAdded = userDao.addUser(u);
             if (isAdded) {
@@ -65,7 +68,7 @@ public class SignUpController extends HttpServlet {
             request.getSession().removeAttribute("registerInfor");
             return;
         }
-        
+
         // Submit data first time
         if (fullname == null || password == null || email == null || !password.equals(confirmPassword)) {
             request.setAttribute("error", "Please ensure all fields are filled correctly.");
@@ -81,12 +84,12 @@ public class SignUpController extends HttpServlet {
             request.getRequestDispatcher("authentication/sign-up.jsp").forward(request, response);
             return;
         }
-        if(!Validator.isFullNameValid(fullname)) {
+        if (!Validator.isFullNameValid(fullname)) {
             request.setAttribute("error", "Full name can not contains special characters.");
             request.getRequestDispatcher("authentication/sign-up.jsp").forward(request, response);
             return;
         }
-        if((!Validator.isStudentIdMatch(email, studentId))) {
+        if ((!Validator.isStudentIdMatch(email, studentId))) {
             request.setAttribute("error", "Student ID is not valid or not match with your email.");
             request.getRequestDispatcher("authentication/sign-up.jsp").forward(request, response);
             return;
@@ -105,6 +108,7 @@ public class SignUpController extends HttpServlet {
             return;
         } else {
             Student u = new Student(fullname, studentId, email, password);
+            u.setGender(gender);
             String otp = RandomGenerator.generate(RandomGenerator.NUMERIC, 6);
             Gmail.sendWithOTP(email, otp);
             request.getSession().setAttribute("OTP", otp);
