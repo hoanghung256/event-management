@@ -33,7 +33,7 @@ public class SignUpController extends HttpServlet {
         StudentDAO userDao = new StudentDAO();
         String fullname = request.getParameter("fullname");
         String password = request.getParameter("password");
-        String studentId = request.getParameter("studentId");
+        String studentId = request.getParameter("studentId").toUpperCase();
         String email = request.getParameter("email");
         String confirmPassword = request.getParameter("confirmPassword");
         String inputOTP = request.getParameter("inputOTP");
