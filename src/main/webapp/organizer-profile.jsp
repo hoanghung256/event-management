@@ -181,7 +181,7 @@
                                                             <span class="event-type"><i class="fa-solid fa-list"></i> ${event.category.name}</span>
                                                         </div>
                                                         <div>
-                                                            <p class="location"><i class="fas fa-location-dot"></i> ${event.location.description}</p>
+                                                            <p class="location"><i class="fas fa-location-dot"></i> ${event.location.name}</p>
                                                         </div>
                                                         <div>
                                                             <p><i class="fa-solid fa-user-group"></i> ${event.guestRegisterLimit}/${event.guestRegisterLimit} Registered</p>

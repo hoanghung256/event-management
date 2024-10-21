@@ -8,7 +8,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-<%@include file="../include/club-layout-header.jsp"%>
+<%@include file="../include/admin-layout-header.jsp"%>
 <style>
 
     @keyframes popupFadeIn {
@@ -27,7 +27,7 @@
 
 <section>
     <div class="app__slide-wrapper">
-        <form id="editProfileForm" method="post" action="${pageContext.request.contextPath}/club/profile" enctype="multipart/form-data">
+        <form id="editProfileForm" method="post" action="${pageContext.request.contextPath}/admin/profile" enctype="multipart/form-data">
             <div class="breadcrumb__area">
                 <div class="breadcrumb__wrapper mb-20">
                     <div class="breadcrumb__main">
@@ -38,7 +38,7 @@
                             <div class="breadcrumb__menu">
                                 <nav>
                                     <ul>
-                                        <li><span><a href="<c:url value="/club/dashboard" />">Dashboard</a></span></li>
+                                        <li><span><a href="<c:url value="/admin/dashboard" />">Dashboard</a></span></li>
                                         <li class="active"><span>Profile</span></li>
                                     </ul>
                                 </nav>
@@ -187,7 +187,7 @@
                                                             <div>
                                                                 <p><i class="fa-solid fa-user-group"></i> ${event.guestRegisterLimit}/${event.guestRegisterLimit} Registered</p>
                                                             </div> 
-                                                            <a class="element__btn border-yellow" href="<c:url value="/club/organized-event-report?eventIdDetail=${event.id}&organizerId=${event.organizer.id}&action=detail"/> "> Details</a>
+                                                            <a class="element__btn border-yellow" href="<c:url value="/admin/organized-event-report?eventIdDetail=${event.id}&organizerId=${event.organizer.id}&action=detail"/> "> Details</a>
                                                         </div>
                                                     </div>
                                                     <!-- Event Content - End -->
