@@ -72,7 +72,7 @@
                                     <span class="nav-text">Register Event</span>
                                 </a>
                             </li>
-                            <li><a href="#" aria-expanded="false">
+                            <li><a href="<c:url value="/club/file" />" aria-expanded="false">
                                     <i class="flaticon-email"></i>
                                     <span class="nav-text">Send File</span>
                                 </a>

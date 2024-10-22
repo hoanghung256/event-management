@@ -24,11 +24,11 @@ public class FileHandler {
 
     /**
      * Process Part objects
-     * 
+     *
      * @return the path list for insert into database
      * @author HungHV
      */
-    public static List<String> processUploadFile(Collection<Part> parts,  FileType fileType) throws IOException {
+    public static List<String> processUploadFile(Collection<Part> parts, FileType fileType) throws IOException {
         List<String> pathList = new ArrayList<>();
 
         for (Part part : parts) {
@@ -42,18 +42,36 @@ public class FileHandler {
 
         return pathList;
     }
-    
+
     /**
-     * Save file into project source
-     * 
+     * Process Part objects
+     *
+     * @return the path list for insert into database
+     * @author HungHV
+     */
+    public static String processUploadFile(Part part, FileType fileType) throws IOException {
+        String path = null;
+
+        if (part.getSubmittedFileName() != null) {
+            String submittedFileName = part.getSubmittedFileName();
+            String processedFileName = UUID.randomUUID().toString() + submittedFileName.substring(submittedFileName.lastIndexOf("."));
+            path = fileType.getFileLocation() + "/" + processedFileName;
+        }
+
+        return path;
+    }
+
+    /**
+     * Save files into project source
+     *
      * @author HungHV
      */
     public static void save(List<String> processedPathList, Collection<Part> parts, ServletContext context, FileType fileType) throws IOException {
         String fileFolderPath = context.getRealPath("");
         Files.createDirectories(Paths.get(fileFolderPath + fileType.getFileLocation()));
-        
+
         int i = 0;
-        
+
         for (Part part : parts) {
             if (part.getSubmittedFileName() == null) {
                 continue;
@@ -63,7 +81,21 @@ public class FileHandler {
     }
     
     /**
-     * 
+     * Save file into project source
+     *
+     * @author HungHV
+     */
+    public static void save(String processedPath, Part part, ServletContext context, FileType fileType) throws IOException {
+        String fileFolderPath = context.getRealPath("");
+        Files.createDirectories(Paths.get(fileFolderPath + fileType.getFileLocation()));
+
+        if (part.getSubmittedFileName() != null) {
+            part.write(fileFolderPath + processedPath);
+        }
+    }
+
+    /**
+     *
      * @author HungHV
      */
     public static void deleteFile(String filepath) {
