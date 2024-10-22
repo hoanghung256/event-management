@@ -19,12 +19,12 @@ public class FileDAO extends SQLDatabase {
 
     private static final Logger logger = Logger.getLogger(FileDAO.class.getName());
     private static final String INSERT_NEW_IMAGE = "INSERT INTO [EventImage] ("
-            + "eventId, "
+            + "studentId, "
             + "path) "
             + "VALUES (?, ?)";
 
     /**
-     * 
+     *
      * @author HungHV
      */
     public int insertEventImages(int eventId, List<String> imagePaths) {
@@ -40,4 +40,6 @@ public class FileDAO extends SQLDatabase {
 
         return insertedRow;
     }
+
+    
 }

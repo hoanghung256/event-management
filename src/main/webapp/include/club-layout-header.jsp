@@ -118,7 +118,7 @@
                                         <div class="user__portfolio">
                                             <div class="user__portfolio-thumb">
                                                 <c:url value="/assets/img/user/default-avatar.jpg" var="defaultAvatar" />
-                                                <img 
+                                                <img class="rounded-circle"
                                                     src="${sessionScope.userInfor.avatarPath != null ? sessionScope.userInfor.avatarPath : defaultAvatar}" 
                                                     alt="Default Avatar" 
                                                 />
