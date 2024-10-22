@@ -153,7 +153,12 @@ CREATE TABLE [File] (
 	[id] INT IDENTITY(1, 1),
 	[submitterId] INT,
 	[fileType] NVARCHAR(30), -- 'REPORT' or 'PLAN'
+	[displayName] NVARCHAR(MAX), -- Display name is the file name user submitted
 	[path] NVARCHAR(MAX),
+	[sendTime] DATETIME DEFAULT GETDATE(),
+	[status] VARCHAR(15) DEFAULT 'PENDING',	-- PENDING / REVIEWING / APPROVED / REQUEST_CHANGE
+	[processNote] NVARCHAR(500),
+	[processTime] DATETIME,
 
 	CONSTRAINT PK_File PRIMARY KEY ([id]),
 	CONSTRAINT FK_File_Organizer FOREIGN KEY ([submitterId]) REFERENCES [Organizer]([id]) ON DELETE CASCADE
@@ -522,3 +527,13 @@ VALUES
 >>>>>>>>> END: EXAMPLE DATA >>>>>>>>>>
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 */
+
+-- Inserting 5 sample records with random submitterId
+INSERT INTO [File] ([submitterId], [fileType], [displayName], [path])
+SELECT TOP 5
+    [id] AS [submitterId], 
+    CASE WHEN RAND(CHECKSUM(NEWID())) > 0.5 THEN 'REPORT' ELSE 'PLAN' END AS [fileType], 
+	N'June 2023 Report',
+    N'/assets/file-template/Report5_Test Documentation_EX.docx' AS [path]
+FROM [Organizer]
+ORDER BY NEWID();
