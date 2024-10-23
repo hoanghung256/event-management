@@ -54,40 +54,47 @@
                                 </c:if>
                                 <h5>Select event to send notification:</h5>
                                 <div class="attendant__wrapper mb-35">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>ID No</th>
-                                                <th>Event Name</th>
-                                                <th>Category</th>
-                                                <th>Time</th>
-                                                <th>Date</th>
-                                                <th>Select</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach var="event" items="${upcomingEvents}">
+                                    <c:if test="${empty upcomingEvents}">
+                                        <div class="no-events">
+                                            <span>No upcomming event!</span>
+                                        </div>
+                                    </c:if>
+                                    <c:if test="${not empty upcomingEvents}">
+                                        <table>
+                                            <thead>
                                                 <tr>
-                                                    <td><span>#${event.id}</span></td>
-                                                    <td>
-                                                        <div class="attendant__seminer">
-                                                            <span>
-                                                                <a href="<c:url value="/event-detail?eventId=${event.id}"/>">${event.fullname}</a>
-                                                            </span>
-                                                        </div>
-                                                    </td>
-
-                                                    <td><span>${event.category.name}</span></td>
-                                                    <td><span id="time">${event.startTime}</span>-<span id="time">${event.endTime}</span></td>
-                                                    <td><span id="date">${event.dateOfEvent}</span></td>
-                                                    <td>
-                                                        <input type="checkbox" id="event${event.id}" name="event-id" value="${event.id}">
-                                                        <label for="event${event.id}" class="custom-checkbox"></label>
-                                                    </td>
+                                                    <th>ID No</th>
+                                                    <th>Event Name</th>
+                                                    <th>Category</th>
+                                                    <th>Time</th>
+                                                    <th>Date</th>
+                                                    <th>Select</th>
                                                 </tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach var="event" items="${upcomingEvents}">
+                                                    <tr>
+                                                        <td><span>#${event.id}</span></td>
+                                                        <td>
+                                                            <div class="attendant__seminer">
+                                                                <span>
+                                                                    <a href="<c:url value="/event-detail?eventId=${event.id}"/>">${event.fullname}</a>
+                                                                </span>
+                                                            </div>
+                                                        </td>
+
+                                                        <td><span>${event.category.name}</span></td>
+                                                        <td><span id="time">${event.startTime}</span>-<span id="time">${event.endTime}</span></td>
+                                                        <td><span id="date">${event.dateOfEvent}</span></td>
+                                                        <td>
+                                                            <input type="checkbox" id="event${event.id}" name="event-id" value="${event.id}">
+                                                            <label for="event${event.id}" class="custom-checkbox"></label>
+                                                        </td>
+                                                    </tr>
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </c:if>
                                 </div>
                                 <button type="submit" class="btn element__btn border-yellow">Send Notification</button>
                             </form>

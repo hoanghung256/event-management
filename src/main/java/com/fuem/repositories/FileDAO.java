@@ -6,6 +6,7 @@ package com.fuem.repositories;
 
 import com.fuem.enums.FileStatus;
 import com.fuem.models.Document;
+import com.fuem.models.Organizer;
 import com.fuem.repositories.helpers.Page;
 import com.fuem.repositories.helpers.PagingCriteria;
 import com.fuem.utils.DataSourceWrapper;
@@ -46,6 +47,30 @@ public class FileDAO extends SQLDatabase {
             + "OFFSET ? ROWS "
             + "FETCH NEXT ? ROWS ONLY;";
     private static final String INSERT_NEW_FILE = "INSERT INTO [File] (submitterId, displayName, fileType, path) VALUES (?, ?, ?, ?)";
+    private static final String SELECT_ALL_FILE = "SELECT "
+            + "[File].id, "
+            + "Organizer.id AS organizerId, "
+            + "Organizer.acronym, "
+            + "displayName, "
+            + "fileType, "
+            + "path, "
+            + "processNote, "
+            + "processTime, "
+            + "status, "
+            + "sendTime, "
+            + "COUNT (*) OVER() AS 'TotalRow' "
+            + "FROM [File] "
+            + "JOIN [Organizer] ON [File].submitterId = [Organizer].id "
+            + "ORDER BY "
+            + "     CASE "
+            + "         WHEN status = 'PENDING' THEN 1 "
+            + "         ELSE 2 "
+            + "     END, "
+            + "     sendTime DESC "
+            + "OFFSET ? ROWS "
+            + "FETCH NEXT ? ROWS ONLY;";
+    private static String UPDATE_FILE_STATUS_BY_ID = "UPDATE [File] SET status=?, processNote=?, processTime=GETDATE() WHERE id=?";
+    
     /**
      * 
      * @author HungHV
@@ -83,7 +108,6 @@ public class FileDAO extends SQLDatabase {
                 docs.add(
                         new Document(
                                 rs.getInt("id"),
-                                submitterId, 
                                 rs.getString("displayName"),
                                 rs.getNString("fileType"),
                                 rs.getNString("path"), 
@@ -111,11 +135,69 @@ public class FileDAO extends SQLDatabase {
         int rowChange = 0;
         
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
-            rowChange = executeUpdatePreparedStatement(conn, INSERT_NEW_FILE, doc.getSubmitterId(), doc.getDisplayName(), doc.getType(), doc.getPath());
+            rowChange = executeUpdatePreparedStatement(conn, INSERT_NEW_FILE, doc.getSubmittedBy().getId(), doc.getDisplayName(), doc.getType(), doc.getPath());
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
         } finally {
             return (rowChange > 0);
         }
+    }
+    
+    /**
+     * 
+     * @author HungHV 
+     */
+    public Page<Document> getFiles(PagingCriteria pagingCriteria) {
+        Page<Document> page = null;
+        ArrayList<Document> docs = new ArrayList<>();
+        
+        try (Connection conn =  DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ALL_FILE, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
+            while (rs.next()) {
+                if (page == null) {
+                    page = new Page<>();
+                    page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
+                    page.setCurrentPage(pagingCriteria.getOffset() / pagingCriteria.getFetchNext());
+                }
+                docs.add(
+                        new Document(
+                                rs.getInt("id"),
+                                new Organizer(
+                                        rs.getInt("organizerId"), 
+                                        rs.getNString("acronym")
+                                ), 
+                                rs.getString("displayName"),
+                                rs.getNString("fileType"),
+                                rs.getNString("path"), 
+                                rs.getTimestamp("sendTime").toLocalDateTime(),
+                                rs.getNString("processNote"),
+                                rs.getTimestamp("processTime") != null ? rs.getTimestamp("processTime").toLocalDateTime() : null,
+                                FileStatus.valueOf(rs.getString("status"))
+                        )
+                );
+            }
+            
+            page.setDatas(docs);
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        
+        return page;
+    }
+    
+    /**
+     * 
+     * @author HungHV 
+     */
+    public boolean updateFileStatus(int fileId, String status, String processNote) {
+        int rowChange = 0;
+        
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
+            rowChange = executeUpdatePreparedStatement(conn, UPDATE_FILE_STATUS_BY_ID, status, processNote, fileId);
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        
+        return rowChange > 0;
     }
 }

@@ -113,8 +113,9 @@
                                                 <p>${notification.content}</p>
                                                 <div class="notification__time">
                                                     <span>${notification.timeAgo}</span>
-                                                    <span class="status">${notification.sender.acronym}</span>
+                                                    <span class="status"><strong>${notification.sender.acronym}</strong></span>
                                                 </div>
+                                                <hr/>
                                             </li>
                                         </c:forEach>
                                     </ul>

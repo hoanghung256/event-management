@@ -6,6 +6,7 @@ package com.fuem.controllers;
 
 import com.fuem.enums.FileStatus;
 import com.fuem.enums.FileType;
+import com.fuem.enums.Role;
 import com.fuem.models.Document;
 import com.fuem.models.Organizer;
 import com.fuem.repositories.FileDAO;
@@ -39,14 +40,21 @@ public class FileController extends HttpServlet {
         FileDAO dao = new FileDAO();
         String pageNumStr = request.getParameter("page");
         int pageNum = 0;
-        
+
         if (pageNumStr != null) {
-            pageNum  = Integer.parseInt(pageNumStr);
+            pageNum = Integer.parseInt(pageNumStr);
         }
-        
+
         PagingCriteria pagingCriteria = new PagingCriteria(pageNum, 10);
-        
-        Page<Document> docsPage = dao.getFilesBySubmitterId(pagingCriteria, organizer.getId());
+        Page<Document> docsPage;
+
+        if (organizer.getRole().equals(Role.ADMIN)) {
+            docsPage = dao.getFiles(pagingCriteria);
+        } else {
+            docsPage = dao.getFilesBySubmitterId(pagingCriteria, organizer.getId());
+        }
+
+        System.out.println(docsPage);
 
         request.setAttribute("page", docsPage);
         request.getRequestDispatcher("manage-files.jsp").forward(request, response);
@@ -55,29 +63,50 @@ public class FileController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Organizer organizer = (Organizer) request.getSession().getAttribute("userInfor");
-        String type = request.getParameter("type");
-        Part filePart = request.getPart("file");
-
-        String processedPath = FileHandler.processUploadFile(filePart, FileType.DOCUMENT);
-
-        Document doc = new Document(
-                organizer.getId(),
-                filePart.getSubmittedFileName(),
-                type,
-                processedPath,
-                FileStatus.PENDING
-        );
-
         FileDAO dao = new FileDAO();
 
-        if (!dao.insertFile(doc)) {
-            request.setAttribute("error", "Submit failed!");
-        } else {
-            try {
-                FileHandler.save(processedPath, filePart, request.getServletContext(), FileType.DOCUMENT);
-                request.setAttribute("message", "Submit successfully!");
-            } catch (IOException e) {
+        if (organizer.getRole().equals(Role.CLUB)) {    // Club send application
+            String type = request.getParameter("type");
+            Part filePart = request.getPart("file");
+
+            String processedPath = FileHandler.processUploadFile(filePart, FileType.DOCUMENT);
+
+            Document doc = new Document(
+                    organizer,
+                    filePart.getSubmittedFileName(),
+                    type,
+                    processedPath,
+                    FileStatus.PENDING
+            );
+
+            if (!dao.insertFile(doc)) {
                 request.setAttribute("error", "Submit failed!");
+            } else {
+                try {
+                    FileHandler.save(processedPath, filePart, request.getServletContext(), FileType.DOCUMENT);
+                    request.setAttribute("message", "Submit successfully!");
+                } catch (IOException e) {
+                    request.setAttribute("error", "Submit failed!");
+                }
+            }
+        } else if (organizer.getRole().equals(Role.ADMIN)) {    // Admin perform review application
+            String reviewAction = request.getParameter("action");
+            int fileId = Integer.parseInt(request.getParameter("id"));
+            String processNote = request.getParameter("processNote");
+            boolean isReviewSuccess = false;
+            
+            switch (reviewAction) {
+                case "Request change":
+                    isReviewSuccess= dao.updateFileStatus(fileId, "REQUEST_CHANGE", processNote);
+                    break;
+                default:
+                    isReviewSuccess = dao.updateFileStatus(fileId, reviewAction.toUpperCase(), processNote);
+            }
+            
+            if (isReviewSuccess) {
+                request.setAttribute("message", "Review successfully!");
+            } else {
+                request.setAttribute("error", "Review failed!");
             }
         }
 

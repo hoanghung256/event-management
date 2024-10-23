@@ -102,7 +102,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#" aria-expanded="false">
+                                <a href="<c:url value="/admin/file" />" aria-expanded="false">
                                     <i class="flaticon-edit-1"></i>
                                     <span class="nav-text">Review Report-Plan Files</span>
                                 </a>

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class Document {
 
     private int id;
-    private int submitterId;
+    private Organizer submittedBy;
     private String displayName;
     private String type;
     private String path;
@@ -23,23 +23,34 @@ public class Document {
     private FileStatus status;
     private LocalDateTime sendTime;
 
-    public Document(int submitterId, String displayName, String type, String path, FileStatus status) {
-        this.submitterId = submitterId;
-        this.displayName = displayName;
-        this.type = type;
-        this.path = path;
-        this.status = status;
-    }
-
-    public Document(int id, int submitterId, String displayName, String type, String path, LocalDateTime sendTime, String processNote, LocalDateTime processTime, FileStatus status) {
+    public Document(int id, String displayName, String type, String path, LocalDateTime sendTime, String processNote, LocalDateTime processTime, FileStatus status) {
         this.id = id;
-        this.submitterId = submitterId;
         this.displayName = displayName;
         this.type = type;
         this.path = path;
         this.sendTime = sendTime;
         this.processNote = processNote;
         this.processTime = processTime;
+        this.status = status;
+    }
+
+    public Document(int id, Organizer submittedBy, String displayName, String type, String path, LocalDateTime sendTime, String processNote, LocalDateTime processTime, FileStatus status) {
+        this.id = id;
+        this.submittedBy = submittedBy;
+        this.displayName = displayName;
+        this.type = type;
+        this.path = path;
+        this.sendTime = sendTime;
+        this.processNote = processNote;
+        this.processTime = processTime;
+        this.status = status;
+    }
+
+    public Document(Organizer submittedBy, String displayName, String type, String processedPath, FileStatus fileStatus) {
+        this.submittedBy = submittedBy;
+        this.displayName = displayName;
+        this.type = type;
+        this.path = path;
         this.status = status;
     }
 
@@ -67,12 +78,12 @@ public class Document {
         this.processTime = processTime;
     }
 
-    public int getSubmitterId() {
-        return submitterId;
+    public Organizer getSubmittedBy() {
+        return submittedBy;
     }
 
-    public void setSubmitterId(int submitterId) {
-        this.submitterId = submitterId;
+    public void setSubmittedBy(Organizer submittedBy) {
+        this.submittedBy = submittedBy;
     }
 
     public String getDisplayName() {
@@ -117,6 +128,6 @@ public class Document {
 
     @Override
     public String toString() {
-        return "Document{" + "id=" + id + ", submitterId=" + submitterId + ", displayName=" + displayName + ", path=" + path + ", status=" + status + ", sendTime=" + sendTime + '}';
+        return "Document{" + "id=" + id + ", submittedBy=" + submittedBy + ", displayName=" + displayName + ", path=" + path + ", status=" + status + ", sendTime=" + sendTime + '}';
     }
 }

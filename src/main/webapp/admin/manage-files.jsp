@@ -1,10 +1,10 @@
 <%-- 
-    Document   : manage-files-club
-    Created on : Oct 19, 2024, 10:25:34 PM
+    Document   : manage-files-admin
+    Created on : Oct 22, 2024, 6:34:40 PM
     Author     : hoang hung 
 --%>
 
-<%@include file="../include/club-layout-header.jsp"%>
+<%@include file="../include/admin-layout-header.jsp"%>
 
 <style>
     .popup__overlay {
@@ -45,8 +45,8 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="<c:url value="/club/dashboard"/>">Dashboard</a></span></li>
-                                    <li class="active"><span>Manage files</span></li>
+                                    <li><span><a href="<c:url value="/admin/dashboard"/>">Dashboard</a></span></li>
+                                    <li class="active"><span>Review files</span></li>
                                 </ul>
                             </nav>
                         </div>
@@ -59,51 +59,37 @@
             <div class="card__header">
                 <div class="card__header-top mb-5">
                     <div class="card__title-inner">
-                        <!--                        <div class="card__header-icon">
-                                                    <i class="flaticon-ticket-1"></i>
-                                                </div>-->
                         <div class="card__header-title">
                             <h4>Submitted files</h4>
                         </div>
                     </div>
-                    <div class="breadcrum__button">
-                        <a class="breadcrum__btn event__popup-active">Send application<i class="fa-regular fa-plus"></i></a>
-                    </div>
                 </div>
             </div>
 
-            <div class="popup__overlay" id="send-application-popup">
+            <div class="popup__overlay" id="process-popup">
                 <div class="popup__content">
-                    <span class="popup__close" id="closePopup"></span>
-                    <h3>Send application</h3>
+                    <span class="popup__close" id="close"></span>
+                    <h3>Processing file application</h3>
                     <hr/>
-                    <form action="<c:url value="/club/file" />" method="POST" enctype="multipart/form-data">
-                        <!--<input type="hidden" name="action" value="add" />-->
-                        <div class="singel__input-field py-3">
-                            <label class="input__field-text">File type: </label>
-                            <select name="type" required>
-                                <option value="REPORT" selected>REPORT</option>
-                                <option value="PLAN">PLAN</option>
-                            </select>
-                        </div>
-                        <div class="py-3">
-                            <input type="file" name="file" required>
-                        </div>
-
-                        <c:if test="${not empty error}">
-                            <div class="error-message" style="color: red; margin-bottom: 15px;">${error}</div>
-                            <script>
-                                document.getElementById('send-application-popup').style.display = 'flex';
-                            </script>
-                        </c:if>
-                        <c:if test="${not empty message}">
-                            <div class="error-message" style="color: green; margin-bottom: 15px;">${message}</div>
-                            <script>
-                                document.getElementById('send-application-popup').style.display = 'flex';
-                            </script>
-                        </c:if>
-                        <button class="input__btn w-100" type="submit">Submit</button>
-                    </form>
+                    <a id="processing-file-name" style="text-decoration: underline"></a>
+                    <c:if test="${not empty error}">
+                        <div class="error-message" style="color: red; margin-bottom: 15px;">${error}</div>
+                        <script>
+                            document.getElementById('deleteConfirmationPopup').style.display = 'flex';
+                        </script>
+                    </c:if>
+                        <form action="<c:url value="/admin/file" />" method="POST">
+                            <div class="singel__input-field mb-15">
+                                <label class="input__field-text">Process note: </label>
+                                <input type="text" name="processNote" required>
+                                <input type="text" id="processing-file-id" name="id" hidden>
+                            </div>
+                            <div class="popup__button-group">
+                                <input class="element__btn red-bg h-75" type="submit" name="action" value="Request change">
+                                <input class="element__btn green-bg h-75" type="submit" name="action" value="Approved">
+                                <input class="element__btn red-bg h-75" type="submit" name="action" value="Rejected">
+                            </div>
+                        </form>
                 </div>
             </div>
 
@@ -125,6 +111,7 @@
                                         <table>
                                             <thead>
                                                 <tr>
+                                                    <th>Send by</th>
                                                     <th>File name</th>
                                                     <th>Type</th>
                                                     <th>Sent date<th>
@@ -140,13 +127,18 @@
                                                     <tr>
                                                         <td>
                                                             <div class="attendant__seminar">
-                                                                <span>${document.displayName}</span>
+                                                                <span><a href="/profile?id=${document.submittedBy.id}">${document.submittedBy.acronym}</a></span>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="attendant__seminar">
+                                                                <span id="file-name-${document.id}">${document.displayName}</span>
                                                             </div>
                                                         </td>
                                                         <td>
                                                             <div class="attendant__seminar">
                                                                 <!--<span><a href="">${document}</a></span>-->
-                                                                <span><a href="">${document.type}</a></span>
+                                                                <span>${document.type}</span>
                                                             </div>
                                                         </td>
 
@@ -187,8 +179,22 @@
                                                             </div>
                                                         </td>
                                                         <td>
-                                                            <div>
-                                                                <a href="<c:url value="${document.path}" />" class="text-decoration-underline">Download</a>
+                                                            <div class="attendant__action">
+                                                                <div class="card__header-dropdown">
+                                                                    <div class="dropdown">
+                                                                        <button>
+                                                                            <svg class="dropdown__svg" width="20" height="4" viewBox="0 0 20 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                            <path d="M2 0.75C2.69036 0.75 3.25 1.30964 3.25 2C3.25 2.69036 2.69036 3.25 2 3.25C1.30964 3.25 0.75 2.69036 0.75 2C0.75 1.30964 1.30964 0.75 2 0.75Z" fill="white"></path>
+                                                                            <path d="M7 0.75C7.69036 0.75 8.25 1.30964 8.25 2C8.25 2.69036 7.69036 3.25 7 3.25C6.30964 3.25 5.75 2.69036 5.75 2C5.75 1.30964 6.30964 0.75 7 0.75Z" fill="white"></path>
+                                                                            <path d="M13.25 2C13.25 1.30964 12.6904 0.75 12 0.75C11.3096 0.75 10.75 1.30964 10.75 2C10.75 2.69036 11.3096 3.25 12 3.25C12.6904 3.25 13.25 2.69036 13.25 2Z" fill="white"></path>
+                                                                            </svg>
+                                                                        </button>
+                                                                        <div class="dropdown-list">
+                                                                            <a class="dropdown__item" id="file-path-${document.id}" href="<c:url value="${document.path}" />">Download</a>
+                                                                            <a class="dropdown__item" href="javascript:void(0)" onclick="processPopup('${document.id}')" />Process</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </td>
                                                     </tr>
@@ -206,7 +212,7 @@
                                                 <c:choose>
                                                     <c:when test="${i == 0 && page.currentPage > 0}">
                                                         <li>
-                                                            <a href="<c:url value="/club/file?page=${page.currentPage - 1}"/>">
+                                                            <a href="<c:url value="/admin/file?page=${page.currentPage - 1}"/>">
                                                                 <i class="fa-regular fa-arrow-left-long"></i>
                                                             </a>
                                                         </li>
@@ -220,7 +226,7 @@
                                                             </c:when>
                                                             <c:otherwise>
                                                                 <li>
-                                                                    <a href="<c:url value="/club/file?page=${i}"/>">${i + 1}</a>
+                                                                    <a href="<c:url value="/admin/file?page=${i}"/>">${i + 1}</a>
                                                                 </li>
                                                             </c:otherwise>
                                                         </c:choose>
@@ -230,14 +236,14 @@
                                                         </c:when>
                                                         <c:when test="${i == page.totalPage - 1 && page.currentPage + 5 < page.totalPage - 1}">
                                                         <li>
-                                                            <a href="<c:url value="/club/file?page=${page.totalPage - 1}"/>">
+                                                            <a href="<c:url value="/admin/file?page=${page.totalPage - 1}"/>">
                                                                 ${page.totalPage}
                                                             </a>
                                                         </li>
                                                     </c:when>
                                                     <c:when test="${i == page.totalPage - 1 && page.currentPage < page.totalPage - 1}">
                                                         <li>
-                                                            <a href="<c:url value="/club/file?page=${page.currentPage + 1}"/>">
+                                                            <a href="<c:url value="/admin/file?page=${page.currentPage + 1}"/>">
                                                                 <i class="fa-regular fa-arrow-right-long"></i>
                                                             </a>
                                                         </li>
@@ -256,18 +262,25 @@
         </div>
 
         <script type="text/javascript">
-            document.querySelector('.breadcrum__btn').addEventListener('click', function (event) {
-                event.preventDefault();
-                document.getElementById('send-application-popup').style.display = 'flex';
-            });
-
             window.addEventListener('click', function (event) {
-                const popup = document.getElementById('send-application-popup');
+                const popup = document.getElementById('process-popup');
                 if (event.target === popup) {
                     popup.style.display = 'none';
                 }
             });
+
+            function processPopup(fileId) {
+                fileName = document.getElementById('file-name-' + fileId).innerHTML;
+                filePath = document.getElementById('file-path-' + fileId).href;
+                processFileNameHolder = document.getElementById("processing-file-name");
+                processFileNameHolder.innerHTML = fileName;
+                processFileNameHolder.href = filePath;
+                document.getElementById("processing-file-id").value = fileId;
+                
+                event.preventDefault();
+                document.getElementById('process-popup').style.display = 'flex';
+            }
         </script>
 </section>
 
-<%@include file="../include/master-footer.jsp" %>
+<%@include file="../include/master-footer.jsp"%>                            
