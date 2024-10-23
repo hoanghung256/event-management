@@ -85,7 +85,6 @@
                             <li><a href="<c:url value="/club/organized-event"/>" aria-expanded="false">
                                     <i class="flaticon-upcoming"></i>
                                     <span class="nav-text">Organized Events</span>
-                                    <span class="nav-text">Organized Events</span>
                                 </a>
                             </li>
                             <li><a href="<c:url value="/sign-out" />" aria-expanded="false">
@@ -119,7 +118,7 @@
                                         <div class="user__portfolio">
                                             <div class="user__portfolio-thumb">
                                                 <c:url value="/assets/img/user/default-avatar.jpg" var="defaultAvatar" />
-                                                <img 
+                                                <img class="rounded-circle"
                                                     src="${sessionScope.userInfor.avatarPath != null ? sessionScope.userInfor.avatarPath : defaultAvatar}" 
                                                     alt="Default Avatar" 
                                                 />

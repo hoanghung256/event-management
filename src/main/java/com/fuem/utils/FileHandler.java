@@ -98,9 +98,14 @@ public class FileHandler {
      *
      * @author HungHV
      */
-    public static void deleteFile(String filepath) {
-        File file = new File(filepath);
+    
+    public static void deleteFile(ServletContext context, String filepath) {
+        String realFilePath = context.getRealPath("") + filepath;
+        File file = new File(realFilePath);
 
-        file.deleteOnExit();
+        if (file.exists()) {
+            boolean isDeleted = file.delete();
+        } 
     }
+
 }

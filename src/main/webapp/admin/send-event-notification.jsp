@@ -34,7 +34,7 @@
 
     <!-- Event Table -->
     <div class="pb-20">
-        <div class="row">
+        <div class="row send-noti-body">
             <div class="body__card-wrapper">
                 <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="day-tab-1-pane" role="tabpanel">

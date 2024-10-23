@@ -27,7 +27,7 @@ public class FileDAO extends SQLDatabase {
 
     private static final Logger logger = Logger.getLogger(FileDAO.class.getName());
     private static final String INSERT_NEW_IMAGE = "INSERT INTO [EventImage] ("
-            + "eventId, "
+            + "studentId, "
             + "path) "
             + "VALUES (?, ?)";
     private static final String SELECT_FILE_BY_SUBMITTER_ID = "SELECT "
@@ -72,7 +72,7 @@ public class FileDAO extends SQLDatabase {
     private static String UPDATE_FILE_STATUS_BY_ID = "UPDATE [File] SET status=?, processNote=?, processTime=GETDATE() WHERE id=?";
     
     /**
-     * 
+     *
      * @author HungHV
      */
     public int insertEventImages(int eventId, List<String> imagePaths) {

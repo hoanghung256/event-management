@@ -149,7 +149,7 @@
 <section>
     <div class="app__slide-wrapper">
         <div class="breadcrumb__area">
-            <div class="breadcrumb__wrapper mb-35">
+            <div class="breadcrumb__wrapper mb-35" style="padding: 0px;">
                 <div class="breadcrumb__main">
                     <div class="breadcrumb__inner">
                         <div class="breadcrumb__icon">
@@ -158,7 +158,7 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="<c:url value='/home'/>">Home</a></span></li>
+                                    <li><span><a href="<c:url value='/admin/dashboard'/>">Dashboard</a></span></li>
                                     <li class="active"><span>Manage Clubs</span></li>
                                 </ul>
                             </nav>

@@ -17,10 +17,9 @@ public class Validator {
     }
 
     public static boolean isFullNameValid(String fullName) {
-        // Sử dụng biểu thức chính quy để kiểm tra không chứa ký tự đặc biệt
-        return fullName.matches("[a-zA-Z\\s]+");
-    }
 
+        return fullName.matches("[a-zA-Z\\p{L}\\s]+");
+    }
     public static String extractStudentIdFromEmail(String email) {
         // Tách phần trước dấu @
         String[] emailSplits = email.split("@");
@@ -33,7 +32,7 @@ public class Validator {
 
         // MSSV là 8 ký tự cuối của localPart
         if (localPart.length() >= 8) {
-            return localPart.substring(localPart.length() - 8); // Trả về MSSV
+            return localPart.substring(localPart.length() - 8).toUpperCase(); // Trả về MSSV
         }
 
         return null; // Trả về null nếu không đủ độ dài
@@ -48,7 +47,7 @@ public class Validator {
         }
 
         // So sánh MSSV lấy được với studentId người dùng nhập
-        return studentIdFromEmail.equals(studentIdInput);
+        return studentIdInput.equalsIgnoreCase(studentIdFromEmail);
     }
 
 }
