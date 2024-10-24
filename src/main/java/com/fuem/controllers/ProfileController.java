@@ -99,10 +99,9 @@ public class ProfileController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute("userInfor");
         Role userRole = user.getRole();
-        String requestUrl = request.getRequestURI();
 
-        if (userRole.equals(Role.STUDENT) && requestUrl.startsWith("/student")) {
-            if (request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) {
+        if (userRole.equals(Role.STUDENT)) {
+            if (request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) { 
                 Collection<Part> parts = request.getParts(); // Lấy tất cả các Part
     
                 // Giới hạn kích thước file
@@ -161,7 +160,7 @@ public class ProfileController extends HttpServlet {
             }
     
             request.getRequestDispatcher("profile.jsp").forward(request, response);
-        } else if ((userRole.equals(Role.CLUB) || userRole.equals(Role.ADMIN))&& requestUrl.startsWith("/student")) {
+        } else if (userRole.equals(Role.CLUB) || userRole.equals(Role.ADMIN)) {
             int organizerId = user.getId();
             String fullname = request.getParameter("fullname");
             String acronym = request.getParameter("acronym");
@@ -197,15 +196,16 @@ public class ProfileController extends HttpServlet {
             }
             Organizer organizer = new Organizer(acronym, description, newCoverPath, organizerId, fullname, email, newAvatarPath);
             boolean isUpdated = organizerDAO.updateOrganizer(organizer);
-
+            organizer.setRole(userRole);
+            
             if (isUpdated) {
                 request.getSession().setAttribute("userInfor", organizer);
                 request.setAttribute("message", "Update successfully");
-                doGet(request, response);
             } else {
                 request.setAttribute("error", "Update failed");
-                request.getRequestDispatcher("profile.jsp").forward(request, response);
             }
+            
+            request.getRequestDispatcher("profile.jsp").forward(request, response);
         }
     }
 }
