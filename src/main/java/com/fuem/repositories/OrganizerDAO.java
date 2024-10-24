@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 public class OrganizerDAO extends SQLDatabase {
 
     private static final Logger logger = Logger.getLogger(OrganizerDAO.class.getName());
-    private static final String SELECT_ORGANIZER_BY_EMAIL_AND_PASSWORD = "SELECT id, acronym, fullname, description, email, avatarPath, isAdmin FROM [Organizer] WHERE email = ? AND password = ?";
+    private static final String SELECT_ORGANIZER_BY_EMAIL_AND_PASSWORD = "SELECT id, acronym, fullname, description, email, avatarPath, coverPath, isAdmin FROM [Organizer] WHERE email = ? AND password = ?";
     private static final String UPDATE_ORGANIZER = "UPDATE [Organizer] "
             + "SET fullname = ?, acronym = ?, email = ?, description = ?, avatarPath = ?, coverPath = ? "
             + "WHERE id = ?";
@@ -67,10 +67,11 @@ public class OrganizerDAO extends SQLDatabase {
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZER_BY_EMAIL_AND_PASSWORD, email, password);) {
             while (rs.next()) {
                 Organizer organizer = new Organizer(
-                        rs.getInt("id"),
                         rs.getString("acronym"),
-                        rs.getString("fullname"),
                         rs.getString("description"),
+                        rs.getString("coverPath"),
+                        rs.getInt("id"),
+                        rs.getString("fullname"),
                         rs.getString("email"),
                         rs.getString("avatarPath"),
                         rs.getBoolean("isAdmin") ? Role.ADMIN : Role.CLUB);
@@ -130,11 +131,11 @@ public class OrganizerDAO extends SQLDatabase {
                         rs.getString("acronym"), 
                         rs.getString("description"),
                         rs.getString("coverPath"), 
-                        rs.getInt("followerCount"), 
                         rs.getInt("id"), 
                         rs.getString("fullname"), 
                         rs.getString("email"), 
-                        rs.getString("avatarPath") 
+                        rs.getString("avatarPath"),
+                        rs.getBoolean("isAdmin") ? Role.ADMIN : Role.CLUB
                 );
             }
         } catch (SQLException e) {

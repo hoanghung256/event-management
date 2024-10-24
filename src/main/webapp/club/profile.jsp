@@ -52,8 +52,10 @@
             <div class="mb-15">
                 <div class="banner-container" style="overflow: hidden; height: 300px; object-fit: cover;border-radius: 10px; ">
                     <div style="width: 100%;height: 300px; position: relative;">
+                        <c:url value="/assets/img/user/banner-default.png" var="defaultBanner" />
+                        <c:url value="${sessionScope.userInfor.coverPath}" var="userBanner" />
                         <input type="file" class="form-control" id="coverFile" name="coverFile" style="display: none;" accept="image/*">
-                        <img src="../${org.coverPath}" alt="Current Banner" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;" id="currentBanner" onclick="document.getElementById('coverFile').click();">
+                        <img src="${sessionScope.userInfor.coverPath != null ? userBanner : defaultBanner}" alt="Banner" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;" id="currentBanner" onclick="document.getElementById('coverFile').click();">
                         <img id="newBannerPreview" style="width: 100%; height: 100%; object-fit: cover;position: absolute;  display: none;">
                     </div>
                 </div>
@@ -87,8 +89,10 @@
                                                         <div class="padding__left-inner p-relative">
                                                             <div class="profile__thumb mb-45 text-center">
                                                                 <div style="width: 190px; height: 190px; position: relative; border-radius: 50%; overflow: hidden; margin: 0 auto;">
+                                                                    <c:url value="/assets/img/user/default-avatar.jpg" var="defaultAvatar" />
+                                                                    <c:url value="${sessionScope.userInfor.avatarPath}" var="userAvatar" />
                                                                     <input type="file" class="form-control" id="avatarFile" name="avatarFile" style="display: none;" accept="image/*">
-                                                                    <img src="../${org.avatarPath}" alt="Current Avatar" 
+                                                                    <img src="${sessionScope.userInfor.avatarPath != null ? userAvatar : defaultAvatar}" alt="Avatar" 
                                                                          style="width: 100%; height: 100%; object-fit: cover; object-position: center; cursor: pointer; border-radius: 50%;" 
                                                                          id="currentAvatar" 
                                                                          onclick="document.getElementById('avatarFile').click();">
@@ -106,7 +110,7 @@
                                                                             <span>Club Name:</span>
                                                                         </div>
                                                                         <div class="profile__user-info" >
-                                                                            <input type="text" name="fullname" value="${param.fullname != null ? param.fullname : org.fullname}" required/>
+                                                                            <input type="text" name="fullname" value="${param.fullname != null ? param.fullname : userInfor.fullname}" required/>
                                                                         </div>
                                                                     </div>
                                                                 </li>
@@ -116,7 +120,7 @@
                                                                             <span>Club Acronym:</span>
                                                                         </div>
                                                                         <div class="profile__user-info">
-                                                                            <input type="text" name="acronym" value="${param.acronym != null ? param.acronym : org.acronym}" required/>
+                                                                            <input type="text" name="acronym" value="${param.acronym != null ? param.acronym : userInfor.acronym}" required/>
                                                                         </div>
                                                                     </div>
                                                                 </li>
@@ -126,7 +130,7 @@
                                                                             <span>Email Address:</span>
                                                                         </div>
                                                                         <div class="profile__user-info">
-                                                                            <input type="email" name="email" value="${param.email != null ? param.email : org.email}" required />
+                                                                            <input type="email" name="email" value="${param.email != null ? param.email : userInfor.email}" required />
                                                                         </div>
                                                                     </div>
                                                                 </li>
@@ -141,7 +145,7 @@
                                                             <div class="profile__text p-3">
                                                                 <textarea id="description" class="yellow-bg" name="description"  style="padding: 10px; width: 100%; overflow: hidden; resize: none; outline: none;" 
                                                                           oninput="this.style.height = 'auto'; this.style.height = (this.scrollHeight) + 'px';" 
-                                                                          required>${org.description}</textarea>
+                                                                          required>${userInfor.description}</textarea>
                                                             </div>
                                                         </div>
                                                     </div>

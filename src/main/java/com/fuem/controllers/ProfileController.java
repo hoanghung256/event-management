@@ -89,7 +89,7 @@ public class ProfileController extends HttpServlet {
                     List<Event> recentEvents = eventDAO.getRecentEvents(user.getId());
                     request.setAttribute("recentEvents", recentEvents);
                     Organizer organizer = organizerDAO.getOrganizerById(organizerId);
-                    request.setAttribute("org", organizer);
+                    request.setAttribute("userInfor", organizer);
                     request.getRequestDispatcher("profile.jsp").forward(request, response);
                 }
                 break;
@@ -106,49 +106,46 @@ public class ProfileController extends HttpServlet {
         String acronym = request.getParameter("acronym");
         String description = request.getParameter("description");
         String email = request.getParameter("email");
+        Role role = user.getRole();
         OrganizerDAO organizerDAO = new OrganizerDAO();
         Organizer currentOrganizer = organizerDAO.getOrganizerById(organizerId);
-        String avatarPath = currentOrganizer.getAvatarPath();
-        String coverPath = currentOrganizer.getCoverPath();
+        String oldAvatarPath = currentOrganizer.getAvatarPath();
+        String oldCoverPath = currentOrganizer.getCoverPath();
 
-        Part avatarFilePart = request.getPart("avatarFile"); //
+        String newAvatarPath = oldAvatarPath;
+        String newCoverPath = oldCoverPath;
+
+        // Handle avatar upload
+        Part avatarFilePart = request.getPart("avatarFile");
         if (avatarFilePart != null && avatarFilePart.getSize() > 0) {
-            String fileName = Paths.get(avatarFilePart.getSubmittedFileName()).getFileName().toString();
-            String relativePath = "assets/img/user/" + fullname + "/avatar/" + fileName;
-            String uploadPath = getServletContext().getRealPath("/") + relativePath;
-
-            File uploadDir = new File(uploadPath).getParentFile();
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
+            newAvatarPath = FileHandler.processUploadFile(avatarFilePart, FileType.IMAGE);
+            FileHandler.save(newAvatarPath, avatarFilePart, getServletContext(), FileType.IMAGE);
+            if (oldAvatarPath != null) {
+                FileHandler.deleteFile(getServletContext(), oldAvatarPath);
             }
-            avatarFilePart.write(uploadPath);
-            avatarPath = relativePath;
-
         }
 
+        // Handle cover upload
         Part coverFilePart = request.getPart("coverFile");
         if (coverFilePart != null && coverFilePart.getSize() > 0) {
-            String bannerFileName = Paths.get(coverFilePart.getSubmittedFileName()).getFileName().toString();
-            String relativeBannerPath = "assets/img/user/" + fullname + "/banner/" + bannerFileName;
-            String uploadBannerPath = getServletContext().getRealPath("/") + relativeBannerPath;
-            File uploadDirBanner = new File(uploadBannerPath).getParentFile();
-            if (!uploadDirBanner.exists()) {
-                uploadDirBanner.mkdirs();
+            newCoverPath = FileHandler.processUploadFile(coverFilePart, FileType.IMAGE);
+            FileHandler.save(newCoverPath, coverFilePart, getServletContext(), FileType.IMAGE);
+            if (oldCoverPath != null) {
+                FileHandler.deleteFile(getServletContext(), oldCoverPath);
             }
-            coverFilePart.write(uploadBannerPath);
-            coverPath = relativeBannerPath;
+
         }
-        Organizer organizer = new Organizer(acronym, description, coverPath, organizerId, fullname, email, avatarPath);
-        System.out.println(organizer.getDescription());
+        Organizer organizer = new Organizer(acronym, description, newCoverPath, organizerId, fullname, email, newAvatarPath);
         boolean isUpdated = organizerDAO.updateOrganizer(organizer);
 
         if (isUpdated) {
-            request.setAttribute("message", "update successfully");
+            Organizer org = new Organizer(acronym, description, newCoverPath, organizerId, fullname, email, newAvatarPath, role);
+            request.getSession().setAttribute("userInfor", org); // update user session
+            request.setAttribute("message", "Update successfully");
             doGet(request, response);
         } else {
-            request.setAttribute("error", "update fail");
+            request.setAttribute("error", "Update failed");
             request.getRequestDispatcher("profile.jsp").forward(request, response);
         }
     }
-
 }

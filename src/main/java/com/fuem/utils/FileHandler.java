@@ -66,9 +66,45 @@ public class FileHandler {
      * 
      * @author HungHV
      */
-    public static void deleteFile(String filepath) {
-        File file = new File(filepath);
+    
+    public static void deleteFile(ServletContext context, String filepath) {
+        String realFilePath = context.getRealPath("") + filepath;
+        File file = new File(realFilePath);
 
-        file.deleteOnExit();
+        if (file.exists()) {
+            boolean isDeleted = file.delete();
+        } 
+    }
+
+/**
+     * Save file into project source
+     *
+     * @author HungHV
+     */
+    public static void save(String processedPath, Part part, ServletContext context, FileType fileType) throws IOException {
+        String fileFolderPath = context.getRealPath("");
+        Files.createDirectories(Paths.get(fileFolderPath + fileType.getFileLocation()));
+
+        if (part.getSubmittedFileName() != null) {
+            part.write(fileFolderPath + processedPath);
+        }
+    }
+    
+    /**
+     * Process Part objects
+     *
+     * @return the path list for insert into database
+     * @author HungHV
+     */
+    public static String processUploadFile(Part part, FileType fileType) throws IOException {
+        String path = null;
+
+        if (part.getSubmittedFileName() != null) {
+            String submittedFileName = part.getSubmittedFileName();
+            String processedFileName = UUID.randomUUID().toString() + submittedFileName.substring(submittedFileName.lastIndexOf("."));
+            path = fileType.getFileLocation() + "/" + processedFileName;
+        }
+
+        return path;
     }
 }
