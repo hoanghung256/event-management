@@ -54,7 +54,7 @@
                      </a>
                   </div>
                   <div class="sign__link">
-                     <a class="sign__link-active" href="#">Sign in</a>
+                     <a class="sign__link-active" href="sign-in">Sign in</a>
                   </div>
                </div>
                <div class="sign__center-wrapper text-center mt-90">
@@ -82,7 +82,7 @@
                </div>
             </div>
             <div class="sign__right">
-               <div class="sign__input-thumb" data-background="assets/img/sign/forgetpassword1.jpg">
+               <div class="sign__input-thumb" data-background="assets/img/sign/forget-password.jpg">
                </div>
             </div>
          </div>

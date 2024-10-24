@@ -5,8 +5,10 @@
 package com.fuem.controllers;
 
 import com.fuem.models.Event;
+import com.fuem.models.Notification;
 import com.fuem.models.Organizer;
 import com.fuem.repositories.AdminDAO;
+import com.fuem.repositories.NotificationDAO;
 import com.fuem.repositories.helpers.Page;
 import com.fuem.repositories.helpers.PagingCriteria;
 import jakarta.servlet.ServletException;
@@ -28,6 +30,7 @@ public class AdminDashboardController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         AdminDAO dao = new AdminDAO();
+        NotificationDAO notiDAO = new NotificationDAO();
         Organizer organizer = (Organizer) request.getSession().getAttribute("userInfor");
         int organizerId = organizer.getId();
         int totalOrganizedEvents = dao.getTotalOrganizedEvents(organizerId);
@@ -36,6 +39,8 @@ public class AdminDashboardController extends HttpServlet {
         ArrayList<Event> organizedList = dao.getOrganizedEvent();
         ArrayList<Event> upcomingList = dao.getUpcomingEvent();
         ArrayList<Event> registrationList = dao.getRegistrationEvent();
+        ArrayList<Notification> notiList = notiDAO.getNotificationsForOrganizer(organizerId);
+        
 
         //paging
         PagingCriteria pagingCriteria = new PagingCriteria();
@@ -63,6 +68,7 @@ public class AdminDashboardController extends HttpServlet {
         request.setAttribute("upcomingList", upcomingList);
         request.setAttribute("registrationList", registrationList);
         request.setAttribute("registrationListPaging", registrationEventWithPaging);
+        request.setAttribute("notiList", notiList);
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
 }

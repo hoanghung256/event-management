@@ -183,7 +183,7 @@
                                                                     <div class="news__item-inner">
                                                                         <div class="news__content">
                                                                             <div class="news__title">
-                                                                                <a href="<c:url value="/club/organized-event-report?action=compared&eventIdSelected=${organizedEvent.id}&eventIdDetail=${event.id}"/>">${organizedEvent.fullname}</a>
+                                                                                <a href="<c:url value="/club/organized-event-report?action=compared&eventIdSelected=${organizedEvent.id}&eventIdDetail=${event.id}&organizerId=${event.organizer.id}"/>">${organizedEvent.fullname}</a>
                                                                             </div>
                                                                             <div class="news__meta">
                                                                                 <div class="news__meta-status">

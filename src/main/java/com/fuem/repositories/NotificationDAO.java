@@ -24,13 +24,41 @@ public class NotificationDAO extends SQLDatabase {
         super();
     }
 
-    private static String SELECT_NOTIFICATION_FOR_USER = "SELECT TOP 10 n.id, n.senderId, n.content, n.sendingTime, o.acronym AS senderName "
-            + "FROM Notification n "
-            + "JOIN NotificationReceiver nr ON n.id = nr.notificationId "
-            + "JOIN Organizer o ON n.senderId = o.id "
-            + "WHERE nr.receiverId = ? "
-            + "AND nr.isOrganizer = 0 "
-            + "ORDER BY n.sendingTime DESC";
+    private static String SELECT_NOTIFICATION_FOR_USER = "SELECT TOP 10 \n"
+            + "    Notification.id, \n"
+            + "    Notification.senderId, \n"
+            + "    Notification.content, \n"
+            + "    Notification.sendingTime, \n"
+            + "    Organizer.acronym AS senderName\n"
+            + "FROM \n"
+            + "    Notification\n"
+            + "JOIN \n"
+            + "    NotificationReceiver ON Notification.id = NotificationReceiver.notificationId\n"
+            + "JOIN \n"
+            + "    Organizer ON Notification.senderId = Organizer.id\n"
+            + "WHERE \n"
+            + "    NotificationReceiver.receiverId = ? \n"
+            + "    AND NotificationReceiver.isOrganizer = 0\n"
+            + "ORDER BY \n"
+            + "    Notification.sendingTime DESC;";
+
+    private static String SELECT_NOTIFICATION_FOR_ORGANIZER = "SELECT TOP 10 \n"
+            + "    Notification.id, \n"
+            + "    Notification.senderId, \n"
+            + "    Notification.content, \n"
+            + "    Notification.sendingTime, \n"
+            + "    Organizer.acronym AS senderName\n"
+            + "FROM \n"
+            + "    Notification\n"
+            + "JOIN \n"
+            + "    NotificationReceiver ON Notification.id = NotificationReceiver.notificationId\n"
+            + "JOIN \n"
+            + "    Organizer ON Notification.senderId = Organizer.id\n"
+            + "WHERE \n"
+            + "    NotificationReceiver.receiverId = ? \n"
+            + "    AND NotificationReceiver.isOrganizer = 1\n"
+            + "ORDER BY \n"
+            + "    Notification.sendingTime DESC;";
 
     private static String INSERT_NEW_NOTIFICATION = "INSERT INTO [Notification] (senderId, content) "
             + "VALUES (?, ?)";
@@ -39,11 +67,11 @@ public class NotificationDAO extends SQLDatabase {
             + "SELECT DISTINCT ?, guestId, 0 "
             + "FROM EventGuest "
             + "WHERE eventId IN (";
-    
+
     private static String INSERT_NOTIFICATION_RECEIVER_AS_ALL_STUDENT = "INSERT INTO NotificationReceiver (notificationId, receiverId, isOrganizer) "
             + "SELECT ?, id, 0 "
             + "FROM Student";
-    
+
     private static String INSERT_NOTIFICATION_RECEIVER_AS_ALL_CLUB = "INSERT INTO NotificationReceiver (notificationId, receiverId, isOrganizer) "
             + "SELECT ?, id, 1 "
             + "FROM Organizer "
@@ -52,8 +80,7 @@ public class NotificationDAO extends SQLDatabase {
     public List<Notification> getNotificationsForUser(int userId) {
         List<Notification> notifications = new ArrayList<>();
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
-                ResultSet resultSet = executeQueryPreparedStatement(conn, SELECT_NOTIFICATION_FOR_USER, userId);) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet resultSet = executeQueryPreparedStatement(conn, SELECT_NOTIFICATION_FOR_USER, userId);) {
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
 
@@ -79,8 +106,7 @@ public class NotificationDAO extends SQLDatabase {
      */
     public int insertAndGetIdOfNewNotification(int senderId, String content) {
         int generatedId = -1;
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
-                PreparedStatement pstmt = conn.prepareStatement(INSERT_NEW_NOTIFICATION, Statement.RETURN_GENERATED_KEYS)) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); PreparedStatement pstmt = conn.prepareStatement(INSERT_NEW_NOTIFICATION, Statement.RETURN_GENERATED_KEYS)) {
             pstmt.setInt(1, senderId);
             pstmt.setString(2, content);
             int affectedRows = pstmt.executeUpdate();
@@ -99,8 +125,9 @@ public class NotificationDAO extends SQLDatabase {
     }
 
     /**
-     *Insert notiId and receiverId into Notification Receiver table
-     * @author AnhNQ 
+     * Insert notiId and receiverId into Notification Receiver table
+     *
+     * @author AnhNQ
      */
     public int insertIntoNotificationReceiver(String[] eventIds, int notificationId) throws SQLException {
         int res = 0;
@@ -116,7 +143,7 @@ public class NotificationDAO extends SQLDatabase {
 
     /**
      *
-     * @author AnhNQ 
+     * @author AnhNQ
      */
     private String buildInsertQuery(String[] eventIds) {
         StringBuilder sb = new StringBuilder(INSERT_NOTIFICATION_RECEIVER);
@@ -131,10 +158,10 @@ public class NotificationDAO extends SQLDatabase {
         System.out.println(sb.toString());
         return sb.toString();
     }
-    
+
     /**
      *
-     * @author AnhNQ 
+     * @author AnhNQ
      */
     public int insertNotificationReceiverForAllStudent(int notificationId) throws SQLException {
         int res = 0;
@@ -147,10 +174,10 @@ public class NotificationDAO extends SQLDatabase {
         }
         return res;
     }
-    
+
     /**
      *
-     * @author AnhNQ 
+     * @author AnhNQ
      */
     public int insertNotificationReceiverForAllClub(int notificationId) throws SQLException {
         int res = 0;
@@ -162,5 +189,28 @@ public class NotificationDAO extends SQLDatabase {
             }
         }
         return res;
+    }
+    
+    public ArrayList<Notification> getNotificationsForOrganizer(int userId) {
+        ArrayList<Notification> notifications = new ArrayList<>();
+
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet resultSet = executeQueryPreparedStatement(conn, SELECT_NOTIFICATION_FOR_ORGANIZER, userId);) {
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+
+                int senderId = resultSet.getInt("senderId");
+                String senderAcronym = resultSet.getString("senderName");
+                Organizer sender = new Organizer(senderId, senderAcronym);
+                String content = resultSet.getString("content");
+                LocalDateTime sendingTime = resultSet.getTimestamp("sendingTime").toLocalDateTime();
+
+                Notification notification = new Notification(id, sender, content, sendingTime);
+                notifications.add(notification);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(NotificationDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return notifications;
     }
 }
