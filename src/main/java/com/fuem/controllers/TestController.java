@@ -1,6 +1,5 @@
 package com.fuem.controllers;
 
-import com.fuem.repositories.EventDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,10 +14,8 @@ import java.io.IOException;
 @WebServlet(name = "TestController", urlPatterns = "/test")
 public class TestController extends HttpServlet {
 
-    private static final EventDAO dbContext = new EventDAO();
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher("index.html").forward(req, resp);
+        req.getRequestDispatcher("club/manage-files.jsp").forward(req, resp);
     }
 }

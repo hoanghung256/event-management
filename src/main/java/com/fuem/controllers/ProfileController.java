@@ -19,8 +19,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
-import java.io.File;
-import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -30,8 +29,8 @@ import java.util.List;
 @WebServlet(name = "ProfileController", urlPatterns = {"/admin/profile", "/club/profile", "/student/profile", "/profile"})
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 1,
-        maxFileSize = 1024 * 1024 * 10,
-        maxRequestSize = 1024 * 1024 * 15
+        maxFileSize = 1024 * 1024 * 1,
+        maxRequestSize = 1024 * 1024 * 2
 )
 public class ProfileController extends HttpServlet {
 
@@ -83,15 +82,13 @@ public class ProfileController extends HttpServlet {
                 User user = (User) request.getSession().getAttribute("userInfor");
 
                 if (!user.getRole().equals(Role.STUDENT)) {
-                    OrganizerDAO organizerDAO = new OrganizerDAO();
-                    int organizerId = user.getId();
                     EventDAO eventDAO = new EventDAO();
                     List<Event> recentEvents = eventDAO.getRecentEvents(user.getId());
+                    
                     request.setAttribute("recentEvents", recentEvents);
-                    Organizer organizer = organizerDAO.getOrganizerById(organizerId);
-                    request.setAttribute("userInfor", organizer);
-                    request.getRequestDispatcher("profile.jsp").forward(request, response);
                 }
+
+                request.getRequestDispatcher("profile.jsp").forward(request, response);
                 break;
             default:
                 request.getRequestDispatcher("error/500.jsp").forward(request, response);
@@ -101,51 +98,114 @@ public class ProfileController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute("userInfor");
-        int organizerId = user.getId();
-        String fullname = request.getParameter("fullname");
-        String acronym = request.getParameter("acronym");
-        String description = request.getParameter("description");
-        String email = request.getParameter("email");
-        Role role = user.getRole();
-        OrganizerDAO organizerDAO = new OrganizerDAO();
-        Organizer currentOrganizer = organizerDAO.getOrganizerById(organizerId);
-        String oldAvatarPath = currentOrganizer.getAvatarPath();
-        String oldCoverPath = currentOrganizer.getCoverPath();
+        Role userRole = user.getRole();
+        String requestUrl = request.getRequestURI();
 
-        String newAvatarPath = oldAvatarPath;
-        String newCoverPath = oldCoverPath;
-
-        // Handle avatar upload
-        Part avatarFilePart = request.getPart("avatarFile");
-        if (avatarFilePart != null && avatarFilePart.getSize() > 0) {
-            newAvatarPath = FileHandler.processUploadFile(avatarFilePart, FileType.IMAGE);
-            FileHandler.save(newAvatarPath, avatarFilePart, getServletContext(), FileType.IMAGE);
-            if (oldAvatarPath != null) {
-                FileHandler.deleteFile(getServletContext(), oldAvatarPath);
+        if (userRole.equals(Role.STUDENT) && requestUrl.startsWith("/student")) {
+            if (request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) {
+                Collection<Part> parts = request.getParts(); // Lấy tất cả các Part
+    
+                // Giới hạn kích thước file
+                long maxFileSize = 1024 * 1024; // 1 MB
+                boolean isFileTooLarge = false;
+    
+                if (parts != null && !parts.isEmpty()) {
+                    for (Part part : parts) {
+                        // Kiểm tra kích thước file
+                        if (part.getSize() > maxFileSize) {
+                            isFileTooLarge = true;
+                            break;
+                        }
+                    }
+    
+                    // Kiểm tra xem có file nào vượt quá kích thước cho phép không
+                    if (isFileTooLarge) {
+                        request.setAttribute("error", "The image file is too large. Please choose a different image.");
+                    } else {
+                        List<String> avatarPaths = FileHandler.processUploadFile(parts, FileType.IMAGE);
+    
+                        // Kiểm tra xem có avatar được upload không
+                        if (!avatarPaths.isEmpty()) {
+                            String newAvatarPath = avatarPaths.get(0);
+    
+                            // Lấy thông tin sinh viên từ session
+                            Student student = (Student) request.getSession().getAttribute("userInfor");
+                            if (student != null) {
+                                String studentId = student.getStudentId();
+                                String oldAvatarPath = student.getAvatarPath(); 
+                                
+                                StudentDAO studentDao = new StudentDAO();
+                                boolean isUpdated = studentDao.updateStudentAvatar(studentId, newAvatarPath);
+    
+                                if (isUpdated) {
+                                    // Xoá avatar cũ nếu tồn tại
+                                    if (oldAvatarPath != null && !oldAvatarPath.isEmpty()) {
+                                        FileHandler.deleteFile(getServletContext(), oldAvatarPath);
+                                    }
+    
+                                    // Cập nhật lại thông tin sinh viên trong session sau khi thay đổi avatar
+                                    student.setAvatarPath(newAvatarPath);
+                                    request.getSession().setAttribute("userInfor", student);
+    
+                                    // Lưu avatar mới
+                                    FileHandler.save(avatarPaths, parts, getServletContext(), FileType.IMAGE);
+    
+                                    request.setAttribute("success", "Avatar updated successfully!");
+                                } else {
+                                    request.setAttribute("error", "Failed to update avatar.");
+                                }
+                            }
+                        }
+                    }
+                }
             }
-        }
-
-        // Handle cover upload
-        Part coverFilePart = request.getPart("coverFile");
-        if (coverFilePart != null && coverFilePart.getSize() > 0) {
-            newCoverPath = FileHandler.processUploadFile(coverFilePart, FileType.IMAGE);
-            FileHandler.save(newCoverPath, coverFilePart, getServletContext(), FileType.IMAGE);
-            if (oldCoverPath != null) {
-                FileHandler.deleteFile(getServletContext(), oldCoverPath);
-            }
-
-        }
-        Organizer organizer = new Organizer(acronym, description, newCoverPath, organizerId, fullname, email, newAvatarPath);
-        boolean isUpdated = organizerDAO.updateOrganizer(organizer);
-
-        if (isUpdated) {
-            Organizer org = new Organizer(acronym, description, newCoverPath, organizerId, fullname, email, newAvatarPath, role);
-            request.getSession().setAttribute("userInfor", org); // update user session
-            request.setAttribute("message", "Update successfully");
-            doGet(request, response);
-        } else {
-            request.setAttribute("error", "Update failed");
+    
             request.getRequestDispatcher("profile.jsp").forward(request, response);
+        } else if ((userRole.equals(Role.CLUB) || userRole.equals(Role.ADMIN))&& requestUrl.startsWith("/student")) {
+            int organizerId = user.getId();
+            String fullname = request.getParameter("fullname");
+            String acronym = request.getParameter("acronym");
+            String description = request.getParameter("description");
+            String email = request.getParameter("email");
+            OrganizerDAO organizerDAO = new OrganizerDAO();
+            Organizer currentOrganizer = organizerDAO.getOrganizerById(organizerId);
+            String oldAvatarPath = currentOrganizer.getAvatarPath();
+            String oldCoverPath = currentOrganizer.getCoverPath();
+
+            String newAvatarPath = oldAvatarPath;
+            String newCoverPath = oldCoverPath;
+
+            // Handle avatar upload
+            Part avatarFilePart = request.getPart("avatarFile");
+            if (avatarFilePart != null && avatarFilePart.getSize() > 0) {
+                newAvatarPath = FileHandler.processUploadFile(avatarFilePart, FileType.IMAGE);
+                FileHandler.save(newAvatarPath, avatarFilePart, getServletContext(), FileType.IMAGE);
+                if (oldAvatarPath != null) {
+                    FileHandler.deleteFile(getServletContext(), oldAvatarPath);
+                }
+            }
+
+            // Handle cover upload
+            Part coverFilePart = request.getPart("coverFile");
+            if (coverFilePart != null && coverFilePart.getSize() > 0) {
+                newCoverPath = FileHandler.processUploadFile(coverFilePart, FileType.IMAGE);
+                FileHandler.save(newCoverPath, coverFilePart, getServletContext(), FileType.IMAGE);
+                if (oldCoverPath != null) {
+                    FileHandler.deleteFile(getServletContext(), oldCoverPath);
+                }
+
+            }
+            Organizer organizer = new Organizer(acronym, description, newCoverPath, organizerId, fullname, email, newAvatarPath);
+            boolean isUpdated = organizerDAO.updateOrganizer(organizer);
+
+            if (isUpdated) {
+                request.getSession().setAttribute("userInfor", organizer);
+                request.setAttribute("message", "Update successfully");
+                doGet(request, response);
+            } else {
+                request.setAttribute("error", "Update failed");
+                request.getRequestDispatcher("profile.jsp").forward(request, response);
+            }
         }
     }
 }
