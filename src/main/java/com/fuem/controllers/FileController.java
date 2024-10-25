@@ -54,8 +54,6 @@ public class FileController extends HttpServlet {
             docsPage = dao.getFilesBySubmitterId(pagingCriteria, organizer.getId());
         }
 
-        System.out.println(docsPage);
-
         request.setAttribute("page", docsPage);
         request.getRequestDispatcher("manage-files.jsp").forward(request, response);
     }
