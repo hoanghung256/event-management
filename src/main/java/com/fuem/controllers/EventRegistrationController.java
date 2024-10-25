@@ -114,7 +114,7 @@ public class EventRegistrationController extends HttpServlet {
         int eventId = eventDao.insertAndGetGenerateKeyOfNewEvent(registerEvent);
         try {
             if (fileDao.insertEventImages(eventId, registerEvent.getImages()) == (registerEvent.getImages().size() - 1)) {
-                request.setAttribute("message", "Register succeessfully");
+                request.setAttribute("message", "Register successfully");
                 FileHandler.save(registerEvent.getImages(), parts, request.getServletContext(), FileType.IMAGE);
             } else {
                 request.setAttribute("error", "Register failed");

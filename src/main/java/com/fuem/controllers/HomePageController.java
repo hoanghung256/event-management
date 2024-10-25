@@ -45,7 +45,10 @@ public class HomePageController extends HttpServlet {
 
         List<Organizer> organizerList = eventDAO.getAllOrganizer();
         request.setAttribute("organizerList", organizerList);
-
+        
+        List<Event> todayEvents = eventDAO.getTodayEvent();
+//        System.out.println(todayEvents);
+        request.setAttribute("todayEvents", todayEvents);
         String name = request.getParameter("name");
         String categoryId = request.getParameter("categoryId");
         String organizerId = request.getParameter("organizerId");
