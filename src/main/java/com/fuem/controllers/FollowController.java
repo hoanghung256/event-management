@@ -40,6 +40,9 @@ public class FollowController extends HttpServlet {
             case "unfollow":
                 dao.doUnfollow(student.getId(), organizerId);
                 break;
+            case "invalid":
+                response.sendRedirect("sign-in");
+                break;
         }
         
         response.sendRedirect(request.getContextPath() + "/profile?role=organizerId&id=" + organizerId);

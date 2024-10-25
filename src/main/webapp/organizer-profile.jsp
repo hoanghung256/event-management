@@ -65,7 +65,7 @@
                             <div class="card__title-inner d-flex justify-content-between">
                                 <h4 class="event__information-title">Profile Information</h4>
                                 <div>
-                                    <form action="<c:url value="/student/follow" />" method="POST">
+                                    <form action="<c:url value="/student/follow"/>" method="POST">
                                         <input type="hidden" name="organizerId" value="${organizer.id}">
                                         <c:choose>
                                             <c:when test="${isFollowing == true}">
@@ -75,6 +75,11 @@
 
                                             <c:when test="${isFollowing == false}">
                                                 <input type="hidden" name="action" value="follow">
+                                                <button type="submit" class="btn btn-primary">Follow</button>
+                                            </c:when>
+
+                                            <c:when test="${isFollowing == null}">
+                                                <input type="hidden" name="action" value="invalid">
                                                 <button type="submit" class="btn btn-primary">Follow</button>
                                             </c:when>
                                         </c:choose>
