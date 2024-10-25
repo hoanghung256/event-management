@@ -129,23 +129,23 @@
                         <c:choose>
                             <c:when test="${event.dateOfEvent eq loginDate}">
                                 <div class="card__header">
-                                    <div class="card__header-top">
-                                        <div class="card__title-inner d-flex justify-content-between">
+                                    <div class="card__title-inner d-flex justify-content-between align-items-center">
+                                        <div class="d-flex align-items-center">
                                             <div class="card__header-icon">
                                                 <i class="flaticon-reminder"></i>
                                             </div>
-
-                                            <div class="card__header-title">
+                                            <div class="card__header-title ml-5">
                                                 <h4>Today Events: ${event.fullname}</h4>
                                             </div>
+                                        </div>
 
-                                            <div class="card__header-right">
-                                                <div class="element__btn yellow-bg pl-5">
-                                                    <a href="#">Check-in Event</a>
-                                                </div>
+                                        <div class="card__header-right">
+                                            <div class="element__btn yellow-bg pl-5">
+                                                <a href="#">Check-in Page</a>
                                             </div>
                                         </div>
                                     </div>
+                                    <hr/>
                                 </div>
                             </c:when>
                             <c:otherwise>

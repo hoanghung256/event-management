@@ -159,7 +159,7 @@
 
                                         <div class="card__header-right">
                                             <div class="element__btn yellow-bg pl-5">
-                                                <a href="#">Check-in Event</a>
+                                                <a href="#">Check-in Page</a>
                                             </div>
                                         </div>
                                     </div>
