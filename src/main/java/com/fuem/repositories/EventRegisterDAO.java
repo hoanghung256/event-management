@@ -39,7 +39,10 @@ public class EventRegisterDAO extends SQLDatabase {
             + "    AND e.id = 2 "
             + "OFFSET ? ROWS "
             + "FETCH NEXT ? ROWS ONLY";
-
+    private static String SELECT_GUEST_ATTENDANCE_STATUS = "SELECT isRegistered, isAttended FROM [EventGuest] WHERE eventId=? AND guestId=?";
+    private static String UPDATE_ATTENDANCE_STATUS = "UPDATE [EventGuest] SET isAttended=1 WHERE eventId=? AND guestId=?";
+    private static String INSERT_ATTENDANCE_STATUS = "INSERT INTO [EventGuest](eventId, guestId, isAttended, isRegistered) VALUES(?, ?, 1, 0)";
+    
     public EventRegisterDAO() {
         super();
     }
@@ -79,5 +82,64 @@ public class EventRegisterDAO extends SQLDatabase {
         }
         page.setDatas(registeredGuestsList); // Cập nhật danh sách khách vào trang
         return page;
+    }
+    
+    /**
+     * 
+     * @param eventId
+     * @param guestId
+     * @return status[2], a boolean array
+     *      status[0] mean isRegistered
+     *      status[1] mean isAttended
+     * @author HungHV
+     */
+    public boolean[] getGuestAttendanceStatus(int eventId, int guestId) {
+        boolean[] status = new boolean[] {false, false};
+        
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_GUEST_ATTENDANCE_STATUS, eventId, guestId);) {
+            if (rs.next()) {
+                status[0] = rs.getBoolean("isRegistered");
+                status[1] = rs.getBoolean("isAttended");
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        
+        return status;
+    }
+    
+    /**
+     * When guest already registered into an event, only need to update EventGuest.isAttended=1
+     * 
+     * @author HungHV 
+     */
+    public boolean updateAttendanceStatus(int eventId, int guestId) {
+        int rowChange = 0;
+        
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
+            rowChange = executeUpdatePreparedStatement(conn, UPDATE_ATTENDANCE_STATUS, eventId, guestId);
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        
+        return (rowChange > 0);
+    }
+    
+    /**
+     * When guest have not registered into an event, need to insert a new record with EventGuest.isAttended = 1
+     * 
+     * @author HungHV 
+     */
+    public boolean insertAttendaceStatus(int eventId, int guestId) {
+        int rowChange = 0;
+        
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
+            rowChange = executeUpdatePreparedStatement(conn, INSERT_ATTENDANCE_STATUS, eventId, guestId);
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        
+        return (rowChange > 0);
     }
 }

@@ -24,7 +24,7 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="home">Home</a></span></li>
+                                    <li><span><a href="<c:url value="/club/dashboard" />">Dashboard</a></span></li>
                                     <li class="active"><span>Register Event</span></li>
                                 </ul>
                             </nav>

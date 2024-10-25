@@ -4079,7 +4079,7 @@ input[type=file] {
 }
 
 .banner__area-1 {
-    padding: 190px 190px 0px 190px;
+    padding: 150px 150px 0px 190px;
     background-repeat: no-repeat;
     background-size: cover;
     position: relative;
@@ -4238,7 +4238,7 @@ input[type=file] {
 }
 .banner__title {
     font-weight: 800;
-    font-size: 110px;
+    font-size: 50px;
     color: var(--clr-common-white);
     line-height: 1.1;
     text-transform: uppercase;

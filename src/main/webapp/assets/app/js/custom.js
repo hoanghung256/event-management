@@ -33,10 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (dateTags !== null) {
         dateTags.forEach(tag => {
-            if (tag.textContent === null) {
-                tag.textContent = "";
-                continue;
-            }
             let formatDate = new Date(tag.textContent).toLocaleDateString("en-UK");
             tag.textContent = formatDate;
         });
@@ -44,10 +40,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (timeTags !== null) {
         timeTags.forEach(tag => {
-            if (tag.textContent === null) {
-                tag.textContent = "";
-                continue;
-            }
             let formatTime = tag.textContent.slice(0, 5);
             
             tag.textContent = formatTime;
@@ -56,10 +48,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (datetimeTags !== null) {
         datetimeTags.forEach(tag => {
-            if (tag.textContent === null) {
-                tag.textContent = "";
-                continue;
-            }
             let datetime = new Date(tag.textContent);
 
             let formattedTime = datetime.toString().substring(16, 21);;

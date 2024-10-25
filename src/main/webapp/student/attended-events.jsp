@@ -140,7 +140,7 @@
                                                         </div>
                                                     </td>
                                                     <td>
-                                                        <div class="attendant__action">
+                                                        <div>
                                                             <c:choose>
                                                                 <c:when test="${isFeedback == true}">
                                                                     <span class="status__tag bg-green">Feedback Sent</span>

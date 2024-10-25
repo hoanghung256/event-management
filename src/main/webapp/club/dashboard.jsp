@@ -3,6 +3,8 @@
     Created on : Oct 1, 2024, 11:25:51?AM
     Author     : ThangNM
 --%>
+
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@include file="../include/club-layout-header.jsp"%>
 
 <section>
@@ -127,13 +129,24 @@
                     <div class="card__wrapper">
                         <div class="card__header">
                             <div class="card__header-top">
-                                <div class="card__title-inner">
+                                <div class="card__title-inner d-flex justify-content-between">
                                     <div class="card__header-icon">
                                         <i class="flaticon-reminder"></i>
                                     </div>
                                     <div class="card__header-title">
                                         <h4>Upcoming Events: ${event.fullname}</h4>
                                     </div>
+                                    
+                                    <%--<c:if test="${event.dateOfEvent == currentDate}">--%>
+                                        <div>
+                                            <a class="element__btn green-bg" href="<c:url value="/club/check-in?action=get-qr&eventId=${event.id}" />">
+                                                <button>Check-in page</button>
+                                            </a>
+                                        </div>
+                                        <div>
+                                            <button class="element__btn green-bg">Start event</button>
+                                        </div>
+                                    <%--</c:if>--%>
                                 </div>
                             </div>
                         </div>
@@ -238,11 +251,10 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- end of organize event -->
-        <!-- Dashboard area end -->
+            <!-- end of organize event -->
+            <!-- Dashboard area end -->
 
-</section>
+            </section>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
