@@ -122,21 +122,47 @@
 
         <!-- Start of Upcoming Event-->
         <div>
+            <!-- Check if Upcoming Event is empty -->
             <c:if test="${not empty upcomingEvent}">
                 <c:forEach var="event" items="${upcomingEvent}">
                     <div class="card__wrapper">
-                        <div class="card__header">
-                            <div class="card__header-top">
-                                <div class="card__title-inner">
-                                    <div class="card__header-icon">
-                                        <i class="flaticon-reminder"></i>
-                                    </div>
-                                    <div class="card__header-title">
-                                        <h4>Upcoming Events: ${event.fullname}</h4>
+                        <c:choose>
+                            <c:when test="${event.dateOfEvent eq loginDate}">
+                                <div class="card__header">
+                                    <div class="card__header-top">
+                                        <div class="card__title-inner d-flex justify-content-between">
+                                            <div class="card__header-icon">
+                                                <i class="flaticon-reminder"></i>
+                                            </div>
+
+                                            <div class="card__header-title">
+                                                <h4>Today Events: ${event.fullname}</h4>
+                                            </div>
+
+                                            <div class="card__header-right">
+                                                <div class="element__btn yellow-bg pl-5">
+                                                    <a href="#">Check-in Event</a>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                            </c:when>
+                            <c:otherwise>
+                                <div class="card__header">
+                                    <div class="card__header-top">
+                                        <div class="card__title-inner">
+                                            <div class="card__header-icon">
+                                                <i class="flaticon-reminder"></i>
+                                            </div>
+                                            <div class="card__header-title">
+                                                <h4>Upcoming Events: ${event.fullname}</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </c:otherwise>
+                        </c:choose>
                         <div>
                             <div class="card__inner">
                                 <div class="card-body" style="display: flex; align-items: center;">
@@ -184,27 +210,26 @@
                 </c:forEach>
             </c:if>
         </div>
-        <!-- End of notification -->
+        <!-- End of Upcoming Event -->
 
-        <!-- Start of organize event -->
+        <!-- Start of organized event -->
         <div class="card__wrapper">
             <div class="card__header">
                 <div class="card__header-top">
                     <div class="card__title-inner">
                         <div class="card__header-icon">
                             <i class="flaticon-reminder"></i>
-                            <div class="card__header-title">
-                                <h4>Organized Events</h4>
-                            </div>
+                        </div>
+                        <div class="card__header-title">
+                            <h4>Organized Events</h4>
                         </div>
                     </div>
                     <div class="card__header-right">
                         <div class="card__header-right">
-                            <div class="card__btn">
-                                <a href="<c:url value="/club/organized-event"/>">view all Event</a>
+                            <div class="element__btn border-yellow">
+                                <a href="<c:url value="/club/organized-event"/>">View All Event</a>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

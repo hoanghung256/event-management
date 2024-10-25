@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -32,6 +33,7 @@ public class AdminDashboardController extends HttpServlet {
         AdminDAO dao = new AdminDAO();
         NotificationDAO notiDAO = new NotificationDAO();
         Organizer organizer = (Organizer) request.getSession().getAttribute("userInfor");
+        LocalDate loginDate = LocalDate.now();
         int organizerId = organizer.getId();
         int totalOrganizedEvents = dao.getTotalOrganizedEvents(organizerId);
         int totalClubs = dao.getTotalClub();
@@ -40,7 +42,6 @@ public class AdminDashboardController extends HttpServlet {
         ArrayList<Event> upcomingList = dao.getUpcomingEvent();
         ArrayList<Event> registrationList = dao.getRegistrationEvent();
         ArrayList<Notification> notiList = notiDAO.getNotificationsForOrganizer(organizerId);
-        
 
         //paging
         PagingCriteria pagingCriteria = new PagingCriteria();
@@ -69,6 +70,7 @@ public class AdminDashboardController extends HttpServlet {
         request.setAttribute("registrationList", registrationList);
         request.setAttribute("registrationListPaging", registrationEventWithPaging);
         request.setAttribute("notiList", notiList);
+        request.setAttribute("loginDate", loginDate);
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
 }
