@@ -24,11 +24,11 @@ public class FileHandler {
 
     /**
      * Process Part objects
-     * 
+     *
      * @return the path list for insert into database
      * @author HungHV
      */
-    public static List<String> processUploadFile(Collection<Part> parts,  FileType fileType) throws IOException {
+    public static List<String> processUploadFile(Collection<Part> parts, FileType fileType) throws IOException {
         List<String> pathList = new ArrayList<>();
 
         for (Part part : parts) {
@@ -42,18 +42,18 @@ public class FileHandler {
 
         return pathList;
     }
-    
+
     /**
      * Save file into project source
-     * 
+     *
      * @author HungHV
      */
     public static void save(List<String> processedPathList, Collection<Part> parts, ServletContext context, FileType fileType) throws IOException {
         String fileFolderPath = context.getRealPath("");
         Files.createDirectories(Paths.get(fileFolderPath + fileType.getFileLocation()));
-        
+
         int i = 0;
-        
+
         for (Part part : parts) {
             if (part.getSubmittedFileName() == null) {
                 continue;
@@ -61,14 +61,27 @@ public class FileHandler {
             part.write(fileFolderPath + processedPathList.get(i++));
         }
     }
-    
+
     /**
-     * 
+     *
+     * @author KhiemHV
+     */
+    public static void deleteFile(ServletContext context, String filepath) {
+        String realFilePath = context.getRealPath("") + filepath;
+        File file = new File(realFilePath);
+
+        if (file.exists()) {
+            boolean isDeleted = file.delete();
+        }
+    }
+
+    /**
+     *
      * @author HungHV
      */
-    public static void deleteFile(String filepath) {
-        File file = new File(filepath);
-
-        file.deleteOnExit();
+    public static void deleteFile(ServletContext context, List<String> filepaths) {
+        for (String path : filepaths) {
+            deleteFile(context, path);
+        }
     }
 }

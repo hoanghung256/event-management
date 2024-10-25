@@ -47,7 +47,7 @@ public class EventDAO extends SQLDatabase {
             + "e.guestRegisterLimit, "
             + "e.guestRegisterDeadline, "
             + "e.guestRegisterCount, "
-             + "e.guestAttendedCount, "
+            + "e.guestAttendedCount, "
             + "e.collaboratorRegisterLimit, "
             + "e.collaboratorRegisterDeadline, "
             + "e.collaboratorRegisterCount, "
@@ -130,7 +130,7 @@ public class EventDAO extends SQLDatabase {
             + "collaboratorRegisterDeadline, "
             + "status)"
             + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-    
+
     private static final String SELECT_INCOMING_EVENT_BY_ORGANIZER_ID = "SELECT TOP 10 e.*, "
             + "       o.fullname AS organizerName, "
             + "       o.id AS organizerId, "
@@ -147,10 +147,18 @@ public class EventDAO extends SQLDatabase {
             + "AND e.guestRegisterCount > 0 "
             + "AND e.dateOfEvent > GETDATE()"
             + "ORDER BY e.dateOfEvent DESC;";
+    private static final String UPDATE_EVENT_BY_ID
+            = "UPDATE event SET fullname = ?, description = ?, categoryId = ?, locationId = ?, "
+            + "dateOfEvent = ?, startTime = ?, endTime = ?, "
+            + "guestRegisterLimit = ?, guestRegisterDeadline = ?, "
+            + "collaboratorRegisterLimit = ?, collaboratorRegisterDeadline = ?, "
+            + "avatarPath = ? "
+            + "WHERE id = ?";
 
     public EventDAO() {
         super();
     }
+
     /**
      *
      * @author AnhNQ
@@ -158,8 +166,7 @@ public class EventDAO extends SQLDatabase {
     public List<Event> getEventsByFollowingOrganizers(int userId) {
         List<Event> events = new ArrayList<>();
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
-                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_EVENTS_FOLLOWED, userId)) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_EVENTS_FOLLOWED, userId)) {
             while (rs.next()) {
                 Event event = new Event();
                 event.setId(rs.getInt("id"));
@@ -194,14 +201,14 @@ public class EventDAO extends SQLDatabase {
         }
         return events;
     }
+
     /**
      *
      * @author AnhNQ
      */
     public List<Event> getIncomingEventByOrganizerId(int userId) {
         List<Event> events = new ArrayList<>();
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
-                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_INCOMING_EVENT_BY_ORGANIZER_ID, userId);) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_INCOMING_EVENT_BY_ORGANIZER_ID, userId);) {
             while (rs.next()) {
                 Event event = new Event();
                 event.setId(rs.getInt("id"));
@@ -245,8 +252,7 @@ public class EventDAO extends SQLDatabase {
     public List<Category> getAllCategory() {
         List<Category> categories = new ArrayList<>();
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
-                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ALL_CATEGORY)) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ALL_CATEGORY)) {
             while (rs.next()) {
                 Category category = new Category();
                 category.setId(rs.getInt("id"));
@@ -285,11 +291,10 @@ public class EventDAO extends SQLDatabase {
         Page<Event> page = new Page<>();
         ArrayList<Event> events = new ArrayList<>();
         String query = buildSelectQuery(pagingCriteria, searchEventCriteria);
-        
+
         System.out.println(query);
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
-                ResultSet rs = executeQueryPreparedStatement(conn, query, id);) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, query, id);) {
             while (rs.next()) {
                 if (page.getTotalPage() == null && page.getCurrentPage() == null) {
                     page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
@@ -298,10 +303,10 @@ public class EventDAO extends SQLDatabase {
                 Organizer organizer = new Organizer();
                 organizer.setId(rs.getInt("organizerId"));
                 organizer.setFullname(rs.getString("organizerName"));
-                
+
                 List<String> images = new ArrayList<>();
                 images.add(rs.getNString("avatarPath"));
-                
+
                 Event event = new Event(
                         rs.getInt("id"),
                         organizer,
@@ -325,7 +330,7 @@ public class EventDAO extends SQLDatabase {
                 event.setImages(images);
                 int registeredCount = rs.getInt("guestRegisterCount");
                 event.setGuestRegisterCount(registeredCount);
-              
+
                 events.add(event);
             }
         } catch (SQLException e) {
@@ -391,8 +396,7 @@ public class EventDAO extends SQLDatabase {
     public Event getEventDetails(int eventId) {
         Event event = null;
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
-                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_EVENT_DETAILS_BY_ID, eventId)) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_EVENT_DETAILS_BY_ID, eventId)) {
             if (rs != null && rs.next()) {
                 event = new Event();
                 event.setId(rs.getInt("id"));
@@ -425,12 +429,11 @@ public class EventDAO extends SQLDatabase {
         }
         return event;
     }
-    
-    private List<String> getEventImages(int eventId) {
+
+    public List<String> getEventImages(int eventId) {
         List<String> images = new ArrayList<>();
-        
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
-                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_IMG_BY_ID, eventId);) {
+
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_IMG_BY_ID, eventId);) {
             while (rs.next()) {
                 images.add(rs.getString("path"));
             }
@@ -439,15 +442,15 @@ public class EventDAO extends SQLDatabase {
         }
         return images;
     }
-  
+
     /**
      *
      * @author TuDK
      */
     public List<Event> getRecentEvents(int organizerId) {
         List<Event> events = new ArrayList<>();
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ) {
-                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_RECENTLY_EVENT_BY_ID, organizerId);
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
+            ResultSet rs = executeQueryPreparedStatement(conn, SELECT_RECENTLY_EVENT_BY_ID, organizerId);
 
             while (rs.next()) {
                 Event event = new Event();
@@ -483,16 +486,15 @@ public class EventDAO extends SQLDatabase {
 
         return events;
     }
-    
+
     /**
-     * 
+     *
      * @author HungHV
      */
     public List<Location> getAllLocations() {
         List<Location> locations = new ArrayList<>();
-        
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
-                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ALL_LOCATIONS);) {
+
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ALL_LOCATIONS);) {
             while (rs.next()) {
                 locations.add(
                         new Location(
@@ -503,39 +505,37 @@ public class EventDAO extends SQLDatabase {
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
-        } 
-        
+        }
+
         return locations;
     }
 
     /**
      * When club use this for registration, init event status is Status.PENDING
      * Admin event status is Status.APPROVED by default
-     * 
+     *
      * @author HungHV
      */
     public int insertAndGetGenerateKeyOfNewEvent(Event registerEvent) {
         int generatedId = 0;
-        
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
-                PreparedStatement pstmt = getPreparedStatement(conn.prepareStatement(INSERT_NEW_EVENT, Statement.RETURN_GENERATED_KEYS), conn, INSERT_NEW_EVENT, 
-                    registerEvent.getOrganizer().getId(),
-                    registerEvent.getFullname(),
-                    registerEvent.getImages().get(0),
-                    registerEvent.getDescription(),
-                    registerEvent.getCategory().getId(),
-                    registerEvent.getLocation().getId(),
-                    registerEvent.getDateOfEvent(),
-                    registerEvent.getStartTime(),
-                    registerEvent.getEndTime(),
-                    registerEvent.getGuestRegisterLimit(),
-                    registerEvent.getCollaboratorRegisterLimit(),
-                    registerEvent.getGuestRegisterDeadline(),
-                    registerEvent.getCollaboratorRegisterDeadline(),
-                    registerEvent.getOrganizer().getRole() == Role.ADMIN ? Status.APPROVED : Status.PENDING)) {
+
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); PreparedStatement pstmt = getPreparedStatement(conn.prepareStatement(INSERT_NEW_EVENT, Statement.RETURN_GENERATED_KEYS), conn, INSERT_NEW_EVENT,
+                registerEvent.getOrganizer().getId(),
+                registerEvent.getFullname(),
+                registerEvent.getImages().get(0),
+                registerEvent.getDescription(),
+                registerEvent.getCategory().getId(),
+                registerEvent.getLocation().getId(),
+                registerEvent.getDateOfEvent(),
+                registerEvent.getStartTime(),
+                registerEvent.getEndTime(),
+                registerEvent.getGuestRegisterLimit(),
+                registerEvent.getCollaboratorRegisterLimit(),
+                registerEvent.getGuestRegisterDeadline(),
+                registerEvent.getCollaboratorRegisterDeadline(),
+                registerEvent.getOrganizer().getRole() == Role.ADMIN ? Status.APPROVED : Status.PENDING)) {
             int rowChange = pstmt.executeUpdate();
-            
-            
+
             if (rowChange > 0) {
                 try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
@@ -546,10 +546,10 @@ public class EventDAO extends SQLDatabase {
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
         }
-        
+
         return generatedId;
     }
-    
+
     /*
      * Update status to database
      *
@@ -562,15 +562,15 @@ public class EventDAO extends SQLDatabase {
             Logger.getLogger(EventDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public int[] getTotalStatisticNumberOfEvent(int eventId) {
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();  ResultSet rs = executeQueryPreparedStatement(conn, SELECT_STATISTIC_NUMBER_OF_EVENT, eventId)) { 
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_STATISTIC_NUMBER_OF_EVENT, eventId)) {
             while (rs.next()) {
                 int totalRegister = rs.getInt("TotalRegister");
                 int totalAttended = rs.getInt("TotalAttended");
                 int totalCollaborator = rs.getInt("TotalCollaborator");
                 int totalCancel = rs.getInt("TotalCancel");
-                
+
                 int[] statisticNumber = {totalRegister, totalAttended, totalCollaborator, totalCancel};
                 return statisticNumber;
             }
@@ -579,4 +579,102 @@ public class EventDAO extends SQLDatabase {
         }
         return null;
     }
+
+public void updateEventDetails(Event event) {
+    try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
+        // Cập nhật thông tin sự kiện
+        int result = executeUpdatePreparedStatement(conn, UPDATE_EVENT_BY_ID, 
+                event.getFullname(), 
+                event.getDescription(), 
+                event.getCategory().getId(), 
+                event.getLocation().getId(), 
+                event.getDateOfEvent(), 
+                event.getStartTime(), 
+                event.getEndTime(),
+                event.getGuestRegisterLimit(), 
+                event.getGuestRegisterDeadline(), 
+                event.getCollaboratorRegisterLimit(), 
+                event.getCollaboratorRegisterDeadline(),
+                (event.getImages().isEmpty() ? null : event.getImages().get(0)), // Cập nhật avatarPath
+                event.getId());
+        
+        // Cập nhật ảnh cho sự kiện
+        updateEventImages(event.getId(), event.getImages());
+    } catch (SQLException e) {
+        logger.log(Level.SEVERE, "Error updating event details", e);
+    }
+}
+
+public String getEventStatus(int eventId) {
+    String status = null;
+    String query = "SELECT status FROM event WHERE id = ?";
+    
+    try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+         PreparedStatement pstmt = conn.prepareStatement(query)) {
+        pstmt.setInt(1, eventId);
+        ResultSet rs = pstmt.executeQuery();
+        
+        if (rs.next()) {
+            status = rs.getString("status");
+        }
+    } catch (SQLException e) {
+        logger.log(Level.SEVERE, "Error retrieving event status", e);
+    }
+    
+    return status;
+}
+
+public void updateEventImages(int eventId, List<String> imagePaths) {
+    try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
+        String sql = "INSERT INTO EventImage (eventId, path) VALUES (?, ?)";
+
+        for (int i= 1; i < imagePaths.size(); i++) {
+            executeUpdatePreparedStatement(conn, sql, eventId, imagePaths.get(i));
+        }
+    } catch (SQLException e) {
+        logger.log(Level.SEVERE, "Error updating event images", e);
+    }
+}
+
+public void deleteEventImages(int eventId) {
+    try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
+        String sql = "DELETE FROM EventImage WHERE eventId = ?";
+        executeUpdatePreparedStatement(conn, sql, eventId); // Xóa tất cả ảnh của sự kiện
+    } catch (SQLException e) {
+        logger.log(Level.SEVERE, "Error deleting event images", e);
+    }
+}
+
+
+
+
+    public Event getEventById(int eventId) {
+        Event event = null;
+        // Thực hiện truy vấn SQL để lấy sự kiện dựa trên eventId
+        String query = "SELECT * FROM event WHERE id = ?";
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, eventId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                // Tạo đối tượng Event từ kết quả truy vấn
+                event = new Event();
+                event.setId(rs.getInt("id"));
+                event.setFullname(rs.getString("fullname"));
+                event.setDescription(rs.getString("description"));
+                event.setCategory(new Category(rs.getInt("categoryId"))); // Giả sử có setter cho Category
+                event.setLocation(new Location(rs.getInt("locationId"))); // Giả sử có setter cho Location
+                event.setDateOfEvent(rs.getDate("dateOfEvent").toLocalDate());
+                event.setStartTime(rs.getTime("startTime").toLocalTime());
+                event.setEndTime(rs.getTime("endTime").toLocalTime());
+                event.setGuestRegisterLimit(rs.getInt("guestRegisterLimit"));
+                event.setRegisterDeadline(rs.getDate("guestRegisterDeadline").toLocalDate());
+                event.setCollaboratorRegisterLimit(rs.getInt("collaboratorRegisterLimit"));
+                event.setCollaboratorRegisterDeadline(rs.getDate("collaboratorRegisterDeadline").toLocalDate());
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        return event;
+    }
+
 }
