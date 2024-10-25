@@ -140,7 +140,7 @@
                     </div>
                 </div>
                 <div class="sign__right">
-                    <div class="sign__input-thumb include__bg w-img" data-background="assets/img/sign/signup.jpg">
+                    <div class="sign__input-thumb include__bg w-img" data-background="assets/img/decorate/signup.jpg">
                     </div>
                 </div>
             </div>
