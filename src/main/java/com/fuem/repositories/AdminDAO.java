@@ -152,6 +152,7 @@ public class AdminDAO extends SQLDatabase {
             + "FETCH NEXT ? ROWS ONLY";
 
     private static String SELECT_UPCOMING_EVENTS = "SELECT \n"
+            + "     Event.id AS EventId, \n"
             + "     Event.organizerId AS OrganizerId, \n"
             + "     Event.fullname AS EventName,\n"
             + "     Organizer.acronym AS OrganizerAcronym,\n"
@@ -362,6 +363,7 @@ public class AdminDAO extends SQLDatabase {
             while (rs.next()) {
                 upcomingEvent.add(
                         new EventBuilder()
+                                .setId(rs.getInt("EventId"))
                                 .setFullname(rs.getNString("EventName"))
                                 .setDateOfEvent(rs.getDate("EventDate").toLocalDate())
                                 .setCategory(

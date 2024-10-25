@@ -5,8 +5,10 @@
 package com.fuem.controllers;
 
 import com.fuem.models.Event;
+import com.fuem.models.Notification;
 import com.fuem.models.Organizer;
 import com.fuem.repositories.ClubDAO;
+import com.fuem.repositories.NotificationDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -27,6 +29,7 @@ public class ClubDashboardController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ClubDAO dao = new ClubDAO();
+        NotificationDAO notiDAO = new NotificationDAO();
         HttpSession session = request.getSession();
         Organizer organizer = (Organizer) session.getAttribute("userInfor");
         int organizerId = organizer.getId();
@@ -36,6 +39,7 @@ public class ClubDashboardController extends HttpServlet {
         int totalUpcomingEvents = dao.getTotalUpcomingEvents(organizerId);
         ArrayList<Event> organizedEvent = dao.getOrganizedEvent(organizerId);
         ArrayList<Event> upcomingEvent = dao.getUpcomingEvent(organizerId);
+        ArrayList<Notification> notiList = notiDAO.getNotificationsForOrganizer(organizerId);
         
         
         request.setAttribute("totalEvents", totalEvents);
@@ -43,6 +47,7 @@ public class ClubDashboardController extends HttpServlet {
         request.setAttribute("totalUpcomingEvents", totalUpcomingEvents);
         request.setAttribute("organizedEvent", organizedEvent);
         request.setAttribute("upcomingEvent", upcomingEvent);
+        request.setAttribute("notiList", notiList);
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
 }
