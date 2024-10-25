@@ -187,53 +187,54 @@
         <!-- End of notification -->
 
         <!-- Start of organize event -->
-        <div>
-            <div class="card__wrapper">
-                <div class="card__header">
-                    <div class="card__header-top">
-                        <div class="card__title-inner">
-                            <div class="card__header-icon">
-                                <i class="flaticon-reminder"></i>
-                            </div>
+        <div class="card__wrapper">
+            <div class="card__header">
+                <div class="card__header-top">
+                    <div class="card__title-inner">
+                        <div class="card__header-icon">
+                            <i class="flaticon-reminder"></i>
                             <div class="card__header-title">
                                 <h4>Organized Events</h4>
                             </div>
-                            <div class="card__header-right">
-                                <div class="card__btn">
-                                    <a href="<c:url value="/club/organized-event"/>">view all Event</a>
-                                </div>
-                            </div>
                         </div>
                     </div>
-                </div>
+                    <div class="card__header-right">
+                        <div class="card__header-right">
+                            <div class="card__btn">
+                                <a href="<c:url value="/club/organized-event"/>">view all Event</a>
+                            </div>
+                        </div>
 
-                <div class="scroll-w-1 card__scroll">
-                    <div class="card__inner">
-                        <div class="card-body">
-                            <c:forEach var="event" items="${organizedEvent}">
-                                <div class="news__item">
-                                    <div class="news__item-inner">
-                                        <div class="news__content">
-                                            <h4 class="news__title"><a href="<c:url value="/club/organized-event-report?eventIdDetail=${event.id}&action=detail&organizerId=${event.organizer.id}"/>">${event.fullname}</a></h4>
-                                            <div class="news__meta">
-                                                <div class="news__meta-status">
-                                                    <span><i class="flaticon-user"></i></span>
-                                                    <span>${event.category.name}</span>
-                                                </div>
-                                                <div class="news__meta-status">
-                                                    <span><i class="flaticon-clock"></i></span>
-                                                    <span>${event.dateOfEvent}</span>
-                                                </div>
-                                                <div class="news__meta-status">
-                                                    <span><i class="flaticon-placeholder-1"></i></span>
-                                                    <span>${event.location.name}</span>
-                                                </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="scroll-w-1 card__scroll">
+                <div class="card__inner">
+                    <div class="card-body">
+                        <c:forEach var="event" items="${organizedEvent}">
+                            <div class="news__item">
+                                <div class="news__item-inner">
+                                    <div class="news__content">
+                                        <h4 class="news__title"><a href="<c:url value="/club/organized-event-report?eventIdDetail=${event.id}&action=detail&organizerId=${event.organizer.id}"/>">${event.fullname}</a></h4>
+                                        <div class="news__meta">
+                                            <div class="news__meta-status">
+                                                <span><i class="flaticon-user"></i></span>
+                                                <span>${event.category.name}</span>
+                                            </div>
+                                            <div class="news__meta-status">
+                                                <span><i class="flaticon-clock"></i></span>
+                                                <span>${event.dateOfEvent}</span>
+                                            </div>
+                                            <div class="news__meta-status">
+                                                <span><i class="flaticon-placeholder-1"></i></span>
+                                                <span>${event.location.name}</span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </c:forEach>
-                        </div>
+                            </div>
+                        </c:forEach>
                     </div>
                 </div>
             </div>
