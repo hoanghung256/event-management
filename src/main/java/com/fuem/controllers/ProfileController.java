@@ -61,7 +61,6 @@ public class ProfileController extends HttpServlet {
                         response.sendRedirect("sign-in");
                     } else {
                         request.getSession().setAttribute("userInfor", student);
-
                         request.setAttribute("student", student);
                         request.getRequestDispatcher("student-profile.jsp").forward(request, response);
                     }
@@ -92,7 +91,6 @@ public class ProfileController extends HttpServlet {
                 } else {
                     if (!user.getRole().equals(Role.STUDENT)) {
                         EventDAO eventDAO = new EventDAO();
-
                         List<Event> recentEvents = eventDAO.getRecentEvents(user.getId());
                         request.setAttribute("recentEvents", recentEvents);
                     }
@@ -105,6 +103,7 @@ public class ProfileController extends HttpServlet {
         }
     }
 
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // Kiểm tra xem có phải multipart form không
         if (request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) {
@@ -155,9 +154,54 @@ public class ProfileController extends HttpServlet {
                     }
                 }
             }
+    
+            request.getRequestDispatcher("profile.jsp").forward(request, response);
+        } else if (userRole.equals(Role.CLUB) || userRole.equals(Role.ADMIN)) {
+            int organizerId = user.getId();
+            String fullname = request.getParameter("fullname");
+            String acronym = request.getParameter("acronym");
+            String description = request.getParameter("description");
+            String email = request.getParameter("email");
+            OrganizerDAO organizerDAO = new OrganizerDAO();
+            Organizer currentOrganizer = organizerDAO.getOrganizerById(organizerId);
+            String oldAvatarPath = currentOrganizer.getAvatarPath();
+            String oldCoverPath = currentOrganizer.getCoverPath();
+
+            String newAvatarPath = oldAvatarPath;
+            String newCoverPath = oldCoverPath;
+
+            // Handle avatar upload
+            Part avatarFilePart = request.getPart("avatarFile");
+            if (avatarFilePart != null && avatarFilePart.getSize() > 0) {
+                newAvatarPath = FileHandler.processUploadFile(avatarFilePart, FileType.IMAGE);
+                FileHandler.save(newAvatarPath, avatarFilePart, getServletContext(), FileType.IMAGE);
+                if (oldAvatarPath != null) {
+                    FileHandler.deleteFile(getServletContext(), oldAvatarPath);
+                }
+            }
+
+            // Handle cover upload
+            Part coverFilePart = request.getPart("coverFile");
+            if (coverFilePart != null && coverFilePart.getSize() > 0) {
+                newCoverPath = FileHandler.processUploadFile(coverFilePart, FileType.IMAGE);
+                FileHandler.save(newCoverPath, coverFilePart, getServletContext(), FileType.IMAGE);
+                if (oldCoverPath != null) {
+                    FileHandler.deleteFile(getServletContext(), oldCoverPath);
+                }
+
+            }
+            Organizer organizer = new Organizer(acronym, description, newCoverPath, organizerId, fullname, email, newAvatarPath);
+            boolean isUpdated = organizerDAO.updateOrganizer(organizer);
+            organizer.setRole(userRole);
+            
+            if (isUpdated) {
+                request.getSession().setAttribute("userInfor", organizer);
+                request.setAttribute("message", "Update successfully");
+            } else {
+                request.setAttribute("error", "Update failed");
+            }
+            
+            request.getRequestDispatcher("profile.jsp").forward(request, response);
         }
-
-        request.getRequestDispatcher("profile.jsp").forward(request, response);
     }
-
 }

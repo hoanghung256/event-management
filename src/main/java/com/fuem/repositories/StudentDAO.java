@@ -50,9 +50,10 @@ public class StudentDAO extends SQLDatabase {
     }
 
     public boolean checkCurrentPassword(String email, String currentPasswordHash) {
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, CHECK_PASSWORD_QUERY, email, currentPasswordHash)) {
-
-            return rs.next();
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+             ResultSet rs = executeQueryPreparedStatement(conn, CHECK_PASSWORD_QUERY,email,currentPasswordHash)) {
+             
+            return rs.next(); 
         } catch (SQLException e) {
             Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, e);
         }

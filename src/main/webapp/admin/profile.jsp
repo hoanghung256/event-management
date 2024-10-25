@@ -8,7 +8,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
-<%@include file="../include/club-layout-header.jsp"%>
+<%@include file="../include/admin-layout-header.jsp"%>
 <style>
 
     @keyframes popupFadeIn {
@@ -27,7 +27,7 @@
 
 <section>
     <div class="app__slide-wrapper">
-        <form id="editProfileForm" method="post" action="${pageContext.request.contextPath}/club/profile" enctype="multipart/form-data">
+        <form id="editProfileForm" method="post" action="${pageContext.request.contextPath}/admin/profile" enctype="multipart/form-data">
             <div class="breadcrumb__area">
                 <div class="breadcrumb__wrapper mb-20">
                     <div class="breadcrumb__main">
@@ -38,7 +38,7 @@
                             <div class="breadcrumb__menu">
                                 <nav>
                                     <ul>
-                                        <li><span><a href="<c:url value="/club/dashboard" />">Dashboard</a></span></li>
+                                        <li><span><a href="<c:url value="/admin/dashboard" />">Dashboard</a></span></li>
                                         <li class="active"><span>Profile</span></li>
                                     </ul>
                                 </nav>
@@ -53,7 +53,7 @@
                 <div class="banner-container" style="overflow: hidden; height: 300px; object-fit: cover;border-radius: 10px; ">
                     <div style="width: 100%;height: 300px; position: relative;">
                         <c:url value="/assets/img/user/banner-default.png" var="defaultBanner" />
-                        <c:url value="${sessionScope.userInfor.coverPath}" var="userBanner" />
+                        <c:url value="${userInfor.coverPath}" var="userBanner" />
                         <input type="file" class="form-control" id="coverFile" name="coverFile" style="display: none;" accept="image/*">
                         <img src="${sessionScope.userInfor.coverPath != null ? userBanner : defaultBanner}" alt="Banner" style="width: 100%; height: 100%; object-fit: cover; cursor: pointer;" id="currentBanner" onclick="document.getElementById('coverFile').click();">
                         <img id="newBannerPreview" style="width: 100%; height: 100%; object-fit: cover;position: absolute;  display: none;">
@@ -90,7 +90,7 @@
                                                             <div class="profile__thumb mb-45 text-center">
                                                                 <div style="width: 190px; height: 190px; position: relative; border-radius: 50%; overflow: hidden; margin: 0 auto;">
                                                                     <c:url value="/assets/img/user/default-avatar.jpg" var="defaultAvatar" />
-                                                                    <c:url value="${sessionScope.userInfor.avatarPath}" var="userAvatar" />
+                                                                    <c:url value="${userInfor.avatarPath}" var="userAvatar" />
                                                                     <input type="file" class="form-control" id="avatarFile" name="avatarFile" style="display: none;" accept="image/*">
                                                                     <img src="${sessionScope.userInfor.avatarPath != null ? userAvatar : defaultAvatar}" alt="Avatar" 
                                                                          style="width: 100%; height: 100%; object-fit: cover; object-position: center; cursor: pointer; border-radius: 50%;" 
@@ -191,7 +191,7 @@
                                                             <div>
                                                                 <p><i class="fa-solid fa-user-group"></i> ${event.guestRegisterLimit}/${event.guestRegisterLimit} Registered</p>
                                                             </div> 
-                                                            <a class="element__btn border-yellow" href="<c:url value="/club/organized-event-report?eventIdDetail=${event.id}&organizerId=${event.organizer.id}&action=detail"/> "> Details</a>
+                                                            <a class="element__btn border-yellow" href="<c:url value="/admin/organized-event-report?eventIdDetail=${event.id}&organizerId=${event.organizer.id}&action=detail"/> "> Details</a>
                                                         </div>
                                                     </div>
                                                     <!-- Event Content - End -->
