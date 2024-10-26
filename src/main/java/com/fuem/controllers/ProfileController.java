@@ -107,21 +107,19 @@ public class ProfileController extends HttpServlet {
         User user = (User) request.getSession().getAttribute("userInfor");
         Role userRole = user.getRole();
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Kiểm tra xem có phải multipart form không
-        if (request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) {
-            Collection<Part> parts = request.getParts();
-
-            long maxFileSize = 1024 * 1024; // 1 MB
-            boolean isFileTooLarge = false;
-
-            if (parts != null && !parts.isEmpty()) {
-                for (Part part : parts) {
-                    if (part.getSize() > maxFileSize) {
-                        isFileTooLarge = true;
-                        break;
-                    }
+        if (userRole.equals(Role.STUDENT)) {
+            if (request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) { 
+                Collection<Part> parts = request.getParts(); // Lấy tất cả các Part
+    
+                long maxFileSize = 1024 * 1024; // 1 MB
+                boolean isFileTooLarge = false;
+    
+                if (parts != null && !parts.isEmpty()) {
+                    for (Part part : parts) {
+                        if (part.getSize() > maxFileSize) {
+                            isFileTooLarge = true;
+                            break;
+                        }
     
                     if (isFileTooLarge) {
                         request.setAttribute("error", "The image file is too large. Please choose a different image.");

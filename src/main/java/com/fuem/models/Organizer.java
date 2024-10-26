@@ -70,14 +70,7 @@ public class Organizer extends User {
         this.coverPath = coverPath;
         this.followerCount = followerCount;
     }
-
-    public Organizer(String acronym, String description, String coverPath, int id, String fullname, String email, String avatarPath) {
-        super(id, fullname, email, avatarPath);
-        this.acronym = acronym;
-        this.description = description;
-        this.coverPath = coverPath;
-    }
-
+    
     public Organizer(String acronym, String description, String coverPath, int id, String fullname, String email, String avatarPath, Role role) {
         super(id, fullname, email, avatarPath, role);
         this.acronym = acronym;
