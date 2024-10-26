@@ -147,22 +147,29 @@
                     <c:if test="${event.dateOfEvent eq loginDate}">
                         <div class="card__wrapper">
                             <div class="card__header">
-                                    <div class="card__title-inner d-flex justify-content-between align-items-center">
-                                        <div class="d-flex align-items-center">
-                                            <div class="card__header-icon">
-                                                <i class="flaticon-reminder"></i>
-                                            </div>
-                                            <div class="card__header-title ml-5">
-                                                <h4>Today Events: ${event.fullname}</h4>
-                                            </div>
+                                <div class="card__title-inner d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <div class="card__header-icon">
+                                            <i class="flaticon-reminder"></i>
                                         </div>
-
-                                        <div class="card__header-right">
-                                            <div class="element__btn yellow-bg pl-5">
-                                                <a href="#">Check-in Event</a>
-                                            </div>
+                                        <div class="card__header-title ml-5">
+                                            <h3>Today Events: ${event.fullname}</h3>
                                         </div>
                                     </div>
+                                    <c:choose>
+                                        <c:when test="${event.organizer.id == sessionScope.userInfor.id}"> 
+                                            <div class="card__header-right">
+                                                <div class="element__btn yellow-bg pl-5">
+                                                    <a href="#">Check-in Page</a>
+                                                </div>
+                                            </div>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <div class="card__header-right">
+                                            </div>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
                                 <hr/>
                             </div>
 
@@ -172,8 +179,9 @@
                                         <div class="col-xxl-6 col-xl-6">
                                             <div class="event__meta-time">
                                                 <ul>
-                                                    <li><span>Date : </span><time id="date">${event.dateOfEvent}</time></li>
-                                                    <li><span>Time : </span><time id="time">${event.startTime}</time> - <time id="time">${event.endTime}</time></li>
+                                                    <li><span>Organizer : </span>${event.organizer.acronym}</li>
+                                                    <li><span>Date : </span><time id="date">${event.dateOfEvent}</time> 
+                                                        <span>Time : </span><time id="time">${event.startTime}</time> - <time id="time">${event.endTime}</time></li>
                                                     <li><span>Category : </span>${event.category.name}</li>
                                                     <li><span>Location : </span>${event.location.name}</li>
                                                     <li>
