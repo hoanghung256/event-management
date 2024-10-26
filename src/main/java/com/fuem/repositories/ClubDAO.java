@@ -94,8 +94,9 @@ public class ClubDAO extends SQLDatabase {
             + "    Category ON Event.categoryId = Category.id\n"
             + "WHERE \n"
             + "    Event.organizerId = ?\n"
-            + "    AND Event.dateOfEvent > GETDATE()\n"
-            + "ORDER BY Event.dateOfEvent DESC;";
+            + "    AND Event.dateOfEvent >= CAST(GETDATE() AS DATE)\n"
+            + "    AND Event.status = 'APPROVED'\n"
+            + "ORDER BY Event.dateOfEvent ASC;";
 
     public int getTotalEventOrganized(int clubId) {
         int totalEvent = 0;
