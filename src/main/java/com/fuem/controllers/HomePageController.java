@@ -35,14 +35,8 @@ public class HomePageController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         EventDAO eventDAO = new EventDAO();
         NotificationDAO notiDAO = new NotificationDAO();
-        Student user = (Student) request.getSession().getAttribute("userInfor");
-        
-        List<Notification> notiList = notiDAO.getNotificationsForUser(user.getId());
-        request.setAttribute("notiList", notiList);
-
         List<Category> cateList = eventDAO.getAllCategory();
         request.setAttribute("cateList", cateList);
-
         List<Organizer> organizerList = eventDAO.getAllOrganizer();
         request.setAttribute("organizerList", organizerList);
 
@@ -54,52 +48,102 @@ public class HomePageController extends HttpServlet {
         String orderBy = request.getParameter("orderBy");
         String pageNumberStr = request.getParameter("page");
 
-        //paging and filter
-        SearchEventCriteria searchEventCriteria = new SearchEventCriteria();
-        PagingCriteria pagingCriteria = new PagingCriteria();
+        Student user = (Student) request.getSession().getAttribute("userInfor");
+        if (user == null) {
+            //paging and filter
+            SearchEventCriteria searchEventCriteria = new SearchEventCriteria();
+            PagingCriteria pagingCriteria = new PagingCriteria();
 
-        Integer pageNumber = null;
-        if (pageNumberStr == null) {
-            pageNumber = 0;
+            Integer pageNumber = null;
+            if (pageNumberStr == null) {
+                pageNumber = 0;
+            } else {
+                pageNumber = Integer.valueOf(pageNumberStr);
+            }
+
+            pagingCriteria = new PagingCriteria(
+                    pageNumber,
+                    10
+            );
+
+            // Set attribute for SearchEventCriteria
+            if (name != null || categoryId != null || organizerId != null || fromDate != null || toDate != null) {
+                if (!name.isBlank()) {
+                    searchEventCriteria.setName(name);
+                }
+                if (!categoryId.isBlank()) {
+                    searchEventCriteria.setCategoryId(Integer.valueOf(categoryId));
+                }
+                if (!organizerId.isBlank()) {
+                    searchEventCriteria.setOrganizerId(Integer.valueOf(organizerId));
+                }
+                if (!fromDate.isBlank()) {
+                    searchEventCriteria.setFrom(LocalDate.parse(fromDate));
+                }
+                if (!toDate.isBlank()) {
+                    searchEventCriteria.setTo(LocalDate.parse(toDate));
+                }
+                if (orderBy != null) {
+                    searchEventCriteria.setOrderBy(EventOrderBy.valueOf(orderBy));
+                }
+
+                request.setAttribute("previousSearchEventCriteria", searchEventCriteria);
+
+            }
+            Page<Event> result = eventDAO.getForGuest(pagingCriteria, searchEventCriteria);
+            request.setAttribute("page", result);
+            request.getRequestDispatcher("homepage.jsp").forward(request, response);
         } else {
-            pageNumber = Integer.valueOf(pageNumberStr);
+            List<Notification> notiList = notiDAO.getNotificationsForUser(user.getId());
+            request.setAttribute("notiList", notiList);
+
+            //paging and filter
+            SearchEventCriteria searchEventCriteria = new SearchEventCriteria();
+            PagingCriteria pagingCriteria = new PagingCriteria();
+
+            Integer pageNumber = null;
+            if (pageNumberStr == null) {
+                pageNumber = 0;
+            } else {
+                pageNumber = Integer.valueOf(pageNumberStr);
+            }
+
+            pagingCriteria = new PagingCriteria(
+                    pageNumber,
+                    10
+            );
+
+            // Set attribute for SearchEventCriteria
+            if (name != null || categoryId != null || organizerId != null || fromDate != null || toDate != null) {
+                if (!name.isBlank()) {
+                    searchEventCriteria.setName(name);
+                }
+                if (!categoryId.isBlank()) {
+                    searchEventCriteria.setCategoryId(Integer.valueOf(categoryId));
+                }
+                if (!organizerId.isBlank()) {
+                    searchEventCriteria.setOrganizerId(Integer.valueOf(organizerId));
+                }
+                if (!fromDate.isBlank()) {
+                    searchEventCriteria.setFrom(LocalDate.parse(fromDate));
+                }
+                if (!toDate.isBlank()) {
+                    searchEventCriteria.setTo(LocalDate.parse(toDate));
+                }
+                if (orderBy != null) {
+                    searchEventCriteria.setOrderBy(EventOrderBy.valueOf(orderBy));
+                }
+
+                request.setAttribute("previousSearchEventCriteria", searchEventCriteria);
+
+            }
+            Page<Event> result = eventDAO.get(
+                    pagingCriteria,
+                    searchEventCriteria,
+                    user.getId()
+            );
+            request.setAttribute("page", result);
+            request.getRequestDispatcher("homepage.jsp").forward(request, response);
         }
-
-        pagingCriteria = new PagingCriteria(
-                pageNumber,
-                10
-        );
-
-        // Set attribute for SearchEventCriteria
-        if (name != null || categoryId != null || organizerId != null || fromDate != null || toDate != null) {
-            if (!name.isBlank()) {
-                searchEventCriteria.setName(name);
-            }
-            if (!categoryId.isBlank()) {
-                searchEventCriteria.setCategoryId(Integer.valueOf(categoryId));
-            }
-            if (!organizerId.isBlank()) {
-                searchEventCriteria.setOrganizerId(Integer.valueOf(organizerId));
-            }
-            if (!fromDate.isBlank()) {
-                searchEventCriteria.setFrom(LocalDate.parse(fromDate));
-            }
-            if (!toDate.isBlank()) {
-                searchEventCriteria.setTo(LocalDate.parse(toDate));
-            }
-            if (orderBy != null) {
-                searchEventCriteria.setOrderBy(EventOrderBy.valueOf(orderBy));
-            }
-
-            request.setAttribute("previousSearchEventCriteria", searchEventCriteria);
-
-        }
-        Page<Event> result = eventDAO.get(
-                pagingCriteria,
-                searchEventCriteria,
-                user.getId()
-        );
-        request.setAttribute("page", result);
-        request.getRequestDispatcher("homepage.jsp").forward(request, response);
     }
 }

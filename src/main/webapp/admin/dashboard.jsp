@@ -182,7 +182,6 @@
                                                     <li><span>Organizer : </span>${event.organizer.acronym}</li>
                                                     <li><span>Date : </span><time id="date">${event.dateOfEvent}</time> 
                                                         <span>Time : </span><time id="time">${event.startTime}</time> - <time id="time">${event.endTime}</time></li>
-                                                    <!--<li><span>Time : </span><time id="time">${event.startTime}</time> - <time id="time">${event.endTime}</time></li>-->
                                                     <li><span>Category : </span>${event.category.name}</li>
                                                     <li><span>Location : </span>${event.location.name}</li>
                                                     <li>
