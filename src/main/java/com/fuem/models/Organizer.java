@@ -34,7 +34,7 @@ public class Organizer extends User {
     }
 
     public Organizer(int id, String fullname, String acronym, String email) {
-        super(fullname, id, email); 
+        super(fullname, id, email);
         this.acronym = acronym;
     }
 
@@ -47,6 +47,13 @@ public class Organizer extends User {
         super(id, fullname, email, password, avatarPath, role);
         this.acronym = acronym;
         this.description = description;
+    }
+
+    public Organizer(String acronym, String description, String coverPath, int id, String fullname, String email, String avatarPath) {
+        super(id, fullname, email, avatarPath);
+        this.acronym = acronym;
+        this.description = description;
+        this.coverPath = coverPath;
     }
 
     public Organizer(int id, String acronym, String fullname, String description, String email, String avatarPath, Role role) {

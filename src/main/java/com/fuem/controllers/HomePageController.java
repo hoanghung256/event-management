@@ -37,7 +37,6 @@ public class HomePageController extends HttpServlet {
         NotificationDAO notiDAO = new NotificationDAO();
         List<Category> cateList = eventDAO.getAllCategory();
         request.setAttribute("cateList", cateList);
-
         List<Organizer> organizerList = eventDAO.getAllOrganizer();
         request.setAttribute("organizerList", organizerList);
 
