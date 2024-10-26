@@ -102,7 +102,8 @@ public class ProfileController extends HttpServlet {
                 request.getRequestDispatcher("error/500.jsp").forward(request, response);
         }
     }
-    
+
+   @Override
    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute("userInfor");
         Role userRole = user.getRole();
@@ -206,4 +207,5 @@ public class ProfileController extends HttpServlet {
             request.getRequestDispatcher("profile.jsp").forward(request, response);
         }
     }
+}
 }
