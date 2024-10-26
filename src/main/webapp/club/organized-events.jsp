@@ -87,7 +87,7 @@
                                                         </td>
                                                         <td>
                                                             <div>
-                                                                <span>${event.location.description}</span>
+                                                                <span>${event.location.name}</span>
                                                             </div>
                                                         </td>
                                                         <td>

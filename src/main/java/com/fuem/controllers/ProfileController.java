@@ -61,7 +61,6 @@ public class ProfileController extends HttpServlet {
                         response.sendRedirect("sign-in");
                     } else {
                         request.getSession().setAttribute("userInfor", student);
-
                         request.setAttribute("student", student);
                         request.getRequestDispatcher("student-profile.jsp").forward(request, response);
                     }
@@ -92,7 +91,6 @@ public class ProfileController extends HttpServlet {
                 } else {
                     if (!user.getRole().equals(Role.STUDENT)) {
                         EventDAO eventDAO = new EventDAO();
-
                         List<Event> recentEvents = eventDAO.getRecentEvents(user.getId());
                         request.setAttribute("recentEvents", recentEvents);
                     }
@@ -109,20 +107,20 @@ public class ProfileController extends HttpServlet {
         User user = (User) request.getSession().getAttribute("userInfor");
         Role userRole = user.getRole();
 
-        if (userRole.equals(Role.STUDENT)) {
-            if (request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) { 
-                Collection<Part> parts = request.getParts(); // Lấy tất cả các Part
-    
-                // Giới hạn kích thước file
-                long maxFileSize = 1024 * 1024; // 1 MB
-                boolean isFileTooLarge = false;
-    
-                if (parts != null && !parts.isEmpty()) {
-                    for (Part part : parts) {
-                        if (part.getSize() > maxFileSize) {
-                            isFileTooLarge = true;
-                            break;
-                        }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Kiểm tra xem có phải multipart form không
+        if (request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) {
+            Collection<Part> parts = request.getParts();
+
+            long maxFileSize = 1024 * 1024; // 1 MB
+            boolean isFileTooLarge = false;
+
+            if (parts != null && !parts.isEmpty()) {
+                for (Part part : parts) {
+                    if (part.getSize() > maxFileSize) {
+                        isFileTooLarge = true;
+                        break;
                     }
     
                     if (isFileTooLarge) {

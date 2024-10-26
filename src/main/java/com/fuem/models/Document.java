@@ -46,7 +46,7 @@ public class Document {
         this.status = status;
     }
 
-    public Document(Organizer submittedBy, String displayName, String type, String processedPath, FileStatus fileStatus) {
+    public Document(Organizer submittedBy, String displayName, String type, String path, FileStatus status) {
         this.submittedBy = submittedBy;
         this.displayName = displayName;
         this.type = type;

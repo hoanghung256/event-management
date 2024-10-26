@@ -93,8 +93,9 @@ public class FileHandler {
             part.write(fileFolderPath + processedPath);
         }
     }
-
+    
     /**
+     * Save file into project source
      *
      * @author HungHV
      */
@@ -104,8 +105,7 @@ public class FileHandler {
         File file = new File(realFilePath);
 
         if (file.exists()) {
-            boolean isDeleted = file.delete();
+            file.delete();
         } 
     }
-
 }
