@@ -47,7 +47,7 @@ public class OrganizerDAO extends SQLDatabase {
             + "OFFSET ? ROWS "
             + "FETCH NEXT ? ROWS ONLY";
 
-    private static final String CHECK_PASSWORD_QUERY = "SELECT * FROM Organizer WHERE email = ? AND password = ?";
+    private static final String CHECK_PASSWORD_QUERY = "SELECT TOP(1) FROM Organizer WHERE email = ? AND password = ?";
     private static final String UPDATE_PASSWORD_BY_EMAIL = "Update [Organizer] "
             + "SET password = ? "
             + "WHERE email = ?";
