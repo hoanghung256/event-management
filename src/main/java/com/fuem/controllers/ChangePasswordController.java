@@ -1,6 +1,10 @@
 package com.fuem.controllers;
 
+import com.fuem.enums.Role;
+import com.fuem.models.Organizer;
 import com.fuem.models.Student;
+import com.fuem.models.User;
+import com.fuem.repositories.OrganizerDAO;
 import com.fuem.repositories.StudentDAO;
 import com.fuem.utils.Hash;
 import jakarta.servlet.ServletException;
@@ -12,7 +16,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebServlet("/student/change-password")
+@WebServlet(name = "ChangePasswordController", urlPatterns = {"/admin/change-password", "/club/change-password", "/student/change-password"})
 public class ChangePasswordController extends HttpServlet {
 
     @Override
@@ -27,27 +31,52 @@ public class ChangePasswordController extends HttpServlet {
         String currentPassword = request.getParameter("currentPassword");
         String newPassword = request.getParameter("newPassword");
         String confirmPassword = request.getParameter("confirmPassword");
+        User user = (User) request.getSession().getAttribute("userInfor");
+        Role userRole = user.getRole();
 
-        HttpSession session = request.getSession();
-        String email = ((Student) session.getAttribute("userInfor")).getEmail();
+        if (userRole.equals(Role.STUDENT)) {
+            HttpSession session = request.getSession();
+            String email = ((Student) session.getAttribute("userInfor")).getEmail();
 
-        StudentDAO studentDAO = new StudentDAO();
+            StudentDAO studentDAO = new StudentDAO();
 
-        if (studentDAO.checkCurrentPassword(email, Hash.doHash(currentPassword))) {
-            if (newPassword.equals(confirmPassword)) {
+            if (studentDAO.checkCurrentPassword(email, Hash.doHash(currentPassword))) {
+                if (newPassword.equals(confirmPassword)) {
 
-                studentDAO.updatePassword(email, newPassword);
-                request.setAttribute("success", "Change password success.");
+                    studentDAO.updatePassword(email, newPassword);
+                    request.setAttribute("success", "Change password success.");
 
+                } else {
+                    request.setAttribute("error", "New password do not match.");
+                }
             } else {
-                request.setAttribute("error", "New password do not match.");
+                request.setAttribute("error", "Current password  incorrect. \n"
+                        + "Please try again!");
             }
-        } else {
-            request.setAttribute("error", "Current password  incorrect. \n"
-                    + "Please try again!");
-        }
-        request.getRequestDispatcher("profile.jsp").forward(request, response);
+            request.getRequestDispatcher("profile.jsp").forward(request, response);
 
+        } else if (userRole.equals(Role.CLUB) || userRole.equals(Role.ADMIN)) {
+            HttpSession session = request.getSession();
+            String email = ((Organizer) session.getAttribute("userInfor")).getEmail();
+            
+            OrganizerDAO organizerDAO = new OrganizerDAO();
+            if (organizerDAO.checkCurrentPassword(email, Hash.doHash(currentPassword))) {
+                if (newPassword.equals(confirmPassword)) {
+
+                    organizerDAO.updatePassword(email, Hash.doHash(newPassword));
+                    request.setAttribute("success", "Change password success.");
+                    System.out.println(newPassword);
+                    
+                } else {
+                    request.setAttribute("error", "New password do not match.");
+                }
+            } else {
+                request.setAttribute("error", "Current password  incorrect. \n"
+                        + "Please try again!");
+            }
+            request.getRequestDispatcher("profile.jsp").forward(request, response);
+
+        }
     }
 
 }
