@@ -32,6 +32,17 @@
         <link rel="stylesheet" href="<c:url value='/assets/app/css/spacing.css' />">
         <link rel="stylesheet" href="<c:url value='/assets/app/css/main.css' />">
     </head> 
+    
+    <style>
+        .user__portfolio-thumb img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%; 
+            object-fit: cover; /* Giữ tỉ lệ ảnh */
+        }
+
+    </style>
+    
     <body class="body-area">
         <!-- Preloder start -->
         <div id="preloader">

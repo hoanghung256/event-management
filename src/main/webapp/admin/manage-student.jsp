@@ -140,8 +140,7 @@
 
     .input-row .singel__input-field:last-child {
         margin-right: 0;
-    }
-
+   
 </style>
 
 <section>
