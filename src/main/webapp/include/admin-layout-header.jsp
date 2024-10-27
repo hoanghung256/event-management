@@ -146,15 +146,13 @@
                         </div>
                         <div class="app__header-right">
                             <div class="nav-item p-relative">
-                                <div id="userportfolio" href="/profile">
+                                <div id="userportfolio">
                                     <div class="user__portfolio">
                                         <div class="user__portfolio-thumb">
-                                            <c:url value="/assets/img/user/default-avatar.jpg" var="defaultAvatar" />
-                                            <c:url value="${sessionScope.userInfor.avatarPath}" var="userAvatar" />
                                             <img 
-                                                src="${sessionScope.userInfor.avatarPath != null ? userAvatar : defaultAvatar}" 
-                                                style=" object-fit: cover;   border-radius: 50%;" 
-                                                alt="Default Avatar" 
+                                                src="<c:url value="${sessionScope.userInfor.avatarPath}" />" 
+                                                style="object-fit: cover; border-radius: 50%;" 
+                                                alt="Avatar" 
                                                 />
                                         </div>
                                         <div class="user__content">
