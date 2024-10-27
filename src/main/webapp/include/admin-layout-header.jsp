@@ -31,6 +31,17 @@
         <link rel="stylesheet" href="<c:url value='/assets/app/css/spacing.css' />">
         <link rel="stylesheet" href="<c:url value='/assets/app/css/main.css' />">
     </head> 
+
+    <style>
+        .user__portfolio-thumb img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover; 
+        }
+
+    </style>
+
     <body class="body-area">
         <!-- Preloder start -->
         <div id="preloader">
@@ -149,11 +160,10 @@
                                 <div id="userportfolio">
                                     <div class="user__portfolio">
                                         <div class="user__portfolio-thumb">
-                                            <img 
-                                                src="<c:url value="${sessionScope.userInfor.avatarPath}" />" 
-                                                style="object-fit: cover; border-radius: 50%;" 
-                                                alt="Avatar" 
-                                                />
+                                            <img class="rounded-circle"
+                                                 src="<c:url value="${sessionScope.userInfor.avatarPath}" />"  
+                                                 alt="Avatar" 
+                                                 />
                                         </div>
                                         <div class="user__content">
                                             <span>${sessionScope.userInfor.fullname != null ? sessionScope.userInfor.fullname : "Guest"}</span>

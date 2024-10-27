@@ -32,6 +32,17 @@
         <link rel="stylesheet" href="<c:url value='/assets/app/css/spacing.css' />">
         <link rel="stylesheet" href="<c:url value='/assets/app/css/main.css' />">
     </head> 
+
+    <style>
+        .user__portfolio-thumb img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%; 
+            object-fit: cover; 
+        }
+
+    </style>
+
     <body class="body-area">
         <!-- Preloder start -->
         <div id="preloader">
@@ -122,7 +133,7 @@
                                                 class="rounded-circle"
                                                 src="<c:url value="${sessionScope.userInfor.avatarPath}" />" 
                                                 alt="Default Avatar" 
-                                            />
+                                                />
                                         </div>
                                         <div class="user__content">
                                             <span>${sessionScope.userInfor.fullname != null ? sessionScope.userInfor.fullname : "Guest"}</span>
@@ -133,7 +144,7 @@
                                     <ul>
                                         <li>
                                             <a href="<c:url value="/student/profile" />"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                                        xmlns="http://www.w3.org/2000/svg">
+                                                                                              xmlns="http://www.w3.org/2000/svg">
                                                 <g clip-path="url(#clip0_643_344)">
                                                 <path
                                                     d="M13.6569 10.3431C12.7855 9.47181 11.7484 8.82678 10.6168 8.43631C11.8288 7.60159 12.625 6.20463 12.625 4.625C12.625 2.07478 10.5502 0 8 0C5.44978 0 3.375 2.07478 3.375 4.625C3.375 6.20463 4.17122 7.60159 5.38319 8.43631C4.25162 8.82678 3.2145 9.47181 2.34316 10.3431C0.832156 11.8542 0 13.8631 0 16H1.25C1.25 12.278 4.27803 9.25 8 9.25C11.722 9.25 14.75 12.278 14.75 16H16C16 13.8631 15.1678 11.8542 13.6569 10.3431ZM8 8C6.13903 8 4.625 6.486 4.625 4.625C4.625 2.764 6.13903 1.25 8 1.25C9.86097 1.25 11.375 2.764 11.375 4.625C11.375 6.486 9.86097 8 8 8Z"
@@ -149,7 +160,7 @@
                                         </li>
                                         <li>
                                             <a href="<c:url value="/sign-out" />"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"
-                                                                       xmlns="http://www.w3.org/2000/svg">
+                                                                                       xmlns="http://www.w3.org/2000/svg">
                                                 <g clip-path="url(#clip0_643_343)">
                                                 <path
                                                     d="M17.4368 8.43771H10.312C10.0015 8.43771 9.74951 8.18572 9.74951 7.87523C9.74951 7.56474 10.0015 7.31274 10.312 7.31274H17.4368C17.7473 7.31274 17.9993 7.56474 17.9993 7.87523C17.9993 8.18572 17.7473 8.43771 17.4368 8.43771Z"
