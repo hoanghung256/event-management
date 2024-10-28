@@ -80,7 +80,7 @@ public class ProfileController extends HttpServlet {
                         request.setAttribute("organizer", organizer);
                         request.setAttribute("recentEvents", recentEvents);
                     }
-                        request.getRequestDispatcher("organizer-profile.jsp").forward(request, response);
+                    request.getRequestDispatcher("organizer-profile.jsp").forward(request, response);
                 }
                 break;
 
@@ -103,61 +103,62 @@ public class ProfileController extends HttpServlet {
         }
     }
 
-   @Override
-   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         User user = (User) request.getSession().getAttribute("userInfor");
         Role userRole = user.getRole();
 
         if (userRole.equals(Role.STUDENT)) {
-            if (request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) { 
+            if (request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) {
                 Collection<Part> parts = request.getParts(); // Lấy tất cả các Part
-    
+
                 long maxFileSize = 1024 * 1024; // 1 MB
                 boolean isFileTooLarge = false;
-    
+
                 if (parts != null && !parts.isEmpty()) {
                     for (Part part : parts) {
                         if (part.getSize() > maxFileSize) {
                             isFileTooLarge = true;
                             break;
                         }
-    
-                    if (isFileTooLarge) {
-                        request.setAttribute("error", "The image file is too large. Please choose a different image.");
-                    } else {
-                        List<String> avatarPaths = FileHandler.processUploadFile(parts, FileType.IMAGE);
-    
-                        if (!avatarPaths.isEmpty()) {
-                            String newAvatarPath = avatarPaths.get(0);
-    
-                            Student student = (Student) request.getSession().getAttribute("userInfor");
-                            if (student != null) {
-                                String studentId = student.getStudentId();
-                                String oldAvatarPath = student.getAvatarPath(); 
-                                
-                                StudentDAO studentDao = new StudentDAO();
-                                boolean isUpdated = studentDao.updateStudentAvatar(studentId, newAvatarPath);
-    
-                                if (isUpdated) {
-                                    if (oldAvatarPath != null && !oldAvatarPath.isEmpty()) {
-                                        FileHandler.deleteFile(getServletContext(), oldAvatarPath);
+
+                        if (isFileTooLarge) {
+                            request.setAttribute("error", "The image file is too large. Please choose a different image.");
+                        } else {
+                            List<String> avatarPaths = FileHandler.processUploadFile(parts, FileType.IMAGE);
+
+                            if (!avatarPaths.isEmpty()) {
+                                String newAvatarPath = avatarPaths.get(0);
+
+                                Student student = (Student) request.getSession().getAttribute("userInfor");
+                                if (student != null) {
+                                    String studentId = student.getStudentId();
+                                    String oldAvatarPath = student.getAvatarPath();
+
+                                    StudentDAO studentDao = new StudentDAO();
+                                    boolean isUpdated = studentDao.updateStudentAvatar(studentId, newAvatarPath);
+
+                                    if (isUpdated) {
+                                        if (oldAvatarPath != null && !oldAvatarPath.isEmpty()) {
+                                            FileHandler.deleteFile(getServletContext(), oldAvatarPath);
+                                        }
+
+                                        student.setAvatarPath(newAvatarPath);
+                                        request.getSession().setAttribute("userInfor", student);
+
+                                        FileHandler.save(avatarPaths, parts, getServletContext(), FileType.IMAGE);
+
+                                        request.setAttribute("success", "Avatar updated successfully!");
+                                    } else {
+                                        request.setAttribute("error", "Failed to update avatar.");
                                     }
-    
-                                    student.setAvatarPath(newAvatarPath);
-                                    request.getSession().setAttribute("userInfor", student);
-    
-                                    FileHandler.save(avatarPaths, parts, getServletContext(), FileType.IMAGE);
-    
-                                    request.setAttribute("success", "Avatar updated successfully!");
-                                } else {
-                                    request.setAttribute("error", "Failed to update avatar.");
                                 }
                             }
                         }
                     }
                 }
             }
-    
+
             request.getRequestDispatcher("profile.jsp").forward(request, response);
         } else if (userRole.equals(Role.CLUB) || userRole.equals(Role.ADMIN)) {
             int organizerId = user.getId();
@@ -196,16 +197,15 @@ public class ProfileController extends HttpServlet {
             Organizer organizer = new Organizer(acronym, description, newCoverPath, organizerId, fullname, email, newAvatarPath);
             boolean isUpdated = organizerDAO.updateOrganizer(organizer);
             organizer.setRole(userRole);
-            
+
             if (isUpdated) {
                 request.getSession().setAttribute("userInfor", organizer);
                 request.setAttribute("message", "Update successfully");
             } else {
                 request.setAttribute("error", "Update failed");
             }
-            
+
             request.getRequestDispatcher("profile.jsp").forward(request, response);
         }
     }
-}
 }
