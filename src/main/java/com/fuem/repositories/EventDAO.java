@@ -159,7 +159,7 @@ public class EventDAO extends SQLDatabase {
             + "JOIN Category c ON e.categoryId = c.id "
             + "JOIN Location l ON e.locationId = l.id "
             + "WHERE e.status = 'APPROVED' "
-            + "AND e.dateOfEvent >= CAST(GETDATE() AS DATE)";
+            + "AND e.dateOfEvent = CAST(GETDATE() AS DATE)";
 
     public EventDAO() {
         super();
@@ -214,7 +214,7 @@ public class EventDAO extends SQLDatabase {
      */
     public List<Event> getTodayEvent(){
         List<Event> events = new ArrayList<>();
-
+        System.out.println(SELECT_TODAY_EVENT);
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_TODAY_EVENT)) {
             while (rs.next()) {
                 Event event = new Event();
@@ -244,6 +244,7 @@ public class EventDAO extends SQLDatabase {
 
                 Location location = new Location();
                 location.setId(rs.getInt("locationId"));
+                location.setName(rs.getString("locationName"));
                 event.setLocation(location);
 
                 events.add(event);

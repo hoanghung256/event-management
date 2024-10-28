@@ -64,31 +64,31 @@
                     <div class="dlabnav">
                         <ul class="metismenu" id="menu">
                             <li>
-                                <a href="<c:url value="/home"/>" aria-expanded="false">
+                                <a href="<c:url value="/home"/>" aria-expanded="false" style="text-decoration: none;">
                                     <i class="flaticon-home"></i>
                                     <span class="nav-text">Home</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="<c:url value="/student/attended-events"/>" aria-expanded="false">
+                                <a href="<c:url value="/student/attended-events"/>" aria-expanded="false" style="text-decoration: none;">
                                     <i class="flaticon-calendar-1"></i>
                                     <span class="nav-text">Attended Events</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="<c:url value="/student/registered-event" />" aria-expanded="false">
+                                <a href="<c:url value="/student/registered-event" />" aria-expanded="false" style="text-decoration: none;">
                                     <i class="flaticon-success"></i>
                                     <span class="nav-text">Register Events</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="<c:url value="/student/profile"/>" aria-expanded="false">
+                                <a href="<c:url value="/student/profile"/>" aria-expanded="false" style="text-decoration: none;">
                                     <i class="flaticon-user-1"></i>
                                     <span class="nav-text">Profile</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="<c:url value="/sign-out"/>" aria-expanded="false">
+                                <a href="<c:url value="/sign-out"/>" aria-expanded="false" style="text-decoration: none;">
                                     <i class="flaticon-log-out-3"></i>
                                     <span class="nav-text">Log out</span>
                                 </a>
@@ -134,7 +134,7 @@
                                 <div class="user__dropdown">
                                     <ul>
                                         <li>
-                                            <a href="<c:url value="/student/profile" />"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                            <a href="<c:url value="/student/profile" />" style="text-decoration: none;"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                                                         xmlns="http://www.w3.org/2000/svg">
                                                 <g clip-path="url(#clip0_643_344)">
                                                 <path
@@ -150,7 +150,7 @@
                                                 Profile</a>
                                         </li>
                                         <li>
-                                            <a href="<c:url value="/sign-out" />"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"
+                                            <a href="<c:url value="/sign-out" />" style="text-decoration: none;"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"
                                                                        xmlns="http://www.w3.org/2000/svg">
                                                 <g clip-path="url(#clip0_643_343)">
                                                 <path
