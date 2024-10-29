@@ -27,7 +27,7 @@ public class FileDAO extends SQLDatabase {
 
     private static final Logger logger = Logger.getLogger(FileDAO.class.getName());
     private static final String INSERT_NEW_IMAGE = "INSERT INTO [EventImage] ("
-            + "studentId, "
+            + "eventId, "
             + "path) "
             + "VALUES (?, ?)";
     private static final String SELECT_FILE_BY_SUBMITTER_ID = "SELECT "

@@ -257,7 +257,7 @@
             <div>
                 <div id="myTabContent" class="today-event-list" style="justify-content: center; align-items: center;">
                     <div class="list-title">
-                        <h2 class="section__title pb-30 pt-20">
+                        <h2 class="section__title pb-30">
                             TODAY
                             <span class="text__highlight"> EVENTS
                                 <svg class="title-underline" width="328" height="31" viewBox="0 0 328 31" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -278,7 +278,6 @@
                                 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="3000"> <!-- Auto slide every 3 seconds -->
                                     <div class="carousel-inner">
                                         <c:forEach var="event" items="${todayEvents}" varStatus="status">
-                                            <img class="footer__shape-2" src="<c:url value="/assets/img/shape/footer/footer-2.png"/>" alt="image not found">
                                             <div class="carousel-item ${status.first ? 'active' : ''}" style="background-image: url('<c:url value="${event.images[0]}"/>');">
                                                 <div class="carousel-caption" style="">
                                                     <h4>${event.fullname}</h4>
