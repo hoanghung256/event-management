@@ -104,8 +104,8 @@ CREATE TABLE [Organizer] (
 	[description] NVARCHAR(2000),
 	[email] NVARCHAR(30) NOT NULL UNIQUE,
 	[password] NVARCHAR(64) NOT NULL,
-	[avatarPath] NVARCHAR(MAX),
-	[coverPath] NVARCHAR(MAX) DEFAULT (N'/assets/img/user/default-avatar.jpg'),
+	[avatarPath] NVARCHAR(MAX) DEFAULT (N'/assets/img/user/default-avatar.jpg'),
+	[coverPath] NVARCHAR(MAX) DEFAULT (N'/assets/img/user/default-banner.png'),
 	[followerCount] INT DEFAULT(0),
 	[isAdmin] BIT DEFAULT(0),
 
@@ -541,3 +541,5 @@ ORDER BY NEWID();
 >>>>>>>>> END: EXAMPLE DATA >>>>>>>>>>
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 */
+
+select * from [Organizer]
