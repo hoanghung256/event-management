@@ -345,14 +345,14 @@ GO
 <<<<<<<<<< BEGIN: EXAMPLE DATA <<<<<<<<<<
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 */
-INSERT INTO [Student] ([fullname], [studentId], [email], [password])
+INSERT INTO [Student] ([fullname], [studentId], [email], [password], [Gender])
 VALUES
-('Hoang Vu Hung', 'DE180038', 'hunghvde180038@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc'),
-('Nguyen Quoc Anh', 'DE180064', 'anhnqde180064@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc'),
-('Nguyen Minh Thang', 'DE180145', 'thangnmde180145@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc'),
-('Huynh Viet Khiem', 'DE180067', 'khiemhvde180067@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc'),
-('Dinh Kim Tu', 'DE180052', 'tudkde180052@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc'),
-('Trinh Ba Hoang Huy', 'DE180057', 'huytbhde180057@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc');
+('Hoang Vu Hung', 'DE180038', 'hunghvde180038@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'MALE'),
+('Nguyen Quoc Anh', 'DE180064', 'anhnqde180064@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'MALE'),
+('Nguyen Minh Thang', 'DE180145', 'thangnmde180145@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'MALE'),
+('Huynh Viet Khiem', 'DE180067', 'khiemhvde180067@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'MALE'),
+('Dinh Kim Tu', 'DE180052', 'tudkde180052@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'MALE'),
+('Trinh Ba Hoang Huy', 'DE180057', 'huytbhde180057@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'MALE');
 
 
 INSERT INTO [Organizer] ([acronym], [fullname], [description], [email], [password], [isAdmin])
