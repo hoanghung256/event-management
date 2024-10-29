@@ -129,10 +129,10 @@
                                 <a id="userportfolio" href="#">
                                     <div class="user__portfolio">
                                         <div class="user__portfolio-thumb">
-                                            <c:url value="/assets/img/user/default-avatar.jpg" var="defaultAvatar" />
+                                            <c:set value="/assets/img/user/default-avatar.jpg" var="defaultAvatar" />
                                             <img 
                                                 class="rounded-circle"
-                                                src="${sessionScope.userInfor != null ? sessionScope.userInfor.avatarPath : defaultAvatar}" 
+                                                src="<c:url value="${sessionScope.userInfor != null ? sessionScope.userInfor.avatarPath : defaultAvatar}" />" 
                                                 alt="Avatar" 
                                                 />
                                         </div>
