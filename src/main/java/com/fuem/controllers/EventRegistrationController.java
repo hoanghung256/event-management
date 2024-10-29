@@ -34,7 +34,7 @@ import java.util.logging.Logger;
  */
 @WebServlet(name = "EventRegistrationController", urlPatterns = {"/club/register-event", "/admin/register-event"})
 @MultipartConfig(
-        fileSizeThreshold = 1024 * 1024 * 1,
+        fileSizeThreshold = 1024 * 1024 * 5,
         maxFileSize = 1024 * 1024 * 10,
         maxRequestSize = 1024 * 1024 * 15
 )
@@ -79,6 +79,7 @@ public class EventRegistrationController extends HttpServlet {
             if (eventBuilder.getGuestRegisterDeadline().isAfter(eventBuilder.getDateOfEvent())) {
                 request.setAttribute("error", "register deadline must before or equal Date of event!");
                 request.getRequestDispatcher("event-registration.jsp").forward(request, response);
+                return;
             }
             eventBuilder.setGuestRegisterLimit(Integer.parseInt(guestRegisterLimit));
         }
@@ -93,6 +94,7 @@ public class EventRegistrationController extends HttpServlet {
             if (eventBuilder.getCollaboratorRegisterDeadline().isAfter(eventBuilder.getDateOfEvent())) {
                 request.setAttribute("error", "Register deadline must before or equal Date of event!");
                 request.getRequestDispatcher("event-registration.jsp").forward(request, response);
+                return;
             }
         }
         eventBuilder.setCollaboratorRegisterLimit(Integer.parseInt(collaboratorRegisterLimit));
@@ -114,7 +116,7 @@ public class EventRegistrationController extends HttpServlet {
         int eventId = eventDao.insertAndGetGenerateKeyOfNewEvent(registerEvent);
         try {
             if (fileDao.insertEventImages(eventId, registerEvent.getImages()) == (registerEvent.getImages().size() - 1)) {
-                request.setAttribute("message", "Register successfully");
+                request.setAttribute("message", "Register succeessfully");
                 FileHandler.save(registerEvent.getImages(), parts, request.getServletContext(), FileType.IMAGE);
             } else {
                 request.setAttribute("error", "Register failed");
