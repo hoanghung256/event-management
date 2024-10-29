@@ -47,7 +47,7 @@ public class OrganizerDAO extends SQLDatabase {
             + "OFFSET ? ROWS "
             + "FETCH NEXT ? ROWS ONLY";
 
-    private static final String CHECK_PASSWORD_QUERY = "SELECT TOP(1) FROM Organizer WHERE email = ? AND password = ?";
+    private static final String CHECK_PASSWORD_QUERY = "SELECT COUNT(1) FROM Organizer WHERE email = ? AND password = ?";
     private static final String UPDATE_PASSWORD_BY_EMAIL = "Update [Organizer] "
             + "SET password = ? "
             + "WHERE email = ?";
@@ -230,9 +230,11 @@ public class OrganizerDAO extends SQLDatabase {
     }
 
     public boolean checkCurrentPassword(String email, String currentPasswordHash) {
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, CHECK_PASSWORD_QUERY, email, currentPasswordHash)) {
-
-            return rs.next();
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
+                ResultSet rs = executeQueryPreparedStatement(conn, CHECK_PASSWORD_QUERY, email, currentPasswordHash)) {
+            if (rs.next()) {
+                return rs.getInt(1) == 1;
+            }
         } catch (SQLException e) {
             Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, e);
         }
