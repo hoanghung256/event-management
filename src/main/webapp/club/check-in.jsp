@@ -1,52 +1,173 @@
-<%-- 
-    Document   : check-in
-    Created on : Oct 24, 2024, 2:02:35 PM
-    Author     : hoang hung 
---%>
+<%@ include file="../include/club-layout-header.jsp" %>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <script src="js/script.js"></script>
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Prata&family=Readex+Pro:wght@160..700&family=Russo+One&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&family=Prata&family=Readex+Pro:wght@160..700&family=Russo+One&display=swap" rel="stylesheet">
+ <style>
+        .welcome-hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            position: relative;
+            background: url('https://daihoc.fpt.edu.vn/wp-content/uploads/2024/03/dai-hoc-fpt-da-nang-1.jpeg') no-repeat center center / cover;
+            height: 1000px;
+            opacity: 0;
+            animation: fadeInBackground 3s forwards 1s;
+        }
+.event-info p {
+    color: #FFFFFF; 
+    
+}
 
-<%@include file="../include/club-layout-header.jsp"%>
+        .header-text {
+            opacity: 0;
+            animation: fadeInText 3s forwards 1s;
+            margin-top: 10px;
+            max-width: 100%;
+            overflow: hidden;
+            position: relative; 
+            margin-bottom: 50px;
+        }
 
-<section class="banner__area banner__area-1 banner__height-1" data-background="<c:url value="/assets/img/bg/check-in.jpg" />">
-    <div class="banner__shape">
-        <img class="banner__shape-1 parallaxed" src="<c:url value="/assets/img/shape/slider/shape-1.png" />" alt="imge not found">
-        <img class="banner__shape-2" src="<c:url value="/assets/img/shape/slider/shape-2.png" />" alt="imge not found">
-        <img class="banner__shape-3" src="<c:url value="/assets/img/shape/slider/shape-3.png" />" alt="imge not found">
-        <img class="banner__shape-4 parallaxed" src="<c:url value="/assets/img/shape/slider/shape-4.png" />" alt="imge not found">
-        <img class="banner__shape-5" src="<c:url value="/assets/img/shape/slider/shape-5.png" />" alt="imge not found">
-        <img class="banner__shape-6 parallaxed" src="<c:url value="/assets/img/shape/slider/shape-6.png" />" alt="imge not found">
-        
-        <div class="container">
-            <div class="text-center">
-                <h1 class="text-white">Event Name Number 81</h1>
-            </div>
-            <div class="row">
-                <div class="col-xl-8">
-                <div class="text-center">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?data=<c:url value="${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/student/check-in?eventId=${eventId}" />&size=500x500" alt="qr-code" />
+        .header-text h2 {
+            font-size: 54px;
+            font-weight: 700;
+            line-height: 1.2;
+            display: inline-block;
+            justify-content: center;
+            gap: 5px;
+            font-family: "DynaPuff", system-ui;
+  font-optical-sizing: auto;
+            background: #D1E9F6;
+            padding: 10px 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #clock {
+            font-size: 48px;
+            font-weight: bold;
+            color: #E7E8D8; /* Màu vàng cho ??ng h? */
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 1); /* Khung m? màu ?en */
+            background-color: rgba(0, 0, 0, 0.1); /* N?n m? cho ??ng h? */
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 20px;
+            width: 250px; /* ??t chi?u r?ng c? ??nh */
+    height: 70px;
+     font-family: "Prata", serif;
+        }
+
+        .event-info {
+            color: #FFFFFF; /* ??i màu ch? thành tr?ng */
+              font-family: "Inter", sans-serif;
+            font-size: 18px;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.1); /* N?n m? cho thông tin s? ki?n */
+            padding: 5px 10px; /* Gi?m padding ?? khung v?a khít v?i ch? */
+            border-radius: 8px;
+            display: inline-block; /* Thay ??i thành inline-block ?? khung co l?i theo kích th??c ch? */
+            margin-top: 10px; /* Gi? margin-top ?? t?o kho?ng cách v?i ph?n trên */
+        }
+
+        .header-text h2 span {
+            display: inline-block;
+            background: #F5F7F8;
+            background-size: 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: letterGradientAnimation 4s infinite alternate;
+            animation-timing-function: ease-in-out;
+        }
+        @import url("https://fonts.googleapis.com/css?family=Raleway:400,400i,700");
+
+
+
+
+
+
+
+
+        @keyframes letterGradientAnimation {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        @keyframes fadeInBackground {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInText {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+ </style>
+</head>
+<section id="welcome-hero" class="welcome-hero">
+    <div class="container">
+        <div class="row">
+
+
+         <div class="col-md-12 text-center">
+                <div class="header-text">
+                    <h2 class="gradient-text animate__animated animate__heartBeat animate__infinite">
+                        <span>C</span><span>H</span><span>E</span><span>C</span><span>K</span> 
+                        <span>I</span><span>N</span> 
+                        <span>N</span><span>O</span><span>W</span> 
+                    </h2>
                 </div>
-            </div>
-            <div class="col-xl-4">
-                <div class="banner__right-content d-flex justify-content-lg-end">
-                    <div class="banner__card-wrapper ">
-                        <div class="banner__card-inner">
-                            <span class="card__icon"></span>
-                            <span class="shape">
-                                <svg width="146" height="227" viewBox="0 0 146 227" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M124 1H139C142.314 1 145 3.68629 145 7V220C145 223.314 142.314 226 139 226H7C3.68629 226 1 223.314 1 220V166.194" stroke="#F87A58"/>
-                                </svg>                                 
-                            </span>
-                            <div class="banner__card-info">
-                                <span>WHEN AND WHERE</span>
-                                <h4>November 9 - 10 <br> The Midway SF</h4>
-                            </div>
-                        </div>
-                        <div class="banner__time"></div>
+
+                <div class="clock-container">
+                    <h1 id="clock"></h1> 
+                    <div class="event-info">
+                        <p>Date: <span id="eventDate"></span></p>
+                        <p>Event Name: <span id="eventName"></span></p>
+                        <p>Location: <span id="eventLocation"></span></p>
                     </div>
                 </div>
-            </div>
-            </div>
+
+                <img style="padding-bottom:100px" src="https://api.qrserver.com/v1/create-qr-code/?data=<c:url value='${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/student/check-in?eventId=${eventId}' />&size=300x300" alt="qr-code" />
+            </div>  
         </div>
     </div>
+
+    <script type="text/javascript">
+        // C?p nh?t thông tin s? ki?n
+        document.getElementById('eventDate').innerText = '2024-10-27'; 
+        document.getElementById('eventName').innerText = 'Sample Event Name';
+        document.getElementById('eventLocation').innerText = 'Sample Location'; 
+
+        setInterval(displayDate, 1000);
+        
+        function displayDate() {
+            let currentdate = new Date();
+            let datetime = formatValue(currentdate.getHours()) + ":"
+                    + formatValue(currentdate.getMinutes()) + ":"
+                    + formatValue(currentdate.getSeconds());
+            document.getElementById("clock").innerHTML = datetime;
+        };
+
+        function formatValue(value) {
+            return (value < 10 ? "0" + value : value);
+        }
+    </script>
 </section>
 
-<%@include file="../include/master-footer.jsp" %>
+<%@ include file="../include/master-footer.jsp" %>
