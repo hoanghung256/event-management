@@ -74,32 +74,32 @@
                     <div class="dlabnav">
                         <ul class="metismenu" id="menu">
                             <li><a href="<c:url value="/club/dashboard"/>" aria-expanded="false">
-                                    <i class="flaticon-home"></i>
+                                     <i class="fa-solid fa-house"></i>
                                     <span class="nav-text">Dashboard</span>
                                 </a>
                             </li>
                             <li><a href="<c:url value="/club/register-event"/>" aria-expanded="false">
-                                    <i class="flaticon-success"></i>
+                                  <i class="fa-solid fa-square-plus"></i>
                                     <span class="nav-text">Register Event</span>
                                 </a>
                             </li>
                             <li><a href="<c:url value="/club/file" />" aria-expanded="false">
-                                    <i class="flaticon-email"></i>
+                                    <i class="fa-solid fa-share-from-square"></i>
                                     <span class="nav-text">Send File</span>
                                 </a>
                             </li>
                             <li><a href="<c:url value="/club/send-event-notification"/>" aria-expanded="false">
-                                    <i class="flaticon-user-1"></i>
+                                    <i class="fa-solid fa-paper-plane"></i>
                                     <span class="nav-text">Send Notification</span>
                                 </a>
                             </li>
                             <li><a href="<c:url value="/club/organized-event"/>" aria-expanded="false">
-                                    <i class="flaticon-upcoming"></i>
+                                  <i class="fa-solid fa-calendar-check"></i>
                                     <span class="nav-text">Organized Events</span>
                                 </a>
                             </li>
                             <li><a href="<c:url value="/sign-out" />" aria-expanded="false">
-                                    <i class="flaticon-log-out-3"></i>
+                                        <i class="fa-solid fa-right-from-bracket"></i>
                                     <span class="nav-text">Log out</span>
                                 </a>
                         </ul>

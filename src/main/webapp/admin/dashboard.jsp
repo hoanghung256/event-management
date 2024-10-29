@@ -319,7 +319,7 @@
                                                                     </svg>
                                                                 </button>
                                                                 <div class="dropdown-list">
-                                                                    <a class="dropdown__item" href="<c:url value="#" />">Detail</a>
+                                                                    <a class="dropdown__item" href="<c:url value="" />">Detail</a>
                                                                 </div>
                                                             </div>
                                                         </div>

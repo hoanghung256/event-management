@@ -74,31 +74,26 @@
                         <ul class="metismenu" id="menu">
                             <li>
                                 <a href="<c:url value="/admin/dashboard"/>" aria-expanded="false">
-                                    <i class="flaticon-home"></i>
+                                   <i class="fa-solid fa-house"></i>
                                     <span class="nav-text">Dashboard</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="<c:url value="/admin/register-event"/>" aria-expanded="false">
-                                    <i class="flaticon-calendar-1"></i>
+                                  <i class="fa-solid fa-square-plus"></i>
                                     <span class="nav-text">Create Event</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="<c:url value="#" />" aria-expanded="false">
-                                    <i class="flaticon-upcoming"></i>
-                                    <span class="nav-text">Pending Post</span>
-                                </a>
-                            </li>
+                           
                             <li>
                                 <a href="<c:url value="/admin/organized-event"/>" aria-expanded="false">
-                                    <i class="flaticon-success"></i>
+                                    <i class="fa-solid fa-calendar-check"></i>
                                     <span class="nav-text">Organized Events</span>
                                 </a>
                             </li>
                             <li>
                                 <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                    <i class="flaticon-user-1"></i>
+                                   <i class="fa-solid fa-paper-plane"></i>
                                     <span class="nav-text">Send Notification</span>
                                 </a>
                                 <ul aria-expanded="false">
@@ -108,19 +103,19 @@
                             </li>
                             <li>
                                 <a href="<c:url value="/admin/approval-events?action=show" />" aria-expanded="false">
-                                    <i class="flaticon-clock"></i>
-                                    <span class="nav-text">Pending Events Approval</span>
+                                    <i class="fa-solid fa-hourglass-end"></i>
+                                    <span class="nav-text">Pending Events </span>
                                 </a>
                             </li>
                             <li>
                                 <a href="<c:url value="/admin/file" />" aria-expanded="false">
-                                    <i class="flaticon-edit-1"></i>
+                                   <i class="fa-solid fa-file"></i>
                                     <span class="nav-text">Review Report-Plan Files</span>
                                 </a>
                             </li>
                             <li>
                                 <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                    <i class="flaticon-user-1"></i>
+                                    <i class="fa-solid fa-user"></i>
                                     <span class="nav-text">User Management</span>
                                 </a>
                                 <ul aria-expanded="false">
@@ -130,7 +125,7 @@
                             </li>
                             <li>
                                 <a href="<c:url value="/sign-out" />" aria-expanded="false">
-                                    <i class="flaticon-log-out-3"></i>
+                                    <i class="fa-solid fa-right-from-bracket"></i>
                                     <span class="nav-text">Log out</span>
                                 </a>
                             </li>
