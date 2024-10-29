@@ -43,7 +43,7 @@ public class ChangePasswordController extends HttpServlet {
             if (studentDAO.checkCurrentPassword(email, Hash.doHash(currentPassword))) {
                 if (newPassword.equals(confirmPassword)) {
 
-                    studentDAO.updatePassword(email, newPassword);
+                    studentDAO.updatePassword(email, Hash.doHash(newPassword));
                     request.setAttribute("success", "Change password success.");
 
                 } else {
@@ -65,7 +65,6 @@ public class ChangePasswordController extends HttpServlet {
 
                     organizerDAO.updatePassword(email, Hash.doHash(newPassword));
                     request.setAttribute("success", "Change password success.");
-                    System.out.println(newPassword);
                     
                 } else {
                     request.setAttribute("error", "New password do not match.");
