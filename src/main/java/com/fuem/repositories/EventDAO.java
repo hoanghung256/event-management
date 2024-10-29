@@ -397,7 +397,7 @@ public class EventDAO extends SQLDatabase {
         StringBuilder query = new StringBuilder(SELECT_EVENTS_FOLLOWED_AND_NOT_FOLLOWED);
 
         if (!searchEventCriteria.isEmpty()) {
-            query.append("\n WHERE");
+            query.append("\n WHERE ");
 
             if (searchEventCriteria.getName() != null && !searchEventCriteria.getName().isBlank()) {
                 query.append(" LOWER(e.fullname) LIKE LOWER('%");
