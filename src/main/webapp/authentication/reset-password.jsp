@@ -88,13 +88,13 @@
                                 </div>
                             </form>
                             <div class="if__account mt-85">
-                                <p>Don’t Have An Account?<a href="signup.html"> Sign up</a></p>
+                                <p>Don’t Have An Account?<a href="sign-up"> Sign up</a></p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="sign__right">
-                    <div class="sign__input-thumb" data-background="assets/img/decorate/reset-password.jpg">
+                    <div class="sign__input-thumb" style="background-image: url('assets/img/decorate/reset-password.jpg');">
                     </div>
                 </div>
             </div>

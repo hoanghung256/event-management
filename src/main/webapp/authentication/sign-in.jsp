@@ -183,7 +183,7 @@
                     </div>
                 </div>
                 <div class="sign__right">
-                    <div class="sign__input-thumb"></div>
+                    <div class="sign__input-thumb include__bg w-img" style="background-image: url('assets/img/decorate/sign-in.jpg');"></div>
                 </div>
             </div>
         </section>
@@ -191,7 +191,7 @@
 
         <!-- JS here -->
         <script src="assets/app/js/jquery-3.6.0.min.js"></script>
-        <script src="assets/app/js/waypoints.min.js"></script>
+        <!--<script src="assets/app/js/waypoints.min.js"></script>-->
         <script src="assets/app/js/bootstrap.bundle.min.js"></script>
         <script src="assets/app/js/apexcharts.min.js"></script>
         <script src="assets/app/js/metisMenu.min.js"></script>
