@@ -199,10 +199,7 @@
             <div class="mb-15">
                 <div class="banner-container" style="overflow: hidden; height: 300px; object-fit: cover;border-radius: 10px; ">
                     <div class="banner-container" style="overflow: hidden; height: 300px; object-fit: cover; border-radius: 10px; position: relative;">
-                        <c:url value="/assets/img/user/banner-default.png" var="defaultBanner" />
-                        <c:url value="${sessionScope.userInfor.coverPath}" var="userBanner" />
-                        <input type="file" class="form-control" id="coverFile" name="coverFile" style="display: none;" accept="image/*">
-                        <img src="${sessionScope.userInfor.coverPath != null ? userBanner : defaultBanner}" alt="Banner" 
+                        <img src="<c:url value="${sessionScope.userInfor.coverPath}" />" alt="Banner" 
                              style="width: 100%; height: 100%; object-fit: cover;" 
                              id="currentBanner">
                         <img id="newBannerPreview" 

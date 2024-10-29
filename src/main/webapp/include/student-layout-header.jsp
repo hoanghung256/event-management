@@ -129,14 +129,15 @@
                                 <a id="userportfolio" href="#">
                                     <div class="user__portfolio">
                                         <div class="user__portfolio-thumb">
+                                            <c:url value="/assets/img/user/default-avatar.jpg" var="defaultAvatar" />
                                             <img 
                                                 class="rounded-circle"
-                                                src="<c:url value="${sessionScope.userInfor.avatarPath}" />" 
-                                                alt="Default Avatar" 
+                                                src="${sessionScope.userInfor != null ? sessionScope.userInfor.avatarPath : defaultAvatar}" 
+                                                alt="Avatar" 
                                                 />
                                         </div>
                                         <div class="user__content">
-                                            <span>${sessionScope.userInfor.fullname != null ? sessionScope.userInfor.fullname : "Guest"}</span>
+                                            <span>${sessionScope.userInfor != null ? sessionScope.userInfor.fullname : "Guest"}</span>
                                         </div>
                                     </div>
                                 </a>
