@@ -32,10 +32,6 @@ public class OrganizerDAO extends SQLDatabase {
     private static final String SELECT_ORGANIZER_BY_ID = "SELECT id, acronym, fullname, description, email, avatarPath, coverPath, followerCount, isAdmin "
             + "FROM [Organizer] "
             + "WHERE id = ?";
-    private static final String UPDATE_STUDENT_BY_ID = "UPDATE Organizer SET fullname = ?,  acronym = ?, email = ? WHERE  id = ?";
-    // private static final String SELECT_ORGANIZER_BY_EMAIL_AND_PASSWORD = "SELECT id, acronym, fullname, description, email, avatarPath, isAdmin FROM [Organizer] WHERE email = ? AND password = ?";
-    // private static final String UPDATE_ORGANIZER = "UPDATE [Organizer] SET fullname = ?, acronym = ?, email = ?, description = ? WHERE id = ?";
-    // private static final String SELECT_ORGANIZER_BY_ID = "SELECT id, acronym, fullname, description, email, avatarPath, isAdmin FROM [Organizer] WHERE id = ?";
     private static final String UPDATE_ORGANIZER_BY_ID = "UPDATE Organizer SET fullname = ?,  acronym = ?, email = ? WHERE  id = ?";
     private static final String DELETE_ORGANIZER_BY_ID = "DELETE FROM [Organizer] WHERE id=?";
     private static final String SELECT_ORGANIZER = "SELECT "
@@ -93,29 +89,6 @@ public class OrganizerDAO extends SQLDatabase {
         return null;
     }
 
-    /**
-     *
-     * @author TuDK
-     */
-//    public boolean updateOrganizer(Organizer organizer) {
-//        boolean isUpdated = false;
-//        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
-//
-//            Object[] values = {
-//                organizer.getFullname(),
-//                organizer.getAcronym(),
-//                organizer.getEmail(),
-//                organizer.getDescription(),
-//                organizer.getId()
-//            };
-//            int rowsAffected = executeUpdatePreparedStatement(conn, UPDATE_ORGANIZER, values);
-//            isUpdated = rowsAffected > 0;
-//            return isUpdated;
-//        } catch (SQLException e) {
-//            logger.log(Level.SEVERE, null, e);
-//        }
-//        return false;
-//    }
     public boolean updateOrganizer(Organizer organizer) {
         int result = 0;
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
