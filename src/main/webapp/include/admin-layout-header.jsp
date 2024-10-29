@@ -135,7 +135,7 @@
                                 </a>
                             </li>
                         </ul>
-                        <div class="sidebar__copyright">
+                        <div class="sidebar__copyright position-absolute bottom-0">
                             <p>Copyright @FUEM 2024</p>
                         </div>
                     </div>
