@@ -75,7 +75,7 @@
                         <ul class="metismenu" id="menu">
                             <li>
                                 <a href="<c:url value="/home"/>" aria-expanded="false">
-                                    <i class="flaticon-home"></i>
+                                    <i class="fa-solid fa-house"></i>
                                     <span class="nav-text">Home</span>
                                 </a>
                             </li>
@@ -99,7 +99,7 @@
                             </li>
                             <li>
                                 <a href="<c:url value="/sign-out"/>" aria-expanded="false">
-                                    <i class="flaticon-log-out-3"></i>
+                                     <i class="fa-solid fa-right-from-bracket"></i>
                                     <span class="nav-text">Sign out</span>
                                 </a>
                             </li>
