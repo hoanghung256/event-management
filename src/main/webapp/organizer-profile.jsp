@@ -188,9 +188,11 @@
                                                         <div>
                                                             <p class="location"><i class="fas fa-location-dot"></i> ${event.location.name}</p>
                                                         </div>
-                                                        <div>
-                                                            <p><i class="fa-solid fa-user-group"></i> ${event.guestRegisterLimit}/${event.guestRegisterLimit} Registered</p>
-                                                        </div> 
+                                                        <c:if test="${event.guestRegisterCount > 0}">
+                                                            <div>
+                                                                <p><i class="fa-solid fa-user-group"></i>${event.guestRegisterCount} attended</p>
+                                                            </div> 
+                                                        </c:if>
                                                         <a class="element__btn border-yellow" href="event-detail?eventId=${event.id}">Details</a>
                                                     </div>
                                                 </div>
@@ -257,10 +259,6 @@
     document.getElementById('editProfileModal').addEventListener('hidden.bs.modal', function () {
         document.body.style.overflow = '';
     });
-
-    fucntion toLowerCase(text) {
-
-    }
 </script>
 
 <%@include file="../include/master-footer.jsp" %>
