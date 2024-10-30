@@ -76,31 +76,31 @@
                         <ul class="metismenu" id="menu">
                             <li>
                                 <a href="<c:url value="/home"/>" aria-expanded="false" style="text-decoration: none;">
-                                    <i class="flaticon-home"></i>
+                                    <i class="fa-solid fa-house"></i>
                                     <span class="nav-text">Home</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="<c:url value="/student/attended-events"/>" aria-expanded="false" style="text-decoration: none;">
-                                    <i class="flaticon-calendar-1"></i>
+                                    <i class="fa-solid fa-calendar-check"></i>
                                     <span class="nav-text">Attended Events</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="<c:url value="/student/registered-event" />" aria-expanded="false" style="text-decoration: none;">
-                                    <i class="flaticon-success"></i>
-                                    <span class="nav-text">Register Events</span>
+                                    <i class="fa-solid fa-clipboard-list-check"></i>
+                                    <span class="nav-text">Registered Events</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="<c:url value="/student/profile"/>" aria-expanded="false" style="text-decoration: none;">
-                                    <i class="flaticon-user-1"></i>
+                                    <i class="fa-solid fa-user"></i>
                                     <span class="nav-text">Profile</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="<c:url value="/sign-out"/>" aria-expanded="false" style="text-decoration: none;">
-                                    <i class="flaticon-log-out-3"></i>
+                                    <i class="fa-solid fa-right-from-bracket"></i>
                                     <span class="nav-text">Log out</span>
                                 </a>
                             </li>

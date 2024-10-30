@@ -93,7 +93,6 @@
                                     <button class="nav-link active" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="true">About</button>
                                     <button class="nav-link" id="nav-recent-event-tab" data-bs-toggle="tab" data-bs-target="#nav-recent-event" type="button" role="tab" aria-controls="nav-recent-event" aria-selected="false">Recently</button>
                                 </div>
-
                             </nav>
                             <div class="tab-content" id="nav-tabContent">
                                 <div class="tab-pane fade show active" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab" tabindex="0">
@@ -214,51 +213,5 @@
         </div>
     </div>
 </section>
-<div class="modal" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true" data-bs-backdrop="false">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body popup-tab-content">
-                <form id="editProfileForm" method="post" action="OrganizerProfileController">
-                    <input type="hidden" name="organizerId" value="${org.id}">
-                    <div class="mb-3">
-                        <label for="clubName" class="form-label">Club Name</label>
-                        <input type="text" class="form-control" id="clubName" name="fullname" value="${organizer.fullname}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="clubAcronym" class="form-label">Club Acronym</label>
-                        <input type="text" class="form-control" id="clubAcronym" name="acronym" value="${organizer.acronym}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="clubEmail" class="form-label">Email Address</label>
-                        <input type="email" class="form-control" id="clubEmail" name="email" value="${organizer.email}">
-                    </div>
-                    <div class="mb-3">
-                        <label for="clubDescription" class="form-label">Description</label>
-                        <textarea class="form-control" id="clubDescription" name="description">${organizer.description}</textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary"  form="editProfileForm" id="saveChanges">Save Changes</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    document.querySelector('.profile__edit').addEventListener('click', function () {
-        const myModal = new bootstrap.Modal(document.getElementById('editProfileModal'));
-        myModal.show();
-    });
-
-    document.getElementById('editProfileModal').addEventListener('hidden.bs.modal', function () {
-        document.body.style.overflow = '';
-    });
-</script>
 
 <%@include file="../include/master-footer.jsp" %>
