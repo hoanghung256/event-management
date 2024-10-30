@@ -66,6 +66,7 @@ public class EventDAO extends SQLDatabase {
             + "       e.endTime, "
             + "       e.guestRegisterLimit, "
             + "       e.guestRegisterDeadline, "
+            + "       e.avatarPath, "
             + "       o.fullname AS organizerName, "
             + "       o.id AS organizerId, "
             + "       c.id AS categoryId, "
@@ -401,9 +402,9 @@ public class EventDAO extends SQLDatabase {
                 int registeredCount = rs.getInt("guestRegisterCount");
                 event.setGuestRegisterCount(registeredCount);
                 boolean isFollowing = rs.getBoolean("isFollowing");
-                
-                Object[] data = new Object[] {isFollowing, event};
-                
+
+                Object[] data = new Object[]{isFollowing, event};
+
                 datas.add(data);
             }
         } catch (SQLException e) {
@@ -550,6 +551,9 @@ public class EventDAO extends SQLDatabase {
                 location.setId(rs.getInt("locationId"));
                 location.setName(rs.getString("locationName"));
                 event.setLocation(location);
+                List<String> images = new ArrayList<>();
+                images.add(rs.getNString("avatarPath"));
+                event.setImages(images);
 
                 events.add(event);
             }
@@ -592,8 +596,7 @@ public class EventDAO extends SQLDatabase {
     public int insertAndGetGenerateKeyOfNewEvent(Event registerEvent) {
         int generatedId = 0;
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
-                PreparedStatement pstmt = getPreparedStatement(conn.prepareStatement(INSERT_NEW_EVENT, Statement.RETURN_GENERATED_KEYS), conn, INSERT_NEW_EVENT, 
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); PreparedStatement pstmt = getPreparedStatement(conn.prepareStatement(INSERT_NEW_EVENT, Statement.RETURN_GENERATED_KEYS), conn, INSERT_NEW_EVENT,
                 registerEvent.getOrganizer().getId(),
                 registerEvent.getFullname(),
                 registerEvent.getImages().get(0),
@@ -696,7 +699,7 @@ public class EventDAO extends SQLDatabase {
                 int registeredCount = rs.getInt("guestRegisterCount");
                 event.setGuestRegisterCount(registeredCount);
 
-                Object[] data = new Object[] {false, event};
+                Object[] data = new Object[]{false, event};
                 datas.add(data);
             }
         } catch (SQLException e) {
@@ -706,7 +709,6 @@ public class EventDAO extends SQLDatabase {
 
         return page;
     }
-
 
     private String buildSelectQueryForGuest(PagingCriteria pagingCriteria, SearchEventCriteria searchEventCriteria) {
         StringBuilder query = new StringBuilder(SELECT_EVENTS_FOR_GUEST);

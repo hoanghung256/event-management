@@ -53,7 +53,7 @@
 
         <div class="mb-25">
             <div class="banner-container">
-                <img src="https://th.bing.com/th/id/R.ef2cc2ae7c5d1d6a639b2d67b0d6c395?rik=GWx0%2fgQLXFKDxA&pid=ImgRaw&r=0" alt="image not found" style="width: 100%; height: 200">
+                <img src="<c:url value="${organizer.coverPath}" />" alt="Cover Image" style="width: 100%; height: 200">
             </div>
         </div>
 
@@ -104,7 +104,7 @@
 
                                                     <div class="padding__left-inner p-relative">
                                                         <div class="profile__thumb mb-45">
-                                                            <img src="assets/img/speaker/list/04.jpg" alt="image not found"> 
+                                                            <img src="<c:url value="${organizer.avatarPath}" />" alt="Avatar Image"> 
                                                         </div>
                                                         <div class="profile__user">
                                                             <ul>
@@ -168,7 +168,7 @@
                                                             ${event.dateOfEvent}
                                                         </small>
                                                     </div>
-                                                    <img src="assets/img/event/event-details.jpg" alt="Event Image" style="width: 100%; height: auto;">
+                                                    <img src="<c:url value="${event.images[0]}" />" alt="Event Image" style="width: 100%; height: auto;">
                                                 </div>
                                                 <!-- Event Image - End -->
 
