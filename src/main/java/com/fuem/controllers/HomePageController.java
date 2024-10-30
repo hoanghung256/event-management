@@ -39,7 +39,10 @@ public class HomePageController extends HttpServlet {
         request.setAttribute("cateList", cateList);
         List<Organizer> organizerList = eventDAO.getAllOrganizer();
         request.setAttribute("organizerList", organizerList);
-
+        
+        List<Event> todayEvents = eventDAO.getTodayEvent();
+        request.setAttribute("todayEvents", todayEvents);
+//        System.out.println(todayEvents);
         String name = request.getParameter("name");
         String categoryId = request.getParameter("categoryId");
         String organizerId = request.getParameter("organizerId");
@@ -90,7 +93,7 @@ public class HomePageController extends HttpServlet {
                 request.setAttribute("previousSearchEventCriteria", searchEventCriteria);
 
             }
-            Page<Event> result = eventDAO.getForGuest(pagingCriteria, searchEventCriteria);
+            Page<Object[]> result = eventDAO.getForGuest(pagingCriteria, searchEventCriteria);
             request.setAttribute("page", result);
             request.getRequestDispatcher("homepage.jsp").forward(request, response);
         } else {
@@ -137,7 +140,7 @@ public class HomePageController extends HttpServlet {
                 request.setAttribute("previousSearchEventCriteria", searchEventCriteria);
 
             }
-            Page<Event> result = eventDAO.get(
+            Page<Object[]> result = eventDAO.get(
                     pagingCriteria,
                     searchEventCriteria,
                     user.getId()
