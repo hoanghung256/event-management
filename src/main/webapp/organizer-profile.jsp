@@ -7,14 +7,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <c:choose>
-    <c:when test="${sessionScope.userInfor.role == 'STUDENT'}">
-        <%@include file="include/student-layout-header.jsp"%>
+    <c:when test="${sessionScope.userInfor.role == 'CLUB'}">
+        <%@include file="include/club-layout-header.jsp"%>
     </c:when>
     <c:when test="${sessionScope.userInfor.role == 'ADMIN'}">
         <%@include file="include/admin-layout-header.jsp"%>
     </c:when>
     <c:otherwise>
-        <%@include file="include/club-layout-header.jsp"%>
+        <%@include file="include/student-layout-header.jsp"%>
     </c:otherwise>
 </c:choose>
 
