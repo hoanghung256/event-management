@@ -134,7 +134,7 @@
 <section>
     <div class="app__slide-wrapper">
         <div class="breadcrumb__area">
-            <div class="breadcrumb__wrapper mb-35">
+            <div class="breadcrumb__wrapper">
                 <!--<div class="breadcrumb__main container">-->
                 <div class="breadcrumb__inner col-md-12">
                     <div class="breadcrumb__icon">
@@ -255,106 +255,108 @@
     <div class="pb-20">
         <div class="row m-0">
             <div>
-                <div id="myTabContent" class="today-event-list" style="justify-content: center; align-items: center;">
-                    <div class="list-title">
-                        <h2 class="section__title pb-30">
-                            TODAY
-                            <span class="text__highlight"> EVENTS
-                                <svg class="title-underline" width="328" height="31" viewBox="0 0 328 31" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M2 29C110 8.62517 326 -19.8996 326 29" stroke="url(#paint0_linear_47_128)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-                                <defs>
-                                <linearGradient id="paint0_linear_47_128" x1="2.50784" y1="22.0412" x2="322.486" y2="65.0473" gradientUnits="userSpaceOnUse">
-                                <stop offset="1" stop-color="#F7426F" />
-                                <stop offset="1" stop-color="#F87A58" />
-                                </linearGradient>
-                                </defs>
-                                </svg>
-                            </span>
-                        </h2>
-                    </div>
-                    <div class="tab-content" id="nav-tabContent">
-                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
-                            <div class="about__event-thumb w-img mt-40">
-                                <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="3000"> <!-- Auto slide every 3 seconds -->
-                                    <div class="carousel-inner">
-                                        <c:forEach var="event" items="${todayEvents}" varStatus="status">
-                                            <div class="carousel-item ${status.first ? 'active' : ''}" style="background-image: url('<c:url value="${event.images[0]}"/>');">
-                                                <div class="carousel-caption" style="">
-                                                    <h4>${event.fullname}</h4>
+                <c:if test="${not empty todayEvents}">
+                    <div id="myTabContent" class="today-event-list" style="justify-content: center; align-items: center;">
+                        <div class="list-title">
+                            <h2 class="section__title pb-30">
+                                TODAY
+                                <span class="text__highlight"> EVENTS
+                                    <svg class="title-underline" width="328" height="31" viewBox="0 0 328 31" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M2 29C110 8.62517 326 -19.8996 326 29" stroke="url(#paint0_linear_47_128)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                                    <defs>
+                                    <linearGradient id="paint0_linear_47_128" x1="2.50784" y1="22.0412" x2="322.486" y2="65.0473" gradientUnits="userSpaceOnUse">
+                                    <stop offset="1" stop-color="#F7426F" />
+                                    <stop offset="1" stop-color="#F87A58" />
+                                    </linearGradient>
+                                    </defs>
+                                    </svg>
+                                </span>
+                            </h2>
+                        </div>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
+                                <div class="about__event-thumb w-img mt-40">
+                                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="3000"> <!-- Auto slide every 3 seconds -->
+                                        <div class="carousel-inner">
+                                            <c:forEach var="event" items="${todayEvents}" varStatus="status">
+                                                <div class="carousel-item ${status.first ? 'active' : ''}" style="background-image: url('<c:url value="${event.images[0]}"/>');">
+                                                    <div class="carousel-caption" style="">
+                                                        <h4>${event.fullname}</h4>
 
-                                                    <p class="description-tex today-truncated-text" style="padding: 0 5rem;">
-                                                        ${event.description}
-                                                    </p>
-                                                    <div style="display: flex; justify-content: space-around; margin: 2rem 5rem;">
-                                                        <p><strong>Organizer: </strong><span>${event.organizer.fullname}</span></p>
-                                                        <div style="margin-bottom: 10px;">
-                                                            <span class="event-type"><i class="fa-solid fa-list"></i> ${event.category.name}</span>
+                                                        <p class="description-tex today-truncated-text" style="padding: 0 5rem;">
+                                                            ${event.description}
+                                                        </p>
+                                                        <div style="display: flex; justify-content: space-around; margin: 2rem 5rem;">
+                                                            <p><strong>Organizer: </strong><span>${event.organizer.fullname}</span></p>
+                                                            <div style="margin-bottom: 10px;">
+                                                                <span class="event-type"><i class="fa-solid fa-list"></i> ${event.category.name}</span>
+                                                            </div>
+                                                            <div>
+                                                                <p class="location"><i class="fas fa-location-dot"></i> ${event.location.name}</p>
+                                                            </div>
                                                         </div>
-                                                        <div>
-                                                            <p class="location"><i class="fas fa-location-dot"></i> ${event.location.name}</p>
-                                                        </div>
-                                                    </div>
 
-                                                    <div class="slider__btn">
-                                                        <a href="event-detail?eventId=${event.id}">
-                                                            View Details
-                                                            <svg class="btn-svg-border1 reg-hover-color-none" width="206" height="78" viewBox="0 0 206 78" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M205.374 38.5573C205.374 43.679 202.612 48.6179 197.487 53.1693C192.362 57.7203 184.918 61.8416 175.677 65.3128C157.197 72.2539 131.634 76.5573 103.374 76.5573C75.1136 76.5573 49.5509 72.2539 31.0714 65.3128C21.8298 61.8416 14.3857 57.7203 9.26099 53.1693C4.13572 48.6179 1.37402 43.679 1.37402 38.5573C1.37402 33.4355 4.13572 28.4966 9.26099 23.9452C14.3857 19.3942 21.8298 15.2729 31.0714 11.8017C49.5509 4.86064 75.1136 0.557251 103.374 0.557251C131.634 0.557251 157.197 4.86064 175.677 11.8017C184.918 15.2729 192.362 19.3942 197.487 23.9452C202.612 28.4966 205.374 33.4355 205.374 38.5573Z"
-                                                                stroke="white"
-                                                                />
-                                                            </svg>
-                                                            <svg class="btn-svg-border2 reg-hover-color-none" width="206" height="78" viewBox="0 0 206 78" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M205.374 38.5573C205.374 43.679 202.612 48.6179 197.487 53.1693C192.362 57.7203 184.918 61.8416 175.677 65.3128C157.197 72.2539 131.634 76.5573 103.374 76.5573C75.1136 76.5573 49.5509 72.2539 31.0714 65.3128C21.8298 61.8416 14.3857 57.7203 9.26099 53.1693C4.13572 48.6179 1.37402 43.679 1.37402 38.5573C1.37402 33.4355 4.13572 28.4966 9.26099 23.9452C14.3857 19.3942 21.8298 15.2729 31.0714 11.8017C49.5509 4.86064 75.1136 0.557251 103.374 0.557251C131.634 0.557251 157.197 4.86064 175.677 11.8017C184.918 15.2729 192.362 19.3942 197.487 23.9452C202.612 28.4966 205.374 33.4355 205.374 38.5573Z"
-                                                                stroke="white"
-                                                                />
-                                                            </svg>
-                                                            <svg class="btn-svg-border1 reg-hover-color" width="206" height="78" viewBox="0 0 206 78" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M205.374 38.6717C205.374 43.7934 202.612 48.7323 197.487 53.2837C192.362 57.8347 184.918 61.956 175.677 65.4272C157.197 72.3683 131.634 76.6717 103.374 76.6716C75.1136 76.6716 49.5509 72.3682 31.0714 65.4272C21.8298 61.956 14.3857 57.8347 9.26098 53.2837C4.13571 48.7323 1.37402 43.7934 1.37402 38.6716C1.37402 33.5499 4.13571 28.611 9.26098 24.0596C14.3857 19.5086 21.8298 15.3873 31.0714 11.9161C49.5509 4.97503 75.1136 0.671644 103.374 0.671649C131.634 0.671654 157.197 4.97505 175.677 11.9161C184.918 15.3873 192.362 19.5086 197.487 24.0596C202.612 28.611 205.374 33.5499 205.374 38.6717Z"
-                                                                stroke="url(#paint0_linear_42_638)"
-                                                                />
-                                                            <defs>
-                                                            <linearGradient id="paint0_linear_42_638" x1="103.374" y1="0.171649" x2="103.374" y2="77.1716" gradientUnits="userSpaceOnUse">
-                                                            <stop offset="1" stop-color="#F7426F" />
-                                                            <stop offset="1" stop-color="#F87A58" />
-                                                            </linearGradient>
-                                                            </defs>
-                                                            </svg>
-                                                            <svg class="btn-svg-border2 reg-hover-color" width="206" height="78" viewBox="0 0 206 78" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                            <path
-                                                                d="M205.374 38.6717C205.374 43.7934 202.612 48.7323 197.487 53.2837C192.362 57.8347 184.918 61.956 175.677 65.4272C157.197 72.3683 131.634 76.6717 103.374 76.6716C75.1136 76.6716 49.5509 72.3682 31.0714 65.4272C21.8298 61.956 14.3857 57.8347 9.26098 53.2837C4.13571 48.7323 1.37402 43.7934 1.37402 38.6716C1.37402 33.5499 4.13571 28.611 9.26098 24.0596C14.3857 19.5086 21.8298 15.3873 31.0714 11.9161C49.5509 4.97503 75.1136 0.671644 103.374 0.671649C131.634 0.671654 157.197 4.97505 175.677 11.9161C184.918 15.3873 192.362 19.5086 197.487 24.0596C202.612 28.611 205.374 33.5499 205.374 38.6717Z"
-                                                                stroke="url(#paint0_linear_42_638)"
-                                                                />
-                                                            <defs>
-                                                            <linearGradient id="paint0_linear_42_6380" x1="103.374" y1="0.171649" x2="103.374" y2="77.1716" gradientUnits="userSpaceOnUse">
-                                                            <stop offset="1" stop-color="#F7426F" />
-                                                            <stop offset="1" stop-color="#F87A58" />
-                                                            </linearGradient>
-                                                            </defs>
-                                                            </svg>
-                                                        </a>
+                                                        <div class="slider__btn">
+                                                            <a href="event-detail?eventId=${event.id}">
+                                                                View Details
+                                                                <svg class="btn-svg-border1 reg-hover-color-none" width="206" height="78" viewBox="0 0 206 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M205.374 38.5573C205.374 43.679 202.612 48.6179 197.487 53.1693C192.362 57.7203 184.918 61.8416 175.677 65.3128C157.197 72.2539 131.634 76.5573 103.374 76.5573C75.1136 76.5573 49.5509 72.2539 31.0714 65.3128C21.8298 61.8416 14.3857 57.7203 9.26099 53.1693C4.13572 48.6179 1.37402 43.679 1.37402 38.5573C1.37402 33.4355 4.13572 28.4966 9.26099 23.9452C14.3857 19.3942 21.8298 15.2729 31.0714 11.8017C49.5509 4.86064 75.1136 0.557251 103.374 0.557251C131.634 0.557251 157.197 4.86064 175.677 11.8017C184.918 15.2729 192.362 19.3942 197.487 23.9452C202.612 28.4966 205.374 33.4355 205.374 38.5573Z"
+                                                                    stroke="white"
+                                                                    />
+                                                                </svg>
+                                                                <svg class="btn-svg-border2 reg-hover-color-none" width="206" height="78" viewBox="0 0 206 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M205.374 38.5573C205.374 43.679 202.612 48.6179 197.487 53.1693C192.362 57.7203 184.918 61.8416 175.677 65.3128C157.197 72.2539 131.634 76.5573 103.374 76.5573C75.1136 76.5573 49.5509 72.2539 31.0714 65.3128C21.8298 61.8416 14.3857 57.7203 9.26099 53.1693C4.13572 48.6179 1.37402 43.679 1.37402 38.5573C1.37402 33.4355 4.13572 28.4966 9.26099 23.9452C14.3857 19.3942 21.8298 15.2729 31.0714 11.8017C49.5509 4.86064 75.1136 0.557251 103.374 0.557251C131.634 0.557251 157.197 4.86064 175.677 11.8017C184.918 15.2729 192.362 19.3942 197.487 23.9452C202.612 28.4966 205.374 33.4355 205.374 38.5573Z"
+                                                                    stroke="white"
+                                                                    />
+                                                                </svg>
+                                                                <svg class="btn-svg-border1 reg-hover-color" width="206" height="78" viewBox="0 0 206 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M205.374 38.6717C205.374 43.7934 202.612 48.7323 197.487 53.2837C192.362 57.8347 184.918 61.956 175.677 65.4272C157.197 72.3683 131.634 76.6717 103.374 76.6716C75.1136 76.6716 49.5509 72.3682 31.0714 65.4272C21.8298 61.956 14.3857 57.8347 9.26098 53.2837C4.13571 48.7323 1.37402 43.7934 1.37402 38.6716C1.37402 33.5499 4.13571 28.611 9.26098 24.0596C14.3857 19.5086 21.8298 15.3873 31.0714 11.9161C49.5509 4.97503 75.1136 0.671644 103.374 0.671649C131.634 0.671654 157.197 4.97505 175.677 11.9161C184.918 15.3873 192.362 19.5086 197.487 24.0596C202.612 28.611 205.374 33.5499 205.374 38.6717Z"
+                                                                    stroke="url(#paint0_linear_42_638)"
+                                                                    />
+                                                                <defs>
+                                                                <linearGradient id="paint0_linear_42_638" x1="103.374" y1="0.171649" x2="103.374" y2="77.1716" gradientUnits="userSpaceOnUse">
+                                                                <stop offset="1" stop-color="#F7426F" />
+                                                                <stop offset="1" stop-color="#F87A58" />
+                                                                </linearGradient>
+                                                                </defs>
+                                                                </svg>
+                                                                <svg class="btn-svg-border2 reg-hover-color" width="206" height="78" viewBox="0 0 206 78" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                                <path
+                                                                    d="M205.374 38.6717C205.374 43.7934 202.612 48.7323 197.487 53.2837C192.362 57.8347 184.918 61.956 175.677 65.4272C157.197 72.3683 131.634 76.6717 103.374 76.6716C75.1136 76.6716 49.5509 72.3682 31.0714 65.4272C21.8298 61.956 14.3857 57.8347 9.26098 53.2837C4.13571 48.7323 1.37402 43.7934 1.37402 38.6716C1.37402 33.5499 4.13571 28.611 9.26098 24.0596C14.3857 19.5086 21.8298 15.3873 31.0714 11.9161C49.5509 4.97503 75.1136 0.671644 103.374 0.671649C131.634 0.671654 157.197 4.97505 175.677 11.9161C184.918 15.3873 192.362 19.5086 197.487 24.0596C202.612 28.611 205.374 33.5499 205.374 38.6717Z"
+                                                                    stroke="url(#paint0_linear_42_638)"
+                                                                    />
+                                                                <defs>
+                                                                <linearGradient id="paint0_linear_42_6380" x1="103.374" y1="0.171649" x2="103.374" y2="77.1716" gradientUnits="userSpaceOnUse">
+                                                                <stop offset="1" stop-color="#F7426F" />
+                                                                <stop offset="1" stop-color="#F87A58" />
+                                                                </linearGradient>
+                                                                </defs>
+                                                                </svg>
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </c:forEach>
+                                            </c:forEach>
 
-                                        <!-- Add more items if needed -->
+                                            <!-- Add more items if needed -->
+                                        </div>
+                                        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
                                     </div>
-                                    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                        <span class="sr-only">Previous</span>
-                                    </a>
-                                    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                        <span class="sr-only">Next</span>
-                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </c:if>
             </div>
             <div class="" id="myTabContent">
                 <div class="list-title ml-30 mb-30 mt-30">
@@ -363,9 +365,11 @@
                 </div>
                 <div class="" id="day-tab-1-pane" role="tabpanel" aria-labelledby="day-tab-1" tabindex="0">
                     <!-- Event item - Start -->
-                    <c:forEach var="event" items="${page.datas}">
+                    <c:forEach var="data" items="${page.datas}">
+                        <c:set var="event" value="${data[1]}" />
+                        <c:set var="isFollowing" value="${data[0]}" />
                         <div class="event-list-item clearfix" style="display: flex;
-                             margin-bottom: 20px;">
+                             margin-bottom: 20px;  position: relative;">
                             <!-- Event Image - Start -->
                             <div class="event-image" style="height: 100%;
                                  position: relative;
@@ -382,7 +386,9 @@
                                      height: auto;">
                             </div>
                             <!-- Event Image - End -->
-
+                            <c:if test="${isFollowing == true}">
+                                <span class="status__tag bg-green" style="position: absolute; top: 10px; right: 10px;">Following Organizer</span>
+                            </c:if>
                             <!-- Event Content - Start -->
                             <div class="event-content" style="width: 70%;
                                  padding-left: 20px;">

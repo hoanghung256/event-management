@@ -96,24 +96,13 @@ public class EventDAO extends SQLDatabase {
             + "o.fullname AS organizerName, o.id AS organizerId, "
             + "c.id AS categoryId, c.categoryName, c.categoryDescription, "
             + "l.id AS locationId, l.locationName, "
-            + "CASE WHEN f.organizerId IS NOT NULL THEN 1 ELSE 0 END AS organizerId "
+            + "CASE WHEN f.organizerId IS NOT NULL THEN 1 ELSE 0 END AS isFollowing, "
+            + "o.id AS organizerId "
             + "FROM Event e "
             + "JOIN Organizer o ON e.organizerId = o.id "
             + "JOIN Category c ON e.categoryId = c.id "
             + "JOIN Location l ON e.locationId = l.id "
             + "LEFT JOIN Follow f ON e.organizerId = f.organizerId AND f.studentId = ? ";
-    private static final String SELECT_EVENTS_BY_NAME_SEARCH = "SELECT e.*, "
-            + "COUNT(*) OVER() AS 'TotalRow', "
-            + "o.fullname AS organizerName, o.id AS organizerId, "
-            + "c.id AS categoryId, c.categoryName, c.categoryDescription, "
-            + "l.id AS locationId, l.locationName, "
-            + "CASE WHEN f.organizerId IS NOT NULL THEN 1 ELSE 0 END AS organizerId "
-            + "FROM Event e "
-            + "JOIN Organizer o ON e.organizerId = o.id "
-            + "JOIN Category c ON e.categoryId = c.id "
-            + "JOIN Location l ON e.locationId = l.id "
-            + "LEFT JOIN Follow f ON e.organizerId = f.organizerId AND f.studentId = ? "
-            + "WHERE LOWER(e.fullname) LIKE LOWER(?)";
     private static final String SELECT_ALL_CATEGORY = "SELECT * FROM [Category]";
     private static final String UPDATE_EVENTS_REGISTRATION_STATUS = "UPDATE [Event]\n"
             + "SET status = ?\n"
@@ -370,9 +359,9 @@ public class EventDAO extends SQLDatabase {
         return organizers;
     }
 
-    public Page<Event> get(PagingCriteria pagingCriteria, SearchEventCriteria searchEventCriteria, int id) {
-        Page<Event> page = new Page<>();
-        ArrayList<Event> events = new ArrayList<>();
+    public Page<Object[]> get(PagingCriteria pagingCriteria, SearchEventCriteria searchEventCriteria, int id) {
+        Page<Object[]> page = new Page<>();
+        ArrayList<Object[]> datas = new ArrayList<>();
         String query = buildSelectQuery(pagingCriteria, searchEventCriteria);
 
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, query, id);) {
@@ -411,13 +400,16 @@ public class EventDAO extends SQLDatabase {
                 event.setImages(images);
                 int registeredCount = rs.getInt("guestRegisterCount");
                 event.setGuestRegisterCount(registeredCount);
-
-                events.add(event);
+                boolean isFollowing = rs.getBoolean("isFollowing");
+                
+                Object[] data = new Object[] {isFollowing, event};
+                
+                datas.add(data);
             }
         } catch (SQLException e) {
             Logger.getLogger(EventDAO.class.getName()).log(Level.SEVERE, null, e);
         }
-        page.setDatas(events);
+        page.setDatas(datas);
 
         return page;
     }
@@ -662,9 +654,9 @@ public class EventDAO extends SQLDatabase {
         return null;
     }
 
-    public Page<Event> getForGuest(PagingCriteria pagingCriteria, SearchEventCriteria searchEventCriteria) {
-        Page<Event> page = new Page<>();
-        ArrayList<Event> events = new ArrayList<>();
+    public Page<Object[]> getForGuest(PagingCriteria pagingCriteria, SearchEventCriteria searchEventCriteria) {
+        Page<Object[]> page = new Page<>();
+        ArrayList<Object[]> datas = new ArrayList<>();
         String query = buildSelectQueryForGuest(pagingCriteria, searchEventCriteria);
 
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, query);) {
@@ -704,15 +696,17 @@ public class EventDAO extends SQLDatabase {
                 int registeredCount = rs.getInt("guestRegisterCount");
                 event.setGuestRegisterCount(registeredCount);
 
-                events.add(event);
+                Object[] data = new Object[] {false, event};
+                datas.add(data);
             }
         } catch (SQLException e) {
             Logger.getLogger(EventDAO.class.getName()).log(Level.SEVERE, null, e);
         }
-        page.setDatas(events);
+        page.setDatas(datas);
 
         return page;
     }
+
 
     private String buildSelectQueryForGuest(PagingCriteria pagingCriteria, SearchEventCriteria searchEventCriteria) {
         StringBuilder query = new StringBuilder(SELECT_EVENTS_FOR_GUEST);

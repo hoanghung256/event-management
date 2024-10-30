@@ -41,6 +41,7 @@ public class HomePageController extends HttpServlet {
         request.setAttribute("organizerList", organizerList);
         
         List<Event> todayEvents = eventDAO.getTodayEvent();
+        request.setAttribute("todayEvents", todayEvents);
 //        System.out.println(todayEvents);
         String name = request.getParameter("name");
         String categoryId = request.getParameter("categoryId");
@@ -92,7 +93,7 @@ public class HomePageController extends HttpServlet {
                 request.setAttribute("previousSearchEventCriteria", searchEventCriteria);
 
             }
-            Page<Event> result = eventDAO.getForGuest(pagingCriteria, searchEventCriteria);
+            Page<Object[]> result = eventDAO.getForGuest(pagingCriteria, searchEventCriteria);
             request.setAttribute("page", result);
             request.getRequestDispatcher("homepage.jsp").forward(request, response);
         } else {
@@ -139,7 +140,7 @@ public class HomePageController extends HttpServlet {
                 request.setAttribute("previousSearchEventCriteria", searchEventCriteria);
 
             }
-            Page<Event> result = eventDAO.get(
+            Page<Object[]> result = eventDAO.get(
                     pagingCriteria,
                     searchEventCriteria,
                     user.getId()
@@ -147,46 +148,5 @@ public class HomePageController extends HttpServlet {
             request.setAttribute("page", result);
             request.getRequestDispatcher("homepage.jsp").forward(request, response);
         }
-<<<<<<< HEAD
-
-        pagingCriteria = new PagingCriteria(
-                pageNumber,
-                10
-        );
-
-        // Set attribute for SearchEventCriteria
-        if (name != null || categoryId != null || organizerId != null || fromDate != null || toDate != null) {
-            if (!name.isBlank()) {
-                searchEventCriteria.setName(name);
-            }
-            if (!categoryId.isBlank()) {
-                searchEventCriteria.setCategoryId(Integer.valueOf(categoryId));
-            }
-            if (!organizerId.isBlank()) {
-                searchEventCriteria.setOrganizerId(Integer.valueOf(organizerId));
-            }
-            if (!fromDate.isBlank()) {
-                searchEventCriteria.setFrom(LocalDate.parse(fromDate));
-            }
-            if (!toDate.isBlank()) {
-                searchEventCriteria.setTo(LocalDate.parse(toDate));
-            }
-            if (orderBy != null) {
-                searchEventCriteria.setOrderBy(EventOrderBy.valueOf(orderBy));
-            }
-
-            request.setAttribute("previousSearchEventCriteria", searchEventCriteria);
-
-        }
-        Page<Event> result = eventDAO.get(
-                pagingCriteria,
-                searchEventCriteria,
-                user.getId()
-        );
-        request.setAttribute("page", result);
-        request.setAttribute("todayEvents", todayEvents);
-        request.getRequestDispatcher("homepage.jsp").forward(request, response);
-=======
->>>>>>> e4c944295aab1c48b1d87f975a061d088da51edf
     }
 }
