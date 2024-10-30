@@ -102,6 +102,18 @@ public class EventDAO extends SQLDatabase {
             + "JOIN Category c ON e.categoryId = c.id "
             + "JOIN Location l ON e.locationId = l.id "
             + "LEFT JOIN Follow f ON e.organizerId = f.organizerId AND f.studentId = ? ";
+    private static final String SELECT_EVENTS_BY_NAME_SEARCH = "SELECT e.*, "
+            + "COUNT(*) OVER() AS 'TotalRow', "
+            + "o.fullname AS organizerName, o.id AS organizerId, "
+            + "c.id AS categoryId, c.categoryName, c.categoryDescription, "
+            + "l.id AS locationId, l.locationName, "
+            + "CASE WHEN f.organizerId IS NOT NULL THEN 1 ELSE 0 END AS organizerId "
+            + "FROM Event e "
+            + "JOIN Organizer o ON e.organizerId = o.id "
+            + "JOIN Category c ON e.categoryId = c.id "
+            + "JOIN Location l ON e.locationId = l.id "
+            + "LEFT JOIN Follow f ON e.organizerId = f.organizerId AND f.studentId = ? "
+            + "WHERE LOWER(e.fullname) LIKE LOWER(?)";
     private static final String SELECT_ALL_CATEGORY = "SELECT * FROM [Category]";
     private static final String UPDATE_EVENTS_REGISTRATION_STATUS = "UPDATE [Event]\n"
             + "SET status = ?\n"
@@ -169,6 +181,11 @@ public class EventDAO extends SQLDatabase {
      *
      * @author AnhNQ
      */
+    
+    /**
+     *
+     * @author AnhNQ
+     */
     public List<Event> getEventsByFollowingOrganizers(int userId) {
         List<Event> events = new ArrayList<>();
 
@@ -207,12 +224,12 @@ public class EventDAO extends SQLDatabase {
         }
         return events;
     }
-    
+
     /**
      *
      * @author AnhNQ
      */
-    public List<Event> getTodayEvent(){
+    public List<Event> getTodayEvent() {
         List<Event> events = new ArrayList<>();
         System.out.println(SELECT_TODAY_EVENT);
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_TODAY_EVENT)) {
@@ -254,6 +271,7 @@ public class EventDAO extends SQLDatabase {
         }
         return events;
     }
+
     /**
      *
      * @author AnhNQ
@@ -397,7 +415,7 @@ public class EventDAO extends SQLDatabase {
         StringBuilder query = new StringBuilder(SELECT_EVENTS_FOLLOWED_AND_NOT_FOLLOWED);
 
         if (!searchEventCriteria.isEmpty()) {
-            query.append("\n WHERE ");
+            query.append("\n WHERE");
 
             if (searchEventCriteria.getName() != null && !searchEventCriteria.getName().isBlank()) {
                 query.append(" LOWER(e.fullname) LIKE LOWER('%");
@@ -419,11 +437,8 @@ public class EventDAO extends SQLDatabase {
                 query.append(searchEventCriteria.getTo());
                 query.append("'");
             }
-        } else {
-            query.append("\n WHERE e.status = 'APPROVED' ");
         }
         query.append("\n AND e.dateOfEvent > GETDATE()");
-        query.append("\n AND e.status = 'APPROVED' ");
 
         query.append("\n ORDER BY f.organizerId DESC, ");
 
@@ -444,6 +459,7 @@ public class EventDAO extends SQLDatabase {
             query.append(pagingCriteria.getFetchNext());
             query.append(" ROWS ONLY");
         }
+
         return query.toString();
     }
 

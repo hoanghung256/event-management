@@ -148,7 +148,7 @@
                         </nav>
                     </div>
                 </div>
-                <div class="col-md-12 d-flex">
+                <div class="col-md-12 d-flex" sytle="justify-content: space-between;">
                     <form action="home" method="GET" class="row filter-form">
                         <!-- Row 1: Event Name, Event Type, Organizer -->
                         <div class="col-md-2 input">
@@ -161,7 +161,7 @@
                             <select id="categoryId" name="categoryId" class="form-select">
                                 <option value="" selected>Select Category</option>
                                 <c:forEach var="category" items="${cateList}">
-                                    <option value="${category.id}" ${previousSearchEventCriteria != null && previousSearchEventCriteria.categoryId == category.id ? "selected" : ""} >
+                                    <option value="${category.id}" ${previousSearchEventCriteria != null && previousSearchEventCriteria.categoryId == category.id ? 'selected' : ''}>
                                         ${category.name}
                                     </option>
                                 </c:forEach>
@@ -171,7 +171,7 @@
                         <div class="col-md-2 input">
                             <label for="organizerId" class="form-label">Organizer</label>
                             <select id="organizerId" name="organizerId" class="form-select">
-                                <option value="" selected>Select Organizer</option>
+                                <option value=""selected>Select Organizer</option>
                                 <c:forEach var="organizer" items="${organizerList}">
                                     <option value="${organizer.id}" ${previousSearchEventCriteria != null && previousSearchEventCriteria.organizerId == organizer.id ? 'selected' : ''}>
                                         ${organizer.fullname}
@@ -197,7 +197,7 @@
                     </form>
                     <div class="col-md-1">       
                         <div class="notification" >
-                            <a id="notifydropdown" href="#" >
+                            <a id="notifydropdown" href="#">
                                 <div class="notification__icon" style="padding-top: 1.5rem">
                                     <svg width="25" height="25" viewBox="0 0 22 22" fill="none" style="ms-auto" 
                                          xmlns="http://www.w3.org/2000/svg">
@@ -253,7 +253,7 @@
 
     <!--B?t ??u n?i dung c?a trang ? ?�y-->
     <div class="pb-20">
-        <div class="row">
+        <div class="row m-0">
             <div>
                 <div id="myTabContent" class="today-event-list" style="justify-content: center; align-items: center;">
                     <div class="list-title">

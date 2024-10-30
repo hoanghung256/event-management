@@ -36,10 +36,8 @@ public class HomePageController extends HttpServlet {
         EventDAO eventDAO = new EventDAO();
         NotificationDAO notiDAO = new NotificationDAO();
         Student user = (Student) request.getSession().getAttribute("userInfor");
-        
-        List<Notification> notiList = notiDAO.getNotificationsForUser(user.getId());
-        request.setAttribute("notiList", notiList);
-
+            List<Notification> notiList = notiDAO.getNotificationsForUser(user.getId());
+            request.setAttribute("notiList", notiList); 
         List<Category> cateList = eventDAO.getAllCategory();
         request.setAttribute("cateList", cateList);
 
@@ -48,7 +46,6 @@ public class HomePageController extends HttpServlet {
         
         List<Event> todayEvents = eventDAO.getTodayEvent();
 //        System.out.println(todayEvents);
-        request.setAttribute("todayEvents", todayEvents);
         String name = request.getParameter("name");
         String categoryId = request.getParameter("categoryId");
         String organizerId = request.getParameter("organizerId");
@@ -103,6 +100,7 @@ public class HomePageController extends HttpServlet {
                 user.getId()
         );
         request.setAttribute("page", result);
+        request.setAttribute("todayEvents", todayEvents);
         request.getRequestDispatcher("homepage.jsp").forward(request, response);
     }
 }
