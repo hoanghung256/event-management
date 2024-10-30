@@ -152,23 +152,29 @@ public class AdminDAO extends SQLDatabase {
             + "FETCH NEXT ? ROWS ONLY";
 
     private static String SELECT_UPCOMING_EVENTS = "SELECT \n"
-            + "     Event.organizerId AS OrganizerId, \n"
-            + "     Event.fullname AS EventName,\n"
-            + "     Organizer.acronym AS OrganizerAcronym,\n"
-            + "     Event.dateOfEvent AS EventDate,\n"
-            + "     Location.locationName AS LocationName,\n"
-            + "     Category.categoryName AS CategoryName \n"
+            + "    Event.id AS EventId, \n"
+            + "    Event.organizerId AS OrganizerId, \n"
+            + "    Event.fullname AS EventName,\n"
+            + "    Organizer.acronym AS OrganizerAcronym,\n"
+            + "    Event.dateOfEvent AS EventDate,\n"
+            + "    Location.locationName AS LocationName,\n"
+            + "    Category.categoryName AS CategoryName,\n"
+            + "    Event.status AS Status,\n"
+            + "    Event.guestRegisterLimit AS RegisterLimit,\n"
+            + "    Event.guestRegisterCount AS RegisterCount, \n"
+            + "    startTime, endTime \n"
             + "FROM \n"
             + "    Event\n"
             + "JOIN\n"
-            + "	Organizer ON Organizer.id = Event.organizerId\n"
+            + "    Organizer ON Organizer.id = Event.organizerId\n"
             + "JOIN \n"
             + "    Location ON Event.locationId = Location.id\n"
             + "JOIN \n"
             + "    Category ON Event.categoryId = Category.id\n"
             + "WHERE \n"
-            + "	Event.dateOfEvent > GETDATE()\n"
-            + "	AND Event.status = 'APPROVED'";
+            + "    Event.dateOfEvent >= CAST(GETDATE() AS DATE)\n"
+            + "    AND Event.status = 'APPROVED'"
+            + "ORDER BY Event.dateOfEvent ASC;";
 
     private static String SELECT_REGISTRATION_EVENTS_WITH_PAGING = "SELECT\n"
             + "    Event.id AS EventId, \n"
@@ -271,24 +277,24 @@ public class AdminDAO extends SQLDatabase {
         ArrayList<Event> organizedEvent = new ArrayList<>();
 
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZED_EVENTS);) {
-            while(rs.next()) {
+            while (rs.next()) {
                 organizedEvent.add(
                         new EventBuilder()
-                        .setId(rs.getInt("EventId"))
-                        .setFullname(rs.getString("EventName"))
-                        .setDateOfEvent(rs.getDate("EventDate").toLocalDate())
-                        .setLocation(
-                                new Location(
-                                        rs.getString("LocationName")
+                                .setId(rs.getInt("EventId"))
+                                .setFullname(rs.getString("EventName"))
+                                .setDateOfEvent(rs.getDate("EventDate").toLocalDate())
+                                .setLocation(
+                                        new Location(
+                                                rs.getString("LocationName")
+                                        )
                                 )
-                        )
-                        .setCategory(
-                                new Category(
-                                        rs.getString("CategoryName")
+                                .setCategory(
+                                        new Category(
+                                                rs.getString("CategoryName")
+                                        )
                                 )
-                        )
-                        .setOrganizer(new Organizer(rs.getInt("OrganizerId"), rs.getString("ClubName")))
-                        .build()
+                                .setOrganizer(new Organizer(rs.getInt("OrganizerId"), rs.getString("ClubName")))
+                                .build()
                 );
             }
         } catch (SQLException e) {
@@ -321,30 +327,30 @@ public class AdminDAO extends SQLDatabase {
         Page<Event> page = new Page<>();
         ArrayList<Event> organizedEvent = new ArrayList<>();
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZED_EVENTS_WITH_PAGING,pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
-            while(rs.next()) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZED_EVENTS_WITH_PAGING, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
+            while (rs.next()) {
                 if (page.getTotalPage() == null && page.getCurrentPage() == null) {
                     page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
                     page.setCurrentPage(pagingCriteria.getOffset() / pagingCriteria.getFetchNext());
                 }
-                
+
                 organizedEvent.add(
                         new EventBuilder()
-                        .setId(rs.getInt("EventId"))
-                        .setFullname(rs.getString("EventName"))
-                        .setDateOfEvent(rs.getDate("EventDate").toLocalDate())
-                        .setLocation(
-                                new Location(
-                                        rs.getString("LocationName")
+                                .setId(rs.getInt("EventId"))
+                                .setFullname(rs.getString("EventName"))
+                                .setDateOfEvent(rs.getDate("EventDate").toLocalDate())
+                                .setLocation(
+                                        new Location(
+                                                rs.getString("LocationName")
+                                        )
                                 )
-                        )
-                        .setCategory(
-                                new Category(
-                                        rs.getString("CategoryName")
+                                .setCategory(
+                                        new Category(
+                                                rs.getString("CategoryName")
+                                        )
                                 )
-                        )
-                        .setOrganizer(new Organizer(rs.getInt("OrganizerId"), rs.getString("ClubName")))
-                        .build()
+                                .setOrganizer(new Organizer(rs.getInt("OrganizerId"), rs.getString("ClubName")))
+                                .build()
                 );
             }
         } catch (SQLException e) {
@@ -362,6 +368,7 @@ public class AdminDAO extends SQLDatabase {
             while (rs.next()) {
                 upcomingEvent.add(
                         new EventBuilder()
+                                .setId(rs.getInt("EventId"))
                                 .setFullname(rs.getNString("EventName"))
                                 .setDateOfEvent(rs.getDate("EventDate").toLocalDate())
                                 .setCategory(
@@ -380,6 +387,11 @@ public class AdminDAO extends SQLDatabase {
                                                 rs.getString("OrganizerAcronym")
                                         )
                                 )
+                                .setStatus(Status.valueOf(rs.getString("Status")))
+                                .setGuestRegisterLimit(rs.getInt("RegisterLimit"))
+                                .setGuestRegisterCount(rs.getInt("RegisterCount"))
+                                .setStartTime(rs.getTime("startTime").toLocalTime())
+                                .setEndTime(rs.getTime("endTime").toLocalTime())
                                 .build()
                 );
             }

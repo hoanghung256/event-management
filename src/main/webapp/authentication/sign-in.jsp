@@ -41,6 +41,64 @@
                 font-size: 40px;
                 font-family: 'Patrick Hand', cursive;
             }
+            .flip-letter {
+                display: inline-block;
+                /* Kích thước chữ lớn */
+                font-weight: bold;
+                color: #ff5722; /* Màu chữ cam */
+                opacity: 1; /* Đầy đủ hiển thị */
+                animation: flip 8s infinite; /* Thời gian tổng thể của animation */
+            }
+
+            /* Chữ F rút lên biến mất */
+            .flip-letter:nth-child(1) {
+                animation-delay: 0s; /* Bắt đầu ngay lập tức */
+            }
+
+            /* Chữ P rút lên biến mất */
+            .flip-letter:nth-child(2) {
+                animation-delay: 2s; /* Bắt đầu sau 2 giây */
+            }
+
+            /* Chữ T rút lên biến mất */
+            .flip-letter:nth-child(3) {
+                animation-delay: 4s; /* Bắt đầu sau 4 giây */
+            }
+
+            /* Hiệu ứng CSS */
+            @keyframes flip {
+                /* Giai đoạn 1: Rút lên và biến mất */
+                0%, 15% {
+                    transform: translateY(0); /* Hiển thị ban đầu */
+                    opacity: 1; /* Đầy đủ hiển thị */
+                }
+                15%, 30% {
+                    transform: translateY(-100%); /* Rút lên và biến mất */
+                    opacity: 0; /* Ẩn */
+                }
+
+                /* Dừng lại 2 giây */
+                30%, 40% {
+                    transform: translateY(-100%); /* Vẫn ẩn */
+                    opacity: 0; /* Ẩn */
+                }
+
+                /* Giai đoạn 2: Hiện từ dưới lên */
+                40%, 50% {
+                    transform: translateY(100%); /* Hiển thị từ dưới lên */
+                    opacity: 1; /* Hiển thị */
+                }
+                50%, 65% {
+                    transform: translateY(0); /* Dừng lại và hiển thị */
+                    opacity: 1; /* Đầy đủ hiển thị */
+                }
+
+                /* Dừng lại 4 giây trước khi thực hiện lại */
+                65%, 100% {
+                    transform: translateY(0); /* Vẫn hiển thị */
+                    opacity: 1; /* Đầy đủ hiển thị */
+                }
+            }
         </style>
     </head>
 
@@ -51,7 +109,7 @@
                 <div class="sign__left">
                     <div class="sign__header">
                         <div class="sign__logo">
-                            <a href="dashboard.html">
+                            <a href="https://daihoc.fpt.edu.vn/">
                                 <img class="logo-black" src="assets/img/logo/logoFpt.svg.png" alt="image not found" style="width: 150px; height: auto;">
                                 <img class="logo-white" src="assets/img/logo/logoFpt.svg.png" alt="image not found" style="width: 150px; height: auto;">
                             </a>
@@ -60,7 +118,11 @@
                     </div>
                     <div class="sign__center-wrapper text-center mt-90">
                         <div class="sign__title-wrapper mb-40">
-                            <h3 class="sign__title">FPT EVENT MANAGEMENT </h3>
+                            <h3 class="sign__title">
+                                <span class="flip-letter">F</span>
+                                <span class="flip-letter">P</span>
+                                <span class="flip-letter">T</span> EVENT MANAGEMENT
+                            </h3>
                             <p>Experience to success.</p>
                         </div>
                         <div class="sign__input-form text-center">
@@ -121,7 +183,7 @@
                     </div>
                 </div>
                 <div class="sign__right">
-                    <div class="sign__input-thumb"></div>
+                    <div class="sign__input-thumb include__bg w-img" style="background-image: url('assets/img/decorate/sign-in.jpg');"></div>
                 </div>
             </div>
         </section>
@@ -129,7 +191,7 @@
 
         <!-- JS here -->
         <script src="assets/app/js/jquery-3.6.0.min.js"></script>
-        <script src="assets/app/js/waypoints.min.js"></script>
+        <!--<script src="assets/app/js/waypoints.min.js"></script>-->
         <script src="assets/app/js/bootstrap.bundle.min.js"></script>
         <script src="assets/app/js/apexcharts.min.js"></script>
         <script src="assets/app/js/metisMenu.min.js"></script>

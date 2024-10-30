@@ -172,16 +172,29 @@ public class EventDAO extends SQLDatabase {
             + "JOIN Location l ON e.locationId = l.id "
             + "WHERE e.status = 'APPROVED' "
             + "AND e.dateOfEvent = CAST(GETDATE() AS DATE)";
+    private static final String SELECT_EVENTS_FOR_GUEST = "SELECT \n"
+            + "    e.*, \n"
+            + "    COUNT(*) OVER() AS TotalRow, \n"
+            + "    o.fullname AS organizerName, \n"
+            + "    o.id AS organizerId, \n"
+            + "    c.id AS categoryId, \n"
+            + "    c.categoryName, \n"
+            + "    c.categoryDescription, \n"
+            + "    l.id AS locationId, \n"
+            + "    l.locationName\n"
+            + "FROM \n"
+            + "    Event e \n"
+            + "JOIN \n"
+            + "    Organizer o ON e.organizerId = o.id \n"
+            + "JOIN \n"
+            + "    Category c ON e.categoryId = c.id \n"
+            + "JOIN \n"
+            + "    Location l ON e.locationId = l.id";
 
     public EventDAO() {
         super();
     }
 
-    /**
-     *
-     * @author AnhNQ
-     */
-    
     /**
      *
      * @author AnhNQ
@@ -361,8 +374,6 @@ public class EventDAO extends SQLDatabase {
         Page<Event> page = new Page<>();
         ArrayList<Event> events = new ArrayList<>();
         String query = buildSelectQuery(pagingCriteria, searchEventCriteria);
-
-        System.out.println(query);
 
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, query, id);) {
             while (rs.next()) {
@@ -589,7 +600,8 @@ public class EventDAO extends SQLDatabase {
     public int insertAndGetGenerateKeyOfNewEvent(Event registerEvent) {
         int generatedId = 0;
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); PreparedStatement pstmt = getPreparedStatement(conn.prepareStatement(INSERT_NEW_EVENT, Statement.RETURN_GENERATED_KEYS), conn, INSERT_NEW_EVENT,
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                PreparedStatement pstmt = getPreparedStatement(conn.prepareStatement(INSERT_NEW_EVENT, Statement.RETURN_GENERATED_KEYS), conn, INSERT_NEW_EVENT, 
                 registerEvent.getOrganizer().getId(),
                 registerEvent.getFullname(),
                 registerEvent.getImages().get(0),
@@ -648,5 +660,107 @@ public class EventDAO extends SQLDatabase {
             Logger.getLogger(EventDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+
+    public Page<Event> getForGuest(PagingCriteria pagingCriteria, SearchEventCriteria searchEventCriteria) {
+        Page<Event> page = new Page<>();
+        ArrayList<Event> events = new ArrayList<>();
+        String query = buildSelectQueryForGuest(pagingCriteria, searchEventCriteria);
+
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, query);) {
+            while (rs.next()) {
+                if (page.getTotalPage() == null && page.getCurrentPage() == null) {
+                    page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
+                    page.setCurrentPage(pagingCriteria.getOffset() / pagingCriteria.getFetchNext());
+                }
+                Organizer organizer = new Organizer();
+                organizer.setId(rs.getInt("organizerId"));
+                organizer.setFullname(rs.getString("organizerName"));
+
+                List<String> images = new ArrayList<>();
+                images.add(rs.getNString("avatarPath"));
+
+                Event event = new Event(
+                        rs.getInt("id"),
+                        organizer,
+                        rs.getNString("fullname"),
+                        rs.getNString("description"),
+                        new Category(
+                                rs.getInt("id"),
+                                rs.getNString("categoryName")
+                        // rs.getNString("description")
+                        ),
+                        new Location(
+                                rs.getInt("id"),
+                                rs.getNString("locationName")),
+                        rs.getDate("dateOfEvent").toLocalDate(),
+                        rs.getTimestamp("startTime").toLocalDateTime().toLocalTime(),
+                        rs.getTimestamp("endTime").toLocalDateTime().toLocalTime(),
+                        rs.getInt("guestRegisterLimit"),
+                        rs.getDate("guestRegisterDeadline").toLocalDate()
+                // rs.getInt("guestAttendedCount")
+                );
+                event.setImages(images);
+                int registeredCount = rs.getInt("guestRegisterCount");
+                event.setGuestRegisterCount(registeredCount);
+
+                events.add(event);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(EventDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+        page.setDatas(events);
+
+        return page;
+    }
+
+    private String buildSelectQueryForGuest(PagingCriteria pagingCriteria, SearchEventCriteria searchEventCriteria) {
+        StringBuilder query = new StringBuilder(SELECT_EVENTS_FOR_GUEST);
+
+        if (!searchEventCriteria.isEmpty()) {
+            query.append("\n WHERE");
+
+            if (searchEventCriteria.getName() != null && !searchEventCriteria.getName().isBlank()) {
+                query.append(" LOWER(e.fullname) LIKE LOWER('%");
+                query.append(searchEventCriteria.getName());
+                query.append("%')\n ");
+            }
+            if (searchEventCriteria.getCategoryId() != null) {
+                query.append("AND e.categoryId=");
+                query.append(searchEventCriteria.getCategoryId());
+            }
+            if (searchEventCriteria.getOrganizerId() != null) {
+                query.append("\n AND e.organizerId=");
+                query.append(searchEventCriteria.getOrganizerId());
+            }
+            if (searchEventCriteria.getFrom() != null && searchEventCriteria.getTo() != null) {
+                query.append("\n AND e.dateOfEvent BETWEEN '");
+                query.append(searchEventCriteria.getFrom());
+                query.append("' AND '");
+                query.append(searchEventCriteria.getTo());
+                query.append("'");
+            }
+        }
+        query.append("\n AND e.dateOfEvent >= CAST(GETDATE() AS DATE)");
+
+        if (EventOrderBy.DATE_ASC.equals(searchEventCriteria.getOrderBy())) {
+            query.append("\n ORDER BY dateOfEvent ASC");
+        } else if (EventOrderBy.FULLNAME_DESC.equals(searchEventCriteria.getOrderBy())) {
+            query.append(" e.fullname DESC");
+        } else if (EventOrderBy.FULLNAME_ASC.equals(searchEventCriteria.getOrderBy())) {
+            query.append(" e.fullname ASC");
+        } else {
+            query.append("\n ORDER BY dateOfEvent DESC");
+        }
+
+        if (!pagingCriteria.isEmpty()) {
+            query.append("\n OFFSET ");
+            query.append(pagingCriteria.getOffset());
+            query.append(" ROWS\n FETCH NEXT ");
+            query.append(pagingCriteria.getFetchNext());
+            query.append(" ROWS ONLY");
+        }
+
+        return query.toString();
     }
 }

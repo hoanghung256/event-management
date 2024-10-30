@@ -55,6 +55,7 @@ public class SignUpController extends HttpServlet {
                     Hash.doHash(password)
             );
             u.setGender(gender);
+            u.setAvatarPath("/assets/img/user/default-avatar.jpg");
 
             boolean isAdded = userDao.addUser(u);
             if (isAdded) {

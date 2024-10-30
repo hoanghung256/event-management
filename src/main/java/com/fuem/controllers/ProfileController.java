@@ -57,38 +57,46 @@ public class ProfileController extends HttpServlet {
                 if (role.equals("student")) {
                     StudentDAO studentDAO = new StudentDAO();
                     Student student = studentDAO.getStudentById(id);
-
-                    request.setAttribute("student", student);
-                    request.getRequestDispatcher("student-profile.jsp").forward(request, response);
+                    if (student == null) {
+                        response.sendRedirect("sign-in");
+                    } else {
+                        request.getSession().setAttribute("userInfor", student);
+                        request.setAttribute("student", student);
+                        request.getRequestDispatcher("student-profile.jsp").forward(request, response);
+                    }
                 } else {
                     OrganizerDAO organizerDAO = new OrganizerDAO();
                     EventDAO eventDAO = new EventDAO();
                     User user = (User) request.getSession().getAttribute("userInfor");
                     Organizer organizer = organizerDAO.getOrganizerById(id);
                     List<Event> recentEvents = eventDAO.getRecentEvents(id);
-
-                    if (user.getRole().equals(Role.STUDENT)) {
+                    if (user == null) {
+                        request.setAttribute("organizer", organizer);
+                        request.setAttribute("recentEvents", recentEvents);
+                    } else if (user.getRole().equals(Role.STUDENT)) {
                         FollowDAO followDAO = new FollowDAO();
                         boolean isFollowing = followDAO.isUserFollowing(user.getId(), id);
                         request.setAttribute("isFollowing", isFollowing);
+                        request.setAttribute("organizer", organizer);
+                        request.setAttribute("recentEvents", recentEvents);
                     }
-
-                    request.setAttribute("organizer", organizer);
-                    request.setAttribute("recentEvents", recentEvents);
                     request.getRequestDispatcher("organizer-profile.jsp").forward(request, response);
                 }
                 break;
+
             case 4: // access self-profile
                 User user = (User) request.getSession().getAttribute("userInfor");
+                if (user == null) {
+                    response.sendRedirect("sign-in");
+                } else {
+                    if (!user.getRole().equals(Role.STUDENT)) {
+                        EventDAO eventDAO = new EventDAO();
+                        List<Event> recentEvents = eventDAO.getRecentEvents(user.getId());
+                        request.setAttribute("recentEvents", recentEvents);
+                    }
 
-                if (!user.getRole().equals(Role.STUDENT)) {
-                    EventDAO eventDAO = new EventDAO();
-                    List<Event> recentEvents = eventDAO.getRecentEvents(user.getId());
-                    
-                    request.setAttribute("recentEvents", recentEvents);
+                    request.getRequestDispatcher("profile.jsp").forward(request, response);
                 }
-
-                request.getRequestDispatcher("profile.jsp").forward(request, response);
                 break;
             default:
                 request.getRequestDispatcher("error/500.jsp").forward(request, response);
@@ -101,64 +109,56 @@ public class ProfileController extends HttpServlet {
         Role userRole = user.getRole();
 
         if (userRole.equals(Role.STUDENT)) {
-            if (request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) { 
+            if (request.getContentType() != null && request.getContentType().startsWith("multipart/form-data")) {
                 Collection<Part> parts = request.getParts(); // Lấy tất cả các Part
-    
-                // Giới hạn kích thước file
+
                 long maxFileSize = 1024 * 1024; // 1 MB
                 boolean isFileTooLarge = false;
-    
+
                 if (parts != null && !parts.isEmpty()) {
                     for (Part part : parts) {
-                        // Kiểm tra kích thước file
                         if (part.getSize() > maxFileSize) {
                             isFileTooLarge = true;
                             break;
                         }
-                    }
-    
-                    // Kiểm tra xem có file nào vượt quá kích thước cho phép không
-                    if (isFileTooLarge) {
-                        request.setAttribute("error", "The image file is too large. Please choose a different image.");
-                    } else {
-                        List<String> avatarPaths = FileHandler.processUploadFile(parts, FileType.IMAGE);
-    
-                        // Kiểm tra xem có avatar được upload không
-                        if (!avatarPaths.isEmpty()) {
-                            String newAvatarPath = avatarPaths.get(0);
-    
-                            // Lấy thông tin sinh viên từ session
-                            Student student = (Student) request.getSession().getAttribute("userInfor");
-                            if (student != null) {
-                                String studentId = student.getStudentId();
-                                String oldAvatarPath = student.getAvatarPath(); 
-                                
-                                StudentDAO studentDao = new StudentDAO();
-                                boolean isUpdated = studentDao.updateStudentAvatar(studentId, newAvatarPath);
-    
-                                if (isUpdated) {
-                                    // Xoá avatar cũ nếu tồn tại
-                                    if (oldAvatarPath != null && !oldAvatarPath.isEmpty()) {
-                                        FileHandler.deleteFile(getServletContext(), oldAvatarPath);
+
+                        if (isFileTooLarge) {
+                            request.setAttribute("error", "The image file is too large. Please choose a different image.");
+                        } else {
+                            List<String> avatarPaths = FileHandler.processUploadFile(parts, FileType.IMAGE);
+
+                            if (!avatarPaths.isEmpty()) {
+                                String newAvatarPath = avatarPaths.get(0);
+
+                                Student student = (Student) request.getSession().getAttribute("userInfor");
+                                if (student != null) {
+                                    String studentId = student.getStudentId();
+                                    String oldAvatarPath = student.getAvatarPath();
+
+                                    StudentDAO studentDao = new StudentDAO();
+                                    boolean isUpdated = studentDao.updateStudentAvatar(studentId, newAvatarPath);
+
+                                    if (isUpdated) {
+                                        if (oldAvatarPath != null && !oldAvatarPath.isEmpty()) {
+                                            FileHandler.deleteFile(getServletContext(), oldAvatarPath);
+                                        }
+
+                                        student.setAvatarPath(newAvatarPath);
+                                        request.getSession().setAttribute("userInfor", student);
+
+                                        FileHandler.save(avatarPaths, parts, getServletContext(), FileType.IMAGE);
+
+                                        request.setAttribute("success", "Avatar updated successfully!");
+                                    } else {
+                                        request.setAttribute("error", "Failed to update avatar.");
                                     }
-    
-                                    // Cập nhật lại thông tin sinh viên trong session sau khi thay đổi avatar
-                                    student.setAvatarPath(newAvatarPath);
-                                    request.getSession().setAttribute("userInfor", student);
-    
-                                    // Lưu avatar mới
-                                    FileHandler.save(avatarPaths, parts, getServletContext(), FileType.IMAGE);
-    
-                                    request.setAttribute("success", "Avatar updated successfully!");
-                                } else {
-                                    request.setAttribute("error", "Failed to update avatar.");
                                 }
                             }
                         }
                     }
                 }
             }
-    
+
             request.getRequestDispatcher("profile.jsp").forward(request, response);
         } else if (userRole.equals(Role.CLUB) || userRole.equals(Role.ADMIN)) {
             int organizerId = user.getId();
@@ -197,14 +197,14 @@ public class ProfileController extends HttpServlet {
             Organizer organizer = new Organizer(acronym, description, newCoverPath, organizerId, fullname, email, newAvatarPath);
             boolean isUpdated = organizerDAO.updateOrganizer(organizer);
             organizer.setRole(userRole);
-            
+
             if (isUpdated) {
                 request.getSession().setAttribute("userInfor", organizer);
                 request.setAttribute("message", "Update successfully");
             } else {
                 request.setAttribute("error", "Update failed");
             }
-            
+
             request.getRequestDispatcher("profile.jsp").forward(request, response);
         }
     }

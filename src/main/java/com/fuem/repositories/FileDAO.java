@@ -138,9 +138,9 @@ public class FileDAO extends SQLDatabase {
             rowChange = executeUpdatePreparedStatement(conn, INSERT_NEW_FILE, doc.getSubmittedBy().getId(), doc.getDisplayName(), doc.getType(), doc.getPath());
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
-        } finally {
-            return (rowChange > 0);
         }
+
+        return (rowChange > 0);
     }
     
     /**
