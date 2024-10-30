@@ -179,7 +179,7 @@
                                         <div class="col-xxl-6 col-xl-6">
                                             <div class="event__meta-time">
                                                 <ul>
-                                                    <li><span>Organizer : </span>${event.organizer.acronym}</li>
+                                                    <li><span>Organizer : </span>${event.organizer.fullname}</li>
                                                     <li><span>Date : </span><time id="date">${event.dateOfEvent}</time> 
                                                         <span>Time : </span><time id="time">${event.startTime}</time> - <time id="time">${event.endTime}</time></li>
                                                     <li><span>Category : </span>${event.category.name}</li>

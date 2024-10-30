@@ -122,6 +122,11 @@
 
         <!-- Start of Upcoming Event-->
         <div>
+            <c:if test="${empty upcomingEvents}">
+                <div class="no-events">
+                    <span>No upcomming event!</span>
+                </div>
+            </c:if>
             <!-- Check if Upcoming Event is empty -->
             <c:if test="${not empty upcomingEvent}">
                 <c:forEach var="event" items="${upcomingEvent}">
@@ -226,7 +231,7 @@
                     </div>
                     <div class="card__header-right">
                         <div class="card__header-right">
-                            <div class="element__btn border-yellow">
+                            <div class="card__btn">
                                 <a href="<c:url value="/club/organized-event"/>">View All Event</a>
                             </div>
                         </div>
