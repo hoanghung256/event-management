@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 tag.textContent = "";
                 continue;
             }
-            let formatDate = new Date(tag.textContent).toLocaleDateString("en-UK");
+            let formatDate = new Date(tag.textContent).toLocaleDateString"en-GB");
             tag.textContent = formatDate;
         });
     }

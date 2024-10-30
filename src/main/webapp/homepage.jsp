@@ -72,13 +72,13 @@
     }
     .carousel-caption {
         position: absolute;
-        top: 50%; /* ??a lên gi?a chi?u d?c */
+        top: 50%; /* ??a lï¿½n gi?a chi?u d?c */
         left: 50%;
-        transform: translate(-50%, -50%); /* C?n gi?a hoàn toàn */
+        transform: translate(-50%, -50%); /* C?n gi?a hoï¿½n toï¿½n */
         background-color: rgba(0, 0, 0, 0.5);
         text-align: center;
         width: 100%;
-        padding: 20px; /* Thêm kho?ng cách */
+        padding: 20px; /* Thï¿½m kho?ng cï¿½ch */
         opacity: 0;
         transition: opacity 0.4s ease, visibility 0.4s ease;
     }
@@ -92,25 +92,25 @@
     .carousel-caption p,
     .carousel-caption .location,
     .carousel-caption .event-type {
-        color: white; /* ??t màu ch? thành tr?ng */
+        color: white; /* ??t mï¿½u ch? thï¿½nh tr?ng */
     }
 
-    /* ?? làm cho các liên k?t tr? nên n?i b?t h?n */
+    /* ?? lï¿½m cho cï¿½c liï¿½n k?t tr? nï¿½n n?i b?t h?n */
 
 
     .carousel-caption a:hover {
-        background-color: #e6b800; /* Màu n?n khi hover */
+        background-color: #e6b800; /* Mï¿½u n?n khi hover */
     }
 
     .today-truncated-text {
         display: -webkit-box;          /* Thi?t l?p ch? ?? hi?n th? box */
-        -webkit-box-orient: vertical;  /* H??ng c?a box là d?c */
-        -webkit-line-clamp: 3;        /* Gi?i h?n s? dòng hi?n th? là 3 */
+        -webkit-box-orient: vertical;  /* H??ng c?a box lï¿½ d?c */
+        -webkit-line-clamp: 3;        /* Gi?i h?n s? dï¿½ng hi?n th? lï¿½ 3 */
         overflow: hidden;              /* ?n n?i dung th?a */
-        text-overflow: ellipsis;      /* Hi?n th? d?u ba ch?m (...) n?u có n?i dung b? c?t */
+        text-overflow: ellipsis;      /* Hi?n th? d?u ba ch?m (...) n?u cï¿½ n?i dung b? c?t */
     }
     .carousel-caption > * {
-        margin: 4rem 0 0 0; /* Thêm margin cho t?t c? các ph?n t? con */
+        margin: 4rem 0 0 0; /* Thï¿½m margin cho t?t c? cï¿½c ph?n t? con */
     }
     @keyframes bounce {
         0%, 20%, 50%, 80%, 100% {
@@ -126,7 +126,7 @@
 
     .bounce-text {
         color: orange;
-        animation: bounce 1s infinite; /* Th?i gian nh?y và l?p l?i vô h?n */
+        animation: bounce 1s infinite; /* Th?i gian nh?y vï¿½ l?p l?i vï¿½ h?n */
         font-weight: bold;
     }
 

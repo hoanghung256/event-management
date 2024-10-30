@@ -143,7 +143,7 @@
                                     </div>
                                 </a>
                                 <div class="user__dropdown">
-                                    <ul>
+                                    <ul class="mb-0">
                                         <li>
                                             <a href="<c:url value="/student/profile" />" style="text-decoration: none;"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"
                                                                         xmlns="http://www.w3.org/2000/svg">
