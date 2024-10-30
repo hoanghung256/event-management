@@ -75,7 +75,7 @@ public class FileDAO extends SQLDatabase {
      *
      * @author HungHV
      */
-    public int insertEventImages(int eventId, List<String> imagePaths) {
+    public int insertEventImages(int eventId, List<String> imagePaths) throws SQLException {
         int insertedRow = 0;
 
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
@@ -83,7 +83,7 @@ public class FileDAO extends SQLDatabase {
                 insertedRow += executeUpdatePreparedStatement(conn, INSERT_NEW_IMAGE, eventId, imagePaths.get(i));
             }
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, null, e);
+            throw e;
         }
 
         return insertedRow;

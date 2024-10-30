@@ -255,7 +255,7 @@
                                 <thead>
                                     <tr>
                                         <th>ID No</th>
-                                        <th>Club Name</th>
+                                        <th>Organizer</th>
                                         <th>Event Name</th>
                                         <th>Date</th>
                                         <th>Category</th>
@@ -276,7 +276,7 @@
                                                 <td>
                                                     <div class="attendant__user-item">
                                                         <div class="registration__user-thumb">
-                                                            <img src="<c:url value="${event.organizer.avatarPath}"/>" alt="image not found">
+                                                            <img class="rounded-circle" src="<c:url value="${event.organizer.avatarPath}"/>" alt="image not found">
                                                         </div>
                                                         <div class="attendant__user-title">
                                                             <span>
@@ -351,13 +351,13 @@
                                     <i class="flaticon-calendar-3"></i>
                                 </div>
                                 <div class="card__header-title">
-                                    <h4>Registration Events</h4>
+                                    <h4>Pending Events</h4>
                                 </div>
                             </div>
                             <div class="card__header-right">
                                 <div class="card__header-right">
-                                    <div class="element__btn border-yellow">
-                                        <a href="<c:url value="/admin/approval-events?action=show"/>">View All Event</a>
+                                    <div class="card__btn">
+                                        <a href="<c:url value="/admin/approval-events?action=show"/>">View All</a>
                                     </div>
                                 </div>
                             </div>
@@ -375,32 +375,29 @@
                                 <c:if test="${not empty registrationList}">
                                     <c:forEach var="event" items="${registrationList}">
                                         <div class="news__item">
-                                            <div class="news__item-inner">
-                                                <div class="news__content">
+                                            <div class="news__content">
+                                                <div class="d-flex justify-content-between align-items-center">
                                                     <h4 class="news__title">
                                                         <a href="<c:url value="/admin/approval-events?action=detail&eventId=${event.id}" />">${event.fullname}</a>
                                                     </h4>
-                                                    <div class="news__meta">
-                                                        <div class="news__meta-status">
-                                                            <span><i class="flaticon-user"></i></span>
-                                                            <span>${event.organizer.fullname}</span>
-                                                        </div>
-                                                        <div class="news__meta-status">
-                                                            <span><i class="flaticon-clock"></i></span>
-                                                            <span>${event.dateOfEvent}</span>
-                                                        </div>
-                                                        <div class="news__meta-status">
-                                                            <span><i class="flaticon-event"></i></span>
-                                                            <span>${event.category.name}</span>
-                                                        </div>
-                                                        <div class="news__meta-status">
-                                                            <span><i class="flaticon-placeholder-1"></i></span>
-                                                            <span>${event.location.name}</span>
-                                                        </div>
-                                                        <div class="news__meta-status">
-                                                            <span><i class="flaticon-bell"></i></span>
-                                                            <span class="status__tag warning-bg">${event.status}</span>
-                                                        </div>
+                                                    <span class="status__tag warning-bg">${event.status}</span>
+                                                </div>
+                                                <div class="news__meta">
+                                                    <div class="news__meta-status">
+                                                        <span><i class="flaticon-user"></i></span>
+                                                        <span>${event.organizer.fullname}</span>
+                                                    </div>
+                                                    <div class="news__meta-status">
+                                                        <span><i class="flaticon-clock"></i></span>
+                                                        <span id="date">${event.dateOfEvent}</span>
+                                                    </div>
+                                                    <div class="news__meta-status">
+                                                        <span><i class="flaticon-event"></i></span>
+                                                        <span>${event.category.name}</span>
+                                                    </div>
+                                                    <div class="news__meta-status">
+                                                        <span><i class="flaticon-event"></i></span>
+                                                        <span>${event.location.name}</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -428,7 +425,7 @@
                                 </div>
                             </div>
                             <div class="card__header-right">
-                                <div class="element__btn border-yellow">
+                                <div class="card__btn">
                                     <a href="<c:url value="/admin/organized-event"/>">View All Event</a>
                                 </div>
                             </div>

@@ -153,7 +153,7 @@
                         <div class="app__header-right">
                             <div class="nav-item p-relative">
                                 <div id="userportfolio">
-                                    <div class="user__portfolio">
+                                    <a class="user__portfolio" href="#">
                                         <div class="user__portfolio-thumb">
                                             <img class="rounded-circle"
                                                  src="<c:url value="${sessionScope.userInfor.avatarPath}" />"  
@@ -163,7 +163,7 @@
                                         <div class="user__content">
                                             <span>${sessionScope.userInfor.fullname != null ? sessionScope.userInfor.fullname : "Guest"}</span>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                                 <div class="user__dropdown">
                                     <ul>

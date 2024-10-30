@@ -234,7 +234,6 @@ public class EventDAO extends SQLDatabase {
      */
     public List<Event> getTodayEvent() {
         List<Event> events = new ArrayList<>();
-        System.out.println(SELECT_TODAY_EVENT);
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_TODAY_EVENT)) {
             while (rs.next()) {
                 Event event = new Event();
@@ -249,7 +248,6 @@ public class EventDAO extends SQLDatabase {
                 List<String> imgUrls = new ArrayList<>();
                 imgUrls.add(rs.getNString("avatarPath"));
                 event.setImages(imgUrls);
-                System.out.println(imgUrls);
 
                 Organizer organizer = new Organizer();
                 organizer.setId(rs.getInt("organizerId"));
@@ -593,10 +591,11 @@ public class EventDAO extends SQLDatabase {
      *
      * @author HungHV
      */
-    public int insertAndGetGenerateKeyOfNewEvent(Event registerEvent) {
+    public int insertAndGetGenerateKeyOfNewEvent(Event registerEvent) throws SQLException {
         int generatedId = 0;
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); PreparedStatement pstmt = getPreparedStatement(conn.prepareStatement(INSERT_NEW_EVENT, Statement.RETURN_GENERATED_KEYS), conn, INSERT_NEW_EVENT,
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
+            PreparedStatement pstmt = getPreparedStatement(conn.prepareStatement(INSERT_NEW_EVENT, Statement.RETURN_GENERATED_KEYS), conn, INSERT_NEW_EVENT, 
                 registerEvent.getOrganizer().getId(),
                 registerEvent.getFullname(),
                 registerEvent.getImages().get(0),
@@ -610,7 +609,7 @@ public class EventDAO extends SQLDatabase {
                 registerEvent.getCollaboratorRegisterLimit(),
                 registerEvent.getGuestRegisterDeadline(),
                 registerEvent.getCollaboratorRegisterDeadline(),
-                registerEvent.getOrganizer().getRole() == Role.ADMIN ? Status.APPROVED : Status.PENDING)) {
+                (registerEvent.getOrganizer().getRole() == Role.ADMIN ? Status.APPROVED : Status.PENDING).toString());
             int rowChange = pstmt.executeUpdate();
 
             if (rowChange > 0) {
@@ -621,7 +620,7 @@ public class EventDAO extends SQLDatabase {
                 }
             }
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, null, e);
+            throw e;
         }
 
         return generatedId;

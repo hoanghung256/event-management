@@ -21,6 +21,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Collection;
@@ -53,78 +54,135 @@ public class EventRegistrationController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (processRequest(request, response)) {
+            return;
+        }
         Organizer registerOrganizer = (Organizer) request.getSession().getAttribute("userInfor");
         EventBuilder eventBuilder = new EventBuilder()
                 .setFullname(request.getParameter("fullname"))
                 .setOrganizer(registerOrganizer)
                 .setDescription(request.getParameter("description"))
                 .setCategory(new Category(Integer.parseInt(request.getParameter("categoryId"))))
-                .setLocation(new Location(Integer.parseInt(request.getParameter("locationId"))))
-                .setDateOfEvent(LocalDate.parse(request.getParameter("dateOfEvent")))
-                .setStartTime(LocalTime.parse(request.getParameter("startTime")))
-                .setEndTime(LocalTime.parse(request.getParameter("endTime")));
+                .setLocation(new Location(Integer.parseInt(request.getParameter("locationId"))));
+
+        LocalDate dateOfEvent = LocalDate.parse(request.getParameter("dateOfEvent"));
+
+        if (dateOfEvent.isBefore(LocalDate.now()) || dateOfEvent.isEqual(LocalDate.now())) {
+            request.setAttribute("error", "Date of event must after today!");
+            request.getRequestDispatcher("register-event?method=get").forward(request, response);
+            return;
+        }
+        eventBuilder.setDateOfEvent(dateOfEvent);
+
+        LocalTime startTime = LocalTime.parse(request.getParameter("startTime"));
+        LocalTime endTime = LocalTime.parse(request.getParameter("endTime"));
+
+        if (startTime.isAfter(endTime) || startTime.compareTo(endTime) == 0) {
+            request.setAttribute("error", "Start time must before End time!");
+            request.getRequestDispatcher("register-event?method=get").forward(request, response);
+            return;
+        }
+        eventBuilder.setStartTime(startTime)
+                .setEndTime(endTime);
 
         String guestRegisterLimit = request.getParameter("guestRegisterLimit");
         String guestRegisterDeadline = request.getParameter("guestRegisterDeadline");
         String collaboratorRegisterLimit = request.getParameter("collaboratorRegisterLimit");
         String collaboratorRegisterDeadline = request.getParameter("collaboratorRegisterDeadline");
 
-        if ((!guestRegisterDeadline.isBlank() && guestRegisterLimit.equals("0"))
-                || (guestRegisterDeadline.isBlank() && !guestRegisterLimit.equals("0"))) {
-            request.setAttribute("error", "Must input Guest limit when select Guest register deadline or conversely!");
-            request.getRequestDispatcher("event-registration.jsp").forward(request, response);
+        if (!guestRegisterLimit.equals("0") && guestRegisterDeadline.isBlank()) {
+            request.setAttribute("error", "Require input Guest register deadline when Guest register limit more than 0!");
+            request.getRequestDispatcher("register-event?method=get").forward(request, response);
             return;
         } else if (!guestRegisterDeadline.isBlank()) {
-            eventBuilder.setGuestRegisterDeadline(LocalDate.parse(guestRegisterDeadline));
+            eventBuilder.setGuestRegisterDeadline(LocalDate.parse(guestRegisterDeadline))
+                    .setGuestRegisterLimit(Integer.parseInt(guestRegisterLimit));
             if (eventBuilder.getGuestRegisterDeadline().isAfter(eventBuilder.getDateOfEvent())) {
-                request.setAttribute("error", "register deadline must before or equal Date of event!");
-                request.getRequestDispatcher("event-registration.jsp").forward(request, response);
+                request.setAttribute("error", "Register deadline must before or equal Date of event!");
+                request.getRequestDispatcher("register-event?method=get").forward(request, response);
+                return;
+            } else if (eventBuilder.getGuestRegisterDeadline().isEqual(LocalDate.now())) {
+                request.setAttribute("error", "Register deadline must after today");
+                request.getRequestDispatcher("register-event?method=get").forward(request, response);
                 return;
             }
-            eventBuilder.setGuestRegisterLimit(Integer.parseInt(guestRegisterLimit));
+        } else if (guestRegisterDeadline.isBlank()) {
+            eventBuilder.setGuestRegisterDeadline(LocalDate.EPOCH);
         }
 
-        if ((!collaboratorRegisterDeadline.isBlank() && collaboratorRegisterLimit.equals("0"))
-                || (collaboratorRegisterDeadline.isBlank() && !collaboratorRegisterLimit.equals("0"))) {
-            request.setAttribute("error", "Require Collaborators limit when select Collaborator register deadline or conversely!");
-            request.getRequestDispatcher("event-registration.jsp").forward(request, response);
+        if (!collaboratorRegisterLimit.equals("0") && collaboratorRegisterDeadline.isBlank()) {
+            request.setAttribute("error", "Require input Collaborator register deadline when Collaborator register limit more than 0");
+            request.getRequestDispatcher("register-event?method=get").forward(request, response);
             return;
         } else if (!collaboratorRegisterDeadline.isBlank()) {
-            eventBuilder.setCollaboratorRegisterDeadline(LocalDate.parse(collaboratorRegisterDeadline));
+            eventBuilder.setCollaboratorRegisterDeadline(LocalDate.parse(collaboratorRegisterDeadline))
+                    .setCollaboratorRegisterLimit(Integer.parseInt(collaboratorRegisterLimit));
             if (eventBuilder.getCollaboratorRegisterDeadline().isAfter(eventBuilder.getDateOfEvent())) {
                 request.setAttribute("error", "Register deadline must before or equal Date of event!");
-                request.getRequestDispatcher("event-registration.jsp").forward(request, response);
+                request.getRequestDispatcher("register-event?method=get").forward(request, response);
+                return;
+            } else if (eventBuilder.getCollaboratorRegisterDeadline().isEqual(LocalDate.now())) {
+                request.setAttribute("error", "Register deadline must after today");
+                request.getRequestDispatcher("register-event?method=get").forward(request, response);
                 return;
             }
+        } else if (collaboratorRegisterDeadline.isBlank()) {
+            eventBuilder.setCollaboratorRegisterDeadline(LocalDate.EPOCH);
         }
-        eventBuilder.setCollaboratorRegisterLimit(Integer.parseInt(collaboratorRegisterLimit));
 
         Collection<Part> parts = request.getParts();
+        if (parts.size() < 2) {
+            request.setAttribute("error", "Require upload 2 or more image!");
+            request.getRequestDispatcher("register-event?method=get").forward(request, response);
+            return;
+        }
         try {
             List<String> imagePaths = FileHandler.processUploadFile(parts, FileType.IMAGE);
             eventBuilder.setImages(imagePaths);
         } catch (IOException e) {
             request.setAttribute("error", "Provide at least one image!");
-            request.getRequestDispatcher("event-registration.jsp").forward(request, response);
+            request.getRequestDispatcher("register-event?method=get").forward(request, response);
             return;
         }
-        
+
         Event registerEvent = eventBuilder.build();
         EventDAO eventDao = new EventDAO();
         FileDAO fileDao = new FileDAO();
-        
-        int eventId = eventDao.insertAndGetGenerateKeyOfNewEvent(registerEvent);
+
         try {
+            int eventId = eventDao.insertAndGetGenerateKeyOfNewEvent(registerEvent);
             if (fileDao.insertEventImages(eventId, registerEvent.getImages()) == (registerEvent.getImages().size() - 1)) {
                 request.setAttribute("message", "Register succeessfully");
                 FileHandler.save(registerEvent.getImages(), parts, request.getServletContext(), FileType.IMAGE);
             } else {
                 request.setAttribute("error", "Register failed");
             }
-        } catch (IOException e) {
+        } catch (IOException | SQLException e) {
+            request.setAttribute("error", "Register failed");
             Logger.getLogger(EventRegistrationController.class.getName()).log(Level.SEVERE, null, e);
         }
 
-        request.getRequestDispatcher("event-registration.jsp").forward(request, response);
+        request.getRequestDispatcher("register-event?method=get").forward(request, response);
+    }
+
+    private boolean processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String method = request.getParameter("method");
+
+        if (method == null) {
+            return false;
+        }
+
+        switch (method) {
+            case "get":
+                doGet(request, response);
+                break;
+            case "post":
+                doPost(request, response);
+                break;
+            default:
+                return false;
+        }
+
+        return true;
     }
 }

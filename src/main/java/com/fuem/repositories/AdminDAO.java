@@ -156,6 +156,7 @@ public class AdminDAO extends SQLDatabase {
             + "    Event.organizerId AS OrganizerId, \n"
             + "    Event.fullname AS EventName,\n"
             + "    Organizer.acronym AS OrganizerAcronym,\n"
+            + "    Organizer.avatarPath AS OrganizerAvatarPath, \n"
             + "    Event.dateOfEvent AS EventDate,\n"
             + "    Location.locationName AS LocationName,\n"
             + "    Category.categoryName AS CategoryName,\n"
@@ -384,7 +385,8 @@ public class AdminDAO extends SQLDatabase {
                                 .setOrganizer(
                                         new Organizer(
                                                 rs.getInt("OrganizerId"),
-                                                rs.getString("OrganizerAcronym")
+                                                rs.getString("OrganizerAcronym"),
+                                                rs.getNString("OrganizerAvatarPath")
                                         )
                                 )
                                 .setStatus(Status.valueOf(rs.getString("Status")))

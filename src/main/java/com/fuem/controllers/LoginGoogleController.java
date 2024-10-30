@@ -54,7 +54,7 @@ public class LoginGoogleController extends HttpServlet {
 
                         HttpSession session = request.getSession();
                         session.setAttribute("userInfo", user);
-                        request.getRequestDispatcher("index.html").forward(request, response);
+                        request.getRequestDispatcher("home").forward(request, response);
                     } else {
                         String[] emailSplit = email.split("@");
                         if (!emailSplit[1].equalsIgnoreCase("fpt.edu.vn")) {
