@@ -8,7 +8,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE HTML>
-<html class="no-js">
+<html class="no-js" style="--clr-theme-1: #ff6f00 !important;">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -75,9 +75,9 @@
                     <div class="dlabnav">
                         <ul class="metismenu" id="menu">
                             <li>
-                                <a href="<c:url value="/home"/>" aria-expanded="false" style="text-decoration: none;">
+                                <a href="<c:url value="/home"/>" aria-expanded="false"  style="text-decoration: none;">
                                     <i class="fa-solid fa-house"></i>
-                                    <span class="nav-text">Home</span>
+                                    <span class="nav-text ">Home</span>
                                 </a>
                             </li>
                             <li>

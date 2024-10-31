@@ -18,6 +18,19 @@
     </c:otherwise>
 </c:choose>
 
+<style>
+    .profile__about-info {
+        margin: 20px 0;
+    }
+
+    .profile__title {
+        display: block; 
+        font-size: 24px; 
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: var(--clr-text-secondary);
+    }
+</style>
 <section>
     <div class="app__slide-wrapper">
         <div class="breadcrumb__area">
@@ -51,9 +64,11 @@
         </div>
         <!--Bat dau content cua page o day-->
 
-        <div class="mb-25">
-            <div class="banner-container">
-                <img src="<c:url value="${organizer.coverPath}" />" alt="Cover Image" style="width: 100%; height: 200">
+        <div class="mb-15">
+            <div class="banner-container" style="overflow: hidden; height: 300px; object-fit: cover;border-radius: 10px; ">
+                <div style="width: 100%;height: 300px; position: relative;">
+                    <img src="<c:url value="${organizer.coverPath}" />" alt="Banner" style="width: 100%; height: 100%; object-fit: cover;"  />
+                </div>
             </div>
         </div>
 
@@ -99,47 +114,50 @@
                                     <div class="profile__main-wrapper mt-35">
                                         <div class="row">
                                             <div class="col-xxl-4 col-xl-5 col-lg-6 col-md-6">
-                                                <div class="profile__left">
+                                                <div class="profile__left p-2">
 
                                                     <div class="padding__left-inner p-relative">
-                                                        <div class="profile__thumb mb-45">
-                                                            <img src="<c:url value="${organizer.avatarPath}" />" alt="Avatar Image"> 
+                                                        <div class="profile__thumb mb-45 text-center">
+                                                            <div style="width: 190px; height: 190px; position: relative; border-radius: 50%; margin: 0 auto;">
+                                                                <img src="<c:url value="${organizer.avatarPath}" />" alt="Avatar" 
+                                                                     style="width: 100%; height: 100%; object-fit: cover; object-position: center; border-radius: 50%;" >
+                                                            </div>
                                                         </div>
-                                                        <div class="profile__user">
-                                                            <ul>
-                                                                <li>
-                                                                    <div class="profile__user-item">
-                                                                        <div class="profile__user-tiitle">
-                                                                            <span>Club Name:</span>
-                                                                        </div>
-                                                                        <div class="profile__user-info">
-                                                                            <span>${organizer.fullname}</span>
-                                                                        </div>
+                                                    </div>
+                                                    <div class="profile__user">
+                                                        <ul>
+                                                            <li>
+                                                                <div class="profile__user-item">
+                                                                    <div class="profile__user-tiitle" style="display: flex; align-items: center;">
+                                                                        <span>Club Name:</span>
                                                                     </div>
-                                                                </li>
+                                                                    <div class="profile__user-info">
+                                                                        <span>${organizer.fullname}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
 
-                                                                <li>
-                                                                    <div class="profile__user-item">
-                                                                        <div class="profile__user-tiitle">
-                                                                            <span>Club Acronym:</span>
-                                                                        </div>
-                                                                        <div class="profile__user-info">
-                                                                            <span>${organizer.acronym}</span> 
-                                                                        </div>
+                                                            <li>
+                                                                <div class="profile__user-item">
+                                                                    <div class="profile__user-tiitle" style="display: flex; align-items: center;">
+                                                                        <span>Club Acronym:</span>
                                                                     </div>
-                                                                </li>
-                                                                <li>
-                                                                    <div class="profile__user-item">
-                                                                        <div class="profile__user-tiitle">
-                                                                            <span>Email Address:</span>
-                                                                        </div>
-                                                                        <div class="profile__user-info">
-                                                                            <span>${organizer.email}</span>
-                                                                        </div>
+                                                                    <div class="profile__user-info">
+                                                                        <span>${organizer.acronym}</span> 
                                                                     </div>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
+                                                                </div>
+                                                            </li>
+                                                            <li>
+                                                                <div class="profile__user-item">
+                                                                    <div class="profile__user-tiitle" style="display: flex; align-items: center;">
+                                                                        <span>Email Address:</span>
+                                                                    </div>
+                                                                    <div class="profile__user-info">
+                                                                        <span>${organizer.email}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
                                                     </div>
                                                 </div>
                                             </div>
@@ -211,7 +229,7 @@
                 </div>
             </div>
         </div>
-    </div>
+
 </section>
 
 <%@include file="../include/master-footer.jsp" %>

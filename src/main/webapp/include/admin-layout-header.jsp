@@ -7,8 +7,8 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<!DOCTYPE HTML>
-<html class="no-js" lang="zxx">
+<!DOCTYPE HTML> 
+<html class="no-js" lang="zxx" style="--clr-theme-1: #ff6f00 !important;">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
