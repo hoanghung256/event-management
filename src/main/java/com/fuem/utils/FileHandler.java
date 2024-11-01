@@ -79,7 +79,7 @@ public class FileHandler {
             part.write(fileFolderPath + processedPathList.get(i++));
         }
     }
-    
+
     /**
      * Save file into project source
      *
@@ -107,5 +107,17 @@ public class FileHandler {
         if (file.exists()) {
             file.delete();
         } 
+    }
+
+    /**
+     * Save file into project source
+     *
+     * @author HungHV
+     */
+    
+     public static void deleteFile(ServletContext context, List<String> filepaths) {
+        for (String path : filepaths) {
+            deleteFile(context, path);
+        }
     }
 }

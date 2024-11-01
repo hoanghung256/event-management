@@ -541,5 +541,3 @@ ORDER BY NEWID();
 >>>>>>>>> END: EXAMPLE DATA >>>>>>>>>>
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 */
-
-select * from [Organizer]
