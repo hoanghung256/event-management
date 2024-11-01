@@ -7,8 +7,8 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<!DOCTYPE HTML>
-<html class="no-js" lang="zxx">
+<!DOCTYPE HTML> 
+<html class="no-js" lang="zxx" style="--clr-theme-1: #ff6f00 !important;">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -31,6 +31,17 @@
         <link rel="stylesheet" href="<c:url value='/assets/app/css/spacing.css' />">
         <link rel="stylesheet" href="<c:url value='/assets/app/css/main.css' />">
     </head> 
+
+    <style>
+        .user__portfolio-thumb img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover; 
+        }
+
+    </style>
+
     <body class="body-area">
         <!-- Preloder start -->
         <div id="preloader">
@@ -63,31 +74,26 @@
                         <ul class="metismenu" id="menu">
                             <li>
                                 <a href="<c:url value="/admin/dashboard"/>" aria-expanded="false">
-                                    <i class="flaticon-home"></i>
+                                   <i class="fa-solid fa-house"></i>
                                     <span class="nav-text">Dashboard</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="<c:url value="/admin/register-event"/>" aria-expanded="false">
-                                    <i class="flaticon-calendar-1"></i>
+                                  <i class="fa-solid fa-square-plus"></i>
                                     <span class="nav-text">Create Event</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="<c:url value="#" />" aria-expanded="false">
-                                    <i class="flaticon-upcoming"></i>
-                                    <span class="nav-text">Pending Post</span>
-                                </a>
-                            </li>
+                           
                             <li>
                                 <a href="<c:url value="/admin/organized-event"/>" aria-expanded="false">
-                                    <i class="flaticon-success"></i>
+                                    <i class="fa-solid fa-calendar-check"></i>
                                     <span class="nav-text">Organized Events</span>
                                 </a>
                             </li>
                             <li>
                                 <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                    <i class="flaticon-user-1"></i>
+                                   <i class="fa-solid fa-paper-plane"></i>
                                     <span class="nav-text">Send Notification</span>
                                 </a>
                                 <ul aria-expanded="false">
@@ -97,19 +103,19 @@
                             </li>
                             <li>
                                 <a href="<c:url value="/admin/approval-events?action=show" />" aria-expanded="false">
-                                    <i class="flaticon-clock"></i>
-                                    <span class="nav-text">Pending Events Approval</span>
+                                    <i class="fa-solid fa-hourglass-end"></i>
+                                    <span class="nav-text">Pending Events </span>
                                 </a>
                             </li>
                             <li>
                                 <a href="<c:url value="/admin/file" />" aria-expanded="false">
-                                    <i class="flaticon-edit-1"></i>
+                                   <i class="fa-solid fa-file"></i>
                                     <span class="nav-text">Review Report-Plan Files</span>
                                 </a>
                             </li>
                             <li>
                                 <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                    <i class="flaticon-user-1"></i>
+                                    <i class="fa-solid fa-user"></i>
                                     <span class="nav-text">User Management</span>
                                 </a>
                                 <ul aria-expanded="false">
@@ -119,12 +125,12 @@
                             </li>
                             <li>
                                 <a href="<c:url value="/sign-out" />" aria-expanded="false">
-                                    <i class="flaticon-log-out-3"></i>
+                                    <i class="fa-solid fa-right-from-bracket"></i>
                                     <span class="nav-text">Log out</span>
                                 </a>
                             </li>
                         </ul>
-                        <div class="sidebar__copyright position-absolute bottom-10">
+                        <div class="sidebar__copyright position-absolute bottom-0">
                             <p>Copyright @FUEM 2024</p>
                         </div>
                     </div>
@@ -146,21 +152,18 @@
                         </div>
                         <div class="app__header-right">
                             <div class="nav-item p-relative">
-                                <div id="userportfolio" href="/profile">
-                                    <div class="user__portfolio">
+                                <div id="userportfolio">
+                                    <a class="user__portfolio" href="#">
                                         <div class="user__portfolio-thumb">
-                                            <c:url value="/assets/img/user/default-avatar.jpg" var="defaultAvatar" />
-                                            <c:url value="${sessionScope.userInfor.avatarPath}" var="userAvatar" />
-                                            <img 
-                                                src="${sessionScope.userInfor.avatarPath != null ? userAvatar : defaultAvatar}" 
-                                                style=" object-fit: cover;   border-radius: 50%;" 
-                                                alt="Default Avatar" 
-                                                />
+                                            <img class="rounded-circle"
+                                                 src="<c:url value="${sessionScope.userInfor.avatarPath}" />"  
+                                                 alt="Avatar" 
+                                                 />
                                         </div>
                                         <div class="user__content">
                                             <span>${sessionScope.userInfor.fullname != null ? sessionScope.userInfor.fullname : "Guest"}</span>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                                 <div class="user__dropdown">
                                     <ul>

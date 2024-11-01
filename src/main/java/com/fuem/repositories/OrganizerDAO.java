@@ -32,10 +32,6 @@ public class OrganizerDAO extends SQLDatabase {
     private static final String SELECT_ORGANIZER_BY_ID = "SELECT id, acronym, fullname, description, email, avatarPath, coverPath, followerCount, isAdmin "
             + "FROM [Organizer] "
             + "WHERE id = ?";
-    private static final String UPDATE_STUDENT_BY_ID = "UPDATE Organizer SET fullname = ?,  acronym = ?, email = ? WHERE  id = ?";
-    // private static final String SELECT_ORGANIZER_BY_EMAIL_AND_PASSWORD = "SELECT id, acronym, fullname, description, email, avatarPath, isAdmin FROM [Organizer] WHERE email = ? AND password = ?";
-    // private static final String UPDATE_ORGANIZER = "UPDATE [Organizer] SET fullname = ?, acronym = ?, email = ?, description = ? WHERE id = ?";
-    // private static final String SELECT_ORGANIZER_BY_ID = "SELECT id, acronym, fullname, description, email, avatarPath, isAdmin FROM [Organizer] WHERE id = ?";
     private static final String UPDATE_ORGANIZER_BY_ID = "UPDATE Organizer SET fullname = ?,  acronym = ?, email = ? WHERE  id = ?";
     private static final String DELETE_ORGANIZER_BY_ID = "DELETE FROM [Organizer] WHERE id=?";
     private static final String SELECT_ORGANIZER = "SELECT "
@@ -50,6 +46,11 @@ public class OrganizerDAO extends SQLDatabase {
             + "ORDER BY id ASC "
             + "OFFSET ? ROWS "
             + "FETCH NEXT ? ROWS ONLY";
+
+    private static final String CHECK_PASSWORD_QUERY = "SELECT COUNT(1) FROM Organizer WHERE email = ? AND password = ?";
+    private static final String UPDATE_PASSWORD_BY_EMAIL = "Update [Organizer] "
+            + "SET password = ? "
+            + "WHERE email = ?";
 
     public OrganizerDAO() {
         super();
@@ -88,29 +89,6 @@ public class OrganizerDAO extends SQLDatabase {
         return null;
     }
 
-    /**
-     *
-     * @author TuDK
-     */
-//    public boolean updateOrganizer(Organizer organizer) {
-//        boolean isUpdated = false;
-//        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
-//
-//            Object[] values = {
-//                organizer.getFullname(),
-//                organizer.getAcronym(),
-//                organizer.getEmail(),
-//                organizer.getDescription(),
-//                organizer.getId()
-//            };
-//            int rowsAffected = executeUpdatePreparedStatement(conn, UPDATE_ORGANIZER, values);
-//            isUpdated = rowsAffected > 0;
-//            return isUpdated;
-//        } catch (SQLException e) {
-//            logger.log(Level.SEVERE, null, e);
-//        }
-//        return false;
-//    }
     public boolean updateOrganizer(Organizer organizer) {
         int result = 0;
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
@@ -251,4 +229,26 @@ public class OrganizerDAO extends SQLDatabase {
         return result > 0; // Trả về true nếu có ít nhất một dòng được cập nhật
     }
 
+    public boolean checkCurrentPassword(String email, String currentPasswordHash) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
+                ResultSet rs = executeQueryPreparedStatement(conn, CHECK_PASSWORD_QUERY, email, currentPasswordHash)) {
+            if (rs.next()) {
+                return rs.getInt(1) == 1;
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+        return false;
+    }
+
+    public void updatePassword(String email, String password) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); PreparedStatement pstmt = conn.prepareStatement(UPDATE_PASSWORD_BY_EMAIL)) {
+
+            pstmt.setString(1, password);
+            pstmt.setString(2, email);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
 }

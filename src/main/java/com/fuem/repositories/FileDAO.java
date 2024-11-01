@@ -27,7 +27,7 @@ public class FileDAO extends SQLDatabase {
 
     private static final Logger logger = Logger.getLogger(FileDAO.class.getName());
     private static final String INSERT_NEW_IMAGE = "INSERT INTO [EventImage] ("
-            + "studentId, "
+            + "eventId, "
             + "path) "
             + "VALUES (?, ?)";
     private static final String SELECT_FILE_BY_SUBMITTER_ID = "SELECT "
@@ -75,7 +75,7 @@ public class FileDAO extends SQLDatabase {
      *
      * @author HungHV
      */
-    public int insertEventImages(int eventId, List<String> imagePaths) {
+    public int insertEventImages(int eventId, List<String> imagePaths) throws SQLException {
         int insertedRow = 0;
 
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
@@ -83,7 +83,7 @@ public class FileDAO extends SQLDatabase {
                 insertedRow += executeUpdatePreparedStatement(conn, INSERT_NEW_IMAGE, eventId, imagePaths.get(i));
             }
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, null, e);
+            throw e;
         }
 
         return insertedRow;
@@ -138,9 +138,9 @@ public class FileDAO extends SQLDatabase {
             rowChange = executeUpdatePreparedStatement(conn, INSERT_NEW_FILE, doc.getSubmittedBy().getId(), doc.getDisplayName(), doc.getType(), doc.getPath());
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
-        } finally {
-            return (rowChange > 0);
         }
+
+        return (rowChange > 0);
     }
     
     /**

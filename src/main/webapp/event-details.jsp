@@ -71,24 +71,24 @@
                                     </div>
                                     <div class="review__main-wrapper">
                                         <div class="review__meta mb-15"></div>
-                                        
-                                            <div class="review__main-wrapper pt-1">
-                                                <div class="review__meta mb-25"></div>
-                                                <div class="review__author-meta mb-15">
-                                                    <a href="#">
-                                                        <div class="review__author-thumb">
-                                                            <img class="rounded-circle" style="height: 40px; width: 40px;"src="<c:url value="${event.organizer.avatarPath}"/>" alt="Organizer Avatar" onerror="this.onerror=null; this.src='assets/img/default-avatar.png';">
-                                                        </div>
-                                                        <div class="review__author-name">
-                                                            <a href="<c:url value="/profile?role=club&id=${event.organizer.id}" />">
-                                                                <h4 style="color: inherit; transition: color 0.3s ease;"
-                                                                    onmouseover="this.style.color = '#F50963';" 
-                                                                    onmouseout="this.style.color = 'inherit';">
-                                                                    ${event.organizer.fullname}
-                                                                </h4>
-                                                            </a>
-                                                        </div>
-                                                </div>
+
+                                        <div class="review__main-wrapper pt-1">
+                                            <div class="review__meta mb-25"></div>
+                                            <div class="review__author-meta mb-15">
+                                                <a href="#">
+                                                    <div class="review__author-thumb">
+                                                        <img class="rounded-circle" style="height: 40px; width: 40px;"src="<c:url value="${event.organizer.avatarPath}"/>" alt="Organizer Avatar" onerror="this.onerror=null; this.src='assets/img/default-avatar.png';">
+                                                    </div>
+                                                    <div class="review__author-name">
+                                                        <a href="<c:url value="/profile?role=club&id=${event.organizer.id}" />">
+                                                            <h4 style="color: inherit; transition: color 0.3s ease;"
+                                                                onmouseover="this.style.color = '#F50963';" 
+                                                                onmouseout="this.style.color = 'inherit';">
+                                                                ${event.organizer.fullname}
+                                                            </h4>
+                                                        </a>
+                                                    </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -105,7 +105,7 @@
                                                 <div class="tab-content" id="nav-tabContent">
                                                     <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
                                                         <div class="about__event-thumb w-img mt-40">
-                                                           <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="3000">
+                                                            <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="3000">
                                                                 <ol class="carousel-indicators">
                                                                     <c:forEach var="image" items="${event.images}" varStatus="status">
                                                                         <li data-target="#eventImageCarousel" data-slide-to="${status.index}" class="${status.first ? 'active' : ''}"></li>
@@ -159,23 +159,25 @@
                                                         <span>Venue: </span>
                                                         ${event.location.name}
                                                     </li>
-                                                    <li>
-                                                        <span>Register Deadline: </span>
-                                                        <i id="date">${event.guestRegisterDeadline}</i>
-                                                    </li>
-
-                                                    <li>
-                                                        <span>Registered: </span>
-                                                        ${event.guestRegisterCount} / ${event.guestRegisterLimit}
-                                                    </li>  
-
-                                                    <c:if test="${event.collaboratorRegisterLimit != 0}">
+                                                    <c:if test="${event.guestRegisterLimit > 0}">
                                                         <li>
-                                                            <span>Collaborator Deadline: </span>
+                                                            <span>Guest Register Deadline: </span>
+                                                            <i id="date">${event.guestRegisterDeadline}</i>
+                                                        </li>
+
+                                                        <li>
+                                                            <span>Guest Registered: </span>
+                                                            ${event.guestRegisterCount} / ${event.guestRegisterLimit}
+                                                        </li>  
+                                                    </c:if>
+
+                                                    <c:if test="${event.collaboratorRegisterLimit > 0}">
+                                                        <li>
+                                                            <span>Collaborator Register Deadline: </span>
                                                             ${event.collaboratorRegisterDeadline}
                                                         </li>
                                                         <li>
-                                                            <span>Collaborator: </span>
+                                                            <span>Collaborator Registered: </span>
                                                             ${event.collaboratorRegisterCount} / ${event.collaboratorRegisterLimit}
                                                         </li>
                                                     </c:if>
@@ -183,40 +185,36 @@
                                                 <div class="ticket__purchase-wrapper mt-30">
                                                     <div class="ticket__price-inner">
                                                         <div class="ticket__price-item">
-                                                            <c:if test="${event.collaboratorRegisterLimit > 0}">
-                                                                <c:if test="${isCollabRegis == true and isGuestRegis == false}">
-                                                                    <form action="<c:url value="/event-detail" />" method="POST">
-                                                                        <input type="hidden" name="action" value="cancelCollaborator">
+                                                            <form action="<c:url value="/event-detail" />" method="POST">
+                                                                <c:if test="${event.collaboratorRegisterLimit > 0}">
+                                                                    <c:if test="${isCollabRegis == true and isGuestRegis == false}">
+                                                                        <input type="hidden" name="action" value="cancelAsCollaborator">
                                                                         <input type="hidden" name="eventId" value="${event.id}">
                                                                         <button style="height: 45px; padding: 0 10px;" class="element__btn red-bg" type="submit">Cancel Collaborator</button>
-                                                                    </form>
-                                                                </c:if>
-                                                                <c:if test="${isCollabRegis == false and isGuestRegis == false}">
-                                                                    <form action="<c:url value="/event-detail" />" method="POST">
-                                                                        <input type="hidden" name="action" value="registerCollaborator">
+                                                                    </c:if>
+                                                                    <c:if test="${isCollabRegis == false and isGuestRegis == false}">
+                                                                        <input type="hidden" name="action" value="registerAsCollaborator">
                                                                         <input type="hidden" name="eventId" value="${event.id}">
                                                                         <button style="height: 45px; padding: 0 10px;" class="element__btn border-yellow" type="submit">Collaborator Register</button>
-                                                                    </form>
+                                                                    </c:if>
                                                                 </c:if>
-                                                            </c:if>
+                                                            </form>
                                                         </div>
                                                         <div class="ticket__price-item">
-                                                            <c:if test="${event.guestRegisterLimit > 0}">
-                                                                <c:if test="${isGuestRegis == true and isCollabRegis == false}">
-                                                                    <form action="<c:url value="/event-detail" />" method="POST">
-                                                                        <input type="hidden" name="action" value="cancelGuest">
+                                                            <form action="<c:url value="/event-detail" />" method="POST">
+                                                                <c:if test="${event.guestRegisterLimit > 0}">
+                                                                    <c:if test="${isGuestRegis == true and isCollabRegis == false}">
+                                                                        <input type="hidden" name="action" value="cancelAsGuest">
                                                                         <input type="hidden" name="eventId" value="${event.id}">
                                                                         <button style="height: 45px; padding: 0 10px;" class="element__btn red-bg" type="submit">Cancel Guest Register</button>
-                                                                    </form>
-                                                                </c:if>
-                                                                <c:if test="${isGuestRegis == false and isCollabRegis == false}">
-                                                                    <form action="<c:url value="/event-detail" />" method="POST">
-                                                                        <input type="hidden" name="action" value="registerGuest">
+                                                                    </c:if>
+                                                                    <c:if test="${isGuestRegis == false and isCollabRegis == false}">
+                                                                        <input type="hidden" name="action" value="registerAsGuest">
                                                                         <input type="hidden" name="eventId" value="${event.id}">
                                                                         <button style="height: 45px; padding: 0 10px;" class="element__btn border-yellow" type="submit">Guest Register</button>
-                                                                    </form>
+                                                                    </c:if>
                                                                 </c:if>
-                                                            </c:if>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>

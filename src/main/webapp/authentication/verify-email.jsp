@@ -85,7 +85,7 @@
                     </div>
                 </div>
                 <div class="sign__right">
-                    <div class="sign__input-thumb" data-background="assets/img/sign/forgetpassword1.jpg">
+                    <div class="sign__input-thumb" style="background-image: url('assets/img/decorate/reset-password.jpg');">
                     </div>
                 </div>
             </div>

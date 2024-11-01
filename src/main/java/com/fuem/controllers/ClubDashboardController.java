@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 /**
  *
@@ -32,6 +33,7 @@ public class ClubDashboardController extends HttpServlet {
         NotificationDAO notiDAO = new NotificationDAO();
         HttpSession session = request.getSession();
         Organizer organizer = (Organizer) session.getAttribute("userInfor");
+        LocalDate loginDate = LocalDate.now();
         int organizerId = organizer.getId();
         
         int totalEvents = dao.getTotalEventOrganized(organizerId);
@@ -48,6 +50,7 @@ public class ClubDashboardController extends HttpServlet {
         request.setAttribute("organizedEvent", organizedEvent);
         request.setAttribute("upcomingEvent", upcomingEvent);
         request.setAttribute("notiList", notiList);
+        request.setAttribute("loginDate", loginDate);
         request.getRequestDispatcher("dashboard.jsp").forward(request, response);
     }
 }

@@ -50,7 +50,7 @@ public abstract class SQLDatabase {
                 return statement;
             }
 
-            for (int i = 0;i < values.length; i++) {
+            for (int i = 0; i < values.length; i++) {
                 if (values[i] == null) {
                     statement.setNull(i + 1, Types.NULL);
                 }  else if (values[i] instanceof Character) {
@@ -65,10 +65,6 @@ public abstract class SQLDatabase {
                     } else {
                         statement.setString(i + 1, (String) values[i]);
                     }
-                } else if (values[i] instanceof java.util.Date) {
-                    statement.setTimestamp(i + 1, new Timestamp(((java.util.Date) values[i]).getTime()));
-                } else if (values[i] instanceof java.sql.Date) {
-                    statement.setTimestamp(i + 1, new Timestamp(((java.util.Date) values[i]).getTime()));
                 } else if (values[i] instanceof LocalDate) {
                     statement.setDate(i + 1, Date.valueOf((LocalDate) values[i]));
                 } else if (values[i] instanceof LocalTime) {
@@ -82,7 +78,6 @@ public abstract class SQLDatabase {
         } catch (SQLException e) {
             Logger.getLogger(SQLDatabase.class.getName()).log(Level.SEVERE, null, e);
         }
-        
         return statement;
     }
 

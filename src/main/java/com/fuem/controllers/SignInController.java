@@ -57,7 +57,7 @@ public class SignInController extends HttpServlet {
                         response.sendRedirect(request.getContextPath() + "/club/dashboard");
                     }
                 } else {
-                    request.setAttribute("error", "Email hoặc mật khẩu không đúng");
+                    request.setAttribute("error", "Email or password incorrect");
                     request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
                 }
             } else {
@@ -69,7 +69,7 @@ public class SignInController extends HttpServlet {
                     session.setAttribute("userInfor", user);
                     response.sendRedirect(request.getContextPath() + "/home");
                 } else {
-                    request.setAttribute("error", "Email hoặc mật khẩu không đúng");
+                    request.setAttribute("error", "Email or password incorrect");
                     request.getRequestDispatcher("authentication/sign-in.jsp").forward(request, response);
                 }
             }
