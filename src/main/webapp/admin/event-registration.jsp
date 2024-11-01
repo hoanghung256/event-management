@@ -62,7 +62,7 @@
                                         <div class="event__update-file" id="image-wrapper">
                                             <div class="event__update-thumb">
                                                 <div class="box__input">
-                                                    <input type="file" name="images" id="file" class="box__file" multiple>
+                                                    <input type="file" name="images" id="file" class="box__file" multiple required>
                                                     <label class="input__field-text" for="file"><span><i class="fa-regular fa-plus"></i></span><span>Add Image</span></label>
                                                 </div>
                                             </div>

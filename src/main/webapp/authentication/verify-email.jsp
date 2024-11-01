@@ -73,6 +73,7 @@
                                 </div>
                                 <input name="fullname" value="${registerInfor.fullname}" hidden>
                                 <input name="studentId" value="${registerInfor.studentId}" hidden>
+                                <input type="text" name="gender" value="${registerInfor.gender}" hidden>
                                 <input name="email" value="${registerInfor.email}" hidden>
                                 <input type="password" name="password" value="${registerInfor.password}" hidden>
                                 <button id="save-button" class="input__btn w-100 mb-20" type="submit">Verify</button>
@@ -84,7 +85,7 @@
                     </div>
                 </div>
                 <div class="sign__right">
-                    <div class="sign__input-thumb" data-background="assets/img/sign/forgetpassword1.jpg">
+                    <div class="sign__input-thumb" style="background-image: url('assets/img/decorate/reset-password.jpg');">
                     </div>
                 </div>
             </div>

@@ -74,7 +74,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
     --clr-common-placeholder: #CDCDCD;
     --clr-common-heading: #333333;
     --clr-common-body-text: #111111;
-    --clr-theme-1: #ff6f00;
+    --clr-theme-1: #ff6f00 !important;
     --clr-theme-2: #ffb300;
     --clr-theme-3: #FFA300;
     --clr-text-primary: #ffffff;
@@ -199,7 +199,10 @@ h6 {
     line-height: 1.3;
     margin-bottom: 0;
 }
-
+.acolor {
+    font-weight: 500;
+    color: black;
+}
 h1 {
     font-size: var(--bd-fs-h1);
 }
@@ -819,7 +822,7 @@ input[type=file] {
 
 .input__btn {
     font-size: 16px;
-    background: var(--clr-gradient-14);
+    background: var(--clr-gradient-4);
     color: var(--clr-text-primary);
     font-weight: var(--bd-fw-medium);
     border: 0;
@@ -1860,7 +1863,7 @@ input[type=file] {
 }
 
 .text__highlight {
-    background: linear-gradient(91deg, #f7426f 5.15%, #f87a58 99.88%);
+    background: linear-gradient(91deg, #f37021, #f88e4d);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -3854,7 +3857,7 @@ input[type=file] {
     color: var(--clr-common-white);
 }
 [bd-theme=bd-theme-dark] .dlabnav .metismenu > li > a i {
-    background: var(--clr-gradient-6);
+    background: var(--clr-gradient-7);
     background-clip: border-box;
     -webkit-background-clip: text;
     background-clip: text;
@@ -3899,7 +3902,7 @@ input[type=file] {
     line-height: 50px;
 }
 .dlabnav .metismenu > li.mm-active li:hover a {
-    background: var(--clr-gradient-1);
+    background: var(--clr-gradient-10);
     color: var(--clr-common-white);
 }
 [bd-theme=bd-theme-dark] .dlabnav .metismenu > li.mm-active li:hover a {
@@ -3908,7 +3911,7 @@ input[type=file] {
 }
 .dlabnav .metismenu > li.mm-active > a {
     color: var(--clr-text-primary);
-    background: var(--clr-gradient-1);
+    background: var(--clr-gradient-4);
 }
 [bd-theme=bd-theme-dark] .dlabnav .metismenu > li.mm-active > a {
     background: var(--clr-common-white);
@@ -3986,7 +3989,7 @@ input[type=file] {
 }
 
 .dlabnav .metismenu > li:hover > a {
-    background: var(--clr-gradient-1);
+    background: var(--clr-gradient-4);
     color: var(--clr-common-white);
 }
 [bd-theme=bd-theme-dark] .dlabnav .metismenu > li:hover > a {
@@ -9245,5 +9248,8 @@ input[type=file] {
 }
 .student-manage-body{
     --bs-gutter-x: -4%;
+}
+a{
+    text-decoration: none !important;
 }
 /*# sourceMappingURL=main.css.map */

@@ -16,17 +16,17 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-
 public class StudentDAO extends SQLDatabase {
 
     private static final Logger logger = Logger.getLogger(StudentDAO.class.getName());
     private static final String SELECT_STUDENT_BY_EMAIL = "SELECT * FROM [Student] WHERE email = ?";
-    private static final String SELECT_STUDENT_BY_EMAIL_AND_PASSWORD = "SELECT id, fullname, studentId, email, avatarPath FROM [Student] WHERE email = ? AND password = ?";
+    private static final String SELECT_STUDENT_BY_EMAIL_AND_PASSWORD = "SELECT id, fullname, studentId, email, avatarPath, gender FROM [Student] WHERE email = ? AND password = ?";
     private static final String SELECT_STUDENT_BY_STUDENT_ID = "SELECT * FROM [Student] WHERE studentId=?";
+    private static final String UPDATE_STUDENT = "UPDATE Student SET avatarPath = ? WHERE studentId = ?";
     private static final String UPDATE_PASSWORD_BY_EMAIL = "Update [Student] "
             + "SET password = ? "
             + "WHERE email = ?";
-    private static final String INSERT_STUDENT = "INSERT INTO [Student] (fullname, studentId, email, password) VALUES (?, ?, ?, ?)";
+    private static final String INSERT_STUDENT = "INSERT INTO [Student] (fullname, studentId, email, password, gender) VALUES (?, ?, ?, ?, ?)";
     private static final String SELECT_STUDENTS = "SELECT "
             + "id, "
             + "fullname, "
@@ -41,17 +41,17 @@ public class StudentDAO extends SQLDatabase {
             + "FETCH NEXT ? ROWS ONLY";
     private static final String DELETE_STUDENT_BY_ID = "DELETE FROM [Student] WHERE studentId = ?";
     private static final String UPDATE_STUDENT_BY_ID = "UPDATE Student SET fullname = ?, email = ?, studentId = ?, gender= ? WHERE  id = ?";
-    private static final String SELECT_STUDENT_BY_ID = "SELECT fullname, studentId, email, gender, avatarPath FROM [Student] WHERE id=?";
+    private static final String SELECT_STUDENT_BY_ID = "SELECT fullname, studentId, gender, email,  avatarPath FROM [Student] WHERE id=?";
     private static final String CHECK_PASSWORD_QUERY = "SELECT * FROM Student WHERE email = ? AND password = ?";
     private static final String FIND_STUDENT_BY_STUDENT_ID_OR_FULL_NAME = "SELECT * FROM Student WHERE studentId LIKE '%?%' OR fullname LIKE '%?%'";
-  
+
     public StudentDAO() {
         super();
     }
 
     public boolean checkCurrentPassword(String email, String currentPasswordHash) {
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
-             ResultSet rs = executeQueryPreparedStatement(conn, CHECK_PASSWORD_QUERY)) {
+             ResultSet rs = executeQueryPreparedStatement(conn, CHECK_PASSWORD_QUERY,email,currentPasswordHash)) {
              
             return rs.next(); 
         } catch (SQLException e) {
@@ -60,18 +60,16 @@ public class StudentDAO extends SQLDatabase {
         return false;
     }
 
-public void updatePassword(String email, String password) {
-    try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
-         PreparedStatement pstmt = conn.prepareStatement(UPDATE_PASSWORD_BY_EMAIL)) {
-         
-        pstmt.setString(1, password);
-        pstmt.setString(2, email);
-        pstmt.executeUpdate();
-    } catch (SQLException e) {
-        Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, e);
-    }
-}
+    public void updatePassword(String email, String password) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); PreparedStatement pstmt = conn.prepareStatement(UPDATE_PASSWORD_BY_EMAIL)) {
 
+            pstmt.setString(1, password);
+            pstmt.setString(2, email);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
 
     public Student getUserByEmail(String email) {
         Student student = null;
@@ -106,6 +104,10 @@ public void updatePassword(String email, String password) {
                         rs.getString("avatarPath"),
                         Role.STUDENT
                 );
+                
+                if (rs.getString("gender") != null) {
+                    user.setGender(Gender.valueOf(rs.getString("gender")));
+                }
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
@@ -117,7 +119,7 @@ public void updatePassword(String email, String password) {
     public boolean addUser(Student user) {
         int result = 0;
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
-            result = executeUpdatePreparedStatement(conn, INSERT_STUDENT, user.getFullname(), user.getStudentId(), user.getEmail(), user.getPassword());
+            result = executeUpdatePreparedStatement(conn, INSERT_STUDENT, user.getFullname(), user.getStudentId(), user.getEmail(), user.getPassword(), user.getGender());
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
         }
@@ -245,8 +247,7 @@ public void updatePassword(String email, String password) {
         List<Student> students = new ArrayList<>();
 
         // Sử dụng try-with-resources để đảm bảo tự động đóng kết nối
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
-                ResultSet rs = executeQueryPreparedStatement(conn, FIND_STUDENT_BY_STUDENT_ID_OR_FULL_NAME)) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, FIND_STUDENT_BY_STUDENT_ID_OR_FULL_NAME)) {
 
             while (rs.next()) {
                 // Tạo đối tượng Student từ ResultSet
@@ -267,27 +268,50 @@ public void updatePassword(String email, String password) {
     }
 
     /**
-     * 
-     * @author HungHV 
+     * @author; TrinhHuy
+     */
+    /**
+     *
+     * @author HungHV
      */
     public Student getStudentById(int id) {
         Student s = null;
-        
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
-                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_STUDENT_BY_ID, id)) {
+
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_STUDENT_BY_ID, id)) {
             if (rs.next()) {
                 s = new Student(
                         id,
-                        rs.getNString("fullname"), 
-                        rs.getString("studentId"), 
-                        rs.getNString("email"), 
+                        rs.getNString("fullname"),
+                        rs.getString("studentId"),
+                        rs.getString("gender") != null ? Gender.valueOf(rs.getString("gender")) : null,
+                        rs.getNString("email"),
                         rs.getNString("avatarPath")
                 );
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
         }
-        
+
         return s;
+    }
+
+    /**
+     *
+     * @author TrinhHuy
+     */
+    public boolean updateStudentAvatar(String studentId, String avatarPath) {
+        int result = 0;
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection()) {
+            // Sử dụng PreparedStatement để thực hiện cập nhật
+            try (PreparedStatement pstmt = conn.prepareStatement(UPDATE_STUDENT)) {
+                pstmt.setString(1, avatarPath); // Gán avatarPath
+                pstmt.setString(2, studentId); // Gán studentId
+                result = pstmt.executeUpdate(); // Thực thi cập nhật
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, "Error updating avatar.", e);
+            throw new RuntimeException("Error updating avatar.", e);
+        }
+        return result > 0; 
     }
 }

@@ -44,7 +44,25 @@ public class FileHandler {
     }
 
     /**
-     * Save file into project source
+     * Process Part objects
+     *
+     * @return the path list for insert into database
+     * @author HungHV
+     */
+    public static String processUploadFile(Part part, FileType fileType) throws IOException {
+        String path = null;
+
+        if (part.getSubmittedFileName() != null) {
+            String submittedFileName = part.getSubmittedFileName();
+            String processedFileName = UUID.randomUUID().toString() + submittedFileName.substring(submittedFileName.lastIndexOf("."));
+            path = fileType.getFileLocation() + "/" + processedFileName;
+        }
+
+        return path;
+    }
+
+    /**
+     * Save files into project source
      *
      * @author HungHV
      */
@@ -63,23 +81,41 @@ public class FileHandler {
     }
 
     /**
+     * Save file into project source
      *
-     * @author KhiemHV
+     * @author HungHV
      */
+    public static void save(String processedPath, Part part, ServletContext context, FileType fileType) throws IOException {
+        String fileFolderPath = context.getRealPath("");
+        Files.createDirectories(Paths.get(fileFolderPath + fileType.getFileLocation()));
+
+        if (part.getSubmittedFileName() != null) {
+            part.write(fileFolderPath + processedPath);
+        }
+    }
+    
+    /**
+     * Save file into project source
+     *
+     * @author HungHV
+     */
+    
     public static void deleteFile(ServletContext context, String filepath) {
         String realFilePath = context.getRealPath("") + filepath;
         File file = new File(realFilePath);
 
         if (file.exists()) {
-            boolean isDeleted = file.delete();
-        }
+            file.delete();
+        } 
     }
 
     /**
+     * Save file into project source
      *
      * @author HungHV
      */
-    public static void deleteFile(ServletContext context, List<String> filepaths) {
+    
+     public static void deleteFile(ServletContext context, List<String> filepaths) {
         for (String path : filepaths) {
             deleteFile(context, path);
         }

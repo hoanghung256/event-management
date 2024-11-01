@@ -26,10 +26,10 @@ public class Event {
     private LocalTime startTime;
     private LocalTime endTime;
     private int guestRegisterLimit;
-    private LocalDate guestRegisterDeadline;
+    private LocalDate guestRegisterDeadline = LocalDate.EPOCH;
     private int guestRegisterCount;
     private int collaboratorRegisterLimit;
-    private LocalDate collaboratorRegisterDeadline;
+    private LocalDate collaboratorRegisterDeadline = LocalDate.EPOCH;
     private int collaboratorRegisterCount;
     private List<String> images;
     private int guestAttendedCount;

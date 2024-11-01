@@ -4,7 +4,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <welcome-file-list>
-        <welcome-file>sign-in</welcome-file>
+        <welcome-file>home</welcome-file>
     </welcome-file-list>
 
     <session-config>
@@ -20,7 +20,10 @@
         <error-code>404</error-code>
         <location>/error/404.jsp</location>
     </error-page>
-
+<error-page>
+        <error-code>413</error-code>
+        <location>/error/413.jsp</location>
+    </error-page>
     <error-page>
         <error-code>500</error-code>
         <location>/error/500.jsp</location>

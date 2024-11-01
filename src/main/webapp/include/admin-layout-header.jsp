@@ -7,8 +7,8 @@
 <%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<!DOCTYPE HTML>
-<html class="no-js" lang="zxx">
+<!DOCTYPE HTML> 
+<html class="no-js" lang="zxx" style="--clr-theme-1: #ff6f00 !important;">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -31,6 +31,17 @@
         <link rel="stylesheet" href="<c:url value='/assets/app/css/spacing.css' />">
         <link rel="stylesheet" href="<c:url value='/assets/app/css/main.css' />">
     </head> 
+
+    <style>
+        .user__portfolio-thumb img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover; 
+        }
+
+    </style>
+
     <body class="body-area">
         <!-- Preloder start -->
         <div id="preloader">
@@ -63,31 +74,26 @@
                         <ul class="metismenu" id="menu">
                             <li>
                                 <a href="<c:url value="/admin/dashboard"/>" aria-expanded="false">
-                                    <i class="flaticon-home"></i>
+                                   <i class="fa-solid fa-house"></i>
                                     <span class="nav-text">Dashboard</span>
                                 </a>
                             </li>
                             <li>
                                 <a href="<c:url value="/admin/register-event"/>" aria-expanded="false">
-                                    <i class="flaticon-calendar-1"></i>
+                                  <i class="fa-solid fa-square-plus"></i>
                                     <span class="nav-text">Create Event</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="<c:url value="#" />" aria-expanded="false">
-                                    <i class="flaticon-upcoming"></i>
-                                    <span class="nav-text">Pending Post</span>
-                                </a>
-                            </li>
+                           
                             <li>
                                 <a href="<c:url value="/admin/organized-event"/>" aria-expanded="false">
-                                    <i class="flaticon-success"></i>
+                                    <i class="fa-solid fa-calendar-check"></i>
                                     <span class="nav-text">Organized Events</span>
                                 </a>
                             </li>
                             <li>
                                 <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                    <i class="flaticon-user-1"></i>
+                                   <i class="fa-solid fa-paper-plane"></i>
                                     <span class="nav-text">Send Notification</span>
                                 </a>
                                 <ul aria-expanded="false">
@@ -97,19 +103,19 @@
                             </li>
                             <li>
                                 <a href="<c:url value="/admin/approval-events?action=show" />" aria-expanded="false">
-                                    <i class="flaticon-clock"></i>
-                                    <span class="nav-text">Pending Events Approval</span>
+                                    <i class="fa-solid fa-hourglass-end"></i>
+                                    <span class="nav-text">Pending Events </span>
                                 </a>
                             </li>
                             <li>
-                                <a href="#" aria-expanded="false">
-                                    <i class="flaticon-edit-1"></i>
+                                <a href="<c:url value="/admin/file" />" aria-expanded="false">
+                                   <i class="fa-solid fa-file"></i>
                                     <span class="nav-text">Review Report-Plan Files</span>
                                 </a>
                             </li>
                             <li>
                                 <a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
-                                    <i class="flaticon-user-1"></i>
+                                    <i class="fa-solid fa-user"></i>
                                     <span class="nav-text">User Management</span>
                                 </a>
                                 <ul aria-expanded="false">
@@ -119,12 +125,12 @@
                             </li>
                             <li>
                                 <a href="<c:url value="/sign-out" />" aria-expanded="false">
-                                    <i class="flaticon-log-out-3"></i>
+                                    <i class="fa-solid fa-right-from-bracket"></i>
                                     <span class="nav-text">Log out</span>
                                 </a>
                             </li>
                         </ul>
-                        <div class="sidebar__copyright">
+                        <div class="sidebar__copyright position-absolute bottom-0">
                             <p>Copyright @FUEM 2024</p>
                         </div>
                     </div>
@@ -146,25 +152,24 @@
                         </div>
                         <div class="app__header-right">
                             <div class="nav-item p-relative">
-                                <div id="userportfolio" href="/profile">
-                                    <div class="user__portfolio">
+                                <div id="userportfolio">
+                                    <a class="user__portfolio" href="#">
                                         <div class="user__portfolio-thumb">
-                                            <c:url value="/assets/img/user/default-avatar.jpg" var="defaultAvatar" />
-                                            <img 
-                                                src="${sessionScope.userInfor.avatarPath != null ? sessionScope.userInfor.avatarPath : defaultAvatar}" 
-                                                alt="Default Avatar" 
-                                                />
+                                            <img class="rounded-circle"
+                                                 src="<c:url value="${sessionScope.userInfor.avatarPath}" />"  
+                                                 alt="Avatar" 
+                                                 />
                                         </div>
                                         <div class="user__content">
                                             <span>${sessionScope.userInfor.fullname != null ? sessionScope.userInfor.fullname : "Guest"}</span>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                                 <div class="user__dropdown">
                                     <ul>
                                         <li>
                                             <a href="<c:url value="/admin/profile" />"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"
-                                                                        xmlns="http://www.w3.org/2000/svg">
+                                                                                            xmlns="http://www.w3.org/2000/svg">
                                                 <g clip-path="url(#clip0_643_344)">
                                                 <path
                                                     d="M13.6569 10.3431C12.7855 9.47181 11.7484 8.82678 10.6168 8.43631C11.8288 7.60159 12.625 6.20463 12.625 4.625C12.625 2.07478 10.5502 0 8 0C5.44978 0 3.375 2.07478 3.375 4.625C3.375 6.20463 4.17122 7.60159 5.38319 8.43631C4.25162 8.82678 3.2145 9.47181 2.34316 10.3431C0.832156 11.8542 0 13.8631 0 16H1.25C1.25 12.278 4.27803 9.25 8 9.25C11.722 9.25 14.75 12.278 14.75 16H16C16 13.8631 15.1678 11.8542 13.6569 10.3431ZM8 8C6.13903 8 4.625 6.486 4.625 4.625C4.625 2.764 6.13903 1.25 8 1.25C9.86097 1.25 11.375 2.764 11.375 4.625C11.375 6.486 9.86097 8 8 8Z"
@@ -180,7 +185,7 @@
                                         </li>
                                         <li>
                                             <a href="<c:url value="/sign-out" />"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"
-                                                                       xmlns="http://www.w3.org/2000/svg">
+                                                                                       xmlns="http://www.w3.org/2000/svg">
                                                 <g clip-path="url(#clip0_643_343)">
                                                 <path
                                                     d="M17.4368 8.43771H10.312C10.0015 8.43771 9.74951 8.18572 9.74951 7.87523C9.74951 7.56474 10.0015 7.31274 10.312 7.31274H17.4368C17.7473 7.31274 17.9993 7.56474 17.9993 7.87523C17.9993 8.18572 17.7473 8.43771 17.4368 8.43771Z"

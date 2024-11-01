@@ -15,6 +15,7 @@ public class Organizer extends User {
     private String acronym;
     private String description;
     private String coverPath;
+    private int followerCount;
 
     public Organizer() {
     }
@@ -34,7 +35,7 @@ public class Organizer extends User {
     }
 
     public Organizer(int id, String fullname, String acronym, String email) {
-        super(fullname, id, email); 
+        super(fullname, id, email);
         this.acronym = acronym;
     }
 
@@ -49,12 +50,35 @@ public class Organizer extends User {
         this.description = description;
     }
 
+    public Organizer(String acronym, String description, String coverPath, int id, String fullname, String email, String avatarPath) {
+        super(id, fullname, email, avatarPath);
+        this.acronym = acronym;
+        this.description = description;
+        this.coverPath = coverPath;
+    }
+
     public Organizer(int id, String acronym, String fullname, String description, String email, String avatarPath, Role role) {
         super(id, fullname, email, avatarPath, role);
         this.acronym = acronym;
         this.description = description;
     }
 
+    public Organizer(String acronym, String description, String coverPath, int followerCount, int id, String fullname, String email, String avatarPath) {
+        super(id, fullname, email, avatarPath);
+        this.acronym = acronym;
+        this.description = description;
+        this.coverPath = coverPath;
+        this.followerCount = followerCount;
+    }
+    
+    public Organizer(String acronym, String description, String coverPath, int id, String fullname, String email, String avatarPath, Role role) {
+        super(id, fullname, email, avatarPath, role);
+        this.acronym = acronym;
+        this.description = description;
+        this.coverPath = coverPath;
+    }
+
+    
     public String getAcronym() {
         return acronym;
     }
@@ -77,6 +101,14 @@ public class Organizer extends User {
 
     public void setCoverPath(String coverPath) {
         this.coverPath = coverPath;
+    }
+
+    public int getFollowerCount() {
+        return followerCount;
+    }
+
+    public void setFollowerCount(int followerCount) {
+        this.followerCount = followerCount;
     }
 
     @Override

@@ -5,6 +5,7 @@
 package com.fuem.controllers;
 
 import com.fuem.models.Event;
+import com.fuem.models.Organizer;
 import com.fuem.repositories.AdminDAO;
 import com.fuem.repositories.EventDAO;
 import jakarta.servlet.ServletException;
@@ -36,7 +37,15 @@ public class OrganizedEventReportController extends HttpServlet {
         EventDAO eventDAO = new EventDAO();
         AdminDAO adminDAO = new AdminDAO();
         int eventId = Integer.parseInt(request.getParameter("eventIdDetail"));
-        int organizerId = Integer.parseInt(request.getParameter("organizerId"));
+        String requestOrganizerId = request.getParameter("organizerId");
+        int organizerId = 0;
+        
+        if (requestOrganizerId != null) {
+            organizerId = Integer.parseInt(requestOrganizerId);
+        } else {
+            Organizer o = (Organizer) request.getSession().getAttribute("userInfor");
+            organizerId = o.getId();
+        }
         int totalRegister, totalAttended, totalCollaborator, totalCancel;
 
         Event event = eventDAO.getEventDetails(eventId);

@@ -23,11 +23,14 @@ public class SignOutController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        User user = (User) session.getAttribute("userInfor");
-        
-        if (user != null) {
-            session.invalidate();
+        if (session != null) {
+            User user = (User) session.getAttribute("userInfor");
+
+            if (user != null) {
+                session.invalidate();
+            }
         }
+
         response.sendRedirect(request.getContextPath() + "/authentication/sign-in.jsp");
     }
 }

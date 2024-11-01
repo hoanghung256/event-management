@@ -1,6 +1,6 @@
 <%-- 
     Document   : club-layout-header
-    Created on : Sep 26, 2024, 4:37:04 PM
+    Created on : Sep 26, 2024, 4:37:04 PM
     Author     : TRINHHUY
 --%>
 
@@ -8,7 +8,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE HTML>
-<html class="no-js" lang="zxx">
+<html class="no-js" lang="zxx" style="--clr-theme-1: #ff6f00 !important;">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -32,6 +32,17 @@
         <link rel="stylesheet" href="<c:url value='/assets/app/css/spacing.css' />">
         <link rel="stylesheet" href="<c:url value='/assets/app/css/main.css' />">
     </head> 
+    
+    <style>
+        .user__portfolio-thumb img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%; 
+            object-fit: cover; /* Giữ tỉ lệ ảnh */
+        }
+
+    </style>
+    
     <body class="body-area">
         <!-- Preloder start -->
         <div id="preloader">
@@ -63,36 +74,36 @@
                     <div class="dlabnav">
                         <ul class="metismenu" id="menu">
                             <li><a href="<c:url value="/club/dashboard"/>" aria-expanded="false">
-                                    <i class="flaticon-home"></i>
+                                     <i class="fa-solid fa-house"></i>
                                     <span class="nav-text">Dashboard</span>
                                 </a>
                             </li>
                             <li><a href="<c:url value="/club/register-event"/>" aria-expanded="false">
-                                    <i class="flaticon-success"></i>
+                                  <i class="fa-solid fa-square-plus"></i>
                                     <span class="nav-text">Register Event</span>
                                 </a>
                             </li>
-                            <li><a href="#" aria-expanded="false">
-                                    <i class="flaticon-email"></i>
+                            <li><a href="<c:url value="/club/file" />" aria-expanded="false">
+                                    <i class="fa-solid fa-share-from-square"></i>
                                     <span class="nav-text">Send File</span>
                                 </a>
                             </li>
                             <li><a href="<c:url value="/club/send-event-notification"/>" aria-expanded="false">
-                                    <i class="flaticon-user-1"></i>
+                                    <i class="fa-solid fa-paper-plane"></i>
                                     <span class="nav-text">Send Notification</span>
                                 </a>
                             </li>
                             <li><a href="<c:url value="/club/organized-event"/>" aria-expanded="false">
-                                    <i class="flaticon-upcoming"></i>
+                                  <i class="fa-solid fa-calendar-check"></i>
                                     <span class="nav-text">Organized Events</span>
                                 </a>
                             </li>
                             <li><a href="<c:url value="/sign-out" />" aria-expanded="false">
-                                    <i class="flaticon-log-out-3"></i>
+                                        <i class="fa-solid fa-right-from-bracket"></i>
                                     <span class="nav-text">Log out</span>
                                 </a>
                         </ul>
-                        <div class="sidebar__copyright">
+                        <div class="sidebar__copyright position-absolute bottom-0">
                             <p>Copyright @FUEM 2024</p>
                         </div>
                     </div>
@@ -115,12 +126,12 @@
                         <div class="app__header-right">
                             <div class="nav-item p-relative">
                                     <div id="userportfolio" href="/profile">
-                                        <div class="user__portfolio">
+                                        <div class="user__portfolio" style="cursor: pointer;">
                                             <div class="user__portfolio-thumb">
-                                                <c:url value="/assets/img/user/default-avatar.jpg" var="defaultAvatar" />
                                                 <img 
-                                                    src="${sessionScope.userInfor.avatarPath != null ? sessionScope.userInfor.avatarPath : defaultAvatar}" 
-                                                    alt="Default Avatar" 
+                                                    src="<c:url value="${sessionScope.userInfor.avatarPath}" />" 
+                                                    style="object-fit: cover; border-radius: 50%;" 
+                                                    alt="Avatar" 
                                                 />
                                             </div>
                                             <div class="user__content">

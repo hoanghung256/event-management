@@ -3,6 +3,7 @@
     Created on : Oct 13, 2024, 4:10:12?PM
     Author     : Administrator
 --%>
+<%@include file="../include/student-layout-header.jsp"%>
 <style>
     .popup__overlay {
         display: none; /* Hidden by default */
@@ -26,7 +27,7 @@
         position: relative;
         animation: popupFadeIn 0.3s ease;
     }
-.popup__button-group {
+    .popup__button-group {
         display: flex;
         justify-content: center;
         gap: 15px;
@@ -57,7 +58,6 @@
     }
 
 </style>
-<%@include file="../include/student-layout-header.jsp"%>
 <section>
     <div class="app__slide-wrapper">
         <div class="breadcrumb__area">
@@ -135,13 +135,11 @@
                                     </tbody>
                                 </table>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
     <!--End content cua page-->
 

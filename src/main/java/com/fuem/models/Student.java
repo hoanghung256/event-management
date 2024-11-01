@@ -39,6 +39,9 @@ public class Student extends User{
         super(fullname, email, password);
         this.studentId = studentId;
     }
+
+   
+    
   
     public Student(int id, String fullname, String studentId, String email, String avatarPath, Role role ) {
         super(id, fullname, email, avatarPath, role);
@@ -48,6 +51,12 @@ public class Student extends User{
     public Student(int id, String fullname, String studentId, String email,  String avatarPath) {
         super(id, fullname, email, avatarPath);
         this.studentId = studentId;
+    }
+    
+    public Student(int id, String fullname, String studentId, Gender gender, String email,  String avatarPath) {
+        super(id, fullname, email, avatarPath);
+        this.studentId = studentId;
+        this.gender = gender;
     }
      public Student(String fullname, String studentId, String email) {
         super(fullname, email, null); 
@@ -65,6 +74,7 @@ public class Student extends User{
     public Gender getGender() {
         return gender;
     }
+    
 
     public void setGender(Gender gender) {
         this.gender = gender;
