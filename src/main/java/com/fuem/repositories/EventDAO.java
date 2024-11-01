@@ -424,23 +424,43 @@ public class EventDAO extends SQLDatabase {
         StringBuilder query = new StringBuilder(SELECT_EVENTS_FOLLOWED_AND_NOT_FOLLOWED);
 
         if (!searchEventCriteria.isEmpty()) {
-            query.append("\n WHERE");
-
+//            query.append("\n WHERE");
+            boolean isNameSelected = false;
             if (searchEventCriteria.getName() != null && !searchEventCriteria.getName().isBlank()) {
-                query.append(" LOWER(e.fullname) LIKE LOWER('%");
+                query.append("\nWHERE LOWER(e.fullname) LIKE LOWER('%");
                 query.append(searchEventCriteria.getName());
                 query.append("%')\n ");
+                isNameSelected = true;
             }
+            boolean isCateSelected = false;
             if (searchEventCriteria.getCategoryId() != null) {
-                query.append("AND e.categoryId=");
+                if(isNameSelected){
+                    query.append(" AND ");
+                }else{
+                    query.append("\nWHERE ");
+                }
+                query.append("e.categoryId=");
                 query.append(searchEventCriteria.getCategoryId());
+                isCateSelected = true;
             }
+            boolean isOrganizerSelected = false;
             if (searchEventCriteria.getOrganizerId() != null) {
-                query.append("\n AND e.organizerId=");
+                if(isCateSelected){
+                    query.append("\nAND ");
+                }else{
+                    query.append("\nWHERE ");
+                }
+                query.append("e.organizerId=");
                 query.append(searchEventCriteria.getOrganizerId());
+                isOrganizerSelected = true;
             }
             if (searchEventCriteria.getFrom() != null && searchEventCriteria.getTo() != null) {
-                query.append("\n AND e.dateOfEvent BETWEEN '");
+                if(isOrganizerSelected){
+                    query.append("\nAND ");
+                }else{
+                    query.append("\nWHERE ");
+                }
+                query.append("e.dateOfEvent BETWEEN '");
                 query.append(searchEventCriteria.getFrom());
                 query.append("' AND '");
                 query.append(searchEventCriteria.getTo());
@@ -602,21 +622,21 @@ public class EventDAO extends SQLDatabase {
         int generatedId = 0;
 
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
-            PreparedStatement pstmt = getPreparedStatement(conn.prepareStatement(INSERT_NEW_EVENT, Statement.RETURN_GENERATED_KEYS), conn, INSERT_NEW_EVENT, 
-                registerEvent.getOrganizer().getId(),
-                registerEvent.getFullname(),
-                registerEvent.getImages().get(0),
-                registerEvent.getDescription(),
-                registerEvent.getCategory().getId(),
-                registerEvent.getLocation().getId(),
-                registerEvent.getDateOfEvent(),
-                registerEvent.getStartTime(),
-                registerEvent.getEndTime(),
-                registerEvent.getGuestRegisterLimit(),
-                registerEvent.getCollaboratorRegisterLimit(),
-                registerEvent.getGuestRegisterDeadline(),
-                registerEvent.getCollaboratorRegisterDeadline(),
-                (registerEvent.getOrganizer().getRole() == Role.ADMIN ? Status.APPROVED : Status.PENDING).toString());
+            PreparedStatement pstmt = getPreparedStatement(conn.prepareStatement(INSERT_NEW_EVENT, Statement.RETURN_GENERATED_KEYS), conn, INSERT_NEW_EVENT,
+                    registerEvent.getOrganizer().getId(),
+                    registerEvent.getFullname(),
+                    registerEvent.getImages().get(0),
+                    registerEvent.getDescription(),
+                    registerEvent.getCategory().getId(),
+                    registerEvent.getLocation().getId(),
+                    registerEvent.getDateOfEvent(),
+                    registerEvent.getStartTime(),
+                    registerEvent.getEndTime(),
+                    registerEvent.getGuestRegisterLimit(),
+                    registerEvent.getCollaboratorRegisterLimit(),
+                    registerEvent.getGuestRegisterDeadline(),
+                    registerEvent.getCollaboratorRegisterDeadline(),
+                    (registerEvent.getOrganizer().getRole() == Role.ADMIN ? Status.APPROVED : Status.PENDING).toString());
             int rowChange = pstmt.executeUpdate();
 
             if (rowChange > 0) {
@@ -666,21 +686,21 @@ public class EventDAO extends SQLDatabase {
     public void updateEventDetails(Event event) {
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
             // Cập nhật thông tin sự kiện
-            int result = executeUpdatePreparedStatement(conn, UPDATE_EVENT_BY_ID, 
-                    event.getFullname(), 
-                    event.getDescription(), 
-                    event.getCategory().getId(), 
-                    event.getLocation().getId(), 
-                    event.getDateOfEvent(), 
-                    event.getStartTime(), 
+            int result = executeUpdatePreparedStatement(conn, UPDATE_EVENT_BY_ID,
+                    event.getFullname(),
+                    event.getDescription(),
+                    event.getCategory().getId(),
+                    event.getLocation().getId(),
+                    event.getDateOfEvent(),
+                    event.getStartTime(),
                     event.getEndTime(),
-                    event.getGuestRegisterLimit(), 
-                    event.getGuestRegisterDeadline(), 
-                    event.getCollaboratorRegisterLimit(), 
+                    event.getGuestRegisterLimit(),
+                    event.getGuestRegisterDeadline(),
+                    event.getCollaboratorRegisterLimit(),
                     event.getCollaboratorRegisterDeadline(),
                     (event.getImages().isEmpty() ? null : event.getImages().get(0)), // Cập nhật avatarPath
                     event.getId());
-            
+
             // Cập nhật ảnh cho sự kiện
             updateEventImages(event.getId(), event.getImages());
         } catch (SQLException e) {
@@ -691,19 +711,18 @@ public class EventDAO extends SQLDatabase {
     public String getEventStatus(int eventId) {
         String status = null;
         String query = "SELECT status FROM event WHERE id = ?";
-        
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, eventId);
             ResultSet rs = pstmt.executeQuery();
-            
+
             if (rs.next()) {
                 status = rs.getString("status");
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, "Error retrieving event status", e);
         }
-        
+
         return status;
     }
 
@@ -711,7 +730,7 @@ public class EventDAO extends SQLDatabase {
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
             String sql = "INSERT INTO EventImage (eventId, path) VALUES (?, ?)";
 
-            for (int i= 1; i < imagePaths.size(); i++) {
+            for (int i = 1; i < imagePaths.size(); i++) {
                 executeUpdatePreparedStatement(conn, sql, eventId, imagePaths.get(i));
             }
         } catch (SQLException e) {
@@ -727,9 +746,6 @@ public class EventDAO extends SQLDatabase {
             logger.log(Level.SEVERE, "Error deleting event images", e);
         }
     }
-
-
-
 
     public Event getEventById(int eventId) {
         Event event = null;
@@ -817,23 +833,43 @@ public class EventDAO extends SQLDatabase {
         StringBuilder query = new StringBuilder(SELECT_EVENTS_FOR_GUEST);
 
         if (!searchEventCriteria.isEmpty()) {
-            query.append("\n WHERE");
-
+//            query.append("\n WHERE");
+            boolean isNameSelected = false;
             if (searchEventCriteria.getName() != null && !searchEventCriteria.getName().isBlank()) {
-                query.append(" LOWER(e.fullname) LIKE LOWER('%");
+                query.append("\nWHERE LOWER(e.fullname) LIKE LOWER('%");
                 query.append(searchEventCriteria.getName());
                 query.append("%')\n ");
+                isNameSelected = true;
             }
+            boolean isCateSelected = false;
             if (searchEventCriteria.getCategoryId() != null) {
-                query.append("AND e.categoryId=");
+                if(isNameSelected){
+                    query.append(" AND ");
+                }else{
+                    query.append("\nWHERE ");
+                }
+                query.append("e.categoryId=");
                 query.append(searchEventCriteria.getCategoryId());
+                isCateSelected = true;
             }
+            boolean isOrganizerSelected = false;
             if (searchEventCriteria.getOrganizerId() != null) {
-                query.append("\n AND e.organizerId=");
+                if(isCateSelected){
+                    query.append("\nAND ");
+                }else{
+                    query.append("\nWHERE ");
+                }
+                query.append("e.organizerId=");
                 query.append(searchEventCriteria.getOrganizerId());
+                isOrganizerSelected = true;
             }
             if (searchEventCriteria.getFrom() != null && searchEventCriteria.getTo() != null) {
-                query.append("\n AND e.dateOfEvent BETWEEN '");
+                if(isOrganizerSelected){
+                    query.append("\nAND ");
+                }else{
+                    query.append("\nWHERE ");
+                }
+                query.append("e.dateOfEvent BETWEEN '");
                 query.append(searchEventCriteria.getFrom());
                 query.append("' AND '");
                 query.append(searchEventCriteria.getTo());
