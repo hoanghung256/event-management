@@ -30,26 +30,19 @@ public class ClubDAO extends SQLDatabase {
 
     private static final Logger logger = Logger.getLogger(ClubDAO.class.getName());
     private static String SELECT_ALL_EVENT_ORGANIZED = "SELECT\n"
-            + "	Organizer.fullname AS OrganizerName,\n"
-            + "	COUNT(Event.id) AS TotalEvents\n"
+            + "	COUNT(id) AS TotalEvents\n"
             + "FROM \n"
-            + "	Organizer\n"
-            + "JOIN \n"
-            + "	Event ON Organizer.id = Event.organizerId\n"
+            + "	Event\n"
             + "WHERE \n"
-            + " Organizer.id = ?\n"
-            + "GROUP BY \n"
-            + "	Organizer.fullname";
+            + " organizerId = ? AND status='END'\n";
 
     private static String SELECT_ALL_UPCOMING_EVENTS = "SELECT \n"
-            + "    COUNT(Event.id) AS UpcomingEvents\n"
+            + "    COUNT(id) AS UpcomingEvents\n"
             + "FROM \n"
             + "    Event\n"
-            + "JOIN \n"
-            + "	Organizer ON Organizer.id = Event.organizerId\n"
-            + "WHERE \n"
-            + "    dateOfEvent > GETDATE()\n"
-            + "	AND Organizer.id = ?";
+            + "WHERE dateOfEvent > GETDATE() "
+            + "AND status='APPROVED' "
+            + "AND organizerId = ?";
 
     private static String SELECT_ALL_FOLLOWERS = "SELECT \n"
             + "    COUNT(studentId) AS FollowerCount\n"
@@ -58,7 +51,8 @@ public class ClubDAO extends SQLDatabase {
             + "WHERE \n"
             + "    organizerId = ?";
 
-    private static String SELECT_ORGANIZED_EVENTS = "SELECT\n"
+    private static String SELECT_ORGANIZED_EVENTS = "SELECT \n"
+            + "    COUNT(*) OVER() AS 'TotalRow', \n"
             + "    Event.id AS EventId,\n"
             + "    Organizer.id AS OrganizerId,"
             + "    Event.fullname AS EventName,\n"
@@ -75,7 +69,7 @@ public class ClubDAO extends SQLDatabase {
             + "	Organizer ON Organizer.id = Event.organizerId\n"
             + "WHERE\n"
             + "    Event.organizerId = ?\n"
-            + "    AND Event.dateOfEvent < GETDATE();";
+            + "    AND Event.status='END'";
 
     private static String SELECT_UPCOMING_EVENTS = "SELECT \n"
             + "    Event.id AS EventId,\n"

@@ -154,6 +154,9 @@
                                             <div class="element__btn yellow-bg pl-5">
                                                 <a href="<c:url value="/club/check-in?action=get-qr&eventId=${event.id}&name=${event.fullname}&location=${event.location.description}&date=${event.dateOfEvent}&start=${event.startTime}&end=${event.endTime}" />">Check-in Page</a>
                                             </div>
+                                             <div class="element__btn yellow-bg pl-5">
+                                                <a href="<c:url value="/club/on-going-event?action=access&eventId=${event.id}" />">Landing Page</a>
+                                            </div>
                                         </div>
                                     </div>
                                     <hr/>
@@ -206,7 +209,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <%--<c:if test="${event.status eq 'PENDING'}">--%>
+                                        <c:if test="${event.status eq 'PENDING'}">
                                             <div class="dropdown">
                                                 <button>
                                                     <svg class="attendant__dot" width="50" height="5" viewBox="0 0 14 4" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -219,7 +222,7 @@
                                                     <a class="dropdown__item" href="<c:url value='/club/edit-event?eventId=${event.id}'/>">Edit</a>
                                                 </div>
                                             </div>
-                                        <%--</c:if>--%>             
+                                        </c:if>             
                                     </div>
 
                                     <!-- Chart section -->

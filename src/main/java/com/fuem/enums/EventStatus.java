@@ -13,5 +13,6 @@ public enum EventStatus {
     APPROVED,
     REJECTED,
     ON_GOING,
+    CANCEL,
     END;
 }

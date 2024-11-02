@@ -33,7 +33,7 @@
                     <div id="myTabContent">
                         <div id="day-tab-1-pane" role="tabpanel" aria-labelledby="day-tab-1" tabindex="0">
                             <div class="event__details-area">
-                                <div class="row">
+<!--                                <div class="row">
                                     <div class="col-xxl-7 col-xl-6 p-1">
                                         <div class="event__details-left">
                                             <div class="body__card-wrapper mb-20">
@@ -88,7 +88,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
 
                                 <!-- Start of statistic Number --> 
                                 <div class="row g-20">

@@ -187,6 +187,8 @@ public class EventDAO extends SQLDatabase {
             + "    Category c ON e.categoryId = c.id \n"
             + "JOIN \n"
             + "    Location l ON e.locationId = l.id";
+    private static final String GET_ATTENDED_COUNT_BY_EVENT_ID = "SELECT guestAttendedCount FROM [Event] WHERE id=?";
+    private static final String UPDATE_STATUS_BY_EVENT_ID = "UPDATE [Event] SET status=? WHERE id=?";
 
     public EventDAO() {
         super();
@@ -653,19 +655,6 @@ public class EventDAO extends SQLDatabase {
         return generatedId;
     }
 
-    /*
-     * Update status to database
-     *
-     * @author ThangNM
-     */
-    public void updateEventRegistrationStatus(int eventId, EventStatus status) {
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
-            executePreparedStatement(conn, UPDATE_EVENTS_REGISTRATION_STATUS, status, eventId);
-        } catch (SQLException ex) {
-            Logger.getLogger(EventDAO.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
     public int[] getTotalStatisticNumberOfEvent(int eventId) {
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_STATISTIC_NUMBER_OF_EVENT, eventId)) {
             while (rs.next()) {
@@ -897,5 +886,38 @@ public class EventDAO extends SQLDatabase {
         }
 
         return query.toString();
+    }
+    
+    /**
+     * 
+     * @author HungHV 
+     */
+    public int getAttendedCount(int eventId) {
+        int count = 0;
+        
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, GET_ATTENDED_COUNT_BY_EVENT_ID, eventId)) {
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        
+        return count;
+    }
+    
+    /**
+     * 
+     * @author HungHV
+     */
+    public boolean changeEventStatus(int eventId, EventStatus status) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
+            executeUpdatePreparedStatement(conn, UPDATE_STATUS_BY_EVENT_ID, status, eventId);
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        
+        return true;
     }
 }

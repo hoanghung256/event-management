@@ -36,7 +36,7 @@ public class AdminDAO extends SQLDatabase {
             + "JOIN \n"
             + "	Event ON Organizer.id = Event.organizerId\n"
             + "WHERE \n"
-            + "	Organizer.id = ?\n"
+            + "	Organizer.id = ? AND Event.status='END' \n"
             + "GROUP BY \n"
             + "	Organizer.fullname";
 
@@ -99,6 +99,7 @@ public class AdminDAO extends SQLDatabase {
             + "WHERE\n"
             + "    MONTH(Event.dateOfEvent) = MONTH(GETDATE())\n"
             + "    AND YEAR(Event.dateOfEvent) = YEAR(GETDATE())\n"
+            + "    AND Event.status='END'\n"
             + "ORDER BY\n"
             + "    Event.dateOfEvent DESC;";
 
@@ -125,7 +126,8 @@ public class AdminDAO extends SQLDatabase {
             + "ORDER BY\n"
             + "	Event.dateOfEvent DESC\n";
 
-    private static String SELECT_ORGANIZED_EVENTS_WITH_PAGING = "SELECT\n"
+    private static String SELECT_ORGANIZED_EVENTS_WITH_PAGING = "SELECT \n"
+            + "    COUNT(*) OVER() AS 'TotalRow', \n"
             + "    Event.id AS EventId, \n"
             + "    Organizer.id AS OrganizerId, \n"
             + "    Organizer.acronym AS ClubName,\n"

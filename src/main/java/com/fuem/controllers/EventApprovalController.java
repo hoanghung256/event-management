@@ -72,11 +72,11 @@ public class EventApprovalController extends HttpServlet {
 
         switch (action) {
             case "approve":
-                dao.updateEventRegistrationStatus(eventId, EventStatus.APPROVED);
+                dao.changeEventStatus(eventId, EventStatus.APPROVED);
                 response.sendRedirect(request.getContextPath() + "/admin/approval-events?success=true&action=show");
                 break;
             case "rejected":
-                dao.updateEventRegistrationStatus(eventId, EventStatus.REJECTED);
+                dao.changeEventStatus(eventId, EventStatus.REJECTED);
                 response.sendRedirect(request.getContextPath() + "/admin/approval-events?success=true&action=show");
                 break;
         }
