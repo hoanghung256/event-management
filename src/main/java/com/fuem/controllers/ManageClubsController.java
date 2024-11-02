@@ -6,8 +6,8 @@ package com.fuem.controllers;
 
 import com.fuem.models.Organizer;
 import com.fuem.daos.OrganizerDAO;
-import com.fuem.repositories.helpers.Page;
-import com.fuem.repositories.helpers.PagingCriteria;
+import com.fuem.daos.helpers.Page;
+import com.fuem.daos.helpers.PagingCriteria;
 import com.fuem.utils.Validator;
 import java.io.IOException;
 import jakarta.servlet.ServletException;

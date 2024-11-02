@@ -6,8 +6,8 @@ package com.fuem.daos;
 
 import com.fuem.enums.Role;
 import com.fuem.models.Organizer;
-import com.fuem.repositories.helpers.Page;
-import com.fuem.repositories.helpers.PagingCriteria;
+import com.fuem.daos.helpers.Page;
+import com.fuem.daos.helpers.PagingCriteria;
 import com.fuem.utils.DataSourceWrapper;
 import com.fuem.utils.Hash;
 import java.sql.Connection;
