@@ -6,7 +6,7 @@
 package com.fuem.controllers;
 
 import com.fuem.models.Student;
-import com.fuem.repositories.FollowDAO;
+import com.fuem.daos.FollowDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

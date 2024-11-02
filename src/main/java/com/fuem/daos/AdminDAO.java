@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.fuem.repositories;
+package com.fuem.daos;
 
-import com.fuem.enums.Status;
+import com.fuem.enums.EventStatus;
 import com.fuem.models.Category;
 import com.fuem.models.Event;
 import com.fuem.models.Location;
@@ -145,7 +145,7 @@ public class AdminDAO extends SQLDatabase {
             + "JOIN \n"
             + "    Location ON Location.id = Event.locationId\n"
             + "WHERE\n"
-            + "     Event.dateOfEvent < GETDATE()"
+            + "     Event.status='END' \n"
             + "ORDER BY\n"
             + "     Event.dateOfEvent DESC\n"
             + "OFFSET ? ROWS\n"
@@ -254,7 +254,7 @@ public class AdminDAO extends SQLDatabase {
                         .setDateOfEvent(rs.getDate("EventDate").toLocalDate())
                         .setCategory(new Category(rs.getString("CategoryName")))
                         .setLocation(new Location(rs.getString("LocationName")))
-                        .setStatus(Status.valueOf(rs.getString("Status")))
+                        .setStatus(EventStatus.valueOf(rs.getString("Status")))
                         .setOrganizer(
                                 new Organizer(
                                         rs.getInt("OrganizerId"),
@@ -262,7 +262,7 @@ public class AdminDAO extends SQLDatabase {
                                         rs.getNString("OrganizerAvatarPath")
                                 )
                         )
-                        .setStatus(Status.valueOf(rs.getString("Status")))
+                        .setStatus(EventStatus.valueOf(rs.getString("Status")))
                         .build();
 
                 registrationEvent.add(e);
@@ -367,8 +367,7 @@ public class AdminDAO extends SQLDatabase {
 
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_UPCOMING_EVENTS);) {
             while (rs.next()) {
-                upcomingEvent.add(
-                        new EventBuilder()
+                upcomingEvent.add(new EventBuilder()
                                 .setId(rs.getInt("EventId"))
                                 .setFullname(rs.getNString("EventName"))
                                 .setDateOfEvent(rs.getDate("EventDate").toLocalDate())
@@ -389,7 +388,7 @@ public class AdminDAO extends SQLDatabase {
                                                 rs.getNString("OrganizerAvatarPath")
                                         )
                                 )
-                                .setStatus(Status.valueOf(rs.getString("Status")))
+                                .setStatus(EventStatus.valueOf(rs.getString("Status")))
                                 .setGuestRegisterLimit(rs.getInt("RegisterLimit"))
                                 .setGuestRegisterCount(rs.getInt("RegisterCount"))
                                 .setStartTime(rs.getTime("startTime").toLocalTime())
@@ -420,7 +419,7 @@ public class AdminDAO extends SQLDatabase {
                         .setDateOfEvent(rs.getDate("EventDate").toLocalDate())
                         .setCategory(new Category(rs.getString("CategoryName")))
                         .setLocation(new Location(rs.getString("LocationName")))
-                        .setStatus(Status.valueOf(rs.getString("Status")))
+                        .setStatus(EventStatus.valueOf(rs.getString("Status")))
                         .setOrganizer(
                                 new Organizer(
                                         rs.getInt("OrganizerId"),
@@ -428,7 +427,7 @@ public class AdminDAO extends SQLDatabase {
                                         rs.getNString("OrganizerAvatarPath")
                                 )
                         )
-                        .setStatus(Status.valueOf(rs.getString("Status")))
+                        .setStatus(EventStatus.valueOf(rs.getString("Status")))
                         .build();
 
                 registrationEvent.add(e);

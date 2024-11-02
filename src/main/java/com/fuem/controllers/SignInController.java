@@ -7,9 +7,9 @@ package com.fuem.controllers;
 
 import com.fuem.enums.Role;
 import com.fuem.models.Organizer;
-import com.fuem.repositories.StudentDAO;
+import com.fuem.daos.StudentDAO;
 import com.fuem.models.Student;
-import com.fuem.repositories.OrganizerDAO;
+import com.fuem.daos.OrganizerDAO;
 
 import com.fuem.utils.Hash;
 import jakarta.servlet.ServletException;

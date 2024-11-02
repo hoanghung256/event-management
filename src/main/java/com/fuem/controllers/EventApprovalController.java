@@ -4,10 +4,10 @@
  */
 package com.fuem.controllers;
 
-import com.fuem.enums.Status;
+import com.fuem.enums.EventStatus;
 import com.fuem.models.Event;
-import com.fuem.repositories.AdminDAO;
-import com.fuem.repositories.EventDAO;
+import com.fuem.daos.AdminDAO;
+import com.fuem.daos.EventDAO;
 import com.fuem.repositories.helpers.Page;
 import com.fuem.repositories.helpers.PagingCriteria;
 import jakarta.servlet.ServletException;
@@ -72,11 +72,11 @@ public class EventApprovalController extends HttpServlet {
 
         switch (action) {
             case "approve":
-                dao.updateEventRegistrationStatus(eventId, Status.APPROVED);
+                dao.updateEventRegistrationStatus(eventId, EventStatus.APPROVED);
                 response.sendRedirect(request.getContextPath() + "/admin/approval-events?success=true&action=show");
                 break;
             case "rejected":
-                dao.updateEventRegistrationStatus(eventId, Status.REJECTED);
+                dao.updateEventRegistrationStatus(eventId, EventStatus.REJECTED);
                 response.sendRedirect(request.getContextPath() + "/admin/approval-events?success=true&action=show");
                 break;
         }

@@ -1,6 +1,6 @@
 package com.fuem.controllers;
 
-import com.fuem.repositories.StudentDAO;
+import com.fuem.daos.StudentDAO;
 import com.fuem.models.Student;
 
 import jakarta.json.Json;

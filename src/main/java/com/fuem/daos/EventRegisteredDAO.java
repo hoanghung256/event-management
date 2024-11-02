@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.fuem.repositories;
+package com.fuem.daos;
 
 import com.fuem.models.Event;
 import com.fuem.models.Organizer;
@@ -42,7 +42,7 @@ public class EventRegisteredDAO extends SQLDatabase {
             + "    AND ec.isCancel = 0 \n"
             + "LEFT JOIN [Organizer] o \n"
             + "    ON o.id = e.organizerId\n"
-            + "WHERE (eg.isRegistered = 1 AND eg.isCancelRegister = 0)  \n"
+            + "WHERE (eg.isRegistered = 1 AND eg.isCancelRegister = 0)  \n" 
             + "   OR (ec.studentId IS NOT NULL AND ec.isCancel = 0);    ";
 
     private static final String REGISTER_COLLABORATOR_EVENT

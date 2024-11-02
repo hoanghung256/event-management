@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.fuem.repositories;
+package com.fuem.daos;
 
 import com.fuem.models.Event;
 import com.fuem.models.Organizer;
@@ -43,8 +43,10 @@ public class EventAttendedDAO extends SQLDatabase {
             + "    [Organizer] Organizer ON Event.organizerId = Organizer.id\n"
             + "JOIN \n"
             + "    [Student] Student ON EventGuest.guestId = Student.id\n"
-            + "WHERE \n"
-            + "    EventGuest.guestId = ?  -- GuestId filter\n"
+            + "WHERE "
+            + "    EventGuest.guestId = ? "
+            + "AND \n"
+            + "    EventGuest.isAttended = 1 \n"
             + "AND \n"
             + "    Event.dateOfEvent < '2025-10-31'\n"
             + "ORDER BY \n"

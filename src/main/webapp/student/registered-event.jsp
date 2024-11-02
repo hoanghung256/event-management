@@ -70,7 +70,7 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="<c:url value="/home"/>">Home</a></span></li>
+                                    <li><span><a class="acolor" href="<c:url value="/home"/>">Home</a></span></li>
                                     <li class="active"><span>Register Events</span></li>
                                 </ul>
                             </nav>

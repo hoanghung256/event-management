@@ -126,13 +126,15 @@
                                         <span>Add image</span>
                                         <br/>
                                         <span>(Upload new image will delete all images are uploaded)</span>
-                                        <div class="event__update-file" id="image-wrapper">
+                                        <div class="event__update-file">
                                             <div class="event__update-thumb">
                                                 <div class="box__input">
-                                                    <input type="file" name="images" id="file" class="box__file" multiple>
+                                                    <input type="file" name="images" id="file" class="box__file" multiple onchange="deletePreviousPreviewImg()">
                                                     <label class="input__field-text" for="file"><span><i class="fa-regular fa-plus"></i></span><span>Add New Image</span></label>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="event__update-file" id="image-wrapper">
                                             <div class="event__image-preview">
                                                 <c:forEach var="imagePath" items="${eventImageList}">
                                                     <div class="event__update-thumb">
@@ -247,41 +249,18 @@
 </section>
 
 <script>
-//    const fileInput = document.getElementById('file');
-//    const previewWrapper = document.getElementById('image-wrapper');
-//
-//    fileInput.addEventListener('change', function () {
-//        displayImagePreview();
-//    });
-//
-//    function displayImagePreview() {
-//        previewWrapper.querySelector(".event__image-preview").innerHTML = ""; // Xóa ?nh c?
-//        let files = fileInput.files;
-//
-//        for (let i = 0; i < files.length; i++) {
-//            let reader = new FileReader();
-//            reader.onload = function (e) {
-//                let imgElement = document.createElement("div");
-//                imgElement.classList.add("event__update-thumb");
-//                imgElement.innerHTML = `<img src="${e.target.result}" alt="Event Image"/>`;
-//                previewWrapper.querySelector(".event__image-preview").appendChild(imgElement);
-//            }
-//            reader.readAsDataURL(files[i]);
-//        }
-//    }
     let previewWrapper = document.getElementById("image-wrapper");
     console.log(previewWrapper);
     let fileInput = document.getElementById("file");
 
     fileInput.onchange = function () {
+        previewWrapper.innerHTML = "";
+        
         for (let i = 0; i < fileInput.files.length; i++) {
             let divWrapper = document.createElement("div");
             divWrapper.className = "event__update-thumb";
             let previewImage = document.createElement("img");
             previewImage.src = URL.createObjectURL(fileInput.files[i]);
-//            previewImage.style.width = '150px';
-//            previewImage.style.height = '100px';
-//            previewImage.style.margin = '10px';
             
             divWrapper.append(previewImage);
             previewWrapper.append(divWrapper);
@@ -291,7 +270,6 @@
         const imageThumb = button.closest('.event__update-thumb');
         imageThumb.remove(); // Xóa ?nh
     }
-    
 </script>
 
 

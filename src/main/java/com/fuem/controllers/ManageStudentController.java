@@ -2,7 +2,7 @@ package com.fuem.controllers;
 
 import com.fuem.enums.Gender;
 import com.fuem.models.Student;
-import com.fuem.repositories.StudentDAO;
+import com.fuem.daos.StudentDAO;
 import com.fuem.repositories.helpers.Page;
 import com.fuem.repositories.helpers.PagingCriteria;
 import com.fuem.utils.Validator;

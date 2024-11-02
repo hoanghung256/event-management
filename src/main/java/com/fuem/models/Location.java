@@ -62,6 +62,6 @@ public class Location {
 
     @Override
     public String toString() {
-        return "EventLocation{" + "id=" + id + ", description=" + description + '}';
+        return "Location{" + "id=" + id + ", name=" + name + ", description=" + description + '}';
     }
 }

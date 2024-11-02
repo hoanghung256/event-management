@@ -9,7 +9,7 @@ import com.fuem.enums.FileType;
 import com.fuem.enums.Role;
 import com.fuem.models.Document;
 import com.fuem.models.Organizer;
-import com.fuem.repositories.FileDAO;
+import com.fuem.daos.FileDAO;
 import com.fuem.repositories.helpers.Page;
 import com.fuem.repositories.helpers.PagingCriteria;
 import com.fuem.utils.FileHandler;

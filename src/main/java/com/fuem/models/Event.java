@@ -4,7 +4,7 @@
  */
 package com.fuem.models;
 
-import com.fuem.enums.Status;
+import com.fuem.enums.EventStatus;
 import java.time.LocalTime;
 import java.time.LocalDate;
 import java.util.List;
@@ -18,7 +18,7 @@ public class Event {
     private int id;
     private Organizer organizer;
     private String fullname;
-    private Status status;
+    private EventStatus status;
     private String description;
     private Category category;
     private Location location;
@@ -88,7 +88,7 @@ public class Event {
         this.guestRegisterDeadline = guestRegisterDeadline;
     }
     
-    public Event(int id, Organizer organizer, String fullname, Status status, String description, String category, Location location, LocalDate dateOfEvent, LocalTime startTime, LocalTime endTime, int guestRegisterLimit, LocalDate guestRegisterDeadline, int guestRegisterCount, int collaboratorRegisterLimit, LocalDate collaboratorRegisterDeadline, int collaboratorRegisterCount, List<String> images) {
+    public Event(int id, Organizer organizer, String fullname, EventStatus status, String description, String category, Location location, LocalDate dateOfEvent, LocalTime startTime, LocalTime endTime, int guestRegisterLimit, LocalDate guestRegisterDeadline, int guestRegisterCount, int collaboratorRegisterLimit, LocalDate collaboratorRegisterDeadline, int collaboratorRegisterCount, List<String> images) {
         this.id = id;
         this.organizer = organizer;
         this.fullname = fullname;
@@ -131,7 +131,7 @@ public class Event {
         this.category.setName(category);
     }
     
-    public Event(int id, String fullname, LocalDate dateOfEvent, String locationName, String category, Status status, int registerLimit, int registerCount, LocalTime startTime, LocalTime endTime){
+    public Event(int id, String fullname, LocalDate dateOfEvent, String locationName, String category, EventStatus status, int registerLimit, int registerCount, LocalTime startTime, LocalTime endTime){
         this.id = id;
         this.fullname = fullname;
         this.dateOfEvent = dateOfEvent;
@@ -146,7 +146,7 @@ public class Event {
         this.endTime = endTime;
     }
     
-    public Event(Organizer organizer, String fullname, LocalDate dateOfEvent, String locationName, String category, Status status, int registerLimit, int registerCount, LocalTime startTime, LocalTime endTime){
+    public Event(Organizer organizer, String fullname, LocalDate dateOfEvent, String locationName, String category, EventStatus status, int registerLimit, int registerCount, LocalTime startTime, LocalTime endTime){
         this.organizer = organizer;
         this.fullname = fullname;
         this.dateOfEvent = dateOfEvent;
@@ -161,7 +161,7 @@ public class Event {
         this.endTime = endTime;
     }
      
-    public Event(int id, String clubName, String avatarPath, String fullname, LocalDate dateOfEvent, String category, String location, Status status){
+    public Event(int id, String clubName, String avatarPath, String fullname, LocalDate dateOfEvent, String category, String location, EventStatus status){
         this.id = id;
         this.organizer = new Organizer();
         //??
@@ -297,11 +297,11 @@ public class Event {
         this.endTime = endTime;
     }
 
-    public Status getStatus() {
+    public EventStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(EventStatus status) {
         this.status = status;
     }
 

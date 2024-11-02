@@ -345,7 +345,7 @@ GO
 <<<<<<<<<< BEGIN: EXAMPLE DATA <<<<<<<<<<
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 */
-INSERT INTO [Student] ([fullname], [studentId], [email], [password], [Gender])
+INSERT INTO [Student] ([fullname], [studentId], [email], [password], [gender])
 VALUES
 ('Hoang Vu Hung', 'DE180038', 'hunghvde180038@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'MALE'),
 ('Nguyen Quoc Anh', 'DE180064', 'anhnqde180064@fpt.edu.vn', 'c72761295946d80be670aeaea88b193b4eb33ad1edea30a0d2b4dd551a2f4fcc', 'MALE'),

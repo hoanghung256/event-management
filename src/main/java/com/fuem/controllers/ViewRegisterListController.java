@@ -1,7 +1,7 @@
 package com.fuem.controllers;
 
 import com.fuem.models.EventGuest;
-import com.fuem.repositories.EventRegisterDAO;
+import com.fuem.daos.EventRegisterDAO;
 import com.fuem.repositories.helpers.Page;
 import com.fuem.repositories.helpers.PagingCriteria;
 import jakarta.servlet.ServletException;

@@ -5,7 +5,10 @@
 package com.fuem.controllers;
 
 import com.fuem.models.Event;
-import com.fuem.repositories.AdminDAO;
+import com.fuem.daos.AdminDAO;
+import com.fuem.daos.ClubDAO;
+import com.fuem.enums.Role;
+import com.fuem.models.Organizer;
 import com.fuem.repositories.helpers.Page;
 import com.fuem.repositories.helpers.PagingCriteria;
 import java.io.IOException;
@@ -24,7 +27,8 @@ public class OrganizedEventController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        AdminDAO dao = new AdminDAO();
+        Organizer org = (Organizer) request.getSession().getAttribute("userInfor");
+        Page<Event> organizedList = new Page<>();
 
         //paging
         PagingCriteria pagingCriteria = new PagingCriteria();
@@ -43,7 +47,15 @@ public class OrganizedEventController extends HttpServlet {
                 10
         );
 
-        Page<Event> organizedList = dao.getOrganizedEventWithPaging(pagingCriteria);
+        if (org.getRole().equals(Role.CLUB)) {
+            ClubDAO clubDao = new ClubDAO();
+            
+            organizedList = clubDao.getOrganizedEventWithPaging(org.getId(), pagingCriteria);
+        } else {
+            AdminDAO adminDao = new AdminDAO();
+
+            organizedList = adminDao.getOrganizedEventWithPaging(pagingCriteria);
+        }
         request.setAttribute("page", organizedList);
         request.getRequestDispatcher("organized-events.jsp").forward(request, response);
     }

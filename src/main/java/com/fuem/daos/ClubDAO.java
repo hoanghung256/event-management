@@ -2,14 +2,16 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.fuem.repositories;
+package com.fuem.daos;
 
-import com.fuem.enums.Status;
+import com.fuem.enums.EventStatus;
 import com.fuem.models.Category;
 import com.fuem.models.Event;
 import com.fuem.models.Location;
 import com.fuem.models.Organizer;
 import com.fuem.models.builders.EventBuilder;
+import com.fuem.repositories.helpers.Page;
+import com.fuem.repositories.helpers.PagingCriteria;
 import com.fuem.utils.DataSourceWrapper;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -35,8 +37,7 @@ public class ClubDAO extends SQLDatabase {
             + "JOIN \n"
             + "	Event ON Organizer.id = Event.organizerId\n"
             + "WHERE \n"
-            + "     Organizer.isAdmin = '0'\n"
-            + "	AND Organizer.id = ?\n"
+            + " Organizer.id = ?\n"
             + "GROUP BY \n"
             + "	Organizer.fullname";
 
@@ -170,7 +171,7 @@ public class ClubDAO extends SQLDatabase {
                 LocalDate eventDate = rs.getDate("EventDate").toLocalDate();
                 String locationName = rs.getString("LocationName");
                 String category = rs.getString("CategoryName");
-                Status status = Status.valueOf(rs.getString("Status"));
+                EventStatus status = EventStatus.valueOf(rs.getString("Status"));
                 int registerLimit = rs.getInt("RegisterLimit");
                 int registerCount = rs.getInt("RegisterCount");
                 LocalTime startTime = rs.getTime("startTime").toLocalTime();
@@ -182,5 +183,33 @@ public class ClubDAO extends SQLDatabase {
             logger.log(Level.SEVERE, null, e);
         }
         return upcomingEvent;
+    }
+    
+    public Page<Event> getOrganizedEventWithPaging(int clubId, PagingCriteria pagingCriteria) {
+        Page<Event> page = new Page<>();
+        ArrayList<Event> organizedEvent = new ArrayList<>();
+
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZED_EVENTS, clubId);) {
+            while (rs.next()) {
+                if (page.getTotalPage() == null && page.getCurrentPage() == null) {
+                    page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
+                    page.setCurrentPage(pagingCriteria.getOffset() / pagingCriteria.getFetchNext());
+                }
+                
+                Event e = new EventBuilder()
+                        .setId(rs.getInt("EventId"))
+                        .setOrganizer(new Organizer(rs.getInt("OrganizerId")))
+                        .setFullname(rs.getString("EventName"))
+                        .setDateOfEvent(rs.getDate("EventDate").toLocalDate())
+                        .setLocation(new Location(rs.getString("LocationName")))
+                        .setCategory(new Category(rs.getString("CategoryName")))
+                        .build();
+                organizedEvent.add(e);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        page.setDatas(organizedEvent);
+        return page;
     }
 }

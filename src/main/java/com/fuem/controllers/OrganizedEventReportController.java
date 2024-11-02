@@ -6,8 +6,8 @@ package com.fuem.controllers;
 
 import com.fuem.models.Event;
 import com.fuem.models.Organizer;
-import com.fuem.repositories.AdminDAO;
-import com.fuem.repositories.EventDAO;
+import com.fuem.daos.AdminDAO;
+import com.fuem.daos.EventDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;

@@ -4,7 +4,7 @@
  */
 package com.fuem.models.builders;
 
-import com.fuem.enums.Status;
+import com.fuem.enums.EventStatus;
 import com.fuem.models.Category;
 import com.fuem.models.Event;
 import com.fuem.models.Location;
@@ -22,7 +22,7 @@ public class EventBuilder {
     private int id;
     private Organizer organizer;
     private String fullname;
-    private Status status;
+    private EventStatus status;
     private String description;
     private Category category;
     private Location location;
@@ -52,7 +52,7 @@ public class EventBuilder {
         return this;
     }
 
-    public EventBuilder setStatus(Status status) {
+    public EventBuilder setStatus(EventStatus status) {
         this.status = status;
         return this;
     }
@@ -134,7 +134,7 @@ public class EventBuilder {
         return fullname;
     }
 
-    public Status getStatus() {
+    public EventStatus getStatus() {
         return status;
     }
 

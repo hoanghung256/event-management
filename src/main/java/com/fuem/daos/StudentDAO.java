@@ -1,4 +1,4 @@
-package com.fuem.repositories;
+package com.fuem.daos;
 
 import com.fuem.enums.Gender;
 import com.fuem.enums.Role;

@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.fuem.repositories;
+package com.fuem.daos;
 
 import com.fuem.enums.Role;
-import com.fuem.enums.Status;
+import com.fuem.enums.EventStatus;
 import com.fuem.models.Event;
 import com.fuem.models.Location;
 import com.fuem.models.Category;
@@ -622,6 +622,7 @@ public class EventDAO extends SQLDatabase {
         int generatedId = 0;
 
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
+<<<<<<< HEAD:src/main/java/com/fuem/repositories/EventDAO.java
             PreparedStatement pstmt = getPreparedStatement(conn.prepareStatement(INSERT_NEW_EVENT, Statement.RETURN_GENERATED_KEYS), conn, INSERT_NEW_EVENT,
                     registerEvent.getOrganizer().getId(),
                     registerEvent.getFullname(),
@@ -637,6 +638,23 @@ public class EventDAO extends SQLDatabase {
                     registerEvent.getGuestRegisterDeadline(),
                     registerEvent.getCollaboratorRegisterDeadline(),
                     (registerEvent.getOrganizer().getRole() == Role.ADMIN ? Status.APPROVED : Status.PENDING).toString());
+=======
+            PreparedStatement pstmt = getPreparedStatement(conn.prepareStatement(INSERT_NEW_EVENT, Statement.RETURN_GENERATED_KEYS), conn, INSERT_NEW_EVENT, 
+                registerEvent.getOrganizer().getId(),
+                registerEvent.getFullname(),
+                registerEvent.getImages().get(0),
+                registerEvent.getDescription(),
+                registerEvent.getCategory().getId(),
+                registerEvent.getLocation().getId(),
+                registerEvent.getDateOfEvent(),
+                registerEvent.getStartTime(),
+                registerEvent.getEndTime(),
+                registerEvent.getGuestRegisterLimit(),
+                registerEvent.getCollaboratorRegisterLimit(),
+                registerEvent.getGuestRegisterDeadline(),
+                registerEvent.getCollaboratorRegisterDeadline(),
+                (registerEvent.getOrganizer().getRole() == Role.ADMIN ? EventStatus.APPROVED : EventStatus.PENDING).toString());
+>>>>>>> 4da13bd (fix flow):src/main/java/com/fuem/daos/EventDAO.java
             int rowChange = pstmt.executeUpdate();
 
             if (rowChange > 0) {
@@ -658,7 +676,7 @@ public class EventDAO extends SQLDatabase {
      *
      * @author ThangNM
      */
-    public void updateEventRegistrationStatus(int eventId, Status status) {
+    public void updateEventRegistrationStatus(int eventId, EventStatus status) {
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
             executePreparedStatement(conn, UPDATE_EVENTS_REGISTRATION_STATUS, status, eventId);
         } catch (SQLException ex) {

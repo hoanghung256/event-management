@@ -5,7 +5,7 @@
 package com.fuem.controllers;
 
 import com.fuem.models.Student;
-import com.fuem.repositories.EventAttendedDAO;
+import com.fuem.daos.EventAttendedDAO;
 import com.fuem.repositories.helpers.Page;
 import com.fuem.repositories.helpers.PagingCriteria;
 import jakarta.servlet.ServletException;

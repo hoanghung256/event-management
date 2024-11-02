@@ -8,9 +8,10 @@ package com.fuem.enums;
  *
  * @author hoang hung
  */
-public enum Status {
+public enum EventStatus {
     PENDING,
     APPROVED,
     REJECTED,
-    ON_GOING;
+    ON_GOING,
+    END;
 }

@@ -24,7 +24,7 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="home">Home</a></span></li>
+                                    <li><span><a href="<c:url value="/club/dashboard" />">Dashboard</a></span></li>
                                     <li class="active"><span>Register Event</span></li>
                                 </ul>
                             </nav>
@@ -59,7 +59,7 @@
                                         <span>Add image</span>
                                         <br/>
                                         <span>(First image will be event avatar by default, 2:3 image for most compatible)</span>
-                                        <div class="event__update-file" id="image-wrapper">
+                                        <div class="event__update-file">
                                             <div class="event__update-thumb">
                                                 <div class="box__input">
                                                     <input type="file" name="images" id="file" class="box__file" multiple>
@@ -67,6 +67,7 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="event__update-file" id="image-wrapper"></div>
                                     </div>
                                 </div>
                                 <div class="event__right-box">
@@ -160,6 +161,8 @@
     let fileInput = document.getElementById("file");
 
     fileInput.onchange = function () {
+        previewWrapper.innerHTML = "";
+        
         for (let i = 0; i < fileInput.files.length; i++) {
             let divWrapper = document.createElement("div");
             divWrapper.className = "event__update-thumb";

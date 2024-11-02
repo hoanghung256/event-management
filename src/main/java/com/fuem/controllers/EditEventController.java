@@ -4,8 +4,8 @@ import com.fuem.enums.FileType;
 import com.fuem.models.Category;
 import com.fuem.models.Event;
 import com.fuem.models.Location;
-import com.fuem.repositories.EventDAO;
-import com.fuem.repositories.FileDAO;
+import com.fuem.daos.EventDAO;
+import com.fuem.daos.FileDAO;
 import com.fuem.utils.FileHandler;
 
 import java.io.IOException;
@@ -24,7 +24,6 @@ import jakarta.servlet.http.HttpServletResponse;
 public class EditEventController extends HttpServlet {
 
     private EventDAO eventDAO = new EventDAO();
-    private FileDAO fileDAO = new FileDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -35,12 +34,12 @@ public class EditEventController extends HttpServlet {
             Event event = eventDAO.getEventDetails(Integer.parseInt(eventId));
 
             // Kiểm tra trạng thái của sự kiện
-            String eventStatus = eventDAO.getEventStatus(event.getId());
-            if (!"pending".equalsIgnoreCase(eventStatus)) {
-                request.setAttribute("error", "You can only edit events with 'pending' status.");
-                request.getRequestDispatcher("error-page.jsp").forward(request, response);
-                return; // Dừng xử lý nếu không được phép
-            }
+//            String eventStatus = eventDAO.getEventStatus(event.getId());
+//            if (!"pending".equalsIgnoreCase(eventStatus)) {
+//                request.setAttribute("error", "You can only edit events with 'pending' status.");
+//                request.getRequestDispatcher("error-page.jsp").forward(request, response);
+//                return; // Dừng xử lý nếu không được phép
+//            }
 
             List<Category> cates = eventDAO.getAllCategory();
             List<Location> locations = eventDAO.getAllLocations();
@@ -62,12 +61,12 @@ public class EditEventController extends HttpServlet {
         int eventId = Integer.parseInt(request.getParameter("eventId"));
 
         // Kiểm tra trạng thái của sự kiện
-        String eventStatus = eventDAO.getEventStatus(eventId);
-        if (!"pending".equalsIgnoreCase(eventStatus)) {
-    request.setAttribute("error", "You can only edit events with 'pending' status.");
-    request.getRequestDispatcher("dashboard.jsp").forward(request, response);
-    return; // Dừng xử lý nếu không được phép  
-        }
+//        String eventStatus = eventDAO.getEventStatus(eventId);
+//        if (!"pending".equalsIgnoreCase(eventStatus)) {
+//            request.setAttribute("error", "You can only edit events with 'pending' status.");
+//            request.getRequestDispatcher("dashboard.jsp").forward(request, response);
+//            return; // Dừng xử lý nếu không được phép  
+//        }
 
         try {
             // Lấy danh sách hình ảnh hiện tại từ cơ sở dữ liệu
@@ -104,7 +103,8 @@ public class EditEventController extends HttpServlet {
 
             // Gọi phương thức cập nhật sự kiện
             eventDAO.updateEventDetails(event);
-            response.sendRedirect("event-details.jsp?eventId=" + eventId); // Chuyển đến trang chi tiết sự kiện sau khi cập nhật thành công
+            request.setAttribute("message", "Update event sucessfully!");
+            response.sendRedirect("edit-event?eventId=" + eventId); // Chuyển đến trang chi tiết sự kiện sau khi cập nhật thành công
         } catch (Exception e) {
             request.setAttribute("error", "An error occurred: " + e.getMessage());
             request.getRequestDispatcher("edit-event.jsp?eventId=" + eventId).forward(request, response);

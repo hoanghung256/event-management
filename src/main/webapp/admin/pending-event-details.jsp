@@ -48,7 +48,7 @@
                                                 <div class="review__author-meta mb-15">
                                                     <a href="#">
                                                         <div class="review__author-thumb">
-                                                            <img src="${event.organizer.avatarPath}" alt="Organizer Avatar" onerror="this.onerror=null; this.src='assets/img/default-avatar.png';">
+                                                            <img src="<c:url value="${event.organizer.avatarPath}" />" alt="Organizer Avatar" onerror="this.onerror=null; this.src='assets/img/default-avatar.png';">
                                                         </div>
                                                         <div class="review__author-name">
                                                             <h4>
@@ -68,7 +68,7 @@
                                                                 <c:choose>
                                                                     <c:when test="${not empty event.images}">
                                                                         <c:forEach var="image" items="${event.images}">
-                                                                            <img src="http://127.0.0.1:5500/muontheme/codeskdhaka.com/html/expovent-prev/expovent/assets/img/event/event-details-2.jpg" alt="Event Image" />
+                                                                            <img src="<c:url value="${image}" />" alt="Event Image" />
                                                                         </c:forEach>
                                                                     </c:when>
                                                                     <c:otherwise>

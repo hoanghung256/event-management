@@ -4,7 +4,7 @@
  */
 package com.fuem.controllers;
 
-import com.fuem.repositories.StudentDAO;
+import com.fuem.daos.StudentDAO;
 import com.fuem.utils.Gmail;
 import com.fuem.utils.RandomGenerator;
 import jakarta.servlet.ServletException;

@@ -4,7 +4,7 @@
  */
 package com.fuem.controllers;
 
-import com.fuem.repositories.StudentDAO;
+import com.fuem.daos.StudentDAO;
 import com.fuem.utils.Hash;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;

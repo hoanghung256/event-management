@@ -53,7 +53,7 @@
                                     <!-- Check if organized list is empty -->
                                     <c:if test="${empty page.datas}">
                                         <div class="no-events">
-                                            <span>No events registered yet</span>
+                                            <span>No organized event yet</span>
                                         </div>
                                     </c:if>
                                     <c:if test="${not empty page.datas}">
