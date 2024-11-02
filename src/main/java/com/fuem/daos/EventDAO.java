@@ -622,23 +622,6 @@ public class EventDAO extends SQLDatabase {
         int generatedId = 0;
 
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
-<<<<<<< HEAD:src/main/java/com/fuem/repositories/EventDAO.java
-            PreparedStatement pstmt = getPreparedStatement(conn.prepareStatement(INSERT_NEW_EVENT, Statement.RETURN_GENERATED_KEYS), conn, INSERT_NEW_EVENT,
-                    registerEvent.getOrganizer().getId(),
-                    registerEvent.getFullname(),
-                    registerEvent.getImages().get(0),
-                    registerEvent.getDescription(),
-                    registerEvent.getCategory().getId(),
-                    registerEvent.getLocation().getId(),
-                    registerEvent.getDateOfEvent(),
-                    registerEvent.getStartTime(),
-                    registerEvent.getEndTime(),
-                    registerEvent.getGuestRegisterLimit(),
-                    registerEvent.getCollaboratorRegisterLimit(),
-                    registerEvent.getGuestRegisterDeadline(),
-                    registerEvent.getCollaboratorRegisterDeadline(),
-                    (registerEvent.getOrganizer().getRole() == Role.ADMIN ? Status.APPROVED : Status.PENDING).toString());
-=======
             PreparedStatement pstmt = getPreparedStatement(conn.prepareStatement(INSERT_NEW_EVENT, Statement.RETURN_GENERATED_KEYS), conn, INSERT_NEW_EVENT, 
                 registerEvent.getOrganizer().getId(),
                 registerEvent.getFullname(),
@@ -654,7 +637,6 @@ public class EventDAO extends SQLDatabase {
                 registerEvent.getGuestRegisterDeadline(),
                 registerEvent.getCollaboratorRegisterDeadline(),
                 (registerEvent.getOrganizer().getRole() == Role.ADMIN ? EventStatus.APPROVED : EventStatus.PENDING).toString());
->>>>>>> 4da13bd (fix flow):src/main/java/com/fuem/daos/EventDAO.java
             int rowChange = pstmt.executeUpdate();
 
             if (rowChange > 0) {
@@ -704,7 +686,7 @@ public class EventDAO extends SQLDatabase {
     public void updateEventDetails(Event event) {
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();) {
             // Cập nhật thông tin sự kiện
-            int result = executeUpdatePreparedStatement(conn, UPDATE_EVENT_BY_ID,
+            executeUpdatePreparedStatement(conn, UPDATE_EVENT_BY_ID,
                     event.getFullname(),
                     event.getDescription(),
                     event.getCategory().getId(),
