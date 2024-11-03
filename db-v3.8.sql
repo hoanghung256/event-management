@@ -305,7 +305,6 @@ BEGIN
 END;
 GO
 
-drop trigger trg_updateGuestCounts
 -- Auto increase collaboratorRegisterCount at [Event] table when student register as collaborator 
 CREATE TRIGGER trg_IncreaseCollaboratorCount
 ON [EventCollaborator]
