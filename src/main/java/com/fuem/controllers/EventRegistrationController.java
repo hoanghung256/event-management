@@ -162,7 +162,7 @@ public class EventRegistrationController extends HttpServlet {
                         () -> {
                             try {
                                 Organizer admin = new OrganizerDAO().getAdmin();
-                                Gmail.newPendingEvent(admin.getEmail(), admin.getAcronym(), registerOrganizer.getFullname(), registerEvent);
+                                Gmail.newPendingEvent(admin.getEmail(), admin.getAcronym(), registerOrganizer.getFullname(), registerEvent, request);
                             } catch (MalformedURLException e) {
                                 Logger.getLogger(EventRegistrationController.class.getName()).log(Level.SEVERE, null, e);
                             }

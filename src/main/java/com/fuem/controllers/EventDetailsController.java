@@ -16,6 +16,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.net.MalformedURLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -93,9 +96,17 @@ public class EventDetailsController extends HttpServlet {
                     result = eventRegisteredDAO.registerGuest(student.getId(), eventId);
                     if (result) {
                         request.setAttribute("message", "Successfully registered as a guest.");
-                        EventDAO eventDao = new EventDAO();
-                        Event e = eventDao.getEventById(eventId);
-                        Gmail.registerEventSuccess(student.getEmail(), student.getFullname(), e);
+                        new Thread(
+                                () -> {
+                                    EventDAO eventDao = new EventDAO();
+                                    Event e = eventDao.getEventById(eventId);
+                            try {
+                                Gmail.registerEventSuccess(student.getEmail(), student.getFullname(), e, request);
+                            } catch (MalformedURLException ex) {
+                                Logger.getLogger(EventDetailsController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                                }
+                        ).start();
                     } else {
                         request.setAttribute("error", "Failed to register as a guest. Please try again.");
                     }

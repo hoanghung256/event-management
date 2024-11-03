@@ -7,6 +7,7 @@ package com.fuem.utils;
 import com.fuem.models.Event;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -157,17 +158,17 @@ public class Gmail {
         }
     }
 
-    public static void sendWithOTP(String email, String otp) throws MalformedURLException {
+    public static void sendWithOTP(String email, String otp, HttpServletRequest request) throws MalformedURLException {
         Gmail g = new Gmail(email)
                 .setContentType("text/html; charset=UTF-8")
                 .setSubject("Verify account")
                 .initMacro()
                 .appendMacro("OTP", otp);
 
-        g.sendTemplate(new URL("http://localhost:8080/event-management/gmail-template/send-otp.jsp"));
+        g.sendTemplate(new URL(ConfigurationGetter.getWebAppPrepath(request) + "/gmail-template/send-otp.jsp"));
     }
     
-    public static void registerEventSuccess(String email, String guestName, Event e) throws MalformedURLException {
+    public static void registerEventSuccess(String email, String guestName, Event e, HttpServletRequest request) throws MalformedURLException {
         Gmail g = new Gmail(email)
                 .setContentType("text/html; charset=UTF-8")
                 .setSubject("Guest Register Successfully!")
@@ -179,10 +180,10 @@ public class Gmail {
                 .appendMacro("EndTime", DateTimeConvertter.timeToString(e.getEndTime()))
                 .appendMacro("Location", e.getLocation().getName());
 
-        g.sendTemplate(new URL("http://localhost:8080/event-management/gmail-template/guest-register-success.jsp"));
+        g.sendTemplate(new URL(ConfigurationGetter.getWebAppPrepath(request) + "/gmail-template/guest-register-success.jsp"));
     }
     
-    public static void newPendingEvent(String email, String adminName, String clubName, Event e) throws MalformedURLException {
+    public static void newPendingEvent(String email, String adminName, String clubName, Event e, HttpServletRequest request) throws MalformedURLException {
         Gmail g = new Gmail(email)
                 .setContentType("text/html; charset=UTF-8")
                 .setSubject("New Event Registration!")
@@ -195,10 +196,10 @@ public class Gmail {
                 .appendMacro("EndTime", DateTimeConvertter.timeToString(e.getEndTime()))
                 .appendMacro("Location", e.getLocation().getName());
 
-        g.sendTemplate(new URL("http://localhost:8080/event-management/gmail-template/new-pending-event.jsp"));
+        g.sendTemplate(new URL(ConfigurationGetter.getWebAppPrepath(request) + "/gmail-template/new-pending-event.jsp"));
     }
     
-    public static void eventRegistrationSuccess(String email, String clubName, Event e) throws MalformedURLException {
+    public static void eventRegistrationSuccess(String email, String clubName, Event e, HttpServletRequest request) throws MalformedURLException {
         Gmail g = new Gmail(email)
                 .setContentType("text/html; charset=UTF-8")
                 .setSubject("New Event Registration!")
@@ -210,6 +211,6 @@ public class Gmail {
                 .appendMacro("EndTime", DateTimeConvertter.timeToString(e.getEndTime()))
                 .appendMacro("Location", e.getLocation().getName());
 
-        g.sendTemplate(new URL("http://localhost:8080/event-management/gmail-template/new-pending-event.jsp"));
+        g.sendTemplate(new URL(ConfigurationGetter.getWebAppPrepath(request) + "/gmail-template/new-pending-event.jsp"));
     }
 }

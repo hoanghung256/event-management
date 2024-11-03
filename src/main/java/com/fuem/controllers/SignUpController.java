@@ -14,6 +14,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -111,7 +114,15 @@ public class SignUpController extends HttpServlet {
             Student u = new Student(fullname, studentId, email, password);
             u.setGender(gender);
             String otp = RandomGenerator.generate(RandomGenerator.NUMERIC, 6);
-            Gmail.sendWithOTP(email, otp);
+            new Thread(
+                    () -> {
+                        try {
+                            Gmail.sendWithOTP(email, otp, request);
+                        } catch (MalformedURLException ex) {
+                            Logger.getLogger(ForgetPasswordController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+            ).start();
             request.getSession().setAttribute("OTP", otp);
             request.setAttribute("registerInfor", u);
             request.getRequestDispatcher("authentication/verify-email.jsp").forward(request, response);

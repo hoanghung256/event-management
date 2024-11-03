@@ -86,7 +86,7 @@ public class EventApprovalController extends HttpServlet {
                             try {
                                 Event e = dao.getEventById(eventId);
                                 Organizer club = new OrganizerDAO().getOrganizerByEventId(eventId);
-                                Gmail.eventRegistrationSuccess(club.getEmail(), club.getFullname(), e);
+                                Gmail.eventRegistrationSuccess(club.getEmail(), club.getFullname(), e, request);
                             } catch (MalformedURLException e) {
                                 Logger.getLogger(EventRegistrationController.class.getName()).log(Level.SEVERE, null, e);
                             }

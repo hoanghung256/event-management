@@ -36,10 +36,18 @@ public class ForgetPasswordController extends HttpServlet {
         StudentDAO userDao = new StudentDAO();
         String email = request.getParameter("email");
         String otp = RandomGenerator.generate(RandomGenerator.NUMERIC, 6);
-        
+
         try {
             if (userDao.getUserByEmail(email) != null) {
-                Gmail.sendWithOTP(email, otp);
+                new Thread(
+                        () -> {
+                            try {
+                                Gmail.sendWithOTP(email, otp, request);
+                            } catch (MalformedURLException ex) {
+                                Logger.getLogger(ForgetPasswordController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                ).start();
                 HttpSession session = request.getSession();
                 session.setAttribute("otp", otp);
                 session.setAttribute("email", email);
@@ -47,10 +55,9 @@ public class ForgetPasswordController extends HttpServlet {
             } else {
                 request.setAttribute("message", "Email does not exist");
                 request.getRequestDispatcher("authentication/forget-password.jsp").forward(request, response);
-            } 
+            }
         } catch (MalformedURLException e) {
-           Logger.getLogger(ForgetPasswordController.class.getName()).log(Level.SEVERE, email, e);
+            Logger.getLogger(ForgetPasswordController.class.getName()).log(Level.SEVERE, email, e);
         }
     }
 }
-

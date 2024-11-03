@@ -4,6 +4,8 @@
  */
 package com.fuem.utils;
 
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -42,5 +44,9 @@ public class ConfigurationGetter {
         String server = getProperty("db.server");
         String url = "jdbc:sqlserver://" + server + ";database=EventManagement;encrypt=true;trustServerCertificate=true;loginTimeout=30;";
         return url;
+    }
+    
+    public static String getWebAppPrepath(HttpServletRequest request) {
+        return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
     }
 }

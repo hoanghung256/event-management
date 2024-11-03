@@ -46,7 +46,7 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="<c:url value="/home"/>">Home</a></span></li>
+                                    <li><span><a class="acolor" href="<c:url value="/home"/>">Home</a></span></li>
                                     <li class="active"><span>Event Details</span></li>
                                 </ul>
                             </nav>
@@ -80,13 +80,11 @@
                                                         <img class="rounded-circle" style="height: 40px; width: 40px;"src="<c:url value="${event.organizer.avatarPath}"/>" alt="Organizer Avatar" onerror="this.onerror=null; this.src='assets/img/default-avatar.png';">
                                                     </div>
                                                     <div class="review__author-name">
-                                                        <a href="<c:url value="/profile?role=club&id=${event.organizer.id}" />">
-                                                            <h4 style="color: inherit; transition: color 0.3s ease;"
-                                                                onmouseover="this.style.color = '#F50963';" 
-                                                                onmouseout="this.style.color = 'inherit';">
+                                                        <h4>
+                                                            <a class="acolor" href="<c:url value="/profile?role=club&id=${event.organizer.id}" />">
                                                                 ${event.organizer.fullname}
-                                                            </h4>
-                                                        </a>
+                                                            </a>
+                                                        </h4>
                                                     </div>
                                             </div>
                                         </div>
