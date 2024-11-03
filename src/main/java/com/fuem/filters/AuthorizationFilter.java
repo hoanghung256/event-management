@@ -36,8 +36,7 @@ public class AuthorizationFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         
         User user = (User) request.getSession().getAttribute("userInfor");
-//        String url = request.getRequestURI(); (in deployment environment)
-        String url = request.getRequestURI().substring(17); // (in development environment)
+        String url = request.getRequestURI();
         
         if (url.startsWith("/gmail-template")) {
             filterChain.doFilter(servletRequest, servletResponse);
