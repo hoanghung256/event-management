@@ -37,11 +37,12 @@ public class CheckInController extends HttpServlet {
                 boolean[] attendanceStatus = dao.getGuestAttendanceStatus(eventId, user.getId());
                 boolean isRegistered = attendanceStatus[0];
                 boolean isAttended = attendanceStatus[1];
+                boolean isCancel = attendanceStatus[2];
                 boolean isActionSuccess = false;
 
                 if (isAttended) {
                     request.setAttribute("error", "You have checked-in!");
-                } else if (isRegistered) {
+                } else if (isRegistered || isCancel) {
                     isActionSuccess = dao.updateAttendanceStatus(eventId, user.getId());
                     if (isActionSuccess) {
                         request.setAttribute("message", "Checked-in successfully!");

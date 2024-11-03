@@ -39,7 +39,7 @@ public class EventRegisterDAO extends SQLDatabase {
             + "    AND e.id = 2 "
             + "OFFSET ? ROWS "
             + "FETCH NEXT ? ROWS ONLY";
-    private static String SELECT_GUEST_ATTENDANCE_STATUS = "SELECT isRegistered, isAttended FROM [EventGuest] WHERE eventId=? AND guestId=?";
+    private static String SELECT_GUEST_ATTENDANCE_STATUS = "SELECT isRegistered, isAttended, isCancelRegister FROM [EventGuest] WHERE eventId=? AND guestId=?";
     private static String UPDATE_ATTENDANCE_STATUS = "UPDATE [EventGuest] SET isAttended=1 WHERE eventId=? AND guestId=?";
     private static String INSERT_ATTENDANCE_STATUS = "INSERT INTO [EventGuest](eventId, guestId, isAttended, isRegistered) VALUES(?, ?, 1, 0)";
 
@@ -95,13 +95,14 @@ public class EventRegisterDAO extends SQLDatabase {
      * @author HungHV
      */
     public boolean[] getGuestAttendanceStatus(int eventId, int guestId) {
-        boolean[] status = new boolean[] {false, false};
+        boolean[] status = new boolean[] {false, false, false};
 
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
                 ResultSet rs = executeQueryPreparedStatement(conn, SELECT_GUEST_ATTENDANCE_STATUS, eventId, guestId);) {
             if (rs.next()) {
                 status[0] = rs.getBoolean("isRegistered");
                 status[1] = rs.getBoolean("isAttended");
+                status[2] = rs.getBoolean("isCancelRegister");
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);

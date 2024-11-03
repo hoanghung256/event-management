@@ -62,7 +62,7 @@ public class EventRegisteredDAO extends SQLDatabase {
             + "    VALUES (source.guestId, source.eventId, 1);";
 
     private static final String CANCEL_GUEST_EVENT
-            = "UPDATE [EventGuest] SET isRegistered = 0 WHERE guestId = ? AND eventId = ?";
+            = "UPDATE [EventGuest] SET isRegistered = 0, isCancelRegister = 1 WHERE guestId = ? AND eventId = ?";
 
     private static final String IS_STUDENT_REGIS_AS_GUEST = "SELECT \n"
             + "COUNT (1) AS 'isGuestRegis' \n"
@@ -151,14 +151,12 @@ public class EventRegisteredDAO extends SQLDatabase {
             try (ResultSet rs = executeQueryPreparedStatement(conn, IS_STUDENT_REGIS_AS_GUEST, userId, eventId);) {
                 if (rs.next()) {
                     isGuestRegis = rs.getBoolean("isGuestRegis");
-                    System.out.println("is guest in db " + rs.getInt("isGuestRegis"));
                 }
             }
 
             try (ResultSet rs = executeQueryPreparedStatement(conn, IS_STUDENT_REGIS_AS_COLLAB, userId, eventId);) {
                 if (rs.next()) {
                     isCollabRegis = rs.getBoolean("isCollabRegis");
-                    System.out.println("is guest in db " + rs.getBoolean("isCollabRegis"));
                 }
             }
         } catch (SQLException e) {
