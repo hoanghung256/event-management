@@ -12,7 +12,9 @@ import com.fuem.models.Organizer;
 import com.fuem.models.builders.EventBuilder;
 import com.fuem.daos.EventDAO;
 import com.fuem.daos.FileDAO;
+import com.fuem.daos.OrganizerDAO;
 import com.fuem.utils.FileHandler;
+import com.fuem.utils.Gmail;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -21,6 +23,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -154,6 +157,17 @@ public class EventRegistrationController extends HttpServlet {
             if (fileDao.insertEventImages(eventId, registerEvent.getImages()) == (registerEvent.getImages().size() - 1)) {
                 request.setAttribute("message", "Register succeessfully");
                 FileHandler.save(registerEvent.getImages(), parts, request.getServletContext(), FileType.IMAGE);
+                
+                new Thread(
+                        () -> {
+                            try {
+                                Organizer admin = new OrganizerDAO().getAdmin();
+                                Gmail.newPendingEvent(admin.getEmail(), admin.getAcronym(), registerOrganizer.getFullname(), registerEvent);
+                            } catch (MalformedURLException e) {
+                                Logger.getLogger(EventRegistrationController.class.getName()).log(Level.SEVERE, null, e);
+                            }
+                        }
+                ).start();
             } else {
                 request.setAttribute("error", "Register failed");
             }

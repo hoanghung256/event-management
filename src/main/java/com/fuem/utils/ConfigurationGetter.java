@@ -37,4 +37,10 @@ public class ConfigurationGetter {
         }
         return properties.getProperty(key);
     }
+    
+    public static String getConnectionString() {
+        String server = getProperty("db.server");
+        String url = "jdbc:sqlserver://" + server + ";database=EventManagement;encrypt=true;trustServerCertificate=true;loginTimeout=30;";
+        return url;
+    }
 }

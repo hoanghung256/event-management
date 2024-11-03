@@ -51,6 +51,13 @@ public class OrganizerDAO extends SQLDatabase {
     private static final String UPDATE_PASSWORD_BY_EMAIL = "Update [Organizer] "
             + "SET password = ? "
             + "WHERE email = ?";
+    private static final String SELECT_ADMIN = "SELECT id, acronym, fullname, description, email, avatarPath, coverPath, followerCount "
+            + "FROM [Organizer] "
+            + "WHERE isAdmin = '1'";
+    private static final String SELECT_ORGANIZER_BY_EVENT_ID = "SELECT id, acronym, fullname, description, email, avatarPath, coverPath, followerCount "
+            + "FROM [Organizer] "
+            + "JOIN [Event] ON Organizer.id = Event.organizerId "
+            + "WHERE Event.id = ?;";
 
     public OrganizerDAO() {
         super();
@@ -250,5 +257,59 @@ public class OrganizerDAO extends SQLDatabase {
         } catch (SQLException e) {
             Logger.getLogger(StudentDAO.class.getName()).log(Level.SEVERE, null, e);
         }
+    }
+    
+    /**
+     * @author HungHV
+     */
+    public Organizer getAdmin() {
+        Organizer organizer = null;
+
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ADMIN)) {
+
+            if (rs.next()) {
+                organizer = new Organizer(
+                        rs.getString("acronym"), 
+                        rs.getString("description"),
+                        rs.getString("coverPath"), 
+                        rs.getInt("id"), 
+                        rs.getString("fullname"), 
+                        rs.getString("email"), 
+                        rs.getString("avatarPath"),
+                        Role.ADMIN
+                );
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+
+        return organizer;
+    }
+    
+    /**
+     * @author HungHV
+     */
+    public Organizer getOrganizerByEventId(int eventId) {
+        Organizer organizer = null;
+
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ORGANIZER_BY_EVENT_ID, eventId)) {
+
+            if (rs.next()) {
+                organizer = new Organizer(
+                        rs.getString("acronym"), 
+                        rs.getString("description"),
+                        rs.getString("coverPath"), 
+                        rs.getInt("id"), 
+                        rs.getString("fullname"), 
+                        rs.getString("email"), 
+                        rs.getString("avatarPath"),
+                        Role.CLUB
+                );
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+
+        return organizer;
     }
 }

@@ -4,6 +4,7 @@
  */
 package com.fuem.utils;
 
+import com.fuem.models.Event;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 import java.io.BufferedReader;
@@ -27,9 +28,9 @@ public class Gmail {
 
     private final String smtpHost = "smtp.gmail.com";
     private final String smtpPort = "587";
-    private final String password = "xgor cvso calo ctvk";
+    private final String password = "cwca unvn nsub lujp";
 
-    private final String fromEmail = "minhthangqhqn@gmail.com";
+    private final String fromEmail = "fpteventmanagementsystem@gmail.com";
     private String toEmail;
     private String contentType;
     private String subject;
@@ -103,7 +104,7 @@ public class Gmail {
 
             Transport.send(message);
         } catch (MessagingException ex) {
-            System.out.println(ex);
+            Logger.getLogger(Gmail.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -164,5 +165,51 @@ public class Gmail {
                 .appendMacro("OTP", otp);
 
         g.sendTemplate(new URL("http://localhost:8080/event-management/gmail-template/send-otp.jsp"));
+    }
+    
+    public static void registerEventSuccess(String email, String guestName, Event e) throws MalformedURLException {
+        Gmail g = new Gmail(email)
+                .setContentType("text/html; charset=UTF-8")
+                .setSubject("Guest Register Successfully!")
+                .initMacro()
+                .appendMacro("GuestName", guestName)
+                .appendMacro("EventName", e.getFullname())
+                .appendMacro("Date", DateTimeConvertter.dateToString(e.getDateOfEvent()))
+                .appendMacro("StartTime", DateTimeConvertter.timeToString(e.getStartTime()))
+                .appendMacro("EndTime", DateTimeConvertter.timeToString(e.getEndTime()))
+                .appendMacro("Location", e.getLocation().getName());
+
+        g.sendTemplate(new URL("http://localhost:8080/event-management/gmail-template/guest-register-success.jsp"));
+    }
+    
+    public static void newPendingEvent(String email, String adminName, String clubName, Event e) throws MalformedURLException {
+        Gmail g = new Gmail(email)
+                .setContentType("text/html; charset=UTF-8")
+                .setSubject("New Event Registration!")
+                .initMacro()
+                .appendMacro("AdminName", adminName)
+                .appendMacro("ClubName", clubName)
+                .appendMacro("EventName", e.getFullname())
+                .appendMacro("Date", DateTimeConvertter.dateToString(e.getDateOfEvent()))
+                .appendMacro("StartTime", DateTimeConvertter.timeToString(e.getStartTime()))
+                .appendMacro("EndTime", DateTimeConvertter.timeToString(e.getEndTime()))
+                .appendMacro("Location", e.getLocation().getName());
+
+        g.sendTemplate(new URL("http://localhost:8080/event-management/gmail-template/new-pending-event.jsp"));
+    }
+    
+    public static void eventRegistrationSuccess(String email, String clubName, Event e) throws MalformedURLException {
+        Gmail g = new Gmail(email)
+                .setContentType("text/html; charset=UTF-8")
+                .setSubject("New Event Registration!")
+                .initMacro()
+                .appendMacro("ClubName", clubName)
+                .appendMacro("EventName", e.getFullname())
+                .appendMacro("Date", DateTimeConvertter.dateToString(e.getDateOfEvent()))
+                .appendMacro("StartTime", DateTimeConvertter.timeToString(e.getStartTime()))
+                .appendMacro("EndTime", DateTimeConvertter.timeToString(e.getEndTime()))
+                .appendMacro("Location", e.getLocation().getName());
+
+        g.sendTemplate(new URL("http://localhost:8080/event-management/gmail-template/new-pending-event.jsp"));
     }
 }

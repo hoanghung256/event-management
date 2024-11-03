@@ -739,7 +739,7 @@ public class EventDAO extends SQLDatabase {
     public Event getEventById(int eventId) {
         Event event = null;
         // Thực hiện truy vấn SQL để lấy sự kiện dựa trên eventId
-        String query = "SELECT * FROM event WHERE id = ?";
+        String query = "SELECT Event.*, Location.locationName AS LocationName FROM [event] JOIN [Location] ON Event.locationId = Location.id WHERE Event.id = ?";
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); PreparedStatement pstmt = conn.prepareStatement(query)) {
             pstmt.setInt(1, eventId);
             ResultSet rs = pstmt.executeQuery();
@@ -750,7 +750,10 @@ public class EventDAO extends SQLDatabase {
                 event.setFullname(rs.getString("fullname"));
                 event.setDescription(rs.getString("description"));
                 event.setCategory(new Category(rs.getInt("categoryId"))); // Giả sử có setter cho Category
-                event.setLocation(new Location(rs.getInt("locationId"))); // Giả sử có setter cho Location
+                event.setLocation(new Location(
+                        rs.getInt("locationId"),
+                        rs.getNString("locationName")
+                )); // Giả sử có setter cho Location
                 event.setDateOfEvent(rs.getDate("dateOfEvent").toLocalDate());
                 event.setStartTime(rs.getTime("startTime").toLocalTime());
                 event.setEndTime(rs.getTime("endTime").toLocalTime());

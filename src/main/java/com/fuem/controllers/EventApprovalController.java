@@ -8,14 +8,20 @@ import com.fuem.enums.EventStatus;
 import com.fuem.models.Event;
 import com.fuem.daos.AdminDAO;
 import com.fuem.daos.EventDAO;
+import com.fuem.daos.OrganizerDAO;
 import com.fuem.daos.helpers.Page;
 import com.fuem.daos.helpers.PagingCriteria;
+import com.fuem.models.Organizer;
+import com.fuem.utils.Gmail;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -74,6 +80,18 @@ public class EventApprovalController extends HttpServlet {
             case "approve":
                 dao.changeEventStatus(eventId, EventStatus.APPROVED);
                 response.sendRedirect(request.getContextPath() + "/admin/approval-events?success=true&action=show");
+                
+                new Thread(
+                        () -> {
+                            try {
+                                Event e = dao.getEventById(eventId);
+                                Organizer club = new OrganizerDAO().getOrganizerByEventId(eventId);
+                                Gmail.eventRegistrationSuccess(club.getEmail(), club.getFullname(), e);
+                            } catch (MalformedURLException e) {
+                                Logger.getLogger(EventRegistrationController.class.getName()).log(Level.SEVERE, null, e);
+                            }
+                        }
+                ).start();
                 break;
             case "rejected":
                 dao.changeEventStatus(eventId, EventStatus.REJECTED);

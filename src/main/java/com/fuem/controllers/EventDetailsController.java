@@ -8,6 +8,7 @@ import com.fuem.models.Event;
 import com.fuem.models.Student;
 import com.fuem.daos.EventDAO;
 import com.fuem.daos.EventRegisteredDAO;
+import com.fuem.utils.Gmail;
 import jakarta.servlet.ServletException;
 import java.io.IOException;
 import jakarta.servlet.annotation.WebServlet;
@@ -92,6 +93,9 @@ public class EventDetailsController extends HttpServlet {
                     result = eventRegisteredDAO.registerGuest(student.getId(), eventId);
                     if (result) {
                         request.setAttribute("message", "Successfully registered as a guest.");
+                        EventDAO eventDao = new EventDAO();
+                        Event e = eventDao.getEventById(eventId);
+                        Gmail.registerEventSuccess(student.getEmail(), student.getFullname(), e);
                     } else {
                         request.setAttribute("error", "Failed to register as a guest. Please try again.");
                     }

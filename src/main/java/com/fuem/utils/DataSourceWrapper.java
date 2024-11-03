@@ -18,7 +18,7 @@ public class DataSourceWrapper {
     static {
         HikariConfig config = new HikariConfig();
         config.setDriverClassName(ConfigurationGetter.getProperty("db.driver"));
-        config.setJdbcUrl(ConfigurationGetter.getProperty("db.url"));
+        config.setJdbcUrl(ConfigurationGetter.getConnectionString());
         config.setUsername(ConfigurationGetter.getProperty("db.user"));
         config.setPassword(ConfigurationGetter.getProperty("db.password"));
         config.setConnectionTimeout(20000);
