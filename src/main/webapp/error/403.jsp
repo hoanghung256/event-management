@@ -99,7 +99,7 @@
             </div>
             <div class="content">
                 <h4>We are sorry, but you do not have permission to access this resource!</h4>
-                <a href="/event-management/home" class="input__btn">Back Home</a> <!-- Nút Back Home -->
+                <a href="<c:url value="/home" />" class="input__btn">Back Home</a> <!-- Nút Back Home -->
             </div>
         </div>
     </body>

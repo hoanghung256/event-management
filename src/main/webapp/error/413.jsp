@@ -105,7 +105,7 @@
             <div class="content">
                 <h4 class="text-danger">Oops, something went wrong!</h4>
                 <h4>Please go back then try to come again</h4>
-                <a href="/event-management/home" class="input__btn">Back Home</a> <!-- Nút Back Home -->
+                <a href="<c:url value="/home" />" class="input__btn">Back Home</a> <!-- Nút Back Home -->
             </div>
         </div>
     </body>

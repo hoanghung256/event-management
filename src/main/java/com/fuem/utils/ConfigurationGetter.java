@@ -40,11 +40,9 @@ public class ConfigurationGetter {
     }
     
     public static String getConnectionString() {
-        String server = getProperty("db.server");
-        String username = getProperty("db.username");
         String password = getProperty("db.password");
         // production environment connection string
-        String url = "jdbc:sqlserver://" + server + ".database.windows.net:1433;database=EventManagement;user=" + username + "@" + server + ";password=" + password + ";encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+        String url = "jdbc:sqlserver://hoanghungserver.database.windows.net:1433;database=EventManagement;user=hoanghung@hoanghungserver;password=" + password + ";encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
         
         // Development environment connection string
         // String url = "jdbc:sqlserver://" server + ";database=EventManagement;encrypt=true;trustServerCertificate=true;loginTimeout=30;user=" + username + ";password=" + password;
