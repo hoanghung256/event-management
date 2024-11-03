@@ -236,58 +236,76 @@ GO
 <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 */
 -- Auto update guestAttendedCount and guestRegisterCount at Event table when guest check-in event that registered before
-CREATE TRIGGER trg_updateGuest_GuestRegisCounts
+CREATE TRIGGER trg_updateGuestCounts
 ON [EventGuest]
-AFTER UPDATE
+AFTER INSERT, UPDATE
 AS
 BEGIN
+    -- Xử lý khi INSERT
     UPDATE e
-    SET guestAttendedCount = guestAttendedCount + (
-        SELECT COUNT(*) 
-        FROM inserted i
-        WHERE i.eventId = e.id AND i.isAttended = 1
-    )
-    FROM Event e
-    WHERE EXISTS (
-        SELECT 1 
-        FROM inserted i
-        WHERE i.eventId = e.id AND i.isAttended = 1
-    );
-
-    UPDATE e
-    SET guestRegisterCount = guestRegisterCount + (
-        SELECT COUNT(*) 
-        FROM inserted i
-        WHERE i.eventId = e.id AND i.isRegistered = 1
-    ) - (
-        SELECT COUNT(*)
-        FROM inserted i
-        WHERE i.eventId = e.id AND i.isRegistered = 0
-    )
+    SET 
+        guestRegisterCount = guestRegisterCount + (
+            SELECT COUNT(*) 
+            FROM inserted i
+            WHERE i.eventId = e.id AND i.isRegistered = 1 AND i.isCancelRegister = 0
+        ),
+        guestAttendedCount = guestAttendedCount + (
+            SELECT COUNT(*) 
+            FROM inserted i
+            WHERE i.eventId = e.id AND i.isAttended = 1 AND i.isRegistered = 0 AND i.isCancelRegister = 0
+        )
     FROM Event e
     WHERE EXISTS (
         SELECT 1 
         FROM inserted i
         WHERE i.eventId = e.id
     );
-END;
-GO
 
--- Auto increase guestRegisterCount at [Event] when guest register an event
--- Auto increase guestAttendedCount at [Event] when guest check-in an event that did not registered before
-CREATE TRIGGER trg_GuestCounts_GuestRegisterCount
-ON [EventGuest]
-AFTER INSERT
-AS
-BEGIN
-    UPDATE Event
+    -- Xử lý khi UPDATE
+    UPDATE e
     SET 
-        guestRegisterCount = guestRegisterCount + (SELECT COUNT(*) FROM inserted WHERE isRegistered = 1),
-        guestAttendedCount = guestAttendedCount + (SELECT COUNT(*) FROM inserted WHERE isAttended = 1)
-    WHERE id IN (SELECT eventId FROM inserted WHERE isRegistered = 1 OR isAttended = 1);
+        guestRegisterCount = guestRegisterCount + (
+            SELECT COUNT(*)
+            FROM inserted i
+            JOIN deleted d ON i.guestId = d.guestId AND i.eventId = d.eventId
+            WHERE i.eventId = e.id 
+              AND i.isRegistered = 1 
+              AND d.isRegistered = 0  -- Chỉ cộng khi isRegistered chuyển từ 0 sang 1
+        ) - (
+            SELECT COUNT(*)
+            FROM inserted i
+            JOIN deleted d ON i.guestId = d.guestId AND i.eventId = d.eventId
+            WHERE i.eventId = e.id 
+              AND i.isRegistered = 0 
+              AND d.isRegistered = 1  -- Chỉ trừ khi isRegistered chuyển từ 1 sang 0
+        ),
+        guestAttendedCount = guestAttendedCount + (
+            SELECT COUNT(*)
+            FROM inserted i
+            JOIN deleted d ON i.guestId = d.guestId AND i.eventId = d.eventId
+            WHERE i.eventId = e.id 
+              AND i.isAttended = 1 
+              AND d.isAttended = 0  -- Chỉ cộng khi isAttended chuyển từ 0 sang 1
+        ) - (
+            SELECT COUNT(*)
+            FROM inserted i
+            JOIN deleted d ON i.guestId = d.guestId AND i.eventId = d.eventId
+            WHERE i.eventId = e.id 
+              AND i.isAttended = 0 
+              AND d.isAttended = 1  -- Chỉ trừ khi isAttended chuyển từ 1 sang 0
+        )
+    FROM Event e
+    WHERE EXISTS (
+        SELECT 1 
+        FROM inserted i
+        JOIN deleted d ON i.guestId = d.guestId AND i.eventId = d.eventId
+        WHERE i.eventId = e.id 
+          AND (i.isRegistered <> d.isRegistered OR i.isAttended <> d.isAttended)
+    );
 END;
 GO
 
+drop trigger trg_updateGuestCounts
 -- Auto increase collaboratorRegisterCount at [Event] table when student register as collaborator 
 CREATE TRIGGER trg_IncreaseCollaboratorCount
 ON [EventCollaborator]
