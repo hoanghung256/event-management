@@ -50,7 +50,7 @@ public class ProfileController extends HttpServlet {
         int requestUrlLength = request.getRequestURI().split("/").length;
 
         switch (requestUrlLength) {
-            case 3: // access other profile
+            case 2: // access other profile
                 String role = request.getParameter("role");
                 int id = Integer.parseInt(request.getParameter("id"));
 
@@ -85,7 +85,7 @@ public class ProfileController extends HttpServlet {
                 }
                 break;
 
-            case 4: // access self-profile
+            case 3: // access self-profile
                 User user = (User) request.getSession().getAttribute("userInfor");
                 if (user == null) {
                     response.sendRedirect("sign-in");
