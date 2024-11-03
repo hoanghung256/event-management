@@ -105,9 +105,6 @@ public class EventDAO extends SQLDatabase {
             + "JOIN Location l ON e.locationId = l.id "
             + "LEFT JOIN Follow f ON e.organizerId = f.organizerId AND f.studentId = ? ";
     private static final String SELECT_ALL_CATEGORY = "SELECT * FROM [Category]";
-    private static final String UPDATE_EVENTS_REGISTRATION_STATUS = "UPDATE [Event]\n"
-            + "SET status = ?\n"
-            + "WHERE id = ?";
     private static final String SELECT_STATISTIC_NUMBER_OF_EVENT = "SELECT	"
             + " guestRegisterCount AS TotalRegister,\n"
             + "	guestAttendedCount AS TotalAttended,\n"

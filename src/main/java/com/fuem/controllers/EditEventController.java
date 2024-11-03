@@ -5,7 +5,6 @@ import com.fuem.models.Category;
 import com.fuem.models.Event;
 import com.fuem.models.Location;
 import com.fuem.daos.EventDAO;
-import com.fuem.daos.FileDAO;
 import com.fuem.utils.FileHandler;
 
 import java.io.IOException;

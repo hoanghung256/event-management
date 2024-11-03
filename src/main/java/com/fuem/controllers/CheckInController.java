@@ -8,7 +8,6 @@ import com.fuem.models.Event;
 import com.fuem.models.Location;
 import com.fuem.models.User;
 import com.fuem.models.builders.EventBuilder;
-import com.fuem.daos.EventDAO;
 import com.fuem.daos.EventRegisterDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
