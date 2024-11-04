@@ -4,10 +4,14 @@
  */
 package com.fuem.daos;
 
+import com.fuem.daos.helpers.Page;
+import com.fuem.daos.helpers.PagingCriteria;
 import com.fuem.models.Event;
 import com.fuem.models.Organizer;
+import com.fuem.models.Student;
 import com.fuem.utils.DataSourceWrapper;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -72,6 +76,12 @@ public class EventRegisteredDAO extends SQLDatabase {
             + "COUNT (1) AS 'isCollabRegis' "
             + "FROM [EventCollaborator] "
             + "WHERE studentId = ? AND eventId = ?;";
+    private static final String SELECT_GUEST_BY_ID = "SELECT Student.studentId, Student.fullname, Student.email, COUNT(*) OVER() AS TotalRow "
+            + "FROM EventGuest "
+            + "JOIN Student ON EventGuest.guestId = Student.id "
+            + "WHERE EventGuest.eventId = ? "
+            + "ORDER BY Student.fullname "
+            + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
     public List<Event> getRegisteredEventListByStudentId(String studentId) {
         List<Event> registeredEvents = new ArrayList<>();
@@ -164,4 +174,36 @@ public class EventRegisteredDAO extends SQLDatabase {
         }
         return new boolean[]{isGuestRegis, isCollabRegis};
     }
+
+    /**
+     *
+     * @author Trinhhuy
+     */
+    public Page<Student> getEventGuestsByEventId(PagingCriteria pagingCriteria, String eventId) {
+        Page<Student> page = new Page<>();
+        ArrayList<Student> guestList = new ArrayList<>();
+
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_GUEST_BY_ID, eventId, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
+            while (rs.next()) {
+                // Lấy tổng số hàng cho phân trang
+                if (page.getTotalPage() == null && page.getCurrentPage() == null) {
+                    page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
+                    page.setCurrentPage(pagingCriteria.getOffset() / pagingCriteria.getFetchNext());
+                }
+
+                // Tạo đối tượng Student và thiết lập thông tin
+                Student student = new Student();
+                student.setStudentId(rs.getString("studentId"));
+                student.setFullname(rs.getString("fullname"));
+                student.setEmail(rs.getString("email"));
+
+                guestList.add(student);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        page.setDatas(guestList);
+        return page;
+    }
+
 }

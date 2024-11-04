@@ -80,7 +80,7 @@ public class EventRegisterDAO extends SQLDatabase {
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e); // Ghi lại lỗi nếu có
         }
-        page.setDatas(registeredGuestsList); // Cập nhật danh sách khách vào trang
+        page.setDatas(registeredGuestsList);
         return page;
     }
     
