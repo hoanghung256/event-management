@@ -19,7 +19,8 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="<c:url value="/club/dasboard" />">Dashboard</a></span></li>
+                                    <li><span><a href="<c:url value="/club/dashboard" />">Dashboard</a></span></li>
+                                    <li><span><a href="<c:url value="/club/organized-event" />">Organized Events</a></span></li>
                                     <li class="active"><span>Event Feedback</span></li>
                                 </ul>
                             </nav>
@@ -88,16 +89,7 @@
                                 <span>Venue: </span>
                                 ${event.location.name}
                             </li>
-                            <li class="pb-2">
-                                <span>Registered: </span>
-                                ${event.guestRegisterCount} / ${event.guestRegisterLimit}
-                            </li>
-                            <li class="pb-2">
-                                <span>Attended: </span>
-                                ${event.guestAttendedCount}
-                            </li>
                         </ul>
-
                     </div>
                 </div>
             </div>

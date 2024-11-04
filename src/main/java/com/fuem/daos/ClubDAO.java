@@ -69,7 +69,8 @@ public class ClubDAO extends SQLDatabase {
             + "	Organizer ON Organizer.id = Event.organizerId\n"
             + "WHERE\n"
             + "    Event.organizerId = ?\n"
-            + "    AND Event.status='END'";
+            + "    AND Event.status='END'"
+            + "ORDER BY Event.dateOfEvent DESC";
 
     private static String SELECT_UPCOMING_EVENTS = "SELECT \n"
             + "    Event.id AS EventId,\n"

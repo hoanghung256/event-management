@@ -28,8 +28,7 @@ public class StudentEventRegisteredController extends HttpServlet {
         EventRegisteredDAO dao = new EventRegisteredDAO();
         Student student = (Student) request.getSession().getAttribute("userInfor");
         
-        String studentId = student.getStudentId();
-        List<Event> registeredEvents = dao.getRegisteredEventListByStudentId(studentId);
+        List<Event> registeredEvents = dao.getRegisteredEventListByStudentId(student.getId());
 
         request.setAttribute("registeredEvents", registeredEvents);
         request.getRequestDispatcher("registered-event.jsp").forward(request, response);

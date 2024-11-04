@@ -422,6 +422,7 @@ public class EventDAO extends SQLDatabase {
     private String buildSelectQuery(PagingCriteria pagingCriteria, SearchEventCriteria searchEventCriteria) {
         StringBuilder query = new StringBuilder(SELECT_EVENTS_FOLLOWED_AND_NOT_FOLLOWED);
 
+        boolean isDateSelected = false;
         if (!searchEventCriteria.isEmpty()) {
 //            query.append("\n WHERE");
             boolean isNameSelected = false;
@@ -464,9 +465,15 @@ public class EventDAO extends SQLDatabase {
                 query.append("' AND '");
                 query.append(searchEventCriteria.getTo());
                 query.append("'");
+                isDateSelected = true;
             }
         }
-        query.append("\n AND e.dateOfEvent > GETDATE()");
+        if (isDateSelected) {
+            query.append(" AND ");
+        } else {
+            query.append(" WHERE ");
+        }
+        query.append("\n e.dateOfEvent > CAST(GETDATE() AS DATE) AND e.status='APPROVED'");
 
         query.append("\n ORDER BY f.organizerId DESC, ");
 
@@ -488,6 +495,7 @@ public class EventDAO extends SQLDatabase {
             query.append(" ROWS ONLY");
         }
 
+        System.out.println("build for std " + query.toString());
         return query.toString();
     }
 
@@ -865,7 +873,7 @@ public class EventDAO extends SQLDatabase {
                 query.append("'");
             }
         }
-        query.append("\n AND e.dateOfEvent > CAST(GETDATE() AS DATE)");
+        query.append("\n AND e.dateOfEvent > CAST(GETDATE() AS DATE) AND e.status='APPROVED'");
 
         if (EventOrderBy.DATE_ASC.equals(searchEventCriteria.getOrderBy())) {
             query.append("\n ORDER BY dateOfEvent ASC");
@@ -884,7 +892,7 @@ public class EventDAO extends SQLDatabase {
             query.append(pagingCriteria.getFetchNext());
             query.append(" ROWS ONLY");
         }
-
+        System.out.println("build for guest " + query.toString());
         return query.toString();
     }
     

@@ -48,7 +48,7 @@ public class EventAttendedDAO extends SQLDatabase {
             + "AND \n"
             + "    EventGuest.isAttended = 1 \n"
             + "AND \n"
-            + "    Event.dateOfEvent < '2025-10-31'\n"
+            + "    Event.status='END'\n"
             + "ORDER BY \n"
             + "    Event.dateOfEvent DESC\n"
             + "OFFSET ? ROWS\n"

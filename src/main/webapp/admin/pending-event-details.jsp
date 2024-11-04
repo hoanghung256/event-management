@@ -46,7 +46,7 @@
                                             <div class="review__main-wrapper pt-25">
                                                 <div class="review__meta mb-25"></div>
                                                 <div class="review__author-meta mb-15">
-                                                    <a href="#">
+                                                    <a href="<c:url value="/profile?role=organizer&id=${event.organizer.id}"/>">
                                                         <div class="review__author-thumb">
                                                             <img src="<c:url value="${event.organizer.avatarPath}" />" alt="Organizer Avatar" onerror="this.onerror=null; this.src='assets/img/default-avatar.png';">
                                                         </div>
@@ -55,6 +55,7 @@
                                                                 <a href="<c:url value="/profile?role=organizer&id=${event.organizer.id}"/>">${event.organizer.fullname}</a>
                                                             </h4>
                                                         </div>
+                                                    </a>
                                                 </div>
                                                 <div class="review__tab">
                                                     <nav>
@@ -65,21 +66,14 @@
                                                     <div class="tab-content" id="nav-tabContent">
                                                         <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
                                                             <div class="about__event-thumb w-img mt-40">
-                                                                <c:choose>
-                                                                    <c:when test="${not empty event.images}">
-                                                                        <c:forEach var="image" items="${event.images}">
-                                                                            <img src="<c:url value="${image}" />" alt="Event Image" />
-                                                                        </c:forEach>
-                                                                    </c:when>
-                                                                    <c:otherwise>
-                                                                        <img src="${pageContext.request.contextPath}/assets/img/event/default-image.jpg" alt="Default Image" />
-                                                                    </c:otherwise>
-                                                                </c:choose>
+                                                                <c:forEach var="image" items="${event.images}">
+                                                                    <img src="<c:url value="${image}" />" alt="Event Image" />
+                                                                </c:forEach>
                                                             </div>
 
                                                             <div class="about__content mt-30">
                                                                 <h4>About This Event</h4>
-                                                                <p>Hello World</p>
+                                                                <p>${event.description}</p>
                                                             </div>
 
                                                             <div class="ticket__purchase-wrapper mt-30">
@@ -117,17 +111,29 @@
                                                         <i id="time">${event.startTime}</i> - <i id="time">${event.endTime}</i> 
                                                     </li>
                                                     <li>
-                                                        <span>Register Deadline: </span>
-                                                        <i id="date">${event.guestRegisterDeadline}</i>
-                                                    </li>
-                                                    <li>
                                                         <span>Venue: </span>
                                                         ${event.location.name}
                                                     </li>
-                                                    <li>
-                                                        <span>Registered: </span>
-                                                        ${event.guestRegisterCount} / ${event.guestRegisterLimit}
-                                                    </li>  
+                                                    <c:if test="${event.guestRegisterLimit > 0}">
+                                                        <li>
+                                                            <span>Guest Registered Limit: </span>
+                                                            ${event.guestRegisterLimit}
+                                                        </li> 
+                                                        <li>
+                                                            <span>Register Deadline: </span>
+                                                            <i id="date">${event.guestRegisterDeadline}</i>
+                                                        </li>
+                                                    </c:if> 
+                                                    <c:if test="${event.collaboratorRegisterLimit > 0}">
+                                                        <li>
+                                                            <span>Collaborator Limit: </span>
+                                                            ${event.collaboratorRegisterLimit}
+                                                        </li>
+                                                        <li>
+                                                            <span>Collaborator Register Deadline: </span>
+                                                            <i id="date">${event.collaboratorRegisterDeadline}</i>
+                                                        </li>
+                                                    </c:if> 
                                                 </ul>
                                             </div>
                                         </div>
