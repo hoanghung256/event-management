@@ -865,7 +865,7 @@ public class EventDAO extends SQLDatabase {
                 query.append("'");
             }
         }
-        query.append("\n AND e.dateOfEvent >= CAST(GETDATE() AS DATE)");
+        query.append("\n AND e.dateOfEvent > CAST(GETDATE() AS DATE)");
 
         if (EventOrderBy.DATE_ASC.equals(searchEventCriteria.getOrderBy())) {
             query.append("\n ORDER BY dateOfEvent ASC");
