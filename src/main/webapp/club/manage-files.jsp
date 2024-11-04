@@ -81,14 +81,17 @@
                         <!--<input type="hidden" name="action" value="add" />-->
                         <div class="singel__input-field py-3">
                             <label class="input__field-text">File type: </label>
-                            <select name="type" required>
-                                <option value="REPORT" selected>REPORT</option>
-                                <option value="PLAN">PLAN</option>
-                            </select>
+                            <div class="contact__select">
+                                <select name="type" required>
+                                    <option value="REPORT" selected>REPORT</option>
+                                    <option value="PLAN">PLAN</option>
+                                </select>
+                            </div>
                         </div>
                         <div class="py-3">
                             <input type="file" name="file" required>
                         </div>
+                        <hr/>
 
                         <c:if test="${not empty error}">
                             <div class="error-message" style="color: red; margin-bottom: 15px;">${error}</div>

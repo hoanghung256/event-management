@@ -8,6 +8,7 @@ import com.fuem.models.Event;
 import com.fuem.models.Notification;
 import com.fuem.models.Organizer;
 import com.fuem.daos.ClubDAO;
+import com.fuem.daos.EventDAO;
 import com.fuem.daos.NotificationDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -39,6 +40,7 @@ public class ClubDashboardController extends HttpServlet {
         int totalEvents = dao.getTotalEventOrganized(organizerId);
         int totalFollowers = dao.getTotalFollowers(organizerId);
         int totalUpcomingEvents = dao.getTotalUpcomingEvents(organizerId);
+        ArrayList<Event> pendingEvent = dao.getPendingEvents(organizerId);
         ArrayList<Event> organizedEvent = dao.getOrganizedEvent(organizerId);
         ArrayList<Event> upcomingEvent = dao.getUpcomingEvent(organizerId);
         ArrayList<Notification> notiList = notiDAO.getNotificationsForOrganizer(organizerId);
@@ -47,6 +49,7 @@ public class ClubDashboardController extends HttpServlet {
         request.setAttribute("totalEvents", totalEvents);
         request.setAttribute("totalFollowers", totalFollowers);
         request.setAttribute("totalUpcomingEvents", totalUpcomingEvents);
+        request.setAttribute("pendingEvent", pendingEvent);
         request.setAttribute("organizedEvent", organizedEvent);
         request.setAttribute("upcomingEvent", upcomingEvent);
         request.setAttribute("notiList", notiList);

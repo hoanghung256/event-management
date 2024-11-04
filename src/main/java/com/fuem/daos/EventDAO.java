@@ -186,6 +186,7 @@ public class EventDAO extends SQLDatabase {
             + "    Location l ON e.locationId = l.id";
     private static final String GET_ATTENDED_COUNT_BY_EVENT_ID = "SELECT guestAttendedCount FROM [Event] WHERE id=?";
     private static final String UPDATE_STATUS_BY_EVENT_ID = "UPDATE [Event] SET status=? WHERE id=?";
+    private static final String SELECT_EVENT_NAME_BY_EVENT_ID = "SELECT fullname FROM [Event] WHERE id=?;";
 
     public EventDAO() {
         super();
@@ -495,7 +496,6 @@ public class EventDAO extends SQLDatabase {
             query.append(" ROWS ONLY");
         }
 
-        System.out.println("build for std " + query.toString());
         return query.toString();
     }
 
@@ -892,7 +892,6 @@ public class EventDAO extends SQLDatabase {
             query.append(pagingCriteria.getFetchNext());
             query.append(" ROWS ONLY");
         }
-        System.out.println("build for guest " + query.toString());
         return query.toString();
     }
     
@@ -927,5 +926,24 @@ public class EventDAO extends SQLDatabase {
         }
         
         return true;
+    }
+    
+    /**
+     * 
+     * @author HungHV 
+     */
+    public String getEventNameById(int eventId) {
+        String name = "";
+        
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_EVENT_NAME_BY_EVENT_ID, eventId)) {
+            if (rs.next()) {
+                name = rs.getNString(1);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        
+        return name;
     }
 }

@@ -92,14 +92,31 @@ public class ClubDAO extends SQLDatabase {
             + "    Event.organizerId = ?\n"
             + "    AND Event.dateOfEvent >= CAST(GETDATE() AS DATE)\n"
             + "    AND Event.status = 'APPROVED'\n"
-            + "ORDER BY Event.dateOfEvent ASC;";
+            + "ORDER BY Event.dateOfEvent DESC;";
+
+    private static String SELECT_PENDING_EVENTS_BY_ORGANIZER_ID = "SELECT \n"
+            + "    Event.id AS EventId,\n"
+            + "    Event.fullname AS EventName,\n"
+            + "    Event.dateOfEvent AS EventDate,\n"
+            + "    Location.locationName AS LocationName,\n"
+            + "    Category.categoryName AS CategoryName\n"
+            + "FROM \n"
+            + "    Event\n"
+            + "JOIN \n"
+            + "    Location ON Event.locationId = Location.id\n"
+            + "JOIN \n"
+            + "    Category ON Event.categoryId = Category.id\n"
+            + "WHERE \n"
+            + "    Event.organizerId = ?\n"
+            + "    AND Event.dateOfEvent > CAST(GETDATE() AS DATE)\n"
+            + "    AND Event.status = 'PENDING'\n"
+            + "ORDER BY Event.dateOfEvent DESC;";
 
     public int getTotalEventOrganized(int clubId) {
         int totalEvent = 0;
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
-                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ALL_EVENT_ORGANIZED, clubId);){
-            while(rs.next()) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ALL_EVENT_ORGANIZED, clubId);) {
+            while (rs.next()) {
                 totalEvent = rs.getInt("TotalEvents");
             }
         } catch (SQLException e) {
@@ -158,9 +175,8 @@ public class ClubDAO extends SQLDatabase {
     public ArrayList<Event> getUpcomingEvent(int clubId) {
         ArrayList<Event> upcomingEvent = new ArrayList<>();
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
-                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_UPCOMING_EVENTS, clubId);){
-            while(rs.next()){
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_UPCOMING_EVENTS, clubId);) {
+            while (rs.next()) {
                 int id = rs.getInt("EventId");
                 String eventName = rs.getString("EventName");
                 LocalDate eventDate = rs.getDate("EventDate").toLocalDate();
@@ -179,7 +195,7 @@ public class ClubDAO extends SQLDatabase {
         }
         return upcomingEvent;
     }
-    
+
     public Page<Event> getOrganizedEventWithPaging(int clubId, PagingCriteria pagingCriteria) {
         Page<Event> page = new Page<>();
         ArrayList<Event> organizedEvent = new ArrayList<>();
@@ -190,7 +206,7 @@ public class ClubDAO extends SQLDatabase {
                     page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
                     page.setCurrentPage(pagingCriteria.getOffset() / pagingCriteria.getFetchNext());
                 }
-                
+
                 Event e = new EventBuilder()
                         .setId(rs.getInt("EventId"))
                         .setOrganizer(new Organizer(rs.getInt("OrganizerId")))
@@ -206,5 +222,30 @@ public class ClubDAO extends SQLDatabase {
         }
         page.setDatas(organizedEvent);
         return page;
+    }
+
+    /**
+     *
+     * @author HungHV
+     */
+    public ArrayList<Event> getPendingEvents(int clubId) {
+        ArrayList<Event> pendingEvents = new ArrayList<>();
+
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_PENDING_EVENTS_BY_ORGANIZER_ID, clubId);) {
+            while (rs.next()) {
+                Event event = new EventBuilder()
+                        .setId(rs.getInt("EventId"))
+                        .setFullname(rs.getString("EventName"))
+                        .setDateOfEvent(rs.getDate("EventDate").toLocalDate())
+                        .setLocation(new Location(rs.getString("LocationName")))
+                        .setCategory(new Category(rs.getString("CategoryName")))
+                        .build();
+
+                pendingEvents.add(event);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        return pendingEvents;
     }
 }

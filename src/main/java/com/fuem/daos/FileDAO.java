@@ -94,13 +94,13 @@ public class FileDAO extends SQLDatabase {
      * @author HungHV 
      */
     public Page<Document> getFilesBySubmitterId(PagingCriteria pagingCriteria, int submitterId) {
-        Page<Document> page = null;
+        Page<Document> page = new Page<>();
         ArrayList<Document> docs = new ArrayList<>();
         
         try (Connection conn =  DataSourceWrapper.getDataSource().getConnection();
                 ResultSet rs = executeQueryPreparedStatement(conn, SELECT_FILE_BY_SUBMITTER_ID, submitterId, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
             while (rs.next()) {
-                if (page == null) {
+                if (page.getTotalPage() == null && page.getCurrentPage() == null) {
                     page = new Page<>();
                     page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
                     page.setCurrentPage(pagingCriteria.getOffset() / pagingCriteria.getFetchNext());
@@ -148,14 +148,13 @@ public class FileDAO extends SQLDatabase {
      * @author HungHV 
      */
     public Page<Document> getFiles(PagingCriteria pagingCriteria) {
-        Page<Document> page = null;
+        Page<Document> page = new Page<>();
         ArrayList<Document> docs = new ArrayList<>();
         
         try (Connection conn =  DataSourceWrapper.getDataSource().getConnection();
                 ResultSet rs = executeQueryPreparedStatement(conn, SELECT_ALL_FILE, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
             while (rs.next()) {
-                if (page == null) {
-                    page = new Page<>();
+                if (page.getTotalPage() == null && page.getCurrentPage() == null) {
                     page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
                     page.setCurrentPage(pagingCriteria.getOffset() / pagingCriteria.getFetchNext());
                 }

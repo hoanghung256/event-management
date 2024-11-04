@@ -33,63 +33,6 @@
                     <div id="myTabContent">
                         <div id="day-tab-1-pane" role="tabpanel" aria-labelledby="day-tab-1" tabindex="0">
                             <div class="event__details-area">
-<!--                                <div class="row">
-                                    <div class="col-xxl-7 col-xl-6 p-1">
-                                        <div class="event__details-left">
-                                            <div class="body__card-wrapper mb-20">
-                                                <div class="card__header-top">
-                                                    <div class="card__title-inner">
-                                                        <h4 class="event__information-title">${event.fullname}</h4>
-                                                    </div>
-                                                </div>
-                                                <div class="review__main-wrapper pt-25">
-                                                    <div class="review__author-meta mb-15">
-                                                        <div class="review__author-thumb">
-                                                            <img src="assets/img/meta/01.png" alt="image not found">
-                                                        </div>
-                                                    </div>
-                                                    <div class="review__tab">
-
-                                                        <div class="tab-content" id="nav-tabContent">
-                                                            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
-                                                                <div class="about__event-thumb w-img mt-40">
-                                                                    <img src="assets/img/event/event-details-2.jpg" alt="image not found">
-                                                                </div>
-                                                                <div class="about__content mt-30">
-                                                                    <h4>About This Event</h4>
-                                                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit dolor modi quos commodi quam facere, quas tempore eius ab neque tempora nihil culpa voluptatem nesciunt a amet deserunt asperiores ea consequuntur sequi consequatur. Alias, quis.</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xxl-5 col-xl-6 p-1">
-                                        <div class="event__details-right">
-                                            <div class="body__card-wrapper mb-20">
-                                                <div class="event__meta-time">
-                                                    <ul>
-                                                        <li>
-                                                            <span> Date : </span>
-                                                            ${event.dateOfEvent}							
-                                                        </li>
-                                                        <li>
-                                                            <span>Location :</span>
-                                                            ${event.location.name}
-                                                        </li>
-                                                        <li>
-                                                            <span>Category : </span>
-                                                            ${event.category.name}						
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>-->
-
                                 <!-- Start of statistic Number --> 
                                 <div class="row g-20">
                                     <div class="col-xxl-3 col-xl-6 col-lg-6 col-md-6">
