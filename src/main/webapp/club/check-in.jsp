@@ -1,9 +1,3 @@
-<%-- 
-    Document   : check-in
-    Created on : Nov 1, 2024, 8:39:08 AM
-    Author     : hoang hung 
---%>
-
 <%@ include file="../include/club-layout-header.jsp" %>
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
@@ -11,158 +5,113 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Prata&family=Readex+Pro:wght@160..700&family=Russo+One&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Playwrite+GB+S:ital,wght@0,100..400;1,100..400&family=Prata&family=Readex+Pro:wght@160..700&family=Russo+One&display=swap" rel="stylesheet">
     <style>
         .welcome-hero {
             display: flex;
-            flex-direction: column;
             align-items: center;
-            justify-content: flex-end;
-            position: relative;
-            background: url('https://daihoc.fpt.edu.vn/wp-content/uploads/2024/03/dai-hoc-fpt-da-nang-1.jpeg') no-repeat center center / cover;
+            justify-content: center;
+            background: url('<c:url value="/assets/img/decorate/check-in-page.jpg" />') no-repeat center center / cover;
             height: 1000px;
-            opacity: 0;
             animation: fadeInBackground 3s forwards 1s;
-        }
-        .event-info p {
-            color: #FFFFFF;
-
-        }
-        .header-text {
-            opacity: 0;
-            animation: fadeInText 3s forwards 1s;
-            margin-top: 10px;
-            max-width: 100%;
-            overflow: hidden;
-            position: relative;
-            margin-bottom: 50px;
         }
         .header-text h2 {
             font-size: 54px;
             font-weight: 700;
-            line-height: 1.2;
-            display: inline-block;
-            justify-content: center;
-            gap: 5px;
-            font-family: "DynaPuff", system-ui;
-            font-optical-sizing: auto;
-            background: #D1E9F6;
-            padding: 10px 20px;
-            border-radius: 10px;
-            overflow: hidden;
+            font-family: "DynaPuff", sans-serif;
+            color: #FFFFFF !important;
         }
         #clock {
             font-size: 48px;
             font-weight: bold;
-            color: #E7E8D8; /* Màu vàng cho ??ng h? */
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 1); /* Khung m? màu ?en */
-            background-color: rgba(0, 0, 0, 0.1); /* N?n m? cho ??ng h? */
+            color: #FFFFFF !important;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 1);
             padding: 10px 20px;
             border-radius: 8px;
-            display: inline-block;
             margin-top: 20px;
-            width: 250px; /* ??t chi?u r?ng c? ??nh */
-            height: 70px;
-            font-family: "Prata", serif;
         }
         .event-info {
-            color: #FFFFFF; /* ??i màu ch? thành tr?ng */
-            font-family: "Inter", sans-serif;
-            font-size: 18px;
-            text-align: center;
-            background-color: rgba(0, 0, 0, 0.1); /* N?n m? cho thông tin s? ki?n */
-            padding: 5px 10px; /* Gi?m padding ?? khung v?a khít v?i ch? */
-            border-radius: 8px;
-            display: inline-block; /* Thay ??i thành inline-block ?? khung co l?i theo kích th??c ch? */
-            margin-top: 10px; /* Gi? margin-top ?? t?o kho?ng cách v?i ph?n trên */
-        }
-        .header-text h2 span {
-            display: inline-block;
-            background: #F5F7F8;
-            background-size: 200%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: letterGradientAnimation 4s infinite alternate;
-            animation-timing-function: ease-in-out;
-        }
-        @import url("https://fonts.googleapis.com/css?family=Raleway:400,400i,700");
-        @keyframes letterGradientAnimation {
-            0% {
-                background-position: 0% 50%;
-            }
-            100% {
-                background-position: 100% 50%;
-            }
-        }
-        @keyframes fadeInBackground {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-        @keyframes fadeInText {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    font-family: "Inter", sans-serif;
+    color: #FFFFFF !important;
+  
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.3); /* Simple dark overlay */
+    padding: 15px;
+    border-radius: 8px;
+    width: fit-content;
+    margin: 0 auto; 
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+.event-info p {
+    color: #FFFFFF !important;
+    margin: 8px 0;
+  
+    line-height: 1.4;
+     font-size: 25px;
+    font-weight: bold;
+}
+
+.event-info span {
+    display: inline-block;
+    margin-left: 4px;
+    padding: 2px 4px;
+    background: rgba(255, 255, 255, 0.1); /* Light overlay for clarity */
+    border-radius: 4px;
+}
+.animated-text {
+    padding: 5px 15px; /* Reduce padding */
+    font-size: 2.5rem; /* Adjust font size as needed */
+    font-weight: bold;
+    color: #FFFFFF;
+    background: #D1E9F6; /* Background color */
+    border-radius: 8px;
+    max-width: 100%; /* Set max width */
+    overflow: hidden; /* Hide overflow */
+    display: inline-block; /* Ensure it behaves as an inline element */
+}
+
+@keyframes animate__heartBeat {
+    0%, 100% { transform: scale(1); }
+    30% { transform: scale(1.1); } /* Reduced scale */
+    60% { transform: scale(0.9); }
+}
+
+
     </style>
+
 </head>
-<section id="welcome-hero" class="welcome-hero">
-    <div class="container">
-        <div class="row">
 
+<section class="welcome-hero">
+    <div class="container text-center">
+        <div class="header-text">
+            <h2 class="animate__animated animate__heartBeat animate__infinite" style="padding-bottom: 10px;">CHECK IN NOW</h2>
 
-            <div class="col-md-12 text-center">
-                <div class="header-text">
-                    <h2 class="gradient-text animate__animated animate__heartBeat animate__infinite">
-                        <span>C</span><span>H</span><span>E</span><span>C</span><span>K</span> 
-                        <span>I</span><span>N</span> 
-                        <span>N</span><span>O</span><span>W</span> 
-                    </h2>
-                </div>
-
-                <div class="clock-container">
-                    <h1 id="clock"></h1> 
-                    <div class="event-info">
-                        <p>Event Name: <span>${event.fullname}</span></p>
-                        <p>Date: <span id="date">${event.dateOfEvent}</span></p>
-                        <p>Time <span id="time">${event.startTime}</span> - <span id="time">${event.endTime}</span></p>
-                        <p>Location: <span>${event.location.name}</span></p>
-                    </div>
-                </div>
-
-                <img style="padding-bottom:100px" src="https://api.qrserver.com/v1/create-qr-code/?data=<c:url value='${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/student/check-in?eventId=${event.id}' />&size=300x300" alt="qr-code" />
-            </div>  
         </div>
-    </div>
+        <div class="qr-container">
+            <div class="event-info">
+                <p><span>${event.fullname}</span></p>
+                <p>Date: <span>${event.dateOfEvent} <Time: <span>${event.startTime} - ${event.endTime}</span></p>
 
-    <script type="text/javascript">
-        setInterval(displayDate, 1000);
+                            <p><span>${event.location.name}</span></p>
+                            </div>
+                            <img style="padding-top:20px;" src="https://api.qrserver.com/v1/create-qr-code/?data=<c:url value='${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/student/check-in?eventId=${event.id}' />&size=380x380" alt="QR Code" />
+                            <h1 id="clock"></h1>
+                            </div>
+                            </div>
 
-        function displayDate() {
-            let currentdate = new Date();
-            let datetime = formatValue(currentdate.getHours()) + ":"
-                    + formatValue(currentdate.getMinutes()) + ":"
-                    + formatValue(currentdate.getSeconds());
-            document.getElementById("clock").innerHTML = datetime;
-        }
-        ;
-        function formatValue(value) {
-            return (value < 10 ? "0" + value : value);
-        }
-    </script>
-</section>
+                            <script type="text/javascript">
+                                setInterval(displayDate, 1000);
+                                function displayDate() {
+                                    const currentdate = new Date();
+                                    const datetime = formatValue(currentdate.getHours()) + ":" + formatValue(currentdate.getMinutes()) + ":" + formatValue(currentdate.getSeconds());
+                                    document.getElementById("clock").innerHTML = datetime;
+                                }
+                                function formatValue(value) {
+                                    return value < 10 ? "0" + value : value;
+                                }
+                            </script>
+                            </section>
 
-<%@ include file="../include/master-footer.jsp" %>
+                            <%@ include file="../include/master-footer.jsp" %>

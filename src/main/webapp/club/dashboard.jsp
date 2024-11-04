@@ -8,31 +8,34 @@
 <section>
     <style>
         .dropdown {
-            position: absolute; /* ??t v? trí t??ng ??i ?? có th? ?i?u ch?nh v? trí */
-            top: 10px; /* Cách t? phía trên */
-            right: 10px; /* Cách t? bên ph?i */
-            z-index: 10; /* ??m b?o dropdown n?m trên các ph?n t? khác */
+            position: absolute; /* ??t v? trï¿½ t??ng ??i ?? cï¿½ th? ?i?u ch?nh v? trï¿½ */
+            top: 10px; /* Cï¿½ch t? phï¿½a trï¿½n */
+            right: 10px; /* Cï¿½ch t? bï¿½n ph?i */
+            z-index: 10; /* ??m b?o dropdown n?m trï¿½n cï¿½c ph?n t? khï¿½c */
         }
 
         .dropdown button {
-            background: transparent; /* N?n trong su?t cho nút */
-            border: none; /* Không có vi?n */
+            background: transparent; /* N?n trong su?t cho nï¿½t */
+            border: none; /* Khï¿½ng cï¿½ vi?n */
             cursor: pointer; /* Hi?n th? con tr? khi di chu?t */
 
         }
 
         .dropdown-list {
             display: none; /* ?n dropdown m?c ??nh */
-            position: absolute; /* ??t dropdown bên d??i nút */
-            top: 20px; /* ??t kho?ng cách t? nút ??n dropdown */
+            position: absolute; /* ??t dropdown bï¿½n d??i nï¿½t */
+            top: 20px; /* ??t kho?ng cï¿½ch t? nï¿½t ??n dropdown */
             right: 0; /* ??t dropdown c?n ph?i */
             background-color: white; /* N?n tr?ng cho dropdown */
             border: 1px solid #ccc; /* ???ng vi?n cho dropdown */
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* ?? bóng cho dropdown */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* ?? bï¿½ng cho dropdown */
         }
 
         .dropdown:hover .dropdown-list {
             display: block; /* Hi?n dropdown khi hover */
+        }
+        .small-btn{
+            height:20px !important;
         }
     </style>
     <!-- App side area start -->
@@ -151,10 +154,10 @@
                                         </div>
 
                                         <div class="card__header-right">
-                                            <div class="element__btn yellow-bg pl-5">
+                                            <div class="element__btn yellow-bg pl-5 small-btn ">
                                                 <a href="<c:url value="/club/check-in?action=get-qr&eventId=${event.id}&name=${event.fullname}&location=${event.location.description}&date=${event.dateOfEvent}&start=${event.startTime}&end=${event.endTime}" />">Check-in Page</a>
                                             </div>
-                                            <div class="element__btn yellow-bg pl-5">
+                                             <div class="element__btn yellow-bg pl-5 small-btn">
                                                 <a href="<c:url value="/club/on-going-event?action=access&eventId=${event.id}" />">Landing Page</a>
                                             </div>
                                         </div>
