@@ -35,7 +35,7 @@
             display: block; /* Hi?n dropdown khi hover */
         }
         .small-btn{
-            height:20px !important;
+            height:3rem !important;
         }
     </style>
     <!-- App side area start -->
@@ -155,9 +155,9 @@
 
                                         <div class="card__header-right">
                                             <div class="element__btn yellow-bg pl-5 small-btn ">
-                                                <a href="<c:url value="/club/check-in?action=get-qr&eventId=${event.id}&name=${event.fullname}&location=${event.location.description}&date=${event.dateOfEvent}&start=${event.startTime}&end=${event.endTime}" />">Check-in Page</a>
+                                                <a href="<c:url value="/club/check-in?eventId=${event.id}" />">Check-in Page</a>
                                             </div>
-                                             <div class="element__btn yellow-bg pl-5 small-btn">
+                                            <div class="element__btn yellow-bg pl-5 small-btn">
                                                 <a href="<c:url value="/club/on-going-event?action=access&eventId=${event.id}" />">Landing Page</a>
                                             </div>
                                         </div>
@@ -242,7 +242,7 @@
         </div>
         <!-- End of Upcoming Event -->
 
-        <!-- Start of organized event -->
+        <!-- Start of pending event -->
         <div class="row">
             <!--Registration Events -->
             <div class="col-xxl-6 col-xl-6 p-2">
@@ -260,7 +260,7 @@
                             <div class="card__header-right">
                                 <div class="card__header-right">
                                     <div class="card__btn">
-                                        <a href="<c:url value="/club/approval-events?action=show"/>">View All</a>
+                                        <a href="<c:url value="#"/>">View All</a>
                                     </div>
                                 </div>
                             </div>
@@ -269,14 +269,14 @@
                     <div class="card-body">
                         <div class="scroll-w-4 card__scroll">
                             <div class="card__inner">
-                                <c:if test="${empty upcomingEvent}">
+                                <c:if test="${empty pendingEvent}">
                                     <div class="no-events">
-                                        <span>No events organized yet</span>
+                                        <span>No pending event yet</span>
                                     </div>
                                 </c:if>
 
-                                <c:if test="${not empty upcomingEvent}">
-                                    <c:forEach var="event" items="${upcomingEvent}">
+                                <c:if test="${not empty pendingEvent}">
+                                    <c:forEach var="event" items="${pendingEvent}">
                                         <div class="news__item">
                                             <div class="news__content">
                                                 <div class="d-flex justify-content-between align-items-center">
@@ -293,20 +293,11 @@
                                                             </svg>
                                                         </button>
                                                         <div class="dropdown-list">
-                                                            <a class="dropdown__item" href="<c:url value='/club/edit-event?eventId=${event.id}'/>">Edit</a>
-                                                            <form action="${pageContext.request.contextPath}/manage-student" method="post" style="display: inline;">
-                                                                <input type="hidden" name="studentId" value="${student.studentId}" />
-                                                                <input type="hidden" name="action" value="delete" />
-                                                                <a class="dropdown__item" href="javascript:void(0)" onclick="showDeleteConfirmation('${student.studentId}')">Delete</a>
-                                                            </form>
+                                                            <a class="dropdown__item" href="<c:url value='/club/edit-event?eventId=${event.id}'/>">Edit23</a>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="news__meta">
-                                                    <div class="news__meta-status">
-                                                        <span><i class="flaticon-user"></i></span>
-                                                        <span>${event.organizer.fullname}</span>
-                                                    </div>
                                                     <div class="news__meta-status">
                                                         <span><i class="flaticon-clock"></i></span>
                                                         <span id="date">${event.dateOfEvent}</span>
@@ -316,7 +307,7 @@
                                                         <span>${event.category.name}</span>
                                                     </div>
                                                     <div class="news__meta-status">
-                                                        <span><i class="flaticon-event"></i></span>
+                                                        <span><i class="flaticon-placeholder-1"></i></span>
                                                         <span>${event.location.name}</span>
                                                     </div>
                                                 </div>
@@ -368,20 +359,16 @@
                                                     <h4 class="news__title"><a href="<c:url value="/club/organized-event-report?eventIdDetail=${event.id}&action=detail&organizerId=${event.organizer.id}"/>">${event.fullname}</a></h4>
                                                     <div class="news__meta">
                                                         <div class="news__meta-status">
-                                                            <span><i class="flaticon-user"></i></span>
-                                                            <span>${event.organizer.acronym}</span>
-                                                        </div>
-                                                        <div class="news__meta-status">
                                                             <span><i class="flaticon-clock"></i></span>
                                                             <span>${event.dateOfEvent}</span>
                                                         </div>
                                                         <div class="news__meta-status">
-                                                            <span><i class="flaticon-placeholder-1"></i></span>
-                                                            <span>${event.location.name}</span>
+                                                            <span><i class="flaticon-event"></i></span>
+                                                            <span>${event.category.name}</span>
                                                         </div>
                                                         <div class="news__meta-status">
                                                             <span><i class="flaticon-placeholder-1"></i></span>
-                                                            <span>${event.category.name}</span>
+                                                            <span>${event.location.name}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -403,28 +390,28 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-                                                                    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
     <c:forEach var="event" items="${upcomingEvent}">
-                                                                        const ctx${event.id} = document.getElementById('registrationChart${event.id}').getContext('2d');
+        const ctx${event.id} = document.getElementById('registrationChart${event.id}').getContext('2d');
 
-                                                                        const data${event.id} = {
-                                                                            labels: ['Registered', 'Available Slots'],
-                                                                            datasets: [{
-                                                                                    data: [${event.guestRegisterCount}, ${event.guestRegisterLimit - event.guestRegisterCount}],
-                                                                                    backgroundColor: ['#FF6500', '#ECDFCC']
-                                                                                }]
-                                                                        };
+        const data${event.id} = {
+            labels: ['Registered', 'Available Slots'],
+            datasets: [{
+                    data: [${event.guestRegisterCount}, ${event.guestRegisterLimit - event.guestRegisterCount}],
+                    backgroundColor: ['#FF6500', '#ECDFCC']
+                }]
+        };
 
-                                                                        const config${event.id} = {
-                                                                            type: 'doughnut',
-                                                                            data: data${event.id}
-                                                                        };
+        const config${event.id} = {
+            type: 'doughnut',
+            data: data${event.id}
+        };
 
-                                                                        console.log(config${event.id})
+        console.log(config${event.id})
 
-                                                                        const registrationChart${event.id} = new Chart(ctx${event.id}, config${event.id});
+        const registrationChart${event.id} = new Chart(ctx${event.id}, config${event.id});
     </c:forEach>
-                                                                    });
+    });
 </script>
 
 <%@include file="../include/master-footer.jsp" %>

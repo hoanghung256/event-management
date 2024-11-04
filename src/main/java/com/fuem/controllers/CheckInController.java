@@ -4,10 +4,9 @@
  */
 package com.fuem.controllers;
 
+import com.fuem.daos.EventDAO;
 import com.fuem.models.Event;
-import com.fuem.models.Location;
 import com.fuem.models.User;
-import com.fuem.models.builders.EventBuilder;
 import com.fuem.daos.EventRegisterDAO;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
@@ -15,8 +14,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.time.LocalDate;
-import java.time.LocalTime;
 
 /**
  *
@@ -60,24 +57,10 @@ public class CheckInController extends HttpServlet {
                 request.getRequestDispatcher("check-in-result.jsp").forward(request, response);
                 break;
             default:    // Return check-in QR code for organizer
-                Event e = new EventBuilder()
-                        .setId(eventId)
-                        .setFullname(request.getParameter("name"))
-                        .setLocation(
-                                new Location(request.getParameter("location"))
-                        )
-                        .setStartTime(LocalTime.parse(request.getParameter("start")))
-                        .setEndTime(LocalTime.parse(request.getParameter("end")))
-                        .setDateOfEvent(LocalDate.parse(request.getParameter("date")))
-                        .build();
+                Event e = new EventDAO().getEventById(eventId);
                 
                 request.setAttribute("event", e);
                 request.getRequestDispatcher("check-in.jsp").forward(request, response);
         }
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        super.doPost(request, response);
     }
 }
