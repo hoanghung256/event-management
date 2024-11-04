@@ -4,6 +4,7 @@
  */
 package com.fuem.listeners;
 
+import com.fuem.utils.DataSourceWrapper;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
@@ -22,6 +23,7 @@ public class ContextListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
+        DataSourceWrapper.closeDataSource();
         System.out.println("Web server stopped!");
     }
 }
