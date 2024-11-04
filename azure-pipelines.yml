@@ -72,6 +72,21 @@ stages:
       runOnce:
         deploy:
           steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download upload directory from previous build'
+            inputs:
+              artifact: 'uploadDir'
+              path: '$(Pipeline.Workspace)/uploadDir'
+
+          - script: |
+              if [ -d "target/event-management-1.0/assets/upload" ]; then
+                echo "Upload directory exists, copying files..."
+                cp -r $(Pipeline.Workspace)/uploadDir/* target/event-management-1.0/assets/upload/
+              else
+                echo "Upload directory does not exist, skipping copy."
+              fi
+            displayName: 'Copy upload directory to target location'
+
           - task: AzureWebApp@1
             displayName: 'Azure Web App Deploy: fuem'
             inputs:
