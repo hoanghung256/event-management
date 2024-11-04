@@ -23,7 +23,6 @@ public class ContextListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        DataSourceWrapper.closeDataSource();
         System.out.println("Web server stopped!");
     }
 }
