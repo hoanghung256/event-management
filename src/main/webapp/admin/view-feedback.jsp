@@ -1,5 +1,5 @@
 <%-- 
-    Document   : view-feedback
+    Document   : admin-view-feedback
     Created on : Oct 11, 2024, 9:47:28?AM
     Author     : Administrator
 --%>
@@ -19,7 +19,7 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="dashboard.html">Home</a></span></li>
+                                    <li><span><a href="<c:url value="/admin/dasboard" />">Dashboard</a></span></li>
                                     <li class="active"><span>Event Feedback</span></li>
                                 </ul>
                             </nav>
@@ -36,8 +36,8 @@
                             <div class="col-md-12">
                                 <div class="review__item ml-10 ">
                                     <div class="review__item-inner">
-                                        <div class="review__item-thumb" >
-                                            <img style="width: 40px;" src="../assets/img/user/default-avatar.jpg" alt="image not found">
+                                        <div class="review__item-thumb user__portfolio-thumb" >
+                                            <img src="<c:url value="${feedback.guest.avatarPath}" />" alt="image not found">
                                         </div>
                                         <div class="review__item-content">
                                             <h5>
