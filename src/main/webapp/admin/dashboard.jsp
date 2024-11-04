@@ -130,7 +130,7 @@
                                             <i class="flaticon-reminder"></i>
                                         </div>
                                         <div class="card__header-title ml-5">
-                                            <h3>Today Events: ${event.fullname}</h3>
+                                            <h3>Today: ${event.fullname}</h3>
                                         </div>
                                     </div>
                                     <c:choose>
@@ -167,18 +167,9 @@
                                                             <c:when test="${event.status == 'APPROVED'}">
                                                                 <span class="status__tag bg-green">${event.status}</span>
                                                             </c:when>
-                                                            <c:when test="${event.status == 'PENDING'}">
-                                                                <span class="status__tag warning-bg">${event.status}</span>
-                                                            </c:when>
-                                                            <c:when test="${event.status == 'REJECTED'}">
-                                                                <span class="status__tag bg-warn">${event.status}</span>
-                                                            </c:when>
                                                             <c:when test="${event.status == 'ON_GOING'}">
                                                                 <span class="status__tag teal-bg">ON GOING</span>
                                                             </c:when>
-                                                            <c:otherwise>
-                                                                <span>${event.status}</span>
-                                                            </c:otherwise>
                                                         </c:choose>
                                                     </li>
                                                 </ul>
@@ -252,8 +243,8 @@
                                                 </td>
                                                 <td>
                                                     <div class="attendant__user-item">
-                                                        <div class="registration__user-thumb">
-                                                            <img class="rounded-circle" src="<c:url value="${event.organizer.avatarPath}"/>" alt="image not found">
+                                                        <div class="user__portfolio-thumb">
+                                                            <img src="<c:url value="${event.organizer.avatarPath}"/>" alt="image not found">
                                                         </div>
                                                         <div class="attendant__user-title">
                                                             <span>

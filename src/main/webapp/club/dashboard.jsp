@@ -146,7 +146,7 @@
                                                 <i class="flaticon-reminder"></i>
                                             </div>
                                             <div class="card__header-title ml-5">
-                                                <h4>Today Events: ${event.fullname}</h4>
+                                                <h4>Today: ${event.fullname}</h4>
                                             </div>
                                         </div>
 

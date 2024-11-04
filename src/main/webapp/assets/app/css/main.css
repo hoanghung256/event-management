@@ -9178,7 +9178,6 @@ input[type=file] {
 .notification {
     position: absolute;
     right: 5vw;
-    margin-top: 2%;
 }
 
 .notification__dropdown {

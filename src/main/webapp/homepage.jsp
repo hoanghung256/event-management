@@ -95,9 +95,6 @@
         color: white; /* ??t m�u ch? th�nh tr?ng */
     }
 
-    /* ?? l�m cho c�c li�n k?t tr? n�n n?i b?t h?n */
-
-
     .carousel-caption a:hover {
         background-color: #e6b800; /* M�u n?n khi hover */
     }
@@ -152,12 +149,8 @@
         font-weight: 500;
         color: #495057;
     }
-
-
-
-
-
 </style>
+
 <section>
     <div class="app__slide-wrapper">
         <div class="breadcrumb__area">
@@ -404,7 +397,7 @@
                                     ${event.fullname}
                                 </h3>
                                     <p><strong>Organizer: </strong><span><a class="acolor" href="<c:url value="/profile?role=organizer&id=${event.organizer.id}" />">${event.organizer.fullname}</a></span></p>
-                                <p><strong>Register Deadline: </strong><span id="datetime">${event.guestRegisterDeadline}</span></p>
+                                <p><strong>Register Deadline: </strong><span id="date">${event.guestRegisterDeadline}</span></p>
                                 <p class="description-text truncated-text">
                                     ${event.description}
                                 </p>

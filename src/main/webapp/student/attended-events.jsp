@@ -109,9 +109,9 @@
                                     <thead>
                                         <tr>
                                             <th>Club</th>
-                                            <th>Event</th>
+                                            <th>Event Name</th>
                                             <th>Date</th>
-                                            <th>Action</th>
+                                            <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -121,7 +121,7 @@
                                                 <tr>
                                                     <td>
                                                         <div class="attendant__user-item">
-                                                            <div class="registration__user-thumb">
+                                                            <div class="user__portfolio-thumb">
                                                                 <img src="<c:url value="${event.organizer.avatarPath}" />" alt="Club Logo">
                                                             </div>
                                                             <div class="attendant__user-title">
