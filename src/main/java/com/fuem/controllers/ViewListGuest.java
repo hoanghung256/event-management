@@ -12,7 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(name = "viewguest", urlPatterns = {"/club/view-list-guest"})
+@WebServlet(name = "viewguest", urlPatterns = {"/admin/view-list-guest", "/club/view-list-guest"})
 public class ViewListGuest extends HttpServlet {
 
     @Override
@@ -25,7 +25,6 @@ public class ViewListGuest extends HttpServlet {
         request.setAttribute("eventId", eventId);
         String pageNumberStr = request.getParameter("page");
         Integer pageNumber = (pageNumberStr == null) ? 0 : Integer.valueOf(pageNumberStr);
-        System.out.println("pagenum " + pageNumber);
         PagingCriteria pagingCriteria = new PagingCriteria(pageNumber, 10);
         
         Page<Student> pageGuest = dao.getEventGuestsByEventId(pagingCriteria, eventId);

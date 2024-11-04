@@ -288,6 +288,7 @@
                                                                 </button>
                                                                 <div class="dropdown-list">
                                                                     <a class="dropdown__item" href="<c:url value="" />">Detail</a>
+                                                                    <a class="dropdown__item" href="<c:url value='/admin/view-list-guest?eventId=${event.id}'/>">View list guest</a>
                                                                 </div>
                                                             </div>
                                                         </div>

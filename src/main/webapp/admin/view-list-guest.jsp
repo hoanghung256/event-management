@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<%@include file="../include/club-layout-header.jsp"%>
+<%@include file="../include/admin-layout-header.jsp"%>
 
 <section>
     <div class="app__slide-wrapper">
@@ -13,7 +13,7 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="<c:url value='/club/dashboard'/>">Dashboard</a></span></li>
+                                    <li><span><a href="<c:url value='/admin/dashboard'/>">Dashboard</a></span></li>
                                     <li class="active"><span>View list guest</span></li>
                                 </ul>
                             </nav>
