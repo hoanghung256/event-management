@@ -27,8 +27,8 @@ jobs:
 
          - name: Update application.properties with secrets
            run: |
-               echo "db.driver=com.microsoft.sqlserver.jdbc.SQLServerDriver" >> src/main/resources/application.properties
-               echo "db.password=${{ secrets.DB_PASSWORD }}" >> src/main/resources/application.properties
+               sed -i 's/db.driver=.*/db.driver=com.microsoft.sqlserver.jdbc.SQLServerDriver/' src/main/resources/application.properties
+               sed -i 's/db.password=.*/db.password=${{ secrets.DB_PASSWORD }}/' src/main/resources/application.properties
 
          - name: Upload artifact for deployment job
            uses: actions/upload-artifact@v4
