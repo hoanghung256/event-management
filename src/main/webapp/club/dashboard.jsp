@@ -8,31 +8,34 @@
 <section>
     <style>
         .dropdown {
-            position: absolute; /* ??t v? trí t??ng ??i ?? có th? ?i?u ch?nh v? trí */
-            top: 10px; /* Cách t? phía trên */
-            right: 10px; /* Cách t? bên ph?i */
-            z-index: 10; /* ??m b?o dropdown n?m trên các ph?n t? khác */
+            position: absolute; /* ??t v? trï¿½ t??ng ??i ?? cï¿½ th? ?i?u ch?nh v? trï¿½ */
+            top: 10px; /* Cï¿½ch t? phï¿½a trï¿½n */
+            right: 10px; /* Cï¿½ch t? bï¿½n ph?i */
+            z-index: 10; /* ??m b?o dropdown n?m trï¿½n cï¿½c ph?n t? khï¿½c */
         }
 
         .dropdown button {
-            background: transparent; /* N?n trong su?t cho nút */
-            border: none; /* Không có vi?n */
+            background: transparent; /* N?n trong su?t cho nï¿½t */
+            border: none; /* Khï¿½ng cï¿½ vi?n */
             cursor: pointer; /* Hi?n th? con tr? khi di chu?t */
 
         }
 
         .dropdown-list {
             display: none; /* ?n dropdown m?c ??nh */
-            position: absolute; /* ??t dropdown bên d??i nút */
-            top: 20px; /* ??t kho?ng cách t? nút ??n dropdown */
+            position: absolute; /* ??t dropdown bï¿½n d??i nï¿½t */
+            top: 20px; /* ??t kho?ng cï¿½ch t? nï¿½t ??n dropdown */
             right: 0; /* ??t dropdown c?n ph?i */
             background-color: white; /* N?n tr?ng cho dropdown */
             border: 1px solid #ccc; /* ???ng vi?n cho dropdown */
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* ?? bóng cho dropdown */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* ?? bï¿½ng cho dropdown */
         }
 
         .dropdown:hover .dropdown-list {
             display: block; /* Hi?n dropdown khi hover */
+        }
+        .small-btn{
+            height:3rem !important;
         }
     </style>
     <!-- App side area start -->
@@ -146,15 +149,15 @@
                                                 <i class="flaticon-reminder"></i>
                                             </div>
                                             <div class="card__header-title ml-5">
-                                                <h4>Today Events: ${event.fullname}</h4>
+                                                <h4>Today: ${event.fullname}</h4>
                                             </div>
                                         </div>
 
                                         <div class="card__header-right">
-                                            <div class="element__btn yellow-bg pl-5">
-                                                <a href="<c:url value="/club/check-in?action=get-qr&eventId=${event.id}&name=${event.fullname}&location=${event.location.description}&date=${event.dateOfEvent}&start=${event.startTime}&end=${event.endTime}" />">Check-in Page</a>
+                                            <div class="element__btn yellow-bg pl-5 small-btn ">
+                                                <a href="<c:url value="/club/check-in?eventId=${event.id}" />">Check-in Page</a>
                                             </div>
-                                             <div class="element__btn yellow-bg pl-5">
+                                            <div class="element__btn yellow-bg pl-5 small-btn">
                                                 <a href="<c:url value="/club/on-going-event?action=access&eventId=${event.id}" />">Landing Page</a>
                                             </div>
                                         </div>
@@ -171,6 +174,18 @@
                                             </div>
                                             <div class="card__header-title">
                                                 <h4>Upcoming Events: ${event.fullname}</h4>
+                                            </div>
+                                        </div>
+                                        <div class="dropdown">
+                                            <button>
+                                                <svg class="attendant__dot" width="50" height="5" viewBox="0 0 14 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M2 0.75C2.69036 0.75 3.25 1.30964 3.25 2C3.25 2.69036 2.69036 3.25 2 3.25C1.30964 3.25 0.75 2.69036 0.75 2C0.75 1.30964 1.30964 0.75 2 0.75Z" fill="white"></path>
+                                                <path d="M7 0.75C7.69036 0.75 8.25 1.30964 8.25 2C8.25 2.69036 7.69036 3.25 7 3.25C6.30964 3.25 5.75 2.69036 5.75 2C5.75 1.30964 6.30964 0.75 7 0.75Z" fill="white"></path>
+                                                <path d="M13.25 2C13.25 1.30964 12.6904 0.75 12 0.75C11.3096 0.75 10.75 1.30964 10.75 2C10.75 2.69036 11.3096 3.25 12 3.25C12.6904 3.25 13.25 2.69036 13.25 2Z" fill="white"></path>
+                                                </svg>
+                                            </button>
+                                            <div class="dropdown-list">
+                                                <a class="dropdown__item" href="<c:url value='/club/view-list-guest?eventId=${event.id}'/>">View list guest</a>
                                             </div>
                                         </div>
                                     </div>
@@ -209,20 +224,7 @@
                                                 </li>
                                             </ul>
                                         </div>
-                                        <c:if test="${event.status eq 'PENDING'}">
-                                            <div class="dropdown">
-                                                <button>
-                                                    <svg class="attendant__dot" width="50" height="5" viewBox="0 0 14 4" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M2 0.75C2.69036 0.75 3.25 1.30964 3.25 2C3.25 2.69036 2.69036 3.25 2 3.25C1.30964 3.25 0.75 2.69036 0.75 2C0.75 1.30964 1.30964 0.75 2 0.75Z" fill="white"></path>
-                                                    <path d="M7 0.75C7.69036 0.75 8.25 1.30964 8.25 2C8.25 2.69036 7.69036 3.25 7 3.25C6.30964 3.25 5.75 2.69036 5.75 2C5.75 1.30964 6.30964 0.75 7 0.75Z" fill="white"></path>
-                                                    <path d="M13.25 2C13.25 1.30964 12.6904 0.75 12 0.75C11.3096 0.75 10.75 1.30964 10.75 2C10.75 2.69036 11.3096 3.25 12 3.25C12.6904 3.25 13.25 2.69036 13.25 2Z" fill="white"></path>
-                                                    </svg>
-                                                </button>
-                                                <div class="dropdown-list">
-                                                    <a class="dropdown__item" href="<c:url value='/club/edit-event?eventId=${event.id}'/>">Edit</a>
-                                                </div>
-                                            </div>
-                                        </c:if>             
+
                                     </div>
 
                                     <!-- Chart section -->
@@ -240,57 +242,146 @@
         </div>
         <!-- End of Upcoming Event -->
 
-        <!-- Start of organized event -->
-        <div class="card__wrapper">
-            <div class="card__header">
-                <div class="card__header-top">
-                    <div class="card__title-inner">
-                        <div class="card__header-icon">
-                            <i class="flaticon-reminder"></i>
-                        </div>
-                        <div class="card__header-title">
-                            <h4>Organized Events</h4>
+        <!-- Start of pending event -->
+        <div class="row">
+            <!--Registration Events -->
+            <div class="col-xxl-6 col-xl-6 p-2">
+                <div class="card__wrapper">
+                    <div class="card__header">
+                        <div class="card__header-top">
+                            <div class="card__title-inner">
+                                <div class="card__header-icon">
+                                    <i class="flaticon-calendar-3"></i>
+                                </div>
+                                <div class="card__header-title">
+                                    <h4>Pending Events</h4>
+                                </div>
+                            </div>
+                            <div class="card__header-right">
+                                <div class="card__header-right">
+                                    <div class="card__btn">
+                                        <a href="<c:url value="#"/>">View All</a>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="card__header-right">
-                        <div class="card__header-right">
-                            <div class="card__btn">
-                                <a href="<c:url value="/club/organized-event"/>">View All Event</a>
+                    <div class="card-body">
+                        <div class="scroll-w-4 card__scroll">
+                            <div class="card__inner">
+                                <c:if test="${empty pendingEvent}">
+                                    <div class="no-events">
+                                        <span>No pending event yet</span>
+                                    </div>
+                                </c:if>
+
+                                <c:if test="${not empty pendingEvent}">
+                                    <c:forEach var="event" items="${pendingEvent}">
+                                        <div class="news__item">
+                                            <div class="news__content">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <h4 class="news__title">
+                                                        <a href="<c:url value="/club/approval-events?action=detail&eventId=${event.id}" />">${event.fullname}</a>
+                                                    </h4>
+
+                                                    <div class="dropdown">
+                                                        <button>
+                                                            <svg class="attendant__dot" width="50" height="5" viewBox="0 0 14 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <path d="M2 0.75C2.69036 0.75 3.25 1.30964 3.25 2C3.25 2.69036 2.69036 3.25 2 3.25C1.30964 3.25 0.75 2.69036 0.75 2C0.75 1.30964 1.30964 0.75 2 0.75Z" fill="white"></path>
+                                                            <path d="M7 0.75C7.69036 0.75 8.25 1.30964 8.25 2C8.25 2.69036 7.69036 3.25 7 3.25C6.30964 3.25 5.75 2.69036 5.75 2C5.75 1.30964 6.30964 0.75 7 0.75Z" fill="white"></path>
+                                                            <path d="M13.25 2C13.25 1.30964 12.6904 0.75 12 0.75C11.3096 0.75 10.75 1.30964 10.75 2C10.75 2.69036 11.3096 3.25 12 3.25C12.6904 3.25 13.25 2.69036 13.25 2Z" fill="white"></path>
+                                                            </svg>
+                                                        </button>
+                                                        <div class="dropdown-list">
+                                                            <a class="dropdown__item" href="<c:url value='/club/edit-event?eventId=${event.id}'/>">Edit23</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="news__meta">
+                                                    <div class="news__meta-status">
+                                                        <span><i class="flaticon-clock"></i></span>
+                                                        <span id="date">${event.dateOfEvent}</span>
+                                                    </div>
+                                                    <div class="news__meta-status">
+                                                        <span><i class="flaticon-event"></i></span>
+                                                        <span>${event.category.name}</span>
+                                                    </div>
+                                                    <div class="news__meta-status">
+                                                        <span><i class="flaticon-placeholder-1"></i></span>
+                                                        <span>${event.location.name}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </c:if>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="scroll-w-1 card__scroll">
-                <div class="card__inner">
-                    <div class="card-body">
-                        <c:forEach var="event" items="${organizedEvent}">
-                            <div class="news__item">
-                                <div class="news__item-inner">
-                                    <div class="news__content">
-                                        <h4 class="news__title"><a href="<c:url value="/club/organized-event-report?eventIdDetail=${event.id}&action=detail&organizerId=${event.organizer.id}"/>">${event.fullname}</a></h4>
-                                        <div class="news__meta">
-                                            <div class="news__meta-status">
-                                                <span><i class="flaticon-user"></i></span>
-                                                <span>${event.category.name}</span>
-                                            </div>
-                                            <div class="news__meta-status">
-                                                <span><i class="flaticon-clock"></i></span>
-                                                <span>${event.dateOfEvent}</span>
-                                            </div>
-                                            <div class="news__meta-status">
-                                                <span><i class="flaticon-placeholder-1"></i></span>
-                                                <span>${event.location.name}</span>
-                                            </div>
-                                        </div>
-                                    </div>
+
+            <!-- Organized Events -->
+            <div class="col-xxl-6 col-xl-6 p-2">
+                <div class="card__wrapper">
+                    <div class="card__header">
+                        <div class="card__header-top">
+                            <div class="card__title-inner">
+                                <div class="card__header-icon">
+                                    <i class="flaticon-calendar-3"></i>
+                                </div>
+                                <div class="card__header-title">
+                                    <h4>Organized Events This Month</h4>
                                 </div>
                             </div>
-                        </c:forEach>
+                            <div class="card__header-right">
+                                <div class="card__btn">
+                                    <a href="<c:url value="/club/organized-event"/>">View All Event</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="scroll-w-4 card__scroll">
+                            <div class="card__inner">
+                                <c:if test="${empty organizedEvent}">
+                                    <div class="no-events">
+                                        <span>No events organized yet</span>
+                                    </div>
+                                </c:if>
+
+                                <c:if test="${not empty organizedEvent}">
+                                    <c:forEach var="event" items="${organizedEvent}">
+                                        <div class="news__item">
+                                            <div class="news__item-inner">
+                                                <div class="news__content">
+                                                    <h4 class="news__title"><a href="<c:url value="/club/organized-event-report?eventIdDetail=${event.id}&action=detail&organizerId=${event.organizer.id}"/>">${event.fullname}</a></h4>
+                                                    <div class="news__meta">
+                                                        <div class="news__meta-status">
+                                                            <span><i class="flaticon-clock"></i></span>
+                                                            <span>${event.dateOfEvent}</span>
+                                                        </div>
+                                                        <div class="news__meta-status">
+                                                            <span><i class="flaticon-event"></i></span>
+                                                            <span>${event.category.name}</span>
+                                                        </div>
+                                                        <div class="news__meta-status">
+                                                            <span><i class="flaticon-placeholder-1"></i></span>
+                                                            <span>${event.location.name}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </c:if>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
         <!-- end of organize event -->
         <!-- Dashboard area end -->

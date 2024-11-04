@@ -1,4 +1,4 @@
-<%@include file="../include/club-layout-header.jsp"%>
+<%@include file="../include/admin-layout-header.jsp"%>
 <style>
     .nameevent{
         color:#859F3D;
@@ -20,7 +20,7 @@
             <div class="d-flex justify-content-center mt-5">
                 <a href="#" class="element__btn yellow-bg mx-2">Start a Q&A</a>
                 <a href="#" class="element__btn yellow-bg mx-2">Start a Voting</a>
-                <a href="<c:url value='/club/on-going-event?action=end&eventId=${eventId}' />" class="element__btn yellow-bg mx-2">End Event</a>
+                <a href="<c:url value='/admin/on-going-event?action=end&eventId=${eventId}' />" class="element__btn yellow-bg mx-2">End Event</a>
             </div>
         </div>
     </div>
@@ -30,7 +30,7 @@
     setInterval(getAttendCount, 1000);
 
     function getAttendCount() {
-        fetch("${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/club/on-going-event?action=get-attend-count&eventId=${eventId}")
+        fetch("${pageContext.request.scheme}://${pageContext.request.serverName}:${pageContext.request.serverPort}${pageContext.request.contextPath}/admin/on-going-event?action=get-attend-count&eventId=${eventId}")
             .then((res) => res.json())
             .then((resJson) => {
                 document.getElementById("attended-count").textContent = resJson.attendedCount;

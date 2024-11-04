@@ -24,6 +24,7 @@ public class FeedbackDAO extends SQLDatabase {
     private static final Logger logger = Logger.getLogger(FeedbackDAO.class.getName());
     private static final String SELECT_EVENT_FEEDBACK_BY_EVENTID = "SELECT "
             + "    s.fullname, "
+            + "    s.avatarPath, "
             + "    f.content, "
             + "    f.guestId "
             + "FROM "
@@ -50,7 +51,9 @@ public class FeedbackDAO extends SQLDatabase {
                             new Student(
                                     rs.getInt("guestId"),
                                     rs.getNString("fullname"),
-                                    "", "", ""
+                                    "", 
+                                    "", 
+                                    rs.getNString("avatarPath")
                             ),
                             rs.getString("content")
                     )

@@ -186,6 +186,7 @@ public class EventDAO extends SQLDatabase {
             + "    Location l ON e.locationId = l.id";
     private static final String GET_ATTENDED_COUNT_BY_EVENT_ID = "SELECT guestAttendedCount FROM [Event] WHERE id=?";
     private static final String UPDATE_STATUS_BY_EVENT_ID = "UPDATE [Event] SET status=? WHERE id=?";
+    private static final String SELECT_EVENT_NAME_BY_EVENT_ID = "SELECT fullname FROM [Event] WHERE id=?;";
 
     public EventDAO() {
         super();
@@ -422,6 +423,7 @@ public class EventDAO extends SQLDatabase {
     private String buildSelectQuery(PagingCriteria pagingCriteria, SearchEventCriteria searchEventCriteria) {
         StringBuilder query = new StringBuilder(SELECT_EVENTS_FOLLOWED_AND_NOT_FOLLOWED);
 
+        boolean isDateSelected = false;
         if (!searchEventCriteria.isEmpty()) {
 //            query.append("\n WHERE");
             boolean isNameSelected = false;
@@ -464,9 +466,15 @@ public class EventDAO extends SQLDatabase {
                 query.append("' AND '");
                 query.append(searchEventCriteria.getTo());
                 query.append("'");
+                isDateSelected = true;
             }
         }
-        query.append("\n AND e.dateOfEvent > GETDATE()");
+        if (isDateSelected) {
+            query.append(" AND ");
+        } else {
+            query.append(" WHERE ");
+        }
+        query.append("\n e.dateOfEvent > CAST(GETDATE() AS DATE) AND e.status='APPROVED'");
 
         query.append("\n ORDER BY f.organizerId DESC, ");
 
@@ -865,7 +873,7 @@ public class EventDAO extends SQLDatabase {
                 query.append("'");
             }
         }
-        query.append("\n AND e.dateOfEvent >= CAST(GETDATE() AS DATE)");
+        query.append("\n AND e.dateOfEvent > CAST(GETDATE() AS DATE) AND e.status='APPROVED'");
 
         if (EventOrderBy.DATE_ASC.equals(searchEventCriteria.getOrderBy())) {
             query.append("\n ORDER BY dateOfEvent ASC");
@@ -884,7 +892,6 @@ public class EventDAO extends SQLDatabase {
             query.append(pagingCriteria.getFetchNext());
             query.append(" ROWS ONLY");
         }
-
         return query.toString();
     }
     
@@ -919,5 +926,24 @@ public class EventDAO extends SQLDatabase {
         }
         
         return true;
+    }
+    
+    /**
+     * 
+     * @author HungHV 
+     */
+    public String getEventNameById(int eventId) {
+        String name = "";
+        
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_EVENT_NAME_BY_EVENT_ID, eventId)) {
+            if (rs.next()) {
+                name = rs.getNString(1);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        
+        return name;
     }
 }

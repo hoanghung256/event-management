@@ -1,0 +1,96 @@
+# Maven package Java project Web App to Linux on Azure
+# Build your Java project and deploy it to Azure as a Linux web app
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/java
+
+trigger:
+- production
+
+variables:
+
+  # Azure Resource Manager connection created during pipeline creation
+  azureSubscription: '1d0c411f-3a43-4298-81a6-44d54b748e3d'
+
+  # Web app name
+  webAppName: 'fuem'
+
+  # Environment name
+  environmentName: 'production'
+
+  # Agent VM image name
+  vmImageName: 'ubuntu-latest'
+
+stages:
+- stage: Build
+  displayName: Build stage
+  jobs:
+  - job: MavenPackageAndPublishArtifacts
+    displayName: Maven Package and Publish Artifacts
+    pool:
+      vmImage: $(vmImageName)
+
+    steps:
+    - task: Maven@4
+      displayName: 'Maven Package'
+      inputs:
+        mavenPomFile: 'pom.xml'
+        mavenOptions: '-Xmx3072m'
+        javaHomeOption: 'JDKVersion'
+        jdkVersionOption: '1.17' 
+        jdkArchitectureOption: 'x64'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        goals: 'clean package'
+        
+    - script: |
+        echo "db.server=$(DB_SERVER)" >> src/main/resources/application.properties
+        echo "db.username=$(DB_USERNAME)" >> src/main/resources/application.properties
+        echo "db.password=$(DB_PASSWORD)" >> src/main/resources/application.properties
+      displayName: 'Update application.properties with secrets'
+
+    - task: CopyFiles@2
+      displayName: 'Copy Files to artifact staging directory'
+      inputs:
+        SourceFolder: '$(System.DefaultWorkingDirectory)'
+        Contents: '**/target/*.?(war|jar)'
+        TargetFolder: $(Build.ArtifactStagingDirectory)
+
+    - upload: $(Build.ArtifactStagingDirectory)
+      artifact: drop
+
+- stage: Deploy
+  displayName: Deploy stage
+  dependsOn: Build
+  condition: succeeded()
+  jobs:
+  - deployment: DeployLinuxWebApp
+    displayName: Deploy Linux Web App
+    environment: $(environmentName)
+    pool:
+      vmImage: $(vmImageName)
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - task: DownloadPipelineArtifact@2
+            displayName: 'Download upload directory from previous build'
+            inputs:
+              artifact: 'uploadDir'
+              path: '$(Pipeline.Workspace)/uploadDir'
+
+          - script: |
+              if [ -d "target/event-management-1.0/assets/upload" ]; then
+                echo "Upload directory exists, copying files..."
+                cp -r $(Pipeline.Workspace)/uploadDir/* target/event-management-1.0/assets/upload/
+              else
+                echo "Upload directory does not exist, skipping copy."
+              fi
+            displayName: 'Copy upload directory to target location'
+
+          - task: AzureWebApp@1
+            displayName: 'Azure Web App Deploy: fuem'
+            inputs:
+              azureSubscription: $(azureSubscription)
+              appType: webAppLinux
+              appName: $(webAppName)
+              package: '$(Pipeline.Workspace)/drop/**/target/*.?(war|jar)'

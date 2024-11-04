@@ -45,6 +45,34 @@
     .singel__input-field {
         margin-bottom: 15px;
     }
+      @media only screen and (max-width: 768px) {
+        .popup__content {
+            width: 90%;
+        }
+
+        .breadcrumb__wrapper, .basic__pagination, .attendant__wrapper {
+            padding: 10px;
+        }
+
+        .attendant__user-title span {
+            font-size: 14px;
+        }
+
+        .status__tag {
+            font-size: 0.9em;
+        }
+
+        /* Center elements on mobile */
+        .breadcrumb__menu, .attendant__action, .attendant__seminar, .attendant__date {
+            text-align: center;
+        }
+
+        /* Adjust font sizes */
+        h3, label, .input__btn {
+            font-size: 1rem;
+        }
+   
+    }
 </style>
 
 <section>
@@ -109,9 +137,9 @@
                                     <thead>
                                         <tr>
                                             <th>Club</th>
-                                            <th>Event</th>
+                                            <th>Event Name</th>
                                             <th>Date</th>
-                                            <th>Action</th>
+                                            <th class="text-center">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -121,7 +149,7 @@
                                                 <tr>
                                                     <td>
                                                         <div class="attendant__user-item">
-                                                            <div class="registration__user-thumb">
+                                                            <div class="user__portfolio-thumb">
                                                                 <img src="<c:url value="${event.organizer.avatarPath}" />" alt="Club Logo">
                                                             </div>
                                                             <div class="attendant__user-title">

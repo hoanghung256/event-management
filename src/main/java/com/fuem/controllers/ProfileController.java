@@ -35,13 +35,13 @@ import java.util.List;
 public class ProfileController extends HttpServlet {
 
     /**
-     * If requestUrlLength = 3, is accessing other profile
+     * If requestUrlLength = 2, is accessing other profile
      *
      * @requestParameter role identity which kind of user profile accessing
      * "student" or "organizer"
      * @requestParameter id identity userId to find profile information
      *
-     * If requestUrlLength = 4, is accessing self-profile
+     * If requestUrlLength = 3, is accessing self-profile
      *
      * @author HungHV
      */
@@ -140,7 +140,7 @@ public class ProfileController extends HttpServlet {
                                     boolean isUpdated = studentDao.updateStudentAvatar(studentId, newAvatarPath);
 
                                     if (isUpdated) {
-                                        if (oldAvatarPath != null && !oldAvatarPath.isEmpty()) {
+                                        if (oldAvatarPath != null && !oldAvatarPath.equalsIgnoreCase("/assets/img/user/default-avatar.jpg")) {
                                             FileHandler.deleteFile(getServletContext(), oldAvatarPath);
                                         }
 
@@ -180,7 +180,7 @@ public class ProfileController extends HttpServlet {
             if (avatarFilePart != null && avatarFilePart.getSize() > 0) {
                 newAvatarPath = FileHandler.processUploadFile(avatarFilePart, FileType.IMAGE);
                 FileHandler.save(newAvatarPath, avatarFilePart, getServletContext(), FileType.IMAGE);
-                if (oldAvatarPath != null) {
+                if (oldAvatarPath != null && !oldAvatarPath.equalsIgnoreCase("/assets/img/user/default-avatar.jpg")) {
                     FileHandler.deleteFile(getServletContext(), oldAvatarPath);
                 }
             }
@@ -190,7 +190,7 @@ public class ProfileController extends HttpServlet {
             if (coverFilePart != null && coverFilePart.getSize() > 0) {
                 newCoverPath = FileHandler.processUploadFile(coverFilePart, FileType.IMAGE);
                 FileHandler.save(newCoverPath, coverFilePart, getServletContext(), FileType.IMAGE);
-                if (oldCoverPath != null) {
+                if (oldCoverPath != null && !oldAvatarPath.equalsIgnoreCase("/assets/img/user/default-banner.png")) {
                     FileHandler.deleteFile(getServletContext(), oldCoverPath);
                 }
 

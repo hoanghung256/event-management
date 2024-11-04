@@ -7,7 +7,6 @@ package com.fuem.controllers;
 
 import com.fuem.daos.EventDAO;
 import com.fuem.enums.EventStatus;
-import com.fuem.models.Event;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,7 +19,7 @@ import java.io.PrintWriter;
  *
  * @author HungHV
  */
-@WebServlet(name="OnGoingEventController", urlPatterns={"/club/on-going-event"})
+@WebServlet(name="OnGoingEventController", urlPatterns={"/club/on-going-event", "/admin/on-going-event"})
 public class OnGoingEventController extends HttpServlet {
    
     @Override
@@ -30,9 +29,10 @@ public class OnGoingEventController extends HttpServlet {
         
         switch (action) {
             case "access":
-                Event event = new Event();
-                event.setId(eventId);
-                request.setAttribute("event", event);
+                String eventName = new EventDAO().getEventNameById(eventId);
+                
+                request.setAttribute("eventId", eventId);
+                request.setAttribute("eventName", eventName);
                 request.getRequestDispatcher("landing.jsp").forward(request, response);
                 break;
             case "get-attend-count":

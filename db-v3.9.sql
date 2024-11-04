@@ -241,7 +241,7 @@ ON [EventGuest]
 AFTER INSERT, UPDATE
 AS
 BEGIN
-    -- Xử lý khi INSERT
+    -- Handle INSERT only
     UPDATE e
     SET 
         guestRegisterCount = guestRegisterCount + (
@@ -259,9 +259,10 @@ BEGIN
         SELECT 1 
         FROM inserted i
         WHERE i.eventId = e.id
+          AND NOT EXISTS (SELECT 1 FROM deleted d WHERE d.guestId = i.guestId AND d.eventId = i.eventId)
     );
 
-    -- Xử lý khi UPDATE
+    -- Handle UPDATE only
     UPDATE e
     SET 
         guestRegisterCount = guestRegisterCount + (
@@ -270,14 +271,14 @@ BEGIN
             JOIN deleted d ON i.guestId = d.guestId AND i.eventId = d.eventId
             WHERE i.eventId = e.id 
               AND i.isRegistered = 1 
-              AND d.isRegistered = 0  -- Chỉ cộng khi isRegistered chuyển từ 0 sang 1
+              AND d.isRegistered = 0  -- Only count when isRegistered changes from 0 to 1
         ) - (
             SELECT COUNT(*)
             FROM inserted i
             JOIN deleted d ON i.guestId = d.guestId AND i.eventId = d.eventId
             WHERE i.eventId = e.id 
               AND i.isRegistered = 0 
-              AND d.isRegistered = 1  -- Chỉ trừ khi isRegistered chuyển từ 1 sang 0
+              AND d.isRegistered = 1  -- Only subtract when isRegistered changes from 1 to 0
         ),
         guestAttendedCount = guestAttendedCount + (
             SELECT COUNT(*)
@@ -285,14 +286,14 @@ BEGIN
             JOIN deleted d ON i.guestId = d.guestId AND i.eventId = d.eventId
             WHERE i.eventId = e.id 
               AND i.isAttended = 1 
-              AND d.isAttended = 0  -- Chỉ cộng khi isAttended chuyển từ 0 sang 1
+              AND d.isAttended = 0  -- Only count when isAttended changes from 0 to 1
         ) - (
             SELECT COUNT(*)
             FROM inserted i
             JOIN deleted d ON i.guestId = d.guestId AND i.eventId = d.eventId
             WHERE i.eventId = e.id 
               AND i.isAttended = 0 
-              AND d.isAttended = 1  -- Chỉ trừ khi isAttended chuyển từ 1 sang 0
+              AND d.isAttended = 1  -- Only subtract when isAttended changes from 1 to 0
         )
     FROM Event e
     WHERE EXISTS (

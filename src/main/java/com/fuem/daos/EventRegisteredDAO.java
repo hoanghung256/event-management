@@ -4,10 +4,14 @@
  */
 package com.fuem.daos;
 
+import com.fuem.daos.helpers.Page;
+import com.fuem.daos.helpers.PagingCriteria;
 import com.fuem.models.Event;
 import com.fuem.models.Organizer;
+import com.fuem.models.Student;
 import com.fuem.utils.DataSourceWrapper;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -34,16 +38,17 @@ public class EventRegisteredDAO extends SQLDatabase {
             + "FROM [Event] e\n"
             + "LEFT JOIN [EventGuest] eg \n"
             + "    ON eg.eventId = e.id \n"
-            + "    AND eg.guestId = (SELECT id FROM [Student] WHERE studentId = ?)\n"
+            + "    AND eg.guestId = ? \n"
             + "    AND eg.isCancelRegister = 0  \n"
             + "LEFT JOIN [EventCollaborator] ec \n"
             + "    ON ec.eventId = e.id \n"
-            + "    AND ec.studentId = (SELECT id FROM [Student] WHERE studentId = ?)\n"
+            + "    AND ec.studentId = ? \n"
             + "    AND ec.isCancel = 0 \n"
             + "LEFT JOIN [Organizer] o \n"
             + "    ON o.id = e.organizerId\n"
-            + "WHERE (eg.isRegistered = 1 AND eg.isCancelRegister = 0)  \n" 
-            + "   OR (ec.studentId IS NOT NULL AND ec.isCancel = 0);    ";
+            + "WHERE ((eg.isRegistered = 1 AND eg.isCancelRegister = 0)  \n"
+            + "   OR (ec.studentId IS NOT NULL AND ec.isCancel = 0)) \n"
+            + "AND e.status='APPROVED';";
 
     private static final String REGISTER_COLLABORATOR_EVENT
             = "INSERT INTO [EventCollaborator](studentId, eventId) VALUES(?, ?)";
@@ -52,28 +57,29 @@ public class EventRegisteredDAO extends SQLDatabase {
             = "DELETE FROM [EventCollaborator] WHERE studentId = ? AND eventId = ?";
 
     private static final String REGISTER_GUEST_EVENT
-            = "MERGE INTO [EventGuest] AS target\n"
-            + "USING (SELECT ? AS guestId, ? AS eventId) AS source\n"
-            + "ON target.guestId = source.guestId AND target.eventId = source.eventId\n"
-            + "WHEN MATCHED THEN\n"
-            + "    UPDATE SET isRegistered = 1\n"
-            + "WHEN NOT MATCHED THEN\n"
-            + "    INSERT (guestId, eventId, isRegistered)\n"
-            + "    VALUES (source.guestId, source.eventId, 1);";
+            = "INSERT INTO [EventGuest](guestId, eventId, isRegistered) VALUES(?, ?, '1')";
 
     private static final String CANCEL_GUEST_EVENT
-            = "UPDATE [EventGuest] SET isRegistered = 0, isCancelRegister = 1 WHERE guestId = ? AND eventId = ?";
+            = "UPDATE [EventGuest] SET isCancelRegister = '1', isRegistered = '0' WHERE guestId = ? AND eventId = ?";
 
     private static final String IS_STUDENT_REGIS_AS_GUEST = "SELECT \n"
             + "COUNT (1) AS 'isGuestRegis' \n"
             + "FROM [EventGuest] "
-            + "WHERE isRegistered = 1 AND guestId = ? AND eventId = ?;";
+            + "WHERE isRegistered = 1 AND isCancelRegister = 0 AND guestId = ? AND eventId = ?;";
     private static final String IS_STUDENT_REGIS_AS_COLLAB = "SELECT "
             + "COUNT (1) AS 'isCollabRegis' "
             + "FROM [EventCollaborator] "
             + "WHERE studentId = ? AND eventId = ?;";
+    private static final String SELECT_GUEST_BY_ID = "SELECT Student.studentId, Student.fullname, Student.email, COUNT(*) OVER() AS TotalRow "
+            + "FROM EventGuest "
+            + "JOIN Student ON EventGuest.guestId = Student.id "
+            + "WHERE EventGuest.eventId = ? AND EventGuest.isRegistered='1' AND isCancelRegister='0' "
+            + "ORDER BY Student.fullname "
+            + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+    private static final String UPDATE_REGISTER_STATUS_FROM_CANCEL = "UPDATE [EventGuest] SET isRegistered='1', isCancelRegister='0' WHERE guestId=? AND eventId=?";
+    private static final String SELECT_IF_GUEST_CANCELED = "SELECT COUNT(1) FROM [EventGuest] WHERE guestId=? AND eventId=? AND isCancelRegister='1'";
 
-    public List<Event> getRegisteredEventListByStudentId(String studentId) {
+    public List<Event> getRegisteredEventListByStudentId(int studentId) {
         List<Event> registeredEvents = new ArrayList<>();
 
         // First, retrieve the registered events
@@ -119,8 +125,13 @@ public class EventRegisteredDAO extends SQLDatabase {
     }
 
     public boolean registerGuest(int guestId, int eventId) {
+        int affectedRows = 0;
         try (Connection conn = DataSourceWrapper.getDataSource().getConnection()) {
-            int affectedRows = executeUpdatePreparedStatement(conn, REGISTER_GUEST_EVENT, guestId, eventId);
+            if (isGuestCanceled(guestId, eventId)) {
+                affectedRows = executeUpdatePreparedStatement(conn, UPDATE_REGISTER_STATUS_FROM_CANCEL, guestId, eventId);
+            } else {
+                affectedRows = executeUpdatePreparedStatement(conn, REGISTER_GUEST_EVENT, guestId, eventId);
+            }
             return affectedRows > 0; // Trả về true nếu đăng ký thành công
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
@@ -163,5 +174,50 @@ public class EventRegisteredDAO extends SQLDatabase {
             logger.log(Level.SEVERE, null, e);
         }
         return new boolean[]{isGuestRegis, isCollabRegis};
+    }
+
+    /**
+     *
+     * @author Trinhhuy
+     */
+    public Page<Student> getEventGuestsByEventId(PagingCriteria pagingCriteria, String eventId) {
+        Page<Student> page = new Page<>();
+        ArrayList<Student> guestList = new ArrayList<>();
+
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, SELECT_GUEST_BY_ID, eventId, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
+            while (rs.next()) {
+                // Lấy tổng số hàng cho phân trang
+                if (page.getTotalPage() == null && page.getCurrentPage() == null) {
+                    page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
+                    page.setCurrentPage(pagingCriteria.getOffset() / pagingCriteria.getFetchNext());
+                }
+
+                // Tạo đối tượng Student và thiết lập thông tin
+                Student student = new Student();
+                student.setStudentId(rs.getString("studentId"));
+                student.setFullname(rs.getString("fullname"));
+                student.setEmail(rs.getString("email"));
+
+                guestList.add(student);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+        }
+        page.setDatas(guestList);
+        return page;
+    }
+
+    public boolean isGuestCanceled(int guestId, int eventId) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection();
+                ResultSet rs = executeQueryPreparedStatement(conn, SELECT_IF_GUEST_CANCELED, guestId, eventId)) {
+            if (rs.next()) {
+                return rs.getBoolean(1);
+            }
+        } catch (SQLException e) {
+            logger.log(Level.SEVERE, null, e);
+            return false; // Trả về false nếu có lỗi
+        }
+        
+        return false;
     }
 }

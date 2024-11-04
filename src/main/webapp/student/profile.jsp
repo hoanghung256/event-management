@@ -1,7 +1,6 @@
 <%@include file="../include/student-layout-header.jsp"%>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
-
 <style>
     /* C?u trúc chính */
     .profile__main-wrapper {
@@ -29,7 +28,6 @@
         align-items: center;
     }
 
-
     .profile__thumb img {
         border-radius: 50%;
         width: 190px;
@@ -39,9 +37,6 @@
         cursor: pointer;
         transition: transform 0.3s ease;
     }
-    /*    .profile__thumb img:hover {
-            transform: scale(1.2);
-        }*/
 
     .profile__user-item {
         display: flex;
@@ -81,10 +76,6 @@
         border: none;
         transition: background-color 0.3s ease;
         cursor: pointer;
-    }
-
-    .unfield__input-btn:hover {
-        transform: scale(1.3);
     }
 
     /* Modal Styles */
@@ -138,8 +129,6 @@
         box-shadow: 0 0 8px rgba(255, 87, 34, 0.4);
     }
 
-
-
     .profile__box {
         text-align: center;
         padding: 50px;
@@ -184,7 +173,6 @@
         font-family: 'Poppins', cursive;
         font-size: 15px;
     }
-    
 </style>
 
 <section>
@@ -259,7 +247,7 @@
 
                         </ul>
                         <div class="change-password-section">
-                            <button class="unfield__input-btn" style="height:30px;"type="button" id="changePasswordBtn">
+                            <button class="unfield__input-btn" type="button" id="changePasswordBtn">
                                 <i class="flaticon-lock"></i> Change Password
                             </button>
                         </div>
@@ -273,7 +261,7 @@
             <div class="modal-content">
                 <span class="close">&times;</span>
                 <h3>Change Password</h3>
-                <br>
+                <hr style="border-top: 1px solid black;"/>
                 <form action="<c:url value='/student/change-password' />" method="POST">
                     <div class="form-group">
                         <input type="password" name="currentPassword" placeholder="Current Password" required>
@@ -284,9 +272,15 @@
                     <div class="form-group">
                         <input type="password" name="confirmPassword" placeholder="Confirm Password" required>
                     </div>
-                    <br>
-                    <button class="unfield__input-btn" style="margin-left: 60px; height: 30px;
-                            " type="submit">Change Password</button>
+                    
+                    <hr style="border-top: 1px solid black;"/>
+
+                    <div class="d-flex align-items-center justify-content-around">
+                        <a href="<c:url value="/forget" />">Forgot password?</a>
+                        <button class="unfield__input-btn" type="submit">
+                            Change Password
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
