@@ -88,7 +88,7 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a href="home">Home</a></span></li>
+                                    <li><span><a href="dashboard">Dashboard</a></span></li>
                                     <li class="active"><span>Edit Event</span></li>
                                 </ul>
                             </nav>
