@@ -165,7 +165,7 @@
                                             </defs>
                                             </svg>
                                         </span>
-                                        <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=http://localhost:8080/event-management/login-google&response_type=code&client_id=89142229238-cu1tiul7dl16gs4qigcjsgd0emkk3j0d.apps.googleusercontent.com&approval_prompt=force">
+                                        <a href="https://accounts.google.com/o/oauth2/auth?scope=email&redirect_uri=https://fuem.azurewebsites.net/login-google&response_type=code&client_id=89142229238-cu1tiul7dl16gs4qigcjsgd0emkk3j0d.apps.googleusercontent.com&approval_prompt=force">
                                             Sign in With Google
                                         </a>
                                     </button>
