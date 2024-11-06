@@ -422,54 +422,52 @@ public class EventDAO extends SQLDatabase {
 
     private String buildSelectQuery(PagingCriteria pagingCriteria, SearchEventCriteria searchEventCriteria) {
         StringBuilder query = new StringBuilder(SELECT_EVENTS_FOLLOWED_AND_NOT_FOLLOWED);
-
-        boolean isDateSelected = false;
+        boolean isWhereInserted = false;
+        
         if (!searchEventCriteria.isEmpty()) {
-//            query.append("\n WHERE");
-            boolean isNameSelected = false;
             if (searchEventCriteria.getName() != null && !searchEventCriteria.getName().isBlank()) {
                 query.append("\nWHERE LOWER(e.fullname) LIKE LOWER('%");
                 query.append(searchEventCriteria.getName());
                 query.append("%')\n ");
-                isNameSelected = true;
+                isWhereInserted = true;
             }
-            boolean isCateSelected = false;
+            
             if (searchEventCriteria.getCategoryId() != null) {
-                if(isNameSelected){
+                if(isWhereInserted){
                     query.append(" AND ");
                 }else{
                     query.append("\nWHERE ");
+                    isWhereInserted = true;
                 }
                 query.append("e.categoryId=");
                 query.append(searchEventCriteria.getCategoryId());
-                isCateSelected = true;
             }
-            boolean isOrganizerSelected = false;
+            
             if (searchEventCriteria.getOrganizerId() != null) {
-                if(isCateSelected){
+                if(isWhereInserted){
                     query.append("\nAND ");
                 }else{
                     query.append("\nWHERE ");
+                    isWhereInserted = true;
                 }
                 query.append("e.organizerId=");
                 query.append(searchEventCriteria.getOrganizerId());
-                isOrganizerSelected = true;
             }
             if (searchEventCriteria.getFrom() != null && searchEventCriteria.getTo() != null) {
-                if(isOrganizerSelected){
+                if(isWhereInserted){
                     query.append("\nAND ");
                 }else{
                     query.append("\nWHERE ");
+                    isWhereInserted = true;
                 }
                 query.append("e.dateOfEvent BETWEEN '");
                 query.append(searchEventCriteria.getFrom());
                 query.append("' AND '");
                 query.append(searchEventCriteria.getTo());
                 query.append("'");
-                isDateSelected = true;
             }
         }
-        if (isDateSelected) {
+        if (isWhereInserted) {
             query.append(" AND ");
         } else {
             query.append(" WHERE ");
@@ -828,43 +826,44 @@ public class EventDAO extends SQLDatabase {
 
     private String buildSelectQueryForGuest(PagingCriteria pagingCriteria, SearchEventCriteria searchEventCriteria) {
         StringBuilder query = new StringBuilder(SELECT_EVENTS_FOR_GUEST);
-
+        boolean isWhereInserted = false;
+        
         if (!searchEventCriteria.isEmpty()) {
-//            query.append("\n WHERE");
-            boolean isNameSelected = false;
             if (searchEventCriteria.getName() != null && !searchEventCriteria.getName().isBlank()) {
                 query.append("\nWHERE LOWER(e.fullname) LIKE LOWER('%");
                 query.append(searchEventCriteria.getName());
                 query.append("%')\n ");
-                isNameSelected = true;
+                isWhereInserted = true;
             }
-            boolean isCateSelected = false;
+            
             if (searchEventCriteria.getCategoryId() != null) {
-                if(isNameSelected){
+                if (isWhereInserted){
                     query.append(" AND ");
-                }else{
+                } else {
                     query.append("\nWHERE ");
+                    isWhereInserted = true;
                 }
                 query.append("e.categoryId=");
                 query.append(searchEventCriteria.getCategoryId());
-                isCateSelected = true;
+                
             }
-            boolean isOrganizerSelected = false;
+            
             if (searchEventCriteria.getOrganizerId() != null) {
-                if(isCateSelected){
+                if(isWhereInserted){
                     query.append("\nAND ");
                 }else{
                     query.append("\nWHERE ");
+                    isWhereInserted = true;
                 }
                 query.append("e.organizerId=");
                 query.append(searchEventCriteria.getOrganizerId());
-                isOrganizerSelected = true;
             }
             if (searchEventCriteria.getFrom() != null && searchEventCriteria.getTo() != null) {
-                if(isOrganizerSelected){
+                if(isWhereInserted){
                     query.append("\nAND ");
                 }else{
                     query.append("\nWHERE ");
+                    isWhereInserted = true;
                 }
                 query.append("e.dateOfEvent BETWEEN '");
                 query.append(searchEventCriteria.getFrom());
@@ -873,7 +872,13 @@ public class EventDAO extends SQLDatabase {
                 query.append("'");
             }
         }
-        query.append("\n AND e.dateOfEvent > CAST(GETDATE() AS DATE) AND e.status='APPROVED'");
+        
+        if (isWhereInserted) {
+            query.append("\nAND ");
+        } else {
+            query.append("\nWHERE ");
+        }
+        query.append("\n e.dateOfEvent > CAST(GETDATE() AS DATE) AND e.status='APPROVED'");
 
         if (EventOrderBy.DATE_ASC.equals(searchEventCriteria.getOrderBy())) {
             query.append("\n ORDER BY dateOfEvent ASC");
