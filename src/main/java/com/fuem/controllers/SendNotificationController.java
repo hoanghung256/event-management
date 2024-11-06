@@ -34,8 +34,8 @@ public class SendNotificationController extends HttpServlet {
     throws ServletException, IOException {
         Organizer organizer = (Organizer) request.getSession().getAttribute("userInfor");
         List<Event> upcomingEvents = eventDAO.getIncomingEventByOrganizerId(organizer.getId());
+        
         request.setAttribute("upcomingEvents", upcomingEvents);
-        System.out.println(upcomingEvents);
         request.getRequestDispatcher("send-event-notification.jsp").forward(request, response);
     }
 
@@ -44,7 +44,7 @@ public class SendNotificationController extends HttpServlet {
     throws ServletException, IOException {
         Organizer organizer = (Organizer) request.getSession().getAttribute("userInfor");
         String content = request.getParameter("content");
-        System.out.println(content);
+        
         int newNotiId = notiDAO.insertAndGetIdOfNewNotification(organizer.getId(), content);
         String[] ids = request.getParameterValues("event-id");
         if(ids.length == 0){

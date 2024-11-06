@@ -29,9 +29,6 @@ public class FeedbackController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-//        HttpSession session = request.getSession();
-//        Organizer organizer = (Organizer) session.getAttribute("userInfor");
-
         try {
             int eventId = Integer.parseInt(request.getParameter("eventId"));
             EventDAO eventDAO = new EventDAO();
@@ -42,7 +39,6 @@ public class FeedbackController extends HttpServlet {
             request.setAttribute("event", event);
             request.setAttribute("feedbackList", feedbackList);
 
-//            System.out.println(feedbackList);
             request.getRequestDispatcher("view-feedback.jsp").forward(request, response);
         } catch (SQLException ex) {
             Logger.getLogger(FeedbackController.class.getName()).log(Level.SEVERE, null, ex);

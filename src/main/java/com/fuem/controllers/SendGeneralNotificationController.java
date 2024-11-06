@@ -35,8 +35,7 @@ public class SendGeneralNotificationController extends HttpServlet {
         Organizer organizer = (Organizer) request.getSession().getAttribute("userInfor");
         String content = request.getParameter("content");
         String receiver = request.getParameter("receiver");
-        System.out.println(content);
-        System.out.println(receiver);
+        
         int newNotiId = notiDAO.insertAndGetIdOfNewNotification(organizer.getId(), content);
         int numberOfReceivers = 0;
         if ("student".equals(receiver)) {
@@ -52,7 +51,7 @@ public class SendGeneralNotificationController extends HttpServlet {
                 Logger.getLogger(SendGeneralNotificationController.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        System.out.println(numberOfReceivers);
+
         request.setAttribute("numberOfReceivers", numberOfReceivers);
         request.getRequestDispatcher("send-general-notification.jsp").forward(request, response);
     }

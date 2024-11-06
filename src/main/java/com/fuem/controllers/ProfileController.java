@@ -70,7 +70,7 @@ public class ProfileController extends HttpServlet {
                     User user = (User) request.getSession().getAttribute("userInfor");
                     Organizer organizer = organizerDAO.getOrganizerById(id);
                     List<Event> recentEvents = eventDAO.getRecentEvents(id);
-                    System.out.println(organizer);
+                    
                     if (user == null) {
                         request.setAttribute("organizer", organizer);
                         request.setAttribute("recentEvents", recentEvents);
