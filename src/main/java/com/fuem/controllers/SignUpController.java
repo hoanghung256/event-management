@@ -58,7 +58,6 @@ public class SignUpController extends HttpServlet {
                     Hash.doHash(password)
             );
             u.setGender(gender);
-            u.setAvatarPath("/assets/img/user/default-avatar.jpg");
 
             boolean isAdded = userDao.addUser(u);
             if (isAdded) {
@@ -74,17 +73,13 @@ public class SignUpController extends HttpServlet {
         }
 
         // Submit data first time
-        if (fullname == null || password == null || email == null || !password.equals(confirmPassword)) {
-            request.setAttribute("error", "Please ensure all fields are filled correctly.");
+        if (!Validator.isEmailBelongFPT(email)) {
+            request.setAttribute("error", "Email not allow, must be FPT Education email");
             request.getRequestDispatcher("authentication/sign-up.jsp").forward(request, response);
             return;
         }
-        if ((fullname == null || fullname.isEmpty())
-                && (password == null || password.isEmpty())
-                && (email == null || email.isEmpty())
-                && (studentId == null || studentId.isEmpty())
-                && (confirmPassword == null || confirmPassword.isEmpty())) {
-            request.setAttribute("error", "Please fill all blanks needed.");
+        if (!password.equals(confirmPassword)) {
+            request.setAttribute("error", "Please ensure all fields are filled correctly.");
             request.getRequestDispatcher("authentication/sign-up.jsp").forward(request, response);
             return;
         }
@@ -97,11 +92,6 @@ public class SignUpController extends HttpServlet {
             request.setAttribute("error", "Student ID is not valid or not match with your email.");
             request.getRequestDispatcher("authentication/sign-up.jsp").forward(request, response);
             return;
-        }
-        if (!Validator.isEmailBelongFPT(email)) {
-            request.setAttribute("error", "Email not allow, must be FPT Education email");
-            request.getRequestDispatcher("authentication/sign-up.jsp").forward(request, response);
-            return;
         } else if (userDao.getUserByEmail(email) != null) {
             request.setAttribute("error", "Email have been registered! Want to sign in?");
             request.getRequestDispatcher("authentication/sign-up.jsp").forward(request, response);
@@ -110,23 +100,23 @@ public class SignUpController extends HttpServlet {
             request.setAttribute("error", "Student ID have been registered! Want to sign in?");
             request.getRequestDispatcher("authentication/sign-up.jsp").forward(request, response);
             return;
-        } else {
-            Student u = new Student(fullname, studentId, email, password);
-            u.setGender(gender);
-            String otp = RandomGenerator.generate(RandomGenerator.NUMERIC, 6);
-            new Thread(
-                    () -> {
-                        try {
-                            Gmail.sendWithOTP(email, otp, request);
-                        } catch (MalformedURLException ex) {
-                            Logger.getLogger(ForgetPasswordController.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-            ).start();
-            request.getSession().setAttribute("OTP", otp);
-            request.setAttribute("registerInfor", u);
-            request.getRequestDispatcher("authentication/verify-email.jsp").forward(request, response);
-            return;
         }
+        
+        Student u = new Student(fullname, studentId, email, password);
+        u.setGender(gender);
+        String otp = RandomGenerator.generate(RandomGenerator.NUMERIC, 6);
+        new Thread(
+                () -> {
+                    try {
+                        Gmail.sendWithOTP(email, otp, request);
+                    } catch (MalformedURLException ex) {
+                        Logger.getLogger(ForgetPasswordController.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+        ).start();
+        request.getSession().setAttribute("OTP", otp);
+        request.setAttribute("registerInfor", u);
+        request.getRequestDispatcher("authentication/verify-email.jsp").forward(request, response);
+        return;
     }
 }
