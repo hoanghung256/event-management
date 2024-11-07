@@ -13,6 +13,8 @@ import com.fuem.models.builders.EventBuilder;
 import com.fuem.daos.EventDAO;
 import com.fuem.daos.FileDAO;
 import com.fuem.daos.OrganizerDAO;
+import com.fuem.enums.EventStatus;
+import com.fuem.enums.Role;
 import com.fuem.utils.FileHandler;
 import com.fuem.utils.Gmail;
 import java.io.IOException;
@@ -147,27 +149,30 @@ public class EventRegistrationController extends HttpServlet {
             request.getRequestDispatcher("register-event?method=get").forward(request, response);
             return;
         }
-
+        eventBuilder.setStatus(registerOrganizer.getRole().equals(Role.ADMIN) ? EventStatus.APPROVED : EventStatus.PENDING);
         Event registerEvent = eventBuilder.build();
         EventDAO eventDao = new EventDAO();
         FileDAO fileDao = new FileDAO();
 
         try {
+
             int eventId = eventDao.insertAndGetGenerateKeyOfNewEvent(registerEvent);
             if (fileDao.insertEventImages(eventId, registerEvent.getImages()) == (registerEvent.getImages().size() - 1)) {
                 request.setAttribute("message", "Register succeessfully");
                 FileHandler.save(registerEvent.getImages(), parts, request.getServletContext(), FileType.IMAGE);
-                
-                new Thread(
-                        () -> {
-                            try {
-                                Organizer admin = new OrganizerDAO().getAdmin();
-                                Gmail.newPendingEvent(admin.getEmail(), admin.getAcronym(), registerOrganizer.getFullname(), registerEvent, request);
-                            } catch (MalformedURLException e) {
-                                Logger.getLogger(EventRegistrationController.class.getName()).log(Level.SEVERE, null, e);
+
+                if (registerOrganizer.getRole().equals(Role.CLUB)) {
+                    new Thread(
+                            () -> {
+                                try {
+                                    Organizer admin = new OrganizerDAO().getAdmin();
+                                    Gmail.newPendingEvent(admin.getEmail(), admin.getAcronym(), registerOrganizer.getFullname(), registerEvent, request);
+                                } catch (MalformedURLException e) {
+                                    Logger.getLogger(EventRegistrationController.class.getName()).log(Level.SEVERE, null, e);
+                                }
                             }
-                        }
-                ).start();
+                    ).start();
+                }
             } else {
                 request.setAttribute("error", "Register failed");
             }
