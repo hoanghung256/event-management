@@ -5,39 +5,13 @@
 --%>
 <%@include file="../include/club-layout-header.jsp"%>
 
+<style>
+    .small-btn{
+        height:3rem !important;
+    }
+</style>
+
 <section>
-    <style>
-        .dropdown {
-            position: absolute; /* ??t v? tr� t??ng ??i ?? c� th? ?i?u ch?nh v? tr� */
-            top: 10px; /* C�ch t? ph�a tr�n */
-            right: 10px; /* C�ch t? b�n ph?i */
-            z-index: 10; /* ??m b?o dropdown n?m tr�n c�c ph?n t? kh�c */
-        }
-
-        .dropdown button {
-            background: transparent; /* N?n trong su?t cho n�t */
-            border: none; /* Kh�ng c� vi?n */
-            cursor: pointer; /* Hi?n th? con tr? khi di chu?t */
-
-        }
-
-        .dropdown-list {
-            display: none; /* ?n dropdown m?c ??nh */
-            position: absolute; /* ??t dropdown b�n d??i n�t */
-            top: 20px; /* ??t kho?ng c�ch t? n�t ??n dropdown */
-            right: 0; /* ??t dropdown c?n ph?i */
-            background-color: white; /* N?n tr?ng cho dropdown */
-            border: 1px solid #ccc; /* ???ng vi?n cho dropdown */
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15); /* ?? b�ng cho dropdown */
-        }
-
-        .dropdown:hover .dropdown-list {
-            display: block; /* Hi?n dropdown khi hover */
-        }
-        .small-btn{
-            height:3rem !important;
-        }
-    </style>
     <!-- App side area start -->
     <div class="app__slide-wrapper">
         <div class="row">
@@ -173,7 +147,7 @@
                                                 <i class="flaticon-reminder"></i>
                                             </div>
                                             <div class="card__header-title">
-                                                <h4>Upcoming Events: ${event.fullname}</h4>
+                                                <h4>Upcoming: ${event.fullname}</h4>
                                             </div>
                                         </div>
                                         <div class="dropdown">
@@ -185,7 +159,7 @@
                                                 </svg>
                                             </button>
                                             <div class="dropdown-list">
-                                                <a class="dropdown__item" href="<c:url value='/club/view-list-guest?eventId=${event.id}'/>">View list guest</a>
+                                                <a class="dropdown__item" href="<c:url value='/club/view-list-guest?eventId=${event.id}'/>">Register Guest</a>
                                             </div>
                                         </div>
                                     </div>
@@ -208,18 +182,9 @@
                                                         <c:when test="${event.status == 'APPROVED'}">
                                                             <span class="status__tag bg-green">${event.status}</span>
                                                         </c:when>
-                                                        <c:when test="${event.status == 'PENDING'}">
-                                                            <span class="status__tag warning-bg">${event.status}</span>
-                                                        </c:when>
-                                                        <c:when test="${event.status == 'REJECTED'}">
-                                                            <span class="status__tag bg-warn">${event.status}</span>
-                                                        </c:when>
                                                         <c:when test="${event.status == 'ON_GOING'}">
                                                             <span class="status__tag teal-bg">ON GOING</span>
                                                         </c:when>
-                                                        <c:otherwise>
-                                                            <span>${event.status}</span>
-                                                        </c:otherwise>
                                                     </c:choose>
                                                 </li>
                                             </ul>
@@ -281,7 +246,7 @@
                                             <div class="news__content">
                                                 <div class="d-flex justify-content-between align-items-center">
                                                     <h4 class="news__title">
-                                                        <a href="<c:url value="/club/approval-events?action=detail&eventId=${event.id}" />">${event.fullname}</a>
+                                                        <a href="<c:url value='/club/edit-event?eventId=${event.id}'/>">${event.fullname}</a>
                                                     </h4>
 
                                                     <div class="dropdown">
@@ -293,7 +258,7 @@
                                                             </svg>
                                                         </button>
                                                         <div class="dropdown-list">
-                                                            <a class="dropdown__item" href="<c:url value='/club/edit-event?eventId=${event.id}'/>">Edit23</a>
+                                                            <a class="dropdown__item" href="<c:url value='/club/edit-event?eventId=${event.id}'/>">Edit</a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -360,7 +325,7 @@
                                                     <div class="news__meta">
                                                         <div class="news__meta-status">
                                                             <span><i class="flaticon-clock"></i></span>
-                                                            <span>${event.dateOfEvent}</span>
+                                                            <span id="date">${event.dateOfEvent}</span>
                                                         </div>
                                                         <div class="news__meta-status">
                                                             <span><i class="flaticon-event"></i></span>

@@ -91,7 +91,7 @@ public class ClubDAO extends SQLDatabase {
             + "WHERE \n"
             + "    Event.organizerId = ?\n"
             + "    AND Event.dateOfEvent >= CAST(GETDATE() AS DATE)\n"
-            + "    AND Event.status = 'APPROVED'\n"
+            + "    AND Event.status = 'APPROVED' OR Event.status = 'ON_GOING' \n"
             + "ORDER BY Event.dateOfEvent DESC;";
 
     private static String SELECT_PENDING_EVENTS_BY_ORGANIZER_ID = "SELECT \n"

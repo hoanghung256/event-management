@@ -26,10 +26,12 @@ public class OnGoingEventController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("action");
         int eventId = Integer.parseInt(request.getParameter("eventId"));
+        EventDAO dao = new EventDAO();
         
         switch (action) {
-            case "access":
-                String eventName = new EventDAO().getEventNameById(eventId);
+            case "access":  // This action will start an event too
+                String eventName = dao.getEventNameById(eventId);
+                dao.changeEventStatus(eventId, EventStatus.ON_GOING);
                 
                 request.setAttribute("eventId", eventId);
                 request.setAttribute("eventName", eventName);
@@ -37,8 +39,6 @@ public class OnGoingEventController extends HttpServlet {
                 break;
             case "get-attend-count":
                 PrintWriter out = response.getWriter();
-                
-                EventDAO dao = new EventDAO();
                 int attendedCount = dao.getAttendedCount(eventId);
                 
                 out.print(
@@ -47,8 +47,7 @@ public class OnGoingEventController extends HttpServlet {
                         "}");
                 break;
             case "end":
-                EventDAO eventDao = new EventDAO();
-                eventDao.changeEventStatus(eventId, EventStatus.END);
+                dao.changeEventStatus(eventId, EventStatus.END);
                 request.getRequestDispatcher("dashboard").forward(request, response);
                 break;
             default:

@@ -48,7 +48,7 @@
                                                 <div class="review__author-meta mb-15">
                                                     <a href="<c:url value="/profile?role=organizer&id=${event.organizer.id}"/>">
                                                         <div class="review__author-thumb">
-                                                            <img src="<c:url value="${event.organizer.avatarPath}" />" alt="Organizer Avatar" onerror="this.onerror=null; this.src='assets/img/default-avatar.png';">
+                                                            <img class="rounded-circle" src="<c:url value="${event.organizer.avatarPath}" />" alt="Organizer Avatar" onerror="this.onerror=null; this.src='assets/img/default-avatar.png';">
                                                         </div>
                                                         <div class="review__author-name">
                                                             <h4>

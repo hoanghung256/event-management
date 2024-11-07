@@ -60,7 +60,6 @@ public class ProfileController extends HttpServlet {
                     if (student == null) {
                         response.sendRedirect("sign-in");
                     } else {
-                        request.getSession().setAttribute("userInfor", student);
                         request.setAttribute("student", student);
                         request.getRequestDispatcher("student-profile.jsp").forward(request, response);
                     }
@@ -84,7 +83,6 @@ public class ProfileController extends HttpServlet {
                     request.getRequestDispatcher("organizer-profile.jsp").forward(request, response);
                 }
                 break;
-
             case 3: // access self-profile
                 User user = (User) request.getSession().getAttribute("userInfor");
                 if (user == null) {

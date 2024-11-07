@@ -176,7 +176,7 @@ public class AdminDAO extends SQLDatabase {
             + "    Category ON Event.categoryId = Category.id\n"
             + "WHERE \n"
             + "    Event.dateOfEvent >= CAST(GETDATE() AS DATE)\n"
-            + "    AND Event.status = 'APPROVED'"
+            + "    AND Event.status = 'APPROVED' OR Event.status='ON_GOING' \n"
             + "ORDER BY Event.dateOfEvent ASC;";
 
     private static String SELECT_REGISTRATION_EVENTS_WITH_PAGING = "SELECT\n"
