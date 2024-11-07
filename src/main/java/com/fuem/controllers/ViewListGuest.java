@@ -33,10 +33,4 @@ public class ViewListGuest extends HttpServlet {
         // Chuyển tiếp request và response đến view JSP
         request.getRequestDispatcher("view-list-guest.jsp").forward(request, response);
     }
-
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        // Xử lý POST nếu cần thiết
-    }
 }

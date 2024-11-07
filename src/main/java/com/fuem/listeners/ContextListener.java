@@ -4,7 +4,6 @@
  */
 package com.fuem.listeners;
 
-import com.fuem.utils.DataSourceWrapper;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;

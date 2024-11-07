@@ -20,10 +20,10 @@ public class DataSourceWrapper {
     static {
         try {
             String driverClass = ConfigurationGetter.getProperty("db.driver");
-            System.out.println("driver " + driverClass);
+            System.out.println("driver: " + driverClass);
             Logger.getLogger(DataSourceWrapper.class.getName()).log(Level.CONFIG, driverClass);
             String connectionString = ConfigurationGetter.getConnectionString();
-            System.out.println("connectioStr " + connectionString);
+            System.out.println("connectionString: " + connectionString);
             Logger.getLogger(DataSourceWrapper.class.getName()).log(Level.CONFIG, connectionString);
             
             HikariConfig config = new HikariConfig();

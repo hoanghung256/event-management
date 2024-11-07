@@ -46,20 +46,20 @@
                                                 </div>
                                                 <div class="review__main-wrapper pt-25">
                                                     <div class="review__author-meta mb-15">
-                                                        <div class="review__author-thumb">
+<!--                                                        <div class="review__author-thumb">
                                                             <img src="assets/img/meta/01.png" alt="image not found">
-                                                        </div>
+                                                        </div>-->
                                                     </div>
                                                     <div class="review__tab">
 
                                                         <div class="tab-content" id="nav-tabContent">
                                                             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab" tabindex="0">
-                                                                <div class="about__event-thumb w-img mt-40">
+<!--                                                                <div class="about__event-thumb w-img mt-40">
                                                                     <img src="assets/img/event/event-details-2.jpg" alt="image not found">
-                                                                </div>
+                                                                </div>-->
                                                                 <div class="about__content mt-30">
                                                                     <h4>About This Event</h4>
-                                                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit dolor modi quos commodi quam facere, quas tempore eius ab neque tempora nihil culpa voluptatem nesciunt a amet deserunt asperiores ea consequuntur sequi consequatur. Alias, quis.</p>
+                                                                    <p>${event.description}</p>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -75,7 +75,7 @@
                                                     <ul>
                                                         <li>
                                                             <span> Date : </span>
-                                                            ${event.dateOfEvent}							
+                                                            <span id="date" class="fw-normal">${event.dateOfEvent}</span>
                                                         </li>
                                                         <li>
                                                             <span>Location :</span>
@@ -188,7 +188,7 @@
                                                                             <div class="news__meta">
                                                                                 <div class="news__meta-status">
                                                                                     <span><i class="flaticon-clock"></i></span>
-                                                                                    <span>${organizedEvent.dateOfEvent}</span>
+                                                                                    <span id="date">${organizedEvent.dateOfEvent}</span>
                                                                                 </div>
                                                                                 <div class="news__meta-status">
                                                                                     <span><i class="flaticon-placeholder-1"></i></span>

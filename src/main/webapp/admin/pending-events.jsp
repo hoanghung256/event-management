@@ -78,7 +78,7 @@
                                                         </td>
                                                         <td>
                                                             <div class="attendant__date">
-                                                                <span>${event.dateOfEvent}</span>
+                                                                <span id="date">${event.dateOfEvent}</span>
                                                             </div>
                                                         </td>
                                                         <td>

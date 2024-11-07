@@ -217,7 +217,14 @@
                         <div class="breadcrumb__menu">
                             <nav>
                                 <ul>
-                                    <li><span><a class="acolor" href="<c:url value='/home' />">Home</a></span></li>
+                                    <c:choose>
+                                        <c:when test="${sessionScope.userInfor.role == 'ADMIN'}">
+                                            <li><span><a class="acolor" href="<c:url value="/admin/dashboard" />">Dashboard</a></span></li>
+                                        </c:when>
+                                        <c:when test="${sessionScope.userInfor.role == 'CLUB'}">
+                                            <li><span><a class="acolor" href="<c:url value="/club/dashboard" />">Dashboard</a></span></li>
+                                        </c:when>
+                                    </c:choose>
                                     <li class="active"><span>Profile</span></li>
                                 </ul>
                             </nav>
@@ -230,7 +237,7 @@
             <div class="userInfor">
                 <div class="profile__main-wrapper mt-35">
                     <div class="profile__thumb">
-                            <img src="${pageContext.request.contextPath}${sessionScope.userInfor.avatarPath}" alt="Profile Image" class="avatar-img" id="avatar">
+                        <img src="<c:url value="${student.avatarPath}" />" alt="Profile Image" class="avatar-img" id="avatar">
                     </div>
                     <div class="profile__about-info" style="padding-top: 80px;">
                         <ul>
@@ -239,7 +246,7 @@
                                     <span>Full Name:</span>
                                 </div>
                                 <div class="profile__user-info" style="padding-left: 30px;">
-                                    <span>${sessionScope.userInfor.fullname}</span>
+                                    <span>${student.fullname}</span>
                                 </div>
                             </li>
                             <li class="profile__user-item">
@@ -247,7 +254,7 @@
                                     <span>Email:</span>
                                 </div>
                                 <div class="profile__user-info" style="padding-left: 30px;">
-                                    <span>${sessionScope.userInfor.email}</span>
+                                    <span>${student.email}</span>
                                 </div>
                             </li>
                             <div class="input-row mb-15" >
@@ -256,7 +263,7 @@
                                         <span>Student ID:</span>
                                     </div>
                                     <div class="profile__user-info">
-                                        <span>${sessionScope.userInfor.studentId}</span>
+                                        <span>${student.studentId}</span>
                                     </div>
                                 </li>
                                 <li class="profile__user-item single__input-field">
@@ -264,7 +271,7 @@
                                         <span>Gender:</span>
                                     </div>
                                     <div class="profile__user-info">
-                                        <span>${sessionScope.userInfor.gender}</span>
+                                        <span>${student.gender}</span>
                                     </div>
                                 </li>
                             </div>

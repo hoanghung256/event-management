@@ -155,7 +155,7 @@ public class NotificationDAO extends SQLDatabase {
                 sb.append(", ");
             }
         }
-        System.out.println(sb.toString());
+        
         return sb.toString();
     }
 

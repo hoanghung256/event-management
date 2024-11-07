@@ -1,7 +1,7 @@
 <%-- 
-    Document   : sign-in
+    Document   : sign-up
     Created on : Sep 28, 2024, 11:21:09 AM
-    Author     : ADMIN
+    Author     : KhiemHV
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -39,15 +39,14 @@
                 width: 100%; /* Chiều rộng 100% */
                 height: 100%; /* Chiều cao có thể tùy chỉnh */
             }
+            .row {
+                display: flex;
+                gap: 12px; /* Khoảng cách giữa Gender và Student ID */
+            }
 
         </style>
     </head>
     <body class="body-area">
-
-        <!--[if lte IE 9]>
-        <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="https://browsehappy.com/">upgrade your browser</a> to improve your experience and security.</p>
-        <![endif]-->
-
         <!-- Preloder start -->
         <div id="preloader">
             <div class="sk-three-bounce">
@@ -86,15 +85,20 @@
                                     <input type="text" placeholder="Full Name" name="fullname" required>
                                     <span><i class="flaticon-user-2"></i></span>
                                 </div>
-                                <label for="gender">Gender:</label>
-                                <select id="gender" name="gender" required>
-                                    <option value="MALE">Male</option>
-                                    <option value="FEMALE">Female</option>
-                                    <option value="OTHER">Other</option>
-                                </select>
-                                <div class="sign__input">
-                                    <input type="text" placeholder="Student ID" name="studentId" required>
-                                    <span><i class="flaticon-user-2"></i></span>
+                                <div class="row">
+
+                                    <div class="sign__input" style="width: 300px" >
+                                        <input type="text" placeholder="Student ID" name="studentId" required>
+                                        <span><i class="flaticon-user-2"></i></span>
+                                    </div>
+                                    <div class="contact__select" style="width: 150px">
+
+                                        <select id="gender" name="gender" required style="background: white!important;">
+                                            <option value="MALE">Male</option>
+                                            <option value="FEMALE">Female</option>
+                                            <option value="OTHER">Other</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="sign__input">
                                     <input type="email" placeholder="Email Address" name="email" value="${email}" required>
@@ -117,7 +121,7 @@
                                         <p class="text-info">${message}</p>
                                     </c:if>
                                     <button class="input__btn w-100 mb-20" type="submit">Sign up</button>
-                                   
+
                                     <g clip-path="url(#clip0_322_540)">
                                     <path d="M4.43242 12.0863L3.73625 14.6852L1.19176 14.739C0.431328 13.3286 0 11.7149 0 10C0 8.34179 0.403281 6.77804 1.11812 5.40112H1.11867L3.38398 5.81644L4.37633 8.06815C4.16863 8.67366 4.05543 9.32366 4.05543 10C4.05551 10.7341 4.18848 11.4374 4.43242 12.0863Z" fill="#FBBB00"/>
                                     <path d="M19.8252 8.13184C19.94 8.73676 19.9999 9.36148 19.9999 9.99996C19.9999 10.7159 19.9246 11.4143 19.7812 12.0879C19.2944 14.3802 18.0224 16.3818 16.2604 17.7983L16.2598 17.7978L13.4065 17.6522L13.0027 15.1313C14.1719 14.4456 15.0857 13.3725 15.567 12.0879H10.2197V8.13184H15.645H19.8252Z" fill="#518EF8"/>
@@ -130,7 +134,7 @@
                                     </clipPath>
                                     </defs>
                                     </svg>
-                                   
+
                                 </div>
                             </form>
                             <div class="if__account mt-90">
@@ -174,7 +178,4 @@
         <script src="assets/app/js/custom.js"></script>
         <script src="assets/app/js/main.js"></script>
     </body>
-
-    <!-- Mirrored from codeskdhaka.com/html/expovent-prev/expovent/signup.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 22 Sep 2024 08:45:00 GMT -->
 </html>
-

@@ -45,15 +45,15 @@
                                 <ul>
                                     <c:choose>
                                         <c:when test="${sessionScope.userInfor.role == 'STUDENT'}">
-                                            <li><span><a href="<c:url value="/home" />">Home</a></span></li>
-                                                    </c:when>
-                                                    <c:when test="${sessionScope.userInfor.role == 'ADMIN'}">
-                                            <li><span><a href="<c:url value="/admin/dashboard" />">Dashboard</a></span></li>
-                                                    </c:when>
-                                                    <c:when test="${sessionScope.userInfor.role == 'CLUB'}">
-                                            <li><span><a href="<c:url value="/club/dashboard" />">Dashboard</a></span></li>
-                                                    </c:when>
-                                                </c:choose>
+                                            <li><span><a class="acolor" href="<c:url value="/home" />">Home</a></span></li>
+                                        </c:when>
+                                        <c:when test="${sessionScope.userInfor.role == 'ADMIN'}">
+                                            <li><span><a class="acolor" href="<c:url value="/admin/dashboard" />">Dashboard</a></span></li>
+                                        </c:when>
+                                        <c:when test="${sessionScope.userInfor.role == 'CLUB'}">
+                                            <li><span><a class="acolor" href="<c:url value="/club/dashboard" />">Dashboard</a></span></li>
+                                        </c:when>
+                                    </c:choose>
                                     <li class="active"><span>Profile</span></li>
                                 </ul>
                             </nav>

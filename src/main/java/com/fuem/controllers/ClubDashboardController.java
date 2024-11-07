@@ -8,7 +8,6 @@ import com.fuem.models.Event;
 import com.fuem.models.Notification;
 import com.fuem.models.Organizer;
 import com.fuem.daos.ClubDAO;
-import com.fuem.daos.EventDAO;
 import com.fuem.daos.NotificationDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -25,7 +24,6 @@ import java.util.ArrayList;
  */
 @WebServlet(name = "ClubDashboardController", urlPatterns = {"/club/dashboard"})
 public class ClubDashboardController extends HttpServlet {
-    
     
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)

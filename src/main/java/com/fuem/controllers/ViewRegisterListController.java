@@ -37,15 +37,9 @@ public class ViewRegisterListController extends HttpServlet {
 
         // Đặt danh sách khách vào request để JSP có thể truy cập
         request.setAttribute("registeredGuestsList", registeredGuestsList);
-        System.out.println(registeredGuestsList);
         request.setAttribute("pageNumber", pageNumber);  // Truyền số trang hiện tại cho JSP
 
         // Chuyển hướng đến trang JSP để hiển thị danh sách
         request.getRequestDispatcher("view-register-list.jsp").forward(request, response);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("Go dopost");
     }
 }

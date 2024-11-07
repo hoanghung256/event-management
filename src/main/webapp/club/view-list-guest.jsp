@@ -14,7 +14,7 @@
                             <nav>
                                 <ul>
                                     <li><span><a href="<c:url value='/club/dashboard'/>">Dashboard</a></span></li>
-                                    <li class="active"><span>View list guest</span></li>
+                                    <li class="active"><span>Register Guests</span></li>
                                 </ul>
                             </nav>
                         </div>
@@ -30,7 +30,7 @@
                             <i class="flaticon-ticket-1"></i>
                         </div>
                         <div class="card__header-title">
-                            <h4>Registered Event List</h4>
+                            <h4>Register Guests</h4>
                         </div>
                     </div>
                 </div>

@@ -1,15 +1,35 @@
 <%@include file="../include/club-layout-header.jsp"%>
 <style>
+    .banner__area-1 {
+        position: relative;
+    }
+    
+    /* Add a semi-transparent overlay */
+    .banner-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.3); /* Adjust opacity as needed */
+        z-index: 1;
+    }
+    
+    .banner__shape {
+        position: relative;
+        z-index: 2;
+    }
+    
     .nameevent{
-        color:#859F3D;
+        color:#FFFFFF;
         font-weight: 700;
     }
 </style>
 <section class="banner__area-1 banner__height-1" 
          style="background-image: url('https://scontent.fdad3-1.fna.fbcdn.net/v/t39.30808-6/462239137_935906218568371_4177881500911241990_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeEvtvAWppLsnTnJkPckJUQ6y2YgaG-MpYfLZiBob4ylh0mcV3cHC-TLTn9zGgzWyYBtfnJDuiMLXJbOIgfOAlay&_nc_ohc=CPkNzqH8TMkQ7kNvgGqZh7F&_nc_zt=23&_nc_ht=scontent.fdad3-1.fna&_nc_gid=AWXw2OgxFzQEFM3LSGCI_YS&oh=00_AYBl9Qh4HjCd5E98bX9ci30ZzQyLl93Acz0RXlPDREKzYQ&oe=672E74D2'); background-size: cover; background-position: center;">
+    <div class="banner-overlay"></div>
+    
     <div class="banner__shape">
-       
-
         <div class="container text-center">
             <h2 class="nameevent">${eventName}</h2>
             <div id="attend-info" class="py-4">

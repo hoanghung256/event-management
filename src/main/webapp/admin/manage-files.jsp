@@ -8,7 +8,7 @@
 
 <style>
     .popup__overlay {
-        display: none; /* ?n popup m?c ??nh */
+        display: none; 
         position: fixed;
         top: 0;
         left: 0;
@@ -20,7 +20,6 @@
         z-index: 9999;
     }
 
-    /* Popup content: khung chính c?a popup */
     .popup__content {
         background-color: white;
         padding: 20px;
@@ -31,6 +30,32 @@
         animation: popupFadeIn 0.3s ease;
 
     }
+    .popup__button-group {
+    display: flex;
+    gap: 15px; 
+    justify-content: center; 
+}
+
+.element__btn {
+    padding: 10px 20px; 
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    min-width: 120px; 
+}
+.element__btn:hover {
+    transform: scale(1.05); 
+    opacity: 0.9; 
+}
+.element__btn:active {
+    transform: scale(0.95);
+    opacity: 0.8;
+}
+
 </style>
 
 <section>
