@@ -119,10 +119,10 @@
                     <div class="sign__center-wrapper text-center mt-90">
                         <div class="sign__title-wrapper mb-40">
                             <h3 class="sign__title">
-    <span class="flip-letter">F</span>
-    <span class="flip-letter">P</span>
-    <span class="flip-letter">T</span> EVENT MANAGEMENT
-</h3>
+                                <span class="flip-letter">F</span>
+                                <span class="flip-letter">P</span>
+                                <span class="flip-letter">T</span> EVENT MANAGEMENT
+                            </h3>
 
                             <p>Experience to success.</p>
                         </div>

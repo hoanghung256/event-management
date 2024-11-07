@@ -52,7 +52,7 @@
     opacity: 0.9; 
 }
 .element__btn:active {
-    transform: scale(0.95); /* Nút thu nh? nh? khi nh?n */
+    transform: scale(0.95);
     opacity: 0.8;
 }
 
