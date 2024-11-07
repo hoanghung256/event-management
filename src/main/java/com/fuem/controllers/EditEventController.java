@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@WebServlet(name = "EditEventController", urlPatterns = {"/club/edit-event"})
+@WebServlet(name = "EditEventController", urlPatterns = {"/admin/edit-event", "/club/edit-event"})
 @MultipartConfig // Cho phép servlet xử lý file upload
 public class EditEventController extends HttpServlet {
 
@@ -42,12 +42,10 @@ public class EditEventController extends HttpServlet {
 
             List<Category> cates = eventDAO.getAllCategory();
             List<Location> locations = eventDAO.getAllLocations();
-            List<String> eventImageList = eventDAO.getEventImages(Integer.parseInt(eventId));
 
             request.setAttribute("categories", cates);
             request.setAttribute("locations", locations);
             request.setAttribute("event", event);
-            request.setAttribute("eventImageList", eventImageList);
             request.getRequestDispatcher("edit-event.jsp").forward(request, response);
         } else {
             response.sendRedirect("error.jsp");

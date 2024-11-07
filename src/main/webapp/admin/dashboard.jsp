@@ -290,6 +290,9 @@
                                                                     </svg>
                                                                 </button>
                                                                 <div class="dropdown-list">
+                                                                    <c:if test="${sessionScope.userInfor.id == event.organizer.id}">
+                                                                        <a class="dropdown__item" href="<c:url value="/admin/edit-event?eventId=${event.id}" />">Edit</a>
+                                                                    </c:if>
                                                                     <a class="dropdown__item" href="<c:url value="" />">Detail</a>
                                                                     <a class="dropdown__item" href="<c:url value='/admin/view-list-guest?eventId=${event.id}'/>">Register Guest</a>
                                                                 </div>

@@ -1,8 +1,9 @@
 <%-- 
-    Document   : edit-event-club
-    Created on : Oct 20, 2024, 3:00:56 PM
-    Author     : ADMIN
+    Document   : edit-event-admin
+    Created on : Nov 7, 2024, 1:14:30 PM
+    Author     : HungHV
 --%>
+
 <style>
     .event__update-thumb {
         display: inline-block; /* Giúp các ?nh n?m c?nh nhau mà không tràn ra */
@@ -72,9 +73,7 @@
     }
 </style>
 
-<!DOCTYPE html>
-<%@include file="../include/club-layout-header.jsp"%>
-
+<%@include file="../include/admin-layout-header.jsp"%>
 
 <section>
     <div class="app__slide-wrapper">
@@ -97,7 +96,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-xxl-12">
                 <div class="create__event-area">
@@ -253,18 +252,18 @@
 
     fileInput.onchange = function () {
         previewWrapper.innerHTML = "";
-        
+
         for (let i = 0; i < fileInput.files.length; i++) {
             let divWrapper = document.createElement("div");
             divWrapper.className = "event__update-thumb";
             let previewImage = document.createElement("img");
             previewImage.src = URL.createObjectURL(fileInput.files[i]);
-            
+
             divWrapper.append(previewImage);
             previewWrapper.append(divWrapper);
         }
     };
-     function removeImage(button) {
+    function removeImage(button) {
         const imageThumb = button.closest('.event__update-thumb');
         imageThumb.remove(); // Xóa ?nh
     }
@@ -272,3 +271,4 @@
 
 
 <%@include file="../include/master-footer.jsp"%>
+

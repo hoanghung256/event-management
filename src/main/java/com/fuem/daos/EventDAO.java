@@ -51,6 +51,7 @@ public class EventDAO extends SQLDatabase {
             + "e.collaboratorRegisterLimit, "
             + "e.collaboratorRegisterDeadline, "
             + "e.collaboratorRegisterCount, "
+            + "e.avatarPath AS eventAvatarPath, "
             + "o.avatarPath AS organizerAvatarPath "
             + "FROM [Event] e "
             + "JOIN [Organizer] o ON e.organizerId = o.id "
@@ -526,7 +527,10 @@ public class EventDAO extends SQLDatabase {
                 event.setCollaboratorRegisterLimit(rs.getInt("collaboratorRegisterLimit"));
                 event.setCollaboratorRegisterDeadline(rs.getDate("collaboratorRegisterDeadline").toLocalDate());
                 event.setCollaboratorRegisterCount(rs.getInt("collaboratorRegisterCount"));
-                event.setImages(getEventImages(eventId));
+                List<String> images = new ArrayList<>();
+                images.add(rs.getNString("eventAvatarPath"));
+                images.addAll(getEventImages(eventId));
+                event.setImages(images);
             }
         } catch (SQLException e) {
             logger.log(Level.SEVERE, null, e);
