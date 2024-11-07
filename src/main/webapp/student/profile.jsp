@@ -202,13 +202,14 @@
                     <div class="profile__thumb">
                         <form style="padding-top: 170px;" action="<c:url value='/student/profile' />" method="POST" enctype="multipart/form-data">
                             <input type="file" name="avatar" accept="image/*" id="avatarInput" style="display: none;" onchange="this.form.submit()"> 
-                            <c:url value="/assets/img/user/default-avatar.jpg" var="defaultAvatar" />
-                            <img src="${pageContext.request.contextPath}${sessionScope.userInfor.avatarPath != null ? sessionScope.userInfor.avatarPath : defaultAvatar}" alt="Profile Image" class="avatar-img" id="avatar">
+                            <img src="<c:url value="${sessionScope.userInfor.avatarPath}" />" alt="Profile Image" class="avatar-img" id="avatar">
                             <button type="button" class="avatar-edit-btn" onclick="document.getElementById('avatarInput').click();">
                                 <span>Edit</span>
                             </button></form>
                     </div>
                     <div class="profile__about-info" style="padding-top: 80px;">
+                        <p class="text-danger">${error}</p>
+                        <p class="text-success">${success}</p>
                         <ul>
                             <li class="profile__user-item">
                                 <div class="profile__user-tiitle">
@@ -272,7 +273,7 @@
                     <div class="form-group">
                         <input type="password" name="confirmPassword" placeholder="Confirm Password" required>
                     </div>
-                    
+
                     <hr style="border-top: 1px solid black;"/>
 
                     <div class="d-flex align-items-center justify-content-around">

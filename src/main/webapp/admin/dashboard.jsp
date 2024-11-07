@@ -290,6 +290,9 @@
                                                                     </svg>
                                                                 </button>
                                                                 <div class="dropdown-list">
+                                                                    <c:if test="${sessionScope.userInfor.id == event.organizer.id}">
+                                                                        <a class="dropdown__item" href="<c:url value="/admin/edit-event?eventId=${event.id}" />">Edit</a>
+                                                                    </c:if>
                                                                     <a class="dropdown__item" href="<c:url value="" />">Detail</a>
                                                                     <a class="dropdown__item" href="<c:url value='/admin/view-list-guest?eventId=${event.id}'/>">Register Guest</a>
                                                                 </div>
@@ -425,7 +428,7 @@
                                                         </div>
                                                         <div class="news__meta-status">
                                                             <span><i class="flaticon-clock"></i></span>
-                                                            <span>${event.dateOfEvent}</span>
+                                                            <span id="date">${event.dateOfEvent}</span>
                                                         </div>
                                                         <div class="news__meta-status">
                                                             <span><i class="flaticon-placeholder-1"></i></span>
