@@ -428,7 +428,7 @@
                                                         </div>
                                                         <div class="news__meta-status">
                                                             <span><i class="flaticon-clock"></i></span>
-                                                            <span>${event.dateOfEvent}</span>
+                                                            <span id="date">${event.dateOfEvent}</span>
                                                         </div>
                                                         <div class="news__meta-status">
                                                             <span><i class="flaticon-placeholder-1"></i></span>

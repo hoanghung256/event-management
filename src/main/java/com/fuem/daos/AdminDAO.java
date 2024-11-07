@@ -149,7 +149,7 @@ public class AdminDAO extends SQLDatabase {
             + "WHERE\n"
             + "     Event.status='END' \n"
             + "ORDER BY\n"
-            + "     Event.dateOfEvent DESC\n"
+            + "     Event.dateOfEvent ASC, Event.startTime ASC\n"
             + "OFFSET ? ROWS\n"
             + "FETCH NEXT ? ROWS ONLY";
 
@@ -177,7 +177,7 @@ public class AdminDAO extends SQLDatabase {
             + "WHERE \n"
             + "    Event.dateOfEvent >= CAST(GETDATE() AS DATE)\n"
             + "    AND Event.status = 'APPROVED' OR Event.status='ON_GOING' \n"
-            + "ORDER BY Event.dateOfEvent ASC;";
+            + "ORDER BY Event.dateOfEvent ASC, Event.startTime ASC;";
 
     private static String SELECT_REGISTRATION_EVENTS_WITH_PAGING = "SELECT\n"
             + "    Event.id AS EventId, \n"
