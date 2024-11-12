@@ -39,113 +39,83 @@ public class HomePageController extends HttpServlet {
         request.setAttribute("cateList", cateList);
         List<Organizer> organizerList = eventDAO.getAllOrganizer();
         request.setAttribute("organizerList", organizerList);
-        
+
         List<Event> todayEvents = eventDAO.getTodayEvent();
         request.setAttribute("todayEvents", todayEvents);
-        
+
+        String pageNumberStr = request.getParameter("page");
+        SearchEventCriteria searchEventCriteria = new SearchEventCriteria();
+        PagingCriteria pagingCriteria = new PagingCriteria();
+
+        Integer pageNumber = null;
+        if (pageNumberStr == null) {
+            pageNumber = 0;
+        } else {
+            pageNumber = Integer.valueOf(pageNumberStr);
+        }
+
+        pagingCriteria = new PagingCriteria(
+                pageNumber,
+                10
+        );
+        String isFind = (String) request.getParameter("isFind");
+        if ("true".equals(isFind)) {
+            handleSearch(request, response, pagingCriteria);
+            return;
+        }
+
+        Student user = (Student) request.getSession().getAttribute("userInfor");
+        Page<Object[]> result = null;
+        if (user == null) {
+            result = eventDAO.getForGuest(pagingCriteria, searchEventCriteria);
+        } else {
+            List<Notification> notiList = notiDAO.getNotificationsForUser(user.getId());
+            request.setAttribute("notiList", notiList);
+            result = eventDAO.get(pagingCriteria, user.getId());
+        }
+        request.setAttribute("page", result);
+        request.getRequestDispatcher("homepage.jsp").forward(request, response);
+    }
+
+    private void handleSearch(HttpServletRequest request, HttpServletResponse response, PagingCriteria pagingCriteria) throws ServletException, IOException {
         String name = request.getParameter("name");
         String categoryId = request.getParameter("categoryId");
         String organizerId = request.getParameter("organizerId");
         String fromDate = request.getParameter("from");
         String toDate = request.getParameter("to");
         String orderBy = request.getParameter("orderBy");
-        String pageNumberStr = request.getParameter("page");
 
-        Student user = (Student) request.getSession().getAttribute("userInfor");
-        if (user == null) {
-            //paging and filter
-            SearchEventCriteria searchEventCriteria = new SearchEventCriteria();
-            PagingCriteria pagingCriteria = new PagingCriteria();
+        EventDAO eventDAO = new EventDAO();
 
-            Integer pageNumber = null;
-            if (pageNumberStr == null) {
-                pageNumber = 0;
-            } else {
-                pageNumber = Integer.valueOf(pageNumberStr);
+        SearchEventCriteria searchEventCriteria = new SearchEventCriteria();
+
+        boolean isFind = false;
+        if (name != null || categoryId != null || organizerId != null || fromDate != null || toDate != null) {
+            if (!name.isBlank()) {
+                searchEventCriteria.setName(name);
             }
-
-            pagingCriteria = new PagingCriteria(
-                    pageNumber,
-                    10
-            );
-
-            // Set attribute for SearchEventCriteria
-            if (name != null || categoryId != null || organizerId != null || fromDate != null || toDate != null) {
-                if (!name.isBlank()) {
-                    searchEventCriteria.setName(name);
-                }
-                if (!categoryId.isBlank()) {
-                    searchEventCriteria.setCategoryId(Integer.valueOf(categoryId));
-                }
-                if (!organizerId.isBlank()) {
-                    searchEventCriteria.setOrganizerId(Integer.valueOf(organizerId));
-                }
-                if (!fromDate.isBlank()) {
-                    searchEventCriteria.setFrom(LocalDate.parse(fromDate));
-                }
-                if (!toDate.isBlank()) {
-                    searchEventCriteria.setTo(LocalDate.parse(toDate));
-                }
-                if (orderBy != null) {
-                    searchEventCriteria.setOrderBy(EventOrderBy.valueOf(orderBy));
-                }
-
-                request.setAttribute("previousSearchEventCriteria", searchEventCriteria);
-
+            if (!categoryId.isBlank()) {
+                searchEventCriteria.setCategoryId(Integer.valueOf(categoryId));
             }
-            Page<Object[]> result = eventDAO.getForGuest(pagingCriteria, searchEventCriteria);
+            if (!organizerId.isBlank()) {
+                searchEventCriteria.setOrganizerId(Integer.valueOf(organizerId));
+            }
+            if (!fromDate.isBlank()) {
+                searchEventCriteria.setFrom(LocalDate.parse(fromDate));
+            }
+            if (!toDate.isBlank()) {
+                searchEventCriteria.setTo(LocalDate.parse(toDate));
+            }
+            if (orderBy != null) {
+                searchEventCriteria.setOrderBy(EventOrderBy.valueOf(orderBy));
+            }
+            isFind = true;
+            request.setAttribute("previousSearchEventCriteria", searchEventCriteria);
+        }
+        if (isFind) {
+            Page<Object[]> result = eventDAO.getSearchEvent(pagingCriteria, searchEventCriteria);
             request.setAttribute("page", result);
-            request.getRequestDispatcher("homepage.jsp").forward(request, response);
-        } else {
-            List<Notification> notiList = notiDAO.getNotificationsForUser(user.getId());
-            request.setAttribute("notiList", notiList);
-
-            //paging and filter
-            SearchEventCriteria searchEventCriteria = new SearchEventCriteria();
-            PagingCriteria pagingCriteria = new PagingCriteria();
-
-            Integer pageNumber = null;
-            if (pageNumberStr == null) {
-                pageNumber = 0;
-            } else {
-                pageNumber = Integer.valueOf(pageNumberStr);
-            }
-
-            pagingCriteria = new PagingCriteria(
-                    pageNumber,
-                    10
-            );
-
-            // Set attribute for SearchEventCriteria
-            if (name != null || categoryId != null || organizerId != null || fromDate != null || toDate != null) {
-                if (!name.isBlank()) {
-                    searchEventCriteria.setName(name);
-                }
-                if (!categoryId.isBlank()) {
-                    searchEventCriteria.setCategoryId(Integer.valueOf(categoryId));
-                }
-                if (!organizerId.isBlank()) {
-                    searchEventCriteria.setOrganizerId(Integer.valueOf(organizerId));
-                }
-                if (!fromDate.isBlank()) {
-                    searchEventCriteria.setFrom(LocalDate.parse(fromDate));
-                }
-                if (!toDate.isBlank()) {
-                    searchEventCriteria.setTo(LocalDate.parse(toDate));
-                }
-                if (orderBy != null) {
-                    searchEventCriteria.setOrderBy(EventOrderBy.valueOf(orderBy));
-                }
-
-                request.setAttribute("previousSearchEventCriteria", searchEventCriteria);
-
-            }
-            Page<Object[]> result = eventDAO.get(
-                    pagingCriteria,
-                    searchEventCriteria,
-                    user.getId()
-            );
-            request.setAttribute("page", result);
+            request.setAttribute("isSearch", true);
             request.getRequestDispatcher("homepage.jsp").forward(request, response);
         }
     }
