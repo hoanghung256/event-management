@@ -92,11 +92,6 @@
                                                 <input type="hidden" name="action" value="follow">
                                                 <button type="submit" class="btn btn-primary">Follow</button>
                                             </c:when>
-
-                                            <c:when test="${isFollowing == null}">
-                                                <input type="hidden" name="action" value="invalid">
-                                                <button type="submit" class="btn btn-primary">Follow</button>
-                                            </c:when>
                                         </c:choose>
                                     </form>
                                 </div>

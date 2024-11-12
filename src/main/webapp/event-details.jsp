@@ -172,7 +172,7 @@
                                                     <c:if test="${event.collaboratorRegisterLimit > 0}">
                                                         <li>
                                                             <span>Collaborator Register Deadline: </span>
-                                                            ${event.collaboratorRegisterDeadline}
+                                                            <i id="date">${event.collaboratorRegisterDeadline}</i>
                                                         </li>
                                                         <li>
                                                             <span>Collaborator Registered: </span>
@@ -185,32 +185,40 @@
                                                         <div class="ticket__price-item">
                                                             <form action="<c:url value="/event-detail" />" method="POST">
                                                                 <c:if test="${event.collaboratorRegisterLimit > 0}">
+                                                                    <c:if test="${ loginDate le event.collaboratorRegisterDeadline }">
                                                                     <c:if test="${isCollabRegis == true and isGuestRegis == false}">
                                                                         <input type="hidden" name="action" value="cancelAsCollaborator">
                                                                         <input type="hidden" name="eventId" value="${event.id}">
                                                                         <button style="height: 45px; padding: 0 10px;" class="element__btn red-bg" type="submit">Cancel Collaborator</button>
                                                                     </c:if>
                                                                     <c:if test="${isCollabRegis == false and isGuestRegis == false}">
+                                                                        <c:if test="${event.collaboratorRegisterCount < event.collaboratorRegisterLimit}">
                                                                         <input type="hidden" name="action" value="registerAsCollaborator">
                                                                         <input type="hidden" name="eventId" value="${event.id}">
                                                                         <button style="height: 45px; padding: 0 10px;" class="element__btn border-yellow" type="submit">Collaborator Register</button>
+                                                                        </c:if>
                                                                     </c:if>
+                                                                        </c:if>
                                                                 </c:if>
                                                             </form>
                                                         </div>
                                                         <div class="ticket__price-item">
                                                             <form action="<c:url value="/event-detail" />" method="POST">
                                                                 <c:if test="${event.guestRegisterLimit > 0}">
+                                                                    <c:if test="${loginDate le event.guestRegisterDeadline}">
                                                                     <c:if test="${isGuestRegis == true and isCollabRegis == false}">
                                                                         <input type="hidden" name="action" value="cancelAsGuest">
                                                                         <input type="hidden" name="eventId" value="${event.id}">
                                                                         <button style="height: 45px; padding: 0 10px;" class="element__btn red-bg" type="submit">Cancel Guest Register</button>
                                                                     </c:if>
                                                                     <c:if test="${isGuestRegis == false and isCollabRegis == false}">
+                                                                        <c:if test="${event.guestRegisterCount < event.guestRegisterLimit}">
                                                                         <input type="hidden" name="action" value="registerAsGuest">
                                                                         <input type="hidden" name="eventId" value="${event.id}">
                                                                         <button style="height: 45px; padding: 0 10px;" class="element__btn border-yellow" type="submit">Guest Register</button>
                                                                     </c:if>
+                                                                    </c:if>
+                                                                        </c:if>
                                                                 </c:if>
                                                             </form>
                                                         </div>
