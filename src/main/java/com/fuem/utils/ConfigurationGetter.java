@@ -4,7 +4,6 @@
  */
 package com.fuem.utils;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -45,6 +44,6 @@ public class ConfigurationGetter {
         String username = getProperty("db.username");
         String password = getProperty("db.password");
 
-        return "jdbc:sqlserver://" + server + ":1433;database=" + databaseName + ";encrypt=true;trustServerCertificate=true;loginTimeout=30;user=" + username + ";password=" + password;
+        return "jdbc:sqlserver://" + server + ":1433;database=" + databaseName +";user=" + username + "@hoanghungserver;password=" + password + ";encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
     }
 }
