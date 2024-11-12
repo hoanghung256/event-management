@@ -191,7 +191,7 @@
                         <div class="col-md-2 input">
                             <label for="organizerId" class="form-label">Organizer</label>
                             <select id="organizerId" name="organizerId" class="form-select">
-                                <option value=""selected>Select Organizer</option>
+                                <option value="" selected>Select Organizer</option>
                                 <c:forEach var="organizer" items="${organizerList}">
                                     <option value="${organizer.id}" ${previousSearchEventCriteria != null && previousSearchEventCriteria.organizerId == organizer.id ? 'selected' : ''}>
                                         ${organizer.fullname}
@@ -209,6 +209,7 @@
                             <label for="to" class="form-label">To</label>
                             <input type="date" id="to" name="to" value="${previousSearchEventCriteria.to}" class="form-control">
                         </div>
+                        <input name="isFind" value="true" hidden/>
 
                         <!-- Submit button -->
                         <div class="col-md-1 input d-flex justify-content-center align-items-end">
@@ -360,8 +361,9 @@
             </div>
             <div class="" id="myTabContent">
                 <div class="list-title ml-30 mb-30 mt-30">
-                    <h4>Up coming events</h4>
-
+                    <c:if test="${isSearch == false}">
+                        <h4>Up coming events</h4>
+                    </c:if>
                 </div>
                 <div class="" id="day-tab-1-pane" role="tabpanel" aria-labelledby="day-tab-1" tabindex="0">
                     <!-- Event item - Start -->
@@ -396,7 +398,7 @@
                                     font-size: 24px;">
                                     ${event.fullname}
                                 </h3>
-                                    <p><strong>Organizer: </strong><span><a class="acolor" href="<c:url value="/profile?role=organizer&id=${event.organizer.id}" />">${event.organizer.fullname}</a></span></p>
+                                <p><strong>Organizer: </strong><span><a class="acolor" href="<c:url value="/profile?role=organizer&id=${event.organizer.id}" />">${event.organizer.fullname}</a></span></p>
                                 <p><strong>Register Deadline: </strong><span id="date">${event.guestRegisterDeadline}</span></p>
                                 <p class="description-text truncated-text">
                                     ${event.description}
