@@ -69,31 +69,17 @@
     <body>
 
         <div class="container">
-            <% 
-                String approvalStatus = request.getParameter("status"); // get status from request
-                boolean isApproved = "approved".equalsIgnoreCase(approvalStatus);
-            %>
-            <div class="header <%= isApproved ? "approved" : "rejected" %>">
-                <h1><%= isApproved ? "Event Approval !" : "Event Rejected !" %></h1>
-            </div>
-
             <div class="content">
                 <h2>Kính gửi [ClubName],</h2>
-                <% if (isApproved) { %>
-                    <p>Chúng tôi rất vui mừng thông báo rằng yêu cầu đăng ký sự kiện <strong>[EventName]</strong> của câu lạc bộ đã được <strong style="color: green;">chấp thuận</strong>!</p>
+                    <p>Chúng tôi rất vui mừng thông báo rằng yêu cầu đăng ký sự kiện <strong>[EventName]</strong> của câu lạc bộ đã được xem xét!</p>
 
                     <p><strong>Thông tin sự kiện:</strong></p>
                     <ul>
+                        <li><strong>Kết quả phê duyệt: </strong> <i>[Result]</i></li>
                         <li><strong>Ngày:</strong> [Date]</li>
                         <li><strong>Thời gian:</strong> [StartTime] - [EndTime]</li>
                         <li><strong>Địa điểm:</strong> [Location]</li>
                     </ul>
-
-                    <p>Hãy đảm bảo mọi công tác chuẩn bị cho sự kiện sẵn sàng và liên hệ với ban quản trị nếu cần thêm hỗ trợ.</p>
-                <% } else { %>
-                    <p>Chúng tôi rất tiếc thông báo rằng yêu cầu đăng ký sự kiện <strong>[EventName]</strong> của câu lạc bộ đã bị <strong style="color: red;">từ chối</strong>.</p>
-                    <p>Vui lòng kiểm tra lại yêu cầu của bạn hoặc liên hệ với ban quản trị để biết thêm chi tiết và hỗ trợ.</p>
-                <% } %>
             </div>
 
             <div class="footer">

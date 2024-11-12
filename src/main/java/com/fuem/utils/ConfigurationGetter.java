@@ -38,22 +38,13 @@ public class ConfigurationGetter {
         }
         return properties.getProperty(key);
     }
-    
+
     public static String getConnectionString() {
         String server = getProperty("db.server");
         String databaseName = getProperty("db.database");
         String username = getProperty("db.username");
         String password = getProperty("db.password");
-        
-        // production environment connection string
-//       String url = "jdbc:sqlserver://hoanghungserver.database.windows.net:1433;database=EventManagement;user=hoanghung@hoanghungserver;password=" + password + ";encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
-        
-        // Development environment connection string
-          String url = "jdbc:sqlserver://" + server +":1433;database=" + databaseName + ";encrypt=true;trustServerCertificate=true;loginTimeout=30;user=" + username + ";password=" + password;
-        return url;
-    }
-    
-    public static String getWebAppPrepath(HttpServletRequest request) {
-        return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+
+        return "jdbc:sqlserver://" + server + ":1433;database=" + databaseName + ";encrypt=true;trustServerCertificate=true;loginTimeout=30;user=" + username + ";password=" + password;
     }
 }

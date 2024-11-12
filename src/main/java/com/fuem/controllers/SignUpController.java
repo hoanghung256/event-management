@@ -108,7 +108,7 @@ public class SignUpController extends HttpServlet {
         new Thread(
                 () -> {
                     try {
-                        Gmail.sendWithOTP(email, otp, request);
+                        Gmail.sendWithOTP(email, otp);
                     } catch (MalformedURLException ex) {
                         Logger.getLogger(ForgetPasswordController.class.getName()).log(Level.SEVERE, null, ex);
                     }

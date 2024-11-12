@@ -85,7 +85,7 @@ public class EventDetailsController extends HttpServlet {
                                     EventDAO eventDao = new EventDAO();
                                     Event e = eventDao.getEventById(eventId);
                                     try {
-                                        Gmail.collaboratorRegisterEventSuccess(student.getEmail(), student.getFullname(), e, request);
+                                        Gmail.collaboratorRegisterEventSuccess(student.getEmail(), student.getFullname(), e);
                                     } catch (MalformedURLException ex) {
                                         Logger.getLogger(EventDetailsController.class.getName()).log(Level.SEVERE, null, ex);
                                     }
@@ -105,7 +105,7 @@ public class EventDetailsController extends HttpServlet {
                                     EventDAO eventDao = new EventDAO();
                                     Event e = eventDao.getEventById(eventId);
                                     try {
-                                        Gmail.cancelCollaboratorRegisterEventSuccess(student.getEmail(), student.getFullname(), e, request);
+                                        Gmail.cancelCollaboratorRegisterEventSuccess(student.getEmail(), student.getFullname(), e);
                                     } catch (MalformedURLException ex) {
                                         Logger.getLogger(EventDetailsController.class.getName()).log(Level.SEVERE, null, ex);
                                     }
@@ -125,7 +125,7 @@ public class EventDetailsController extends HttpServlet {
                                     EventDAO eventDao = new EventDAO();
                                     Event e = eventDao.getEventById(eventId);
                                     try {
-                                        Gmail.guestregisterEventSuccess(student.getEmail(), student.getFullname(), e, request);
+                                        Gmail.guestregisterEventSuccess(student.getEmail(), student.getFullname(), e);
                                     } catch (MalformedURLException ex) {
                                         Logger.getLogger(EventDetailsController.class.getName()).log(Level.SEVERE, null, ex);
                                     }
@@ -145,7 +145,7 @@ public class EventDetailsController extends HttpServlet {
                                     EventDAO eventDao = new EventDAO();
                                     Event e = eventDao.getEventById(eventId);
                                     try {
-                                        Gmail.cancelGuestRegisterEventSuccess(student.getEmail(), student.getFullname(), e, request);
+                                        Gmail.cancelGuestRegisterEventSuccess(student.getEmail(), student.getFullname(), e);
                                     } catch (MalformedURLException ex) {
                                         Logger.getLogger(EventDetailsController.class.getName()).log(Level.SEVERE, null, ex);
                                     }
