@@ -270,10 +270,6 @@ public class StudentDAO extends SQLDatabase {
     /**
      * @author; TrinhHuy
      */
-    /**
-     *
-     * @author HungHV
-     */
     public Student getStudentById(int id) {
         Student s = null;
 
