@@ -104,7 +104,24 @@ public class EventDAO extends SQLDatabase {
             + "JOIN Organizer o ON e.organizerId = o.id "
             + "JOIN Category c ON e.categoryId = c.id "
             + "JOIN Location l ON e.locationId = l.id "
-            + "LEFT JOIN Follow f ON e.organizerId = f.organizerId AND f.studentId = ? ";
+            + "LEFT JOIN Follow f ON e.organizerId = f.organizerId AND f.studentId = ? "
+            + "WHERE e.dateOfEvent > CAST(GETDATE() AS DATE) AND e.status='APPROVED' "
+            + "ORDER BY f.organizerId DESC "
+            + "OFFSET ? ROWS\n"
+            + "FETCH NEXT ? ROWS ONLY";
+    
+    private static final String SELECT_SEARCH_EVENTS = "SELECT e.*, "
+            + "COUNT(*) OVER() AS 'TotalRow', "
+            + "o.fullname AS organizerName, o.id AS organizerId, "
+            + "c.id AS categoryId, c.categoryName, c.categoryDescription, "
+            + "l.id AS locationId, l.locationName, "
+            + "o.id AS organizerId "
+            + "FROM Event e "
+            + "JOIN Organizer o ON e.organizerId = o.id "
+            + "JOIN Category c ON e.categoryId = c.id "
+            + "JOIN Location l ON e.locationId = l.id "
+            + "WHERE e.status = 'APPROVE' OR e.status = 'END' ";
+    
     private static final String SELECT_ALL_CATEGORY = "SELECT * FROM [Category]";
     private static final String SELECT_STATISTIC_NUMBER_OF_EVENT = "SELECT	"
             + " guestRegisterCount AS TotalRegister,\n"
@@ -167,7 +184,7 @@ public class EventDAO extends SQLDatabase {
             + "JOIN Location l ON e.locationId = l.id "
             + "WHERE e.status = 'APPROVED' "
             + "AND e.dateOfEvent = CAST(GETDATE() AS DATE)";
-    private static final String SELECT_EVENTS_FOR_GUEST = "SELECT \n"
+    private static final String SELECT_UPCOMING_EVENTS_FOR_GUEST = "SELECT \n"
             + "    e.*, \n"
             + "    COUNT(*) OVER() AS TotalRow, \n"
             + "    o.fullname AS organizerName, \n"
@@ -184,7 +201,11 @@ public class EventDAO extends SQLDatabase {
             + "JOIN \n"
             + "    Category c ON e.categoryId = c.id \n"
             + "JOIN \n"
-            + "    Location l ON e.locationId = l.id";
+            + "    Location l ON e.locationId = l.id "
+            + "WHERE e.dateOfEvent > CAST(GETDATE() AS DATE) AND e.status='APPROVED' "
+            + "\n ORDER BY dateOfEvent ASC "
+            + "OFFSET ? ROWS\n"
+            + "FETCH NEXT ? ROWS ONLY";
     private static final String GET_ATTENDED_COUNT_BY_EVENT_ID = "SELECT guestAttendedCount FROM [Event] WHERE id=?";
     private static final String UPDATE_STATUS_BY_EVENT_ID = "UPDATE [Event] SET status=? WHERE id=?";
     private static final String SELECT_EVENT_NAME_BY_EVENT_ID = "SELECT fullname FROM [Event] WHERE id=?;";
@@ -366,12 +387,12 @@ public class EventDAO extends SQLDatabase {
         return organizers;
     }
 
-    public Page<Object[]> get(PagingCriteria pagingCriteria, SearchEventCriteria searchEventCriteria, int id) {
+    public Page<Object[]> get(PagingCriteria pagingCriteria, int id) {
         Page<Object[]> page = new Page<>();
         ArrayList<Object[]> datas = new ArrayList<>();
-        String query = buildSelectQuery(pagingCriteria, searchEventCriteria);
+        String query = SELECT_EVENTS_FOLLOWED_AND_NOT_FOLLOWED;
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, query, id);) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, query, id, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
             while (rs.next()) {
                 if (page.getTotalPage() == null && page.getCurrentPage() == null) {
                     page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
@@ -420,81 +441,96 @@ public class EventDAO extends SQLDatabase {
 
         return page;
     }
+    
+    public Page<Object[]> getSearchEvent(PagingCriteria pagingCriteria, SearchEventCriteria searchEventCriteria) {
+        Page<Object[]> page = new Page<>();
+        ArrayList<Object[]> datas = new ArrayList<>();
+        String query = buildSelectQuery(pagingCriteria, searchEventCriteria);
 
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); 
+                ResultSet rs = executeQueryPreparedStatement(conn, query);) {
+            while (rs.next()) {
+                if (page.getTotalPage() == null && page.getCurrentPage() == null) {
+                    page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
+                    page.setCurrentPage(pagingCriteria.getOffset() / pagingCriteria.getFetchNext());
+                }
+                Organizer organizer = new Organizer();
+                organizer.setId(rs.getInt("organizerId"));
+                organizer.setFullname(rs.getString("organizerName"));
+
+                List<String> images = new ArrayList<>();
+                images.add(rs.getNString("avatarPath"));
+
+                Event event = new Event(
+                        rs.getInt("id"),
+                        organizer,
+                        rs.getNString("fullname"),
+                        rs.getNString("description"),
+                        new Category(
+                                rs.getInt("id"),
+                                rs.getNString("categoryName")
+                        // rs.getNString("description")
+                        ),
+                        new Location(
+                                rs.getInt("id"),
+                                rs.getNString("locationName")),
+                        rs.getDate("dateOfEvent").toLocalDate(),
+                        rs.getTimestamp("startTime").toLocalDateTime().toLocalTime(),
+                        rs.getTimestamp("endTime").toLocalDateTime().toLocalTime(),
+                        rs.getInt("guestRegisterLimit"),
+                        rs.getDate("guestRegisterDeadline").toLocalDate()
+                // rs.getInt("guestAttendedCount")
+                );
+                event.setImages(images);
+                int registeredCount = rs.getInt("guestRegisterCount");
+                event.setGuestRegisterCount(registeredCount);
+                Object[] data = new Object[]{false, event};
+
+                datas.add(data);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(EventDAO.class.getName()).log(Level.SEVERE, null, e);
+        }
+        page.setDatas(datas);
+
+        return page;
+    }
+    
     private String buildSelectQuery(PagingCriteria pagingCriteria, SearchEventCriteria searchEventCriteria) {
-        StringBuilder query = new StringBuilder(SELECT_EVENTS_FOLLOWED_AND_NOT_FOLLOWED);
-        boolean isWhereInserted = false;
+        StringBuilder query = new StringBuilder(SELECT_SEARCH_EVENTS);
         
         if (!searchEventCriteria.isEmpty()) {
             if (searchEventCriteria.getName() != null && !searchEventCriteria.getName().isBlank()) {
-                query.append("\nWHERE LOWER(e.fullname) LIKE LOWER('%");
+                query.append("\nAND LOWER(e.fullname) LIKE LOWER('%");
                 query.append(searchEventCriteria.getName());
                 query.append("%')\n ");
-                isWhereInserted = true;
             }
             
             if (searchEventCriteria.getCategoryId() != null) {
-                if(isWhereInserted){
-                    query.append(" AND ");
-                }else{
-                    query.append("\nWHERE ");
-                    isWhereInserted = true;
-                }
-                query.append("e.categoryId=");
+                query.append("\nAND e.categoryId=");
                 query.append(searchEventCriteria.getCategoryId());
             }
             
             if (searchEventCriteria.getOrganizerId() != null) {
-                if(isWhereInserted){
-                    query.append("\nAND ");
-                }else{
-                    query.append("\nWHERE ");
-                    isWhereInserted = true;
-                }
-                query.append("e.organizerId=");
+                query.append("\nAND e.organizerId=");
                 query.append(searchEventCriteria.getOrganizerId());
             }
             if (searchEventCriteria.getFrom() != null && searchEventCriteria.getTo() != null) {
-                if(isWhereInserted){
-                    query.append("\nAND ");
-                }else{
-                    query.append("\nWHERE ");
-                    isWhereInserted = true;
-                }
-                query.append("e.dateOfEvent BETWEEN '");
+                query.append(" \nAND e.dateOfEvent BETWEEN '");
                 query.append(searchEventCriteria.getFrom());
                 query.append("' AND '");
                 query.append(searchEventCriteria.getTo());
                 query.append("'");
             }
-        }
-        if (isWhereInserted) {
-            query.append(" AND ");
-        } else {
-            query.append(" WHERE ");
-        }
-        query.append("\n e.dateOfEvent > CAST(GETDATE() AS DATE) AND e.status='APPROVED'");
-
-        query.append("\n ORDER BY f.organizerId DESC, ");
-
-        if (EventOrderBy.DATE_ASC.equals(searchEventCriteria.getOrderBy())) {
-            query.append(" dateOfEvent ASC");
-        } else if (EventOrderBy.FULLNAME_DESC.equals(searchEventCriteria.getOrderBy())) {
-            query.append(" e.fullname DESC");
-        } else if (EventOrderBy.FULLNAME_ASC.equals(searchEventCriteria.getOrderBy())) {
-            query.append(" e.fullname ASC");
-        } else {
-            query.append(" dateOfEvent DESC");
-        }
-
-        if (!pagingCriteria.isEmpty()) {
+            query.append(" ORDER BY e.dateOfEvent");
+            if (!pagingCriteria.isEmpty()) {
             query.append(" OFFSET ");
             query.append(pagingCriteria.getOffset());
             query.append(" ROWS\n FETCH NEXT ");
             query.append(pagingCriteria.getFetchNext());
             query.append(" ROWS ONLY");
         }
-
+        }
         return query.toString();
     }
 
@@ -778,9 +814,9 @@ public class EventDAO extends SQLDatabase {
     public Page<Object[]> getForGuest(PagingCriteria pagingCriteria, SearchEventCriteria searchEventCriteria) {
         Page<Object[]> page = new Page<>();
         ArrayList<Object[]> datas = new ArrayList<>();
-        String query = buildSelectQueryForGuest(pagingCriteria, searchEventCriteria);
+        String query = SELECT_UPCOMING_EVENTS_FOR_GUEST;
 
-        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, query);) {
+        try (Connection conn = DataSourceWrapper.getDataSource().getConnection(); ResultSet rs = executeQueryPreparedStatement(conn, query, pagingCriteria.getOffset(), pagingCriteria.getFetchNext());) {
             while (rs.next()) {
                 if (page.getTotalPage() == null && page.getCurrentPage() == null) {
                     page.setTotalPage((int) Math.ceil(rs.getInt("TotalRow") / pagingCriteria.getFetchNext()));
@@ -828,82 +864,6 @@ public class EventDAO extends SQLDatabase {
         return page;
     }
 
-    private String buildSelectQueryForGuest(PagingCriteria pagingCriteria, SearchEventCriteria searchEventCriteria) {
-        StringBuilder query = new StringBuilder(SELECT_EVENTS_FOR_GUEST);
-        boolean isWhereInserted = false;
-        
-        if (!searchEventCriteria.isEmpty()) {
-            if (searchEventCriteria.getName() != null && !searchEventCriteria.getName().isBlank()) {
-                query.append("\nWHERE LOWER(e.fullname) LIKE LOWER('%");
-                query.append(searchEventCriteria.getName());
-                query.append("%')\n ");
-                isWhereInserted = true;
-            }
-            
-            if (searchEventCriteria.getCategoryId() != null) {
-                if (isWhereInserted){
-                    query.append(" AND ");
-                } else {
-                    query.append("\nWHERE ");
-                    isWhereInserted = true;
-                }
-                query.append("e.categoryId=");
-                query.append(searchEventCriteria.getCategoryId());
-                
-            }
-            
-            if (searchEventCriteria.getOrganizerId() != null) {
-                if(isWhereInserted){
-                    query.append("\nAND ");
-                }else{
-                    query.append("\nWHERE ");
-                    isWhereInserted = true;
-                }
-                query.append("e.organizerId=");
-                query.append(searchEventCriteria.getOrganizerId());
-            }
-            if (searchEventCriteria.getFrom() != null && searchEventCriteria.getTo() != null) {
-                if(isWhereInserted){
-                    query.append("\nAND ");
-                }else{
-                    query.append("\nWHERE ");
-                    isWhereInserted = true;
-                }
-                query.append("e.dateOfEvent BETWEEN '");
-                query.append(searchEventCriteria.getFrom());
-                query.append("' AND '");
-                query.append(searchEventCriteria.getTo());
-                query.append("'");
-            }
-        }
-        
-        if (isWhereInserted) {
-            query.append("\nAND ");
-        } else {
-            query.append("\nWHERE ");
-        }
-        query.append("\n e.dateOfEvent > CAST(GETDATE() AS DATE) AND e.status='APPROVED'");
-
-        if (EventOrderBy.DATE_ASC.equals(searchEventCriteria.getOrderBy())) {
-            query.append("\n ORDER BY dateOfEvent ASC");
-        } else if (EventOrderBy.FULLNAME_DESC.equals(searchEventCriteria.getOrderBy())) {
-            query.append(" e.fullname DESC");
-        } else if (EventOrderBy.FULLNAME_ASC.equals(searchEventCriteria.getOrderBy())) {
-            query.append(" e.fullname ASC");
-        } else {
-            query.append("\n ORDER BY dateOfEvent DESC");
-        }
-
-        if (!pagingCriteria.isEmpty()) {
-            query.append("\n OFFSET ");
-            query.append(pagingCriteria.getOffset());
-            query.append(" ROWS\n FETCH NEXT ");
-            query.append(pagingCriteria.getFetchNext());
-            query.append(" ROWS ONLY");
-        }
-        return query.toString();
-    }
-    
     /**
      * 
      * @author HungHV 

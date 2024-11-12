@@ -112,6 +112,6 @@ public class FileController extends HttpServlet {
             request.setAttribute("error", "File exceeds the maximum allowed size (2MB).");
         }
 
-        request.getRequestDispatcher("file").forward(request, response);
+        doGet(request, response);
     }
 }

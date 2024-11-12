@@ -53,7 +53,7 @@ public class LoginGoogleController extends HttpServlet {
                         user = userDAO.getUserByEmail(email);
 
                         HttpSession session = request.getSession();
-                        session.setAttribute("userInfo", user);
+                        session.setAttribute("userInfor", user);
                         request.getRequestDispatcher("home").forward(request, response);
                     } else {
                         String[] emailSplit = email.split("@");

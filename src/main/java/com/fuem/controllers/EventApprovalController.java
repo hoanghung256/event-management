@@ -79,25 +79,25 @@ public class EventApprovalController extends HttpServlet {
         switch (action) {
             case "approve":
                 dao.changeEventStatus(eventId, EventStatus.APPROVED);
-                response.sendRedirect(request.getContextPath() + "/admin/approval-events?success=true&action=show");
-                
-                new Thread(
-                        () -> {
-                            try {
-                                Event e = dao.getEventById(eventId);
-                                Organizer club = new OrganizerDAO().getOrganizerByEventId(eventId);
-                                Gmail.eventRegistrationSuccess(club.getEmail(), club.getFullname(), e, request);
-                            } catch (MalformedURLException e) {
-                                Logger.getLogger(EventRegistrationController.class.getName()).log(Level.SEVERE, null, e);
-                            }
-                        }
-                ).start();
+                response.sendRedirect(request.getContextPath() + "/admin/approval-events?action=show");
                 break;
             case "rejected":
                 dao.changeEventStatus(eventId, EventStatus.REJECTED);
-                response.sendRedirect(request.getContextPath() + "/admin/approval-events?success=true&action=show");
+                response.sendRedirect(request.getContextPath() + "/admin/approval-events?action=show");
                 break;
         }
+
+        new Thread(
+                () -> {
+                    try {
+                        Event e = dao.getEventById(eventId);
+                        Organizer club = new OrganizerDAO().getOrganizerByEventId(eventId);
+                        Gmail.eventRegistrationResult(club.getEmail(), club.getFullname(), e, action.equals("approve") ? true : false);
+                    } catch (MalformedURLException e) {
+                        Logger.getLogger(EventRegistrationController.class.getName()).log(Level.SEVERE, null, e);
+                    }
+                }
+        ).start();
     }
 
 }

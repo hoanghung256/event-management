@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.net.MalformedURLException;
+import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,13 +34,13 @@ public class EventDetailsController extends HttpServlet {
         EventDAO eventDAO = new EventDAO();
         EventRegisteredDAO eventRegisteredDAO = new EventRegisteredDAO();
         Event event = eventDAO.getEventDetails(eventId);
+        LocalDate loginDate = LocalDate.now();
         Student student = (Student) request.getSession().getAttribute("userInfor");
         if (student == null) {
             if (event != null) {
                 request.setAttribute("event", event);
                 request.setAttribute("isGuestRegis", false);
                 request.setAttribute("isCollabRegis", false);
-                request.getRequestDispatcher("event-details.jsp").forward(request, response);
             }
         } else {
             if (event != null) {
@@ -52,8 +53,9 @@ public class EventDetailsController extends HttpServlet {
                 request.setAttribute("error", "Get data failed!");
             }
 
-            request.getRequestDispatcher("event-details.jsp").forward(request, response);
         }
+        request.setAttribute("loginDate", loginDate);
+        request.getRequestDispatcher("event-details.jsp").forward(request, response);
     }
 
     @Override
@@ -78,6 +80,17 @@ public class EventDetailsController extends HttpServlet {
                     result = eventRegisteredDAO.registerCollaborator(student.getId(), eventId);
                     if (result) {
                         request.setAttribute("message", "Successfully registered as a collaborator.");
+                        new Thread(
+                                () -> {
+                                    EventDAO eventDao = new EventDAO();
+                                    Event e = eventDao.getEventById(eventId);
+                                    try {
+                                        Gmail.collaboratorRegisterEventSuccess(student.getEmail(), student.getFullname(), e);
+                                    } catch (MalformedURLException ex) {
+                                        Logger.getLogger(EventDetailsController.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                }
+                        ).start();
                     } else {
                         request.setAttribute("error", "Failed to register as a collaborator. Please try again.");
                     }
@@ -87,6 +100,17 @@ public class EventDetailsController extends HttpServlet {
                     result = eventRegisteredDAO.cancelCollaboratorRegistration(student.getId(), eventId);
                     if (result) {
                         request.setAttribute("message", "Successfully canceled collaborator registration.");
+                        new Thread(
+                                () -> {
+                                    EventDAO eventDao = new EventDAO();
+                                    Event e = eventDao.getEventById(eventId);
+                                    try {
+                                        Gmail.cancelCollaboratorRegisterEventSuccess(student.getEmail(), student.getFullname(), e);
+                                    } catch (MalformedURLException ex) {
+                                        Logger.getLogger(EventDetailsController.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                }
+                        ).start();
                     } else {
                         request.setAttribute("error", "Failed to cancel collaborator registration. Please try again.");
                     }
@@ -100,11 +124,11 @@ public class EventDetailsController extends HttpServlet {
                                 () -> {
                                     EventDAO eventDao = new EventDAO();
                                     Event e = eventDao.getEventById(eventId);
-                            try {
-                                Gmail.registerEventSuccess(student.getEmail(), student.getFullname(), e, request);
-                            } catch (MalformedURLException ex) {
-                                Logger.getLogger(EventDetailsController.class.getName()).log(Level.SEVERE, null, ex);
-                            }
+                                    try {
+                                        Gmail.guestregisterEventSuccess(student.getEmail(), student.getFullname(), e);
+                                    } catch (MalformedURLException ex) {
+                                        Logger.getLogger(EventDetailsController.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
                                 }
                         ).start();
                     } else {
@@ -116,6 +140,17 @@ public class EventDetailsController extends HttpServlet {
                     result = eventRegisteredDAO.cancelGuestRegistration(student.getId(), eventId);
                     if (result) {
                         request.setAttribute("message", "Successfully canceled guest registration.");
+                         new Thread(
+                                () -> {
+                                    EventDAO eventDao = new EventDAO();
+                                    Event e = eventDao.getEventById(eventId);
+                                    try {
+                                        Gmail.cancelGuestRegisterEventSuccess(student.getEmail(), student.getFullname(), e);
+                                    } catch (MalformedURLException ex) {
+                                        Logger.getLogger(EventDetailsController.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                }
+                        ).start();
                     } else {
                         request.setAttribute("error", "Failed to cancel guest registration. Please try again.");
                     }

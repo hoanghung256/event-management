@@ -54,10 +54,10 @@ public class OrganizerDAO extends SQLDatabase {
     private static final String SELECT_ADMIN = "SELECT id, acronym, fullname, description, email, avatarPath, coverPath, followerCount "
             + "FROM [Organizer] "
             + "WHERE isAdmin = '1'";
-    private static final String SELECT_ORGANIZER_BY_EVENT_ID = "SELECT id, acronym, fullname, description, email, avatarPath, coverPath, followerCount "
-            + "FROM [Organizer] "
-            + "JOIN [Event] ON Organizer.id = Event.organizerId "
-            + "WHERE Event.id = ?;";
+    private static final String SELECT_ORGANIZER_BY_EVENT_ID = "SELECT o.id, o.acronym, o.fullname, o.description, o.email, o.avatarPath, o.coverPath, o.followerCount "
+            + "FROM [Organizer] o "
+            + "JOIN [Event] e ON o.id = e.organizerId "
+            + "WHERE e.id = ?;";
 
     public OrganizerDAO() {
         super();

@@ -72,15 +72,14 @@ public class ProfileController extends HttpServlet {
                     List<Event> recentEvents = eventDAO.getRecentEvents(id);
 
                     if (user == null) {
-                        request.setAttribute("organizer", organizer);
                         request.setAttribute("recentEvents", recentEvents);
                     } else if (user.getRole().equals(Role.STUDENT)) {
                         FollowDAO followDAO = new FollowDAO();
                         boolean isFollowing = followDAO.isUserFollowing(user.getId(), id);
                         request.setAttribute("isFollowing", isFollowing);
-                        request.setAttribute("organizer", organizer);
-                        request.setAttribute("recentEvents", recentEvents);
                     }
+                    request.setAttribute("recentEvents", recentEvents);
+                    request.setAttribute("organizer", organizer);
                     request.getRequestDispatcher("organizer-profile.jsp").forward(request, response);
                 }
                 break;
